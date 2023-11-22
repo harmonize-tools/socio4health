@@ -1,7 +1,7 @@
 import sqlite3
 
-from harmonize.dto.dataset import Dataset
-from harmonize.enum.config_enum import ConfigEnum
+from nyctibius.dto.dataset import Dataset
+from nyctibius.enums.config_enum import ConfigEnum
 
 
 class Loader:

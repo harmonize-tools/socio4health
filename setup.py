@@ -21,7 +21,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 # Fields marked as "Optional" may be commented out.
 
 setup(
-    name='harmonize',  # Required
+    name='nyctibius',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -66,11 +66,11 @@ setup(
 
     # This should be your name or the name of the organization which owns the
     # project.
-    author='Cristian Amaya',  # Optional
+    author='Erick Lozano, Diego Irreño y Cristian Amaya',  # Optional
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='cm.amaya10@uniandes.edu.co',  # Optional
+    author_email='',  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -119,7 +119,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=['harmonize', 'harmonize.dto', 'harmonize.enum', 'harmonize.etl', 'harmonize.sql', 'harmonize.utils'],  # Required
+    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enum', 'nyctibius.etl', 'nyctibius.sql', 'nyctibius.utils'],  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -151,7 +151,7 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.
     package_data={  # Optional
-        'harmonize': ['src/harmonize/config/*.json'],
+        'nyctibius': ['src/nyctibius/config/*.json'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -159,7 +159,7 @@ setup(
     # http://docs.python.org/distutils/setupscript.html#installing-additional-files
     #
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('harmonize_data', glob('src/harmonize/config/*.json'))
+    data_files=[('harmonize_data', glob('src/nyctibius/config/*.json'))
                 ],  # Optional
 
     # To provide executable scripts, use entry points in preference to the

@@ -15,10 +15,10 @@ from typing import List
 
 from pandas import DataFrame
 
-from harmonize.dto.dataset import Dataset
-from harmonize.enum.config_enum import ConfigEnum
-from harmonize.etl.loader import Loader
-from harmonize.etl.transformer import Transformer
+from nyctibius.dto.dataset import Dataset
+from nyctibius.enums.config_enum import ConfigEnum
+from nyctibius.etl.loader import Loader
+from nyctibius.etl.transformer import Transformer
 
 
 class Harmonizer:
@@ -26,15 +26,15 @@ class Harmonizer:
     def __init__(self, datasets: List[Dataset]):
         self._datasets = datasets
 
-    def transform(self, table_name, in_col_names, out_col_names) -> List[DataFrame]:
-        transformed_datasets = []
+    def transform(self, table_name, headers=None) -> List[DataFrame]:
+        dataframes = []
         for dataset in self._datasets:
             if dataset is not None:
-                transformer = Transformer(dataset.name, in_col_names, out_col_names, ConfigEnum.DB_PATH.value,
-                                          table_name)
+                transformer = Transformer(dataset.filepath, ConfigEnum.DB_PATH.value, table_name, headers)
                 transformed_data = transformer.transform_data()
-                transformed_datasets.append(transformed_data)
-        return transformed_datasets
+                dataframes.append(transformed_data)
+        # TODO need to set tech dataframe into corresponding data in dataframe
+        return dataframes
 
     def load(self) -> List[tuple]:
         results = []

@@ -147,5 +147,5 @@ class DatabaseSetup:
 
 
 if __name__ == '__main__':
-    db_setup = DatabaseSetup('data/output/harmonize.db')
+    db_setup = DatabaseSetup('data/output/nyctibius.db')
     db_setup.create_tables()

@@ -2,37 +2,23 @@ import pandas as pd
 
 
 class Dataset:
-    def __init__(self, data, name, description, url):
-        self._data = data
-        self._name = name
+    def __init__(self, file_path, description, url):
+        self._file_path = file_path
         self._description = description
         self._url = url
 
     @property
-    def data(self):
-        return self._data
+    def file_path(self):
+        return self.file_path
 
-    @data.setter
-    def data(self, data):
-        if not isinstance(data, pd.DataFrame):
-            raise TypeError('data must be a pandas DataFrame')
+    @file_path.setter
+    def data(self, file_path):
+        if not isinstance(file_path, str):
+            raise TypeError('data must be a String')
         try:
-            self._data = data
+            self._file_path = file_path
         except Exception as e:
             raise Exception(f'Error setting data: {e}')
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, name):
-        if not isinstance(name, str):
-            raise TypeError('name must be a string')
-        try:
-            self._name = name
-        except Exception as e:
-            raise Exception(f'Error setting name: {e}')
 
     @property
     def description(self):

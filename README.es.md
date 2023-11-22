@@ -16,7 +16,7 @@ El Harmonize Toolkit  es una biblioteca de Python que proporciona una forma fác
 Puedes instalar la biblioteca Harmonize Toolkit utilizando `pip`. Asegúrate de tener instalado Python 3.x en tu sistema.
 
 ```shell
-pip install harmonize
+pip install nyctibius
 ```
 
 ## Uso

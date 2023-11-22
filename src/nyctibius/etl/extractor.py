@@ -4,6 +4,7 @@ import zipfile
 import os
 import json
 
+
 class Extractor():
     def run_scrapy_spider(self):
         # Ejecuta una Spider que hace Scrapping de una pagina del DANE 
@@ -56,9 +57,9 @@ class Extractor():
                         for archivo in archivo_zip.namelist():
                             if "CSV" in archivo:
                                 # Supongamos que el archivo deseado está en la raíz del archivo ZIP
-                                archivo_zip.extract(archivo, carpeta_dest+f"/{carpeta_temp}")
+                                archivo_zip.extract(archivo, carpeta_dest + f"/{carpeta_temp}")
                                 print(f'Descomprimido: {archivo}')
-                    
+
                     # Agrega el archivo ZIP a la lista de archivos a borrar
                     archivos_a_borrar.append(archivo_zip_path)
 
@@ -69,7 +70,7 @@ class Extractor():
         with open("enlaces_vivienda.json", 'r', encoding='utf-8') as file:
             # Cargar el contenido del archivo en un diccionario
             departamentos = json.load(file)
-        
+
         # Imprimir el contenido del diccionario (opcional)
         for departamento, url in departamentos.items():
             print(f"{url}")
@@ -77,6 +78,7 @@ class Extractor():
             self.descargar_descomprimir_zip(url[:-1])
             print(f"Datos {departamento}: ----- Descarga Finalizada")
             break
+
 
 if __name__ == "__main__":
     extractor = Extractor()

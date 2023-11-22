@@ -15,26 +15,32 @@ from typing import List
 
 from pandas import DataFrame
 
-from nyctibius.dto.dataset import Dataset
+from nyctibius.dto.data_info import DataInfo
 from nyctibius.enums.config_enum import ConfigEnum
 from nyctibius.etl.loader import Loader
 from nyctibius.etl.transformer import Transformer
+from etl.extractor import Extractor
 
 
-class Harmonizer:
+class Harmonizer():
 
-    def __init__(self, datasets: List[Dataset]):
+    def __init__(self, datasets: List[DataInfo]):
         self._datasets = datasets
 
-    def transform(self, table_name, headers=None) -> List[DataFrame]:
-        dataframes = []
+    def extract(self, urls: List[str]):
+        extractor = Extractor()
+        extractor.run_scrapy_spider()
+        extractor.extract()
+        # TODO create a DataInfo obj according to extractor location
+        return self
+
+    def transform(self, table_name, headers=None) -> List[DataInfo]:
         for dataset in self._datasets:
             if dataset is not None:
-                transformer = Transformer(dataset.filepath, ConfigEnum.DB_PATH.value, table_name, headers)
+                transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value, table_name, headers)
                 transformed_data = transformer.transform_data()
-                dataframes.append(transformed_data)
-        # TODO need to set tech dataframe into corresponding data in dataframe
-        return dataframes
+                dataset.data(transformed_data)
+        return self._datasets
 
     def load(self) -> List[tuple]:
         results = []

@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class Dataset:
+class DataInfo:
     def __init__(self, file_path, description, url):
         self._file_path = file_path
         self._description = description

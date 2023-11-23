@@ -25,12 +25,12 @@ class Harmonizer:
     def __init__(self, datasets: List[DataInfo] = None):
         self._datasets = datasets if datasets is not None else []
 
-    def extract(self):
+    def extract(self, url=None):
         extractor = Extractor()
         extractor.run_scrapy_spider()
-        extractor.extract()
+        list_datainfo = extractor.extract()
         # TODO complete a DataInfo obj according to extractor location
-        return self
+        return list(list_datainfo.values())
 
     def transform(self, table_name, headers=None) -> List[DataInfo]:
         for dataset in self._datasets:

@@ -29,7 +29,6 @@ class Harmonizer:
         extractor = Extractor()
         extractor.run_scrapy_spider()
         list_datainfo = extractor.extract()
-        # TODO complete a DataInfo obj according to extractor location
         return list(list_datainfo.values())
 
     def transform(self, table_name, headers=None) -> List[DataInfo]:
@@ -37,6 +36,7 @@ class Harmonizer:
             if dataset is not None:
                 transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value, table_name, headers)
                 transformed_data = transformer.transform_data()
+                # TODO optimize this
                 dataset.data = transformed_data
         return self._datasets
 

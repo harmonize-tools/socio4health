@@ -31,15 +31,17 @@ class Transformer:
        """
         # Get file extension
         _, file_extension = os.path.splitext(self.file_path)
-
+        # TODO delete file when saved df
+        print('Transforming ', self.file_path, '...')
         # Depending on the file extension, read the file using the appropriate pandas function
-        if file_extension == '.csv':
+        if file_extension.lower() == '.csv':
             df = pd.read_csv(self.file_path, usecols=self.headers, header=0 if self.headers is None else None)
-        elif file_extension == '.txt':
+        elif file_extension.lower() == '.txt':
             df = pd.read_table(self.file_path, usecols=self.headers, header=0 if self.headers is None else None)
-        elif file_extension == '.xlsx':
+        elif file_extension.lower() == '.xlsx':
             df = pd.read_excel(self.file_path, usecols=self.headers, header=0 if self.headers is None else None)
         else:
             raise ValueError(f'Unsupported file type: {file_extension}')
 
+        print('Successful transforming of', self.file_path, '!')
         return df

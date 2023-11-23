@@ -13,7 +13,7 @@ class Loader:
     def load_data(self, dataset: DataInfo) -> tuple:
         """Load DataFrame into SQLite database"""
         try:
-            dataset.data.to_sql(dataset.name, self.cnx, if_exists='append', index=False)
+            dataset.data.to_sql(dataset.file_path, self.cnx, if_exists='append', index=False)
             self.cnx.commit()
             self.cnx.close()
             return True, "Data loaded successfully"

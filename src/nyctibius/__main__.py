@@ -1,33 +1,37 @@
+import pandas as pd
+
+from nyctibius.etl.transformer import Transformer
 from nyctibius.harmonizer import Harmonizer
 from nyctibius.dto.data_info import DataInfo
+from nyctibius.enums.headers_enum import HeadersEnum
+from nyctibius.enums.config_enum import ConfigEnum
 
 
 def main():
-    try:
-        # Define your datasets here
-        datasets = [
-            DataInfo(file_path="path_to_file1", description="description1", url="url1"),
-            DataInfo(file_path="path_to_file2", description="description2", url="url2")
-        ]
 
-        # Create an instance of the Harmonizer class
-        harmonizer = Harmonizer(datasets)
+    # TODO Erick recibe un Data info con solo URL y Descripción ej: datinfo1 = DataInfo(None, 'My Dataset 1', 'https://example.com')
+    # TODO El extractor setea el campo file_path al extraer los archivos en la carpeta
 
-        # Extract data
-        harmonizer.extract(urls=["url1", "url2"])
+    datinfo1 = DataInfo('../../data/input/Person.csv', 'My Dataset 1', 'https://example.com')
+    datainfo2 = DataInfo('../../data/input/Household.csv', 'My Dataset 2', 'https://example.com')
 
-        # Transform data
-        harmonizer.transform(table_name="table_name", headers=None)
+    list_datainfo = [datinfo1, datainfo2]
 
-        # Load data
-        results = harmonizer.load()
+    # Create a Harmonizer instance
+    harmonizer = Harmonizer(list_datainfo)
 
-        # Print results
-        for result in results:
-            print(result)
+    # Extract data
+    # TODO harmonizer.extract()
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    # Transform data
+    harmonizer.transform('Person')
+
+    # Load the data
+    results = harmonizer.load()
+
+    # Print the results
+    for i, result in enumerate(results):
+        print(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
 
 
 if __name__ == "__main__":

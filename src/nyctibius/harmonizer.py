@@ -13,25 +13,23 @@ functions:
 """
 from typing import List
 
-from pandas import DataFrame
-
 from nyctibius.dto.data_info import DataInfo
 from nyctibius.enums.config_enum import ConfigEnum
 from nyctibius.etl.loader import Loader
 from nyctibius.etl.transformer import Transformer
-from etl.extractor import Extractor
+from nyctibius.etl.extractor import Extractor
 
 
-class Harmonizer():
+class Harmonizer:
 
-    def __init__(self, datasets: List[DataInfo]):
-        self._datasets = datasets
+    def __init__(self, datasets: List[DataInfo] = None):
+        self._datasets = datasets if datasets is not None else []
 
-    def extract(self, urls: List[str]):
+    def extract(self):
         extractor = Extractor()
         extractor.run_scrapy_spider()
         extractor.extract()
-        # TODO create a DataInfo obj according to extractor location
+        # TODO complete a DataInfo obj according to extractor location
         return self
 
     def transform(self, table_name, headers=None) -> List[DataInfo]:
@@ -39,7 +37,7 @@ class Harmonizer():
             if dataset is not None:
                 transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value, table_name, headers)
                 transformed_data = transformer.transform_data()
-                dataset.data(transformed_data)
+                dataset.data = transformed_data
         return self._datasets
 
     def load(self) -> List[tuple]:

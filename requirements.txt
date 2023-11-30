@@ -1,4 +1,8 @@
-pandas
-requests
+pandas~=2.1.3
+requests~=2.31.0
 openpyxl
 xlsxwriter
+dask~=2023.11.0
+Scrapy~=2.11.0
+setuptools~=68.1.2
+SQLAlchemy~=2.0.23

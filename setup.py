@@ -119,7 +119,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enum', 'nyctibius.etl', 'nyctibius.sql', 'nyctibius.utils'],  # Required
+    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enums', 'nyctibius.etl', 'nyctibius.sql', 'nyctibius.utils'],  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this

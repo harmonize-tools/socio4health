@@ -11,6 +11,7 @@ functions:
 
     * list_sources - returns the current list of sources
 """
+import time
 from typing import List
 
 from nyctibius.dto.data_info import DataInfo
@@ -36,7 +37,6 @@ class Harmonizer:
             if dataset is not None:
                 transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value, table_name, headers)
                 transformed_data = transformer.transform_data()
-                # TODO optimize this
                 dataset.data = transformed_data
         return self._datasets
 
@@ -46,7 +46,9 @@ class Harmonizer:
             if dataset is not None:
                 try:
                     loader = Loader()
+                    start_time = time.time()
                     loader.load_data(dataset)
+                    print("Tiempo: ", time.time() - start_time)
                     results.append((True, "Data loaded successfully"))
                 except Exception as e:
                     results.append((False, f"Error loading data: {str(e)}"))

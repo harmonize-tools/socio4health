@@ -10,7 +10,6 @@ def main():
     my_url = 'https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata'
     list_datainfo = harmonizer.extract(url=my_url)
     harmonizer = Harmonizer(list_datainfo)
-
     # Transform data
     harmonizer.transform('Person')
 

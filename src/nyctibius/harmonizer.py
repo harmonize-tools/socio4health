@@ -42,10 +42,10 @@ class Harmonizer:
 
     def load(self) -> List[tuple]:
         results = []
+        loader = Loader()
         for dataset in self._datasets:
             if dataset is not None:
                 try:
-                    loader = Loader()
                     start_time = time.time()
                     loader.load_data(dataset)
                     print("Tiempo: ", time.time() - start_time)

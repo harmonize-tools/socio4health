@@ -1,5 +1,7 @@
 import os
 import sqlite3
+from pathlib import Path
+
 from nyctibius.dto.data_info import DataInfo
 from nyctibius.enums.config_enum import ConfigEnum
 
@@ -24,8 +26,9 @@ class Loader:
                 cnx.execute('PRAGMA temp_store = MEMORY')
                 cnx.execute('PRAGMA mmap_size = 30000000000')
 
-                # Load data
-                dataInfo.data.to_sql(dataInfo.file_path, cnx, if_exists='append', index=False, chunksize=1000)
+                # Create the table
+                name = Path(dataInfo.file_path).stem
+                dataInfo.data.to_sql(name, cnx, if_exists='append', chunksize=1000)
 
                 # Optimize the database
                 cnx.execute('PRAGMA optimize')

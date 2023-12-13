@@ -22,6 +22,19 @@ class Querier:
 
         self.db_path = ConfigEnum.DB_PATH.value
 
+    def execute_query(self, query, parameters=None):
+        """Execute a SQL query."""
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+                if parameters:
+                    cursor.execute(query, parameters)
+                else:
+                    cursor.execute(query)
+                return True, None
+        except Exception as e:
+            return False, str(e)
+
     def get_tables(self):
         try:
             with sqlite3.connect(self.db_path) as cnx:
@@ -35,11 +48,18 @@ class Querier:
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
+
+                # Check if the table exists
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+                if not cursor.fetchone():
+                    return []
+
+                # Retrieve column names
                 cursor.execute(f'PRAGMA table_info({table_name})')
                 columns = cursor.fetchall()
                 return [column[1] for column in columns]
         except Exception as e:
-            return False, f"Error getting tables: {str(e)}"
+            raise Exception(f"Error getting columns for table '{table_name}': {str(e)}")
 
     def rename_table(self, initial_name, final_name):
         try:

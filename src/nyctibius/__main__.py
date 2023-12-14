@@ -3,7 +3,6 @@ from nyctibius.harmonizer import Harmonizer
 
 
 def main():
-
     # Create a Harmonizer instance
     harmonizer = Harmonizer()
 
@@ -20,6 +19,7 @@ def main():
     # Print the results
     for i, result in enumerate(results):
         print(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
+
 
 if __name__ == "__main__":
     main()

@@ -5,10 +5,14 @@ from nyctibius.sql.querier import Querier
 querier = Querier()
 
 # Example 1: Execute a SQL Query
-query = "CREATE TABLE IF NOT EXISTS example_table (id INTEGER PRIMARY KEY, name TEXT);"
-success, error = querier.execute_query(query)
+query = "SELECT * FROM CNPV2018_1VIV_A2_05;"
+success, result, error = querier.execute_query(query)
+
 if success:
     print("Query executed successfully")
+    # Print the result
+    print("Query Result:")
+    print(result)
 else:
     print(f"Error executing query: {error}")
 
@@ -24,12 +28,15 @@ else:
     print("Tables in the database:", tables)
 
 # Example 3: Get Columns for a Table
-table_name = "example_table"
-columns, error = querier.get_columns(table_name)
+table_name = "CNPV2018_1VIV_A2_05"
+columns = querier.get_columns(table_name)
+
 if columns:
-    print(f"Columns in table '{table_name}':", columns)
+    print(f"Columns for table '{table_name}':")
+    for column in columns:
+        print(column)
 else:
-    print(f"Error getting columns: {error}")
+    print(f"Table '{table_name}' does not exist or has no columns.")
 
 # Example 4: Rename a Table
 initial_name = "example_table"

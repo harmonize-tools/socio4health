@@ -31,9 +31,10 @@ class Querier:
                     cursor.execute(query, parameters)
                 else:
                     cursor.execute(query)
-                return True, None
+                result = cursor.fetchall()  # Fetch result for SELECT queries
+                return True, result, None
         except Exception as e:
-            return False, str(e)
+            return False, None, str(e)
 
     def get_tables(self):
         try:
@@ -51,7 +52,10 @@ class Querier:
 
                 # Check if the table exists
                 cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
-                if not cursor.fetchone():
+                table_exists = cursor.fetchone()
+
+                if not table_exists:
+                    # Table does not exist, return an empty list or handle it as needed
                     return []
 
                 # Retrieve column names

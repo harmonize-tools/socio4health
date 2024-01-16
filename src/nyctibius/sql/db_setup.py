@@ -8,7 +8,7 @@ class DatabaseSetup:
     def __init__(self, db_file):
         self.db_file = db_file
 
-    def create_tables(self):
+    def create_default_census_schema_co(self):
         """ Create necessary tables in the SQLite database """
         conn = sqlite3.connect(self.db_file)
         cursor = conn.cursor()
@@ -148,4 +148,4 @@ class DatabaseSetup:
 
 if __name__ == '__main__':
     db_setup = DatabaseSetup('data/output/nyctibius.db')
-    db_setup.create_tables()
+    db_setup.create_default_census_schema_co()

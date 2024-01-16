@@ -1,24 +1,17 @@
-import pandas as pd
-
-from nyctibius.etl.transformer import Transformer
+from nyctibius.sql.querier import Querier
 from nyctibius.harmonizer import Harmonizer
-from nyctibius.dto.data_info import DataInfo
-from nyctibius.enums.headers_enum import HeadersEnum
-from nyctibius.enums.config_enum import ConfigEnum
 
 
 def main():
-
     # Create a Harmonizer instance
     harmonizer = Harmonizer()
 
     # Extract data
     my_url = 'https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata'
-    list_datainfo = harmonizer.extract(url=my_url)
-    harmonizer = Harmonizer(list_datainfo)
+    harmonizer.extract(url=my_url)
 
     # Transform data
-    harmonizer.transform('Person')
+    harmonizer.transform()
 
     # Load the data
     results = harmonizer.load()

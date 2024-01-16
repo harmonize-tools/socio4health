@@ -11,6 +11,7 @@ functions:
 
     * list_sources - returns the current list of sources
 """
+import time
 from typing import List
 
 from nyctibius.dto.data_info import DataInfo
@@ -22,31 +23,33 @@ from nyctibius.etl.extractor import Extractor
 
 class Harmonizer:
 
-    def __init__(self, datasets: List[DataInfo] = None):
-        self._datasets = datasets if datasets is not None else []
+    def __init__(self, dataInfoList: List[DataInfo] = None):
+        self._dataInfoList = dataInfoList if dataInfoList is not None else []
 
     def extract(self, url=None):
         extractor = Extractor()
         extractor.run_scrapy_spider()
         list_datainfo = extractor.extract()
-        return list(list_datainfo.values())
+        self._dataInfoList = list(list_datainfo.values())
+        return self._dataInfoList
 
-    def transform(self, table_name, headers=None) -> List[DataInfo]:
-        for dataset in self._datasets:
+    def transform(self) -> List[DataInfo]:
+        for dataset in self._dataInfoList:
             if dataset is not None:
-                transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value, table_name, headers)
-                transformed_data = transformer.transform_data()
-                # TODO optimize this
+                transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
+                transformed_data = transformer.transform_data(dataset.name)
                 dataset.data = transformed_data
-        return self._datasets
+        return self._dataInfoList
 
     def load(self) -> List[tuple]:
         results = []
-        for dataset in self._datasets:
+        loader = Loader()
+        for dataset in self._dataInfoList:
             if dataset is not None:
                 try:
-                    loader = Loader()
+                    start_time = time.time()
                     loader.load_data(dataset)
+                    print("Tiempo: ", time.time() - start_time)
                     results.append((True, "Data loaded successfully"))
                 except Exception as e:
                     results.append((False, f"Error loading data: {str(e)}"))

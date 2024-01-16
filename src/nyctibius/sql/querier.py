@@ -151,30 +151,37 @@ class Querier:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
 
-                # Check if the table and column exist
-                cursor.execute(f"PRAGMA table_info({table_name})")
-                columns = [column[1] for column in cursor.fetchall()]
+                # Check if the table exists
+                tables = self.get_tables()
+                if (table_name,) not in tables:
+                    return False, f"Table '{table_name}' does not exist"
+
+                # Check if the column exists
+                columns = self.get_columns(table_name)
+                if not columns:
+                    return False, f"Error getting columns for table '{table_name}'"
+
                 if column_name not in columns:
                     return False, f"Column '{column_name}' not found in table '{table_name}'"
 
                 # Check if the column is nullable
                 cursor.execute(f"PRAGMA table_info({table_name})")
-                column_info = cursor.fetchall()
-                for col in column_info:
-                    if col[1] == column_name and col[3] == 1:  # col[3] is the 'notnull' column
-                        return False, f"Column '{column_name}' cannot be set as primary key because it is nullable"
+                nullable_columns = [col[1] for col in cursor.fetchall() if col[3] == 1]
+                if column_name in nullable_columns:
+                    return False, f"Column '{column_name}' cannot be set as a primary key because it is nullable"
 
                 # Set the primary key
-                cursor.execute(f"PRAGMA foreign_keys=off")
-                cursor.execute(f"BEGIN TRANSACTION")
+                cursor.execute("PRAGMA foreign_keys=off")
+                cursor.execute("BEGIN TRANSACTION")
                 cursor.execute(f"CREATE TEMPORARY TABLE {table_name}_backup AS SELECT * FROM {table_name}")
                 cursor.execute(f"DROP TABLE {table_name}")
                 cursor.execute(
-                    f"CREATE TABLE {table_name} ({column_name} INTEGER PRIMARY KEY, UNIQUE ({column_name}), UNIQUE ({', '.join(columns)}))")
+                    f"CREATE TABLE {table_name} ({column_name} INTEGER PRIMARY KEY, UNIQUE ({column_name}), UNIQUE ({', '.join(columns)}))"
+                )
                 cursor.execute(f"INSERT INTO {table_name} SELECT * FROM {table_name}_backup")
                 cursor.execute(f"DROP TABLE {table_name}_backup")
-                cursor.execute(f"COMMIT")
-                cursor.execute(f"PRAGMA foreign_keys=on")
+                cursor.execute("COMMIT")
+                cursor.execute("PRAGMA foreign_keys=on")
 
                 return True, f"Primary key set successfully for column '{column_name}' in table '{table_name}'"
         except Exception as e:

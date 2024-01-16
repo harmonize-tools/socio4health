@@ -3,7 +3,7 @@ from nyctibius.sql.querier import Querier
 
 # Create an instance of Querier
 querier = Querier()
-
+'''
 # Example 1: Execute a SQL Query
 query = "SELECT * FROM CNPV2018_1VIV_A2_05;"
 success, result, error = querier.execute_query(query)
@@ -28,7 +28,7 @@ else:
     print("Tables in the database:", tables)
 
 # Example 3: Get Columns for a Table
-table_name = "CNPV2018_1VIV_A2_05"
+table_name = "CNPV2018_3FALL_A2_05"
 columns = querier.get_columns(table_name)
 
 if columns:
@@ -39,8 +39,8 @@ else:
     print(f"Table '{table_name}' does not exist or has no columns.")
 
 # Example 4: Rename a Table
-initial_name = "example_table"
-final_name = "renamed_table"
+initial_name = "CNPV2018_3FALL_A2_05"
+final_name = "deceased"
 success, error = querier.rename_table(initial_name, final_name)
 if success:
     print(f"Table '{initial_name}' renamed to '{final_name}' successfully")
@@ -66,7 +66,7 @@ if success:
     print(f"Column '{column_name}' set as {'nullable' if is_nullable else 'not nullable'} in table '{table_name}'")
 else:
     print(f"Error setting column as {'nullable' if is_nullable else 'not nullable'}: {error}")
-
+'''
 # Example 6: Set Primary Key
 table_name = "renamed_table"
 column_name = "id"

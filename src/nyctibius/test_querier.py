@@ -1,88 +1,36 @@
-# Example Usage of Querier Class
 from nyctibius.sql.querier import Querier
 
-# Create an instance of Querier
 querier = Querier()
-'''
-# Example 1: Execute a SQL Query
-query = "SELECT * FROM CNPV2018_1VIV_A2_05;"
-success, result, error = querier.execute_query(query)
 
-if success:
-    print("Query executed successfully")
-    # Print the result
-    print("Query Result:")
-    print(result)
+tables = querier.get_tables()
+
+if tables['status'] == 'success':
+    # If the operation was successful, print the list of tables
+    print("Tables in the database:")
+    for table in tables['result']:
+        print(table[0])
 else:
-    print(f"Error executing query: {error}")
+    # If the operation failed, print the error message
+    print("Error getting tables:", tables['error'])
 
-# Example 2: Get a List of Tables
-result = querier.get_tables()
+columns = querier.get_columns('CNPV2018_3FALL_A2_05')
 
-if isinstance(result, tuple) and result[0] is False:
-    # Handle the error and print the error message
-    print(f"Error getting tables: {result[1]}")
+if columns['status'] == 'success':
+    # If the operation was successful, print the list of columns
+    print("Columns in the table:")
+    for column in columns['result']:
+        print(column[1])
 else:
-    # Unpack the list of table names
-    tables = result
-    print("Tables in the database:", tables)
+    # If the operation failed, print the error message
+    print("Error getting columns:", columns['error'])
 
-# Example 3: Get Columns for a Table
-table_name = "CNPV2018_3FALL_A2_05"
-columns = querier.get_columns(table_name)
+#print(querier.rename_table("CNPV2018_3FALL_A2_05", "Deceased"))
 
-if columns:
-    print(f"Columns for table '{table_name}':")
-    for column in columns:
-        print(column)
-else:
-    print(f"Table '{table_name}' does not exist or has no columns.")
+#print(querier.rename_column("Deceased", "TIPO_REG", "type"))
 
-# Example 4: Rename a Table
-initial_name = "CNPV2018_3FALL_A2_05"
-final_name = "deceased"
-success, error = querier.rename_table(initial_name, final_name)
-if success:
-    print(f"Table '{initial_name}' renamed to '{final_name}' successfully")
-else:
-    print(f"Error renaming table: {error}")
+#print(querier.rename_table_columns("Deceased", ['id', 'type', 'Department', 'Municipality', 'class', 'sourvey_id',
+#                                   'living', 'housing_id', 'num_fall', 'sex_fall', 'age_fall', 'death_cert']))
 
-# Example 5: Rename a Column
-table_name = "renamed_table"  # Use the renamed table from Example 4
-initial_name = "name"
-final_name = "new_name"
-success, error = querier.rename_column(table_name, initial_name, final_name)
-if success:
-    print(f"Column '{initial_name}' in table '{table_name}' renamed to '{final_name}' successfully")
-else:
-    print(f"Error renaming column: {error}")
+print(querier.set_primary_key("Deceased", "id"))
 
-# Example 7: Set Column as Not Nullable
-table_name = "renamed_table"
-column_name = "new_name"
-is_nullable = False
-success, error = querier.set_column_not_nullable(table_name, column_name, is_nullable)
-if success:
-    print(f"Column '{column_name}' set as {'nullable' if is_nullable else 'not nullable'} in table '{table_name}'")
-else:
-    print(f"Error setting column as {'nullable' if is_nullable else 'not nullable'}: {error}")
-'''
-# Example 6: Set Primary Key
-table_name = "renamed_table"
-column_name = "id"
-success, error = querier.set_primary_key(table_name, column_name)
-if success:
-    print(f"Primary key set successfully for column '{column_name}' in table '{table_name}'")
-else:
-    print(f"Error setting primary key: {error}")
-
-# Example 8: Set Foreign Key Constraint
-column_name = "foreign_key_column"
-main_table = "main_table"
-secondary_table = "referenced_table"
-success, error = querier.set_foreign_key(column_name, main_table, secondary_table)
-if success:
-    print(
-        f"Foreign key constraint set for column '{column_name}' in table '{main_table}' referencing table '{secondary_table}'")
-else:
-    print(f"Error setting foreign key: {error}")
+print(querier.set_foreign_key("Deceased", "sourvey_id", "CNPV2018_1VIV_A2_05", "COD_ENCUESTAS"))

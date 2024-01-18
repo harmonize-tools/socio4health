@@ -1,3 +1,5 @@
+import sys
+sys.path.append("./")
 from nyctibius.sql.querier import Querier
 from nyctibius.harmonizer import Harmonizer
 

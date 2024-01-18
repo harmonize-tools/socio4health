@@ -1,15 +1,6 @@
 import os
 import sqlite3
-from pathlib import Path
-
-from nyctibius.dto.data_info import DataInfo
 from nyctibius.enums.config_enum import ConfigEnum
-
-
-def get_column_datatypes(cnx, table_name):
-    cursor = cnx.cursor()
-    cursor.execute(f"PRAGMA table_info({table_name})")
-    return [col[2] for col in cursor.fetchall()]
 
 
 class Querier:
@@ -22,172 +13,375 @@ class Querier:
 
         self.db_path = ConfigEnum.DB_PATH.value
 
-    def execute_query(self, query, parameters=None):
-        """Execute a SQL query."""
+    def get_column_datatypes(self, table_name: str):
+        """
+        Get the datatypes of all columns in a table.
+
+        Args:
+            table_name (str): The name of the table.
+
+        Returns:
+            A dictionary containing the status of the operation and the list of column datatypes or error message.
+        """
+        query = f"PRAGMA table_info({table_name});"
+        result = self.execute_query(query)
+        if result['status'] == 'success':
+            # Extract column names and datatypes
+            result['result'] = [(column[1], column[2]) for column in result['result']]
+        return result
+
+    def execute_query(self, query: str, params: tuple = ()):
+        """
+        Execute a SQL query.
+
+        Args:
+            query (str): The SQL query to execute.
+            params (tuple): The parameters to substitute in the query.
+
+        Returns:
+            A dictionary containing the status of the operation and the result or error message.
+        """
+        result = {'status': None, 'result': None, 'error': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
-                if parameters:
-                    cursor.execute(query, parameters)
-                else:
-                    cursor.execute(query)
-                result = cursor.fetchall()  # Fetch result for SELECT queries
-                return True, result, None
+                cursor.execute(query, params)
+                result['status'] = 'success'
+                result['result'] = cursor.fetchall()
         except Exception as e:
-            return False, None, str(e)
+            result['status'] = 'failure'
+            result['error'] = str(e)
+
+        return result
 
     def get_tables(self):
+        """
+        Get a list of all tables in the database.
+
+        Returns:
+            A dictionary containing the status of the operation and the list of tables or error message.
+        """
+        query = "SELECT name FROM sqlite_master WHERE type='table';"
+        return self.execute_query(query)
+
+    def get_columns(self, table_name: str):
+        """
+        Get a list of all columns in a table.
+
+        Args:
+            table_name (str): The name of the table.
+
+        Returns:
+            A dictionary containing the status of the operation and the list of columns or error message.
+        """
+        query = f"PRAGMA table_info({table_name});"
+        return self.execute_query(query)
+    
+    def rename_table(self, old_table_name: str, new_table_name: str):
+        """
+        Rename a table in the database.
+
+        Args:
+            old_table_name (str): The current name of the table.
+            new_table_name (str): The new name for the table.
+
+        Returns:
+            A dictionary containing the status of the operation and a message.
+        """
+        result = {'status': None, 'message': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
-                cursor.execute("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';")
-                return cursor.fetchall()
+                cursor.execute(f"ALTER TABLE {old_table_name} RENAME TO {new_table_name}")
+                result['status'] = 'success'
+                result['message'] = f"Table '{old_table_name}' renamed to '{new_table_name}'"
         except Exception as e:
-            return False, f"Error getting tables: {str(e)}"
+            result['status'] = 'failure'
+            result['message'] = str(e)
 
-    def get_columns(self, table_name):
+        return result
+
+    def rename_column(self, table_name: str, old_column_name: str, new_column_name: str):
+        """
+        Rename a column in a table.
+
+        Args:
+            table_name (str): The name of the table where the column is located.
+            old_column_name (str): The current name of the column.
+            new_column_name (str): The new name for the column.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+
+                # Check if the table and column exist
+                cursor.execute(f"PRAGMA table_info({table_name})")
+                columns = [column[1] for column in cursor.fetchall()]
+                if old_column_name not in columns:
+                    result['status'] = False
+                    result['message'] = f"Column '{old_column_name}' not found in table '{table_name}'"
+                    return result
+
+                # Rename the column
+                cursor.execute(f"ALTER TABLE {table_name} RENAME COLUMN {old_column_name} TO {new_column_name}")
+
+                result['status'] = True
+                result['message'] = f"Column '{old_column_name}' renamed to '{new_column_name}' in table '{table_name}'"
+        except Exception as e:
+            result['status'] = False
+            result['message'] = f"Error renaming column: {str(e)}"
+
+        return result
+
+    def rename_table_columns(self, table_name: str, new_column_names: list):
+        """
+        Rename the columns of a table.
+
+        Args:
+            table_name (str): The name of the table where the columns are located.
+            new_column_names (list): A list of new column names.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
 
                 # Check if the table exists
                 cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
-                table_exists = cursor.fetchone()
-
-                if not table_exists:
-                    # Table does not exist, return an empty list or handle it as needed
-                    return []
-
-                # Retrieve column names
-                cursor.execute(f'PRAGMA table_info({table_name})')
-                columns = cursor.fetchall()
-                return [column[1] for column in columns]
-        except Exception as e:
-            raise Exception(f"Error getting columns for table '{table_name}': {str(e)}")
-
-    def rename_table(self, initial_name, final_name):
-        try:
-            with sqlite3.connect(self.db_path) as cnx:
-                cursor = cnx.cursor()
-
-                # Check if the initial table exists
-                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{initial_name}'")
                 if not cursor.fetchone():
-                    return False, f"Table '{initial_name}' not found"
+                    result['status'] = False
+                    result['message'] = f"Table '{table_name}' not found"
+                    return result
 
-                # Rename the table
-                cursor.execute(f"ALTER TABLE {initial_name} RENAME TO {final_name}")
+                # Get the current column names
+                cursor.execute(f"PRAGMA table_info({table_name})")
+                current_column_names = [column[1] for column in cursor.fetchall()]
 
-                return True, f"Table '{initial_name}' renamed to '{final_name}'"
+                # Check if the number of new column names matches the number of current column names
+                if len(new_column_names) != len(current_column_names):
+                    result['status'] = False
+                    result[
+                        'message'] = "The number of new column names does not match the number of current column names"
+                    return result
+
+                # Create a new table with the new column names and copy the data from the old table
+                cursor.execute(f"CREATE TABLE temp_table ({', '.join(new_column_names)})")
+                cursor.execute(f"INSERT INTO temp_table SELECT * FROM {table_name}")
+
+                # Delete the old table and rename the new table
+                cursor.execute(f"DROP TABLE {table_name}")
+                cursor.execute(f"ALTER TABLE temp_table RENAME TO {table_name}")
+
+                result['status'] = True
+                result['message'] = f"Columns in table '{table_name}' renamed successfully"
         except Exception as e:
-            return False, f"Error renaming table: {str(e)}"
+            result['status'] = False
+            result['message'] = f"Error renaming columns: {str(e)}"
 
-    def rename_column(self, table_name, initial_name, final_name):
+        return result
+
+    def remove_duplicates(self, table_name: str, column_name: str):
+        """
+        Remove duplicate rows in a table based on a specific column.
+
+        Args:
+            table_name (str): The name of the table.
+            column_name (str): The name of the column.
+
+        Returns:
+            A dictionary containing the status of the operation and a message.
+        """
+        result = {'status': None, 'message': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
-
-                # Check if the table and initial column exist
-                cursor.execute(f"PRAGMA table_info({table_name})")
-                columns = [column[1] for column in cursor.fetchall()]
-                if initial_name not in columns:
-                    return False, f"Column '{initial_name}' not found in table '{table_name}'"
-
-                # Rename the column
-                cursor.execute(f"PRAGMA foreign_keys=off")
-                cursor.execute(f"BEGIN TRANSACTION")
-                cursor.execute(f"CREATE TEMPORARY TABLE {table_name}_backup AS SELECT * FROM {table_name}")
-                cursor.execute(f"DROP TABLE {table_name}")
-                new_columns = [col if col != initial_name else final_name for col in columns]
-                cursor.execute(f"CREATE TABLE {table_name} ({', '.join(new_columns)})")
-                cursor.execute(f"INSERT INTO {table_name} SELECT * FROM {table_name}_backup")
-                cursor.execute(f"DROP TABLE {table_name}_backup")
-                cursor.execute(f"COMMIT")
-                cursor.execute(f"PRAGMA foreign_keys=on")
-
-                return True, f"Column '{initial_name}' in table '{table_name}' renamed to '{final_name}'"
+                cursor.execute(
+                    f"DELETE FROM {table_name} WHERE rowid NOT IN (SELECT MIN(rowid) FROM {table_name} GROUP BY {column_name})")
+                result['status'] = 'success'
+                result['message'] = f"Duplicates based on column '{column_name}' removed from table '{table_name}'"
         except Exception as e:
-            return False, f"Error renaming column: {str(e)}"
+            result['status'] = 'failure'
+            result['message'] = str(e)
 
-    def rename_table_columns(self, table_name, final_names_list):
+        return result
+
+    def set_primary_key(self, table_name: str, pk_column_name: str):
+        """
+        Set a column as the primary key of a table.
+
+        Args:
+            table_name (str): The name of the table where the column is located.
+            column_name (str): The name of the column to set as the primary key.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
 
                 # Check if the table exists
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+                if not cursor.fetchone():
+                    result['status'] = False
+                    result['message'] = f"Table '{table_name}' not found"
+                    return result
+
+                # Get the current column names
                 cursor.execute(f"PRAGMA table_info({table_name})")
                 columns = [column[1] for column in cursor.fetchall()]
-                if not columns:
-                    return False, f"Table '{table_name}' not found"
-
-                # Check if the number of columns in final_names_list matches the existing columns
-                if len(columns) != len(final_names_list):
-                    return False, "Number of columns in final_names_list does not match the existing columns"
-
-                # Create a mapping of old names to new names
-                columns_mapping = {columns[i]: final_names_list[i] for i in range(len(columns))}
-
-                # Rename the columns
-                cursor.execute(f"PRAGMA foreign_keys=off")
-                cursor.execute(f"BEGIN TRANSACTION")
-                cursor.execute(f"CREATE TEMPORARY TABLE {table_name}_backup AS SELECT * FROM {table_name}")
-                cursor.execute(f"DROP TABLE {table_name}")
-
-                new_columns = [f"{columns_mapping[col]} {datatype}" for col, datatype in
-                               zip(columns, get_column_datatypes(cnx, table_name))]
-                cursor.execute(f"CREATE TABLE {table_name} ({', '.join(new_columns)})")
-
-                cursor.execute(f"INSERT INTO {table_name} SELECT * FROM {table_name}_backup")
-                cursor.execute(f"DROP TABLE {table_name}_backup")
-                cursor.execute(f"COMMIT")
-                cursor.execute(f"PRAGMA foreign_keys=on")
-
-                return True, f"Columns in table '{table_name}' renamed successfully"
-        except Exception as e:
-            return False, f"Error renaming columns: {str(e)}"
-
-    def set_primary_key(self, table_name, column_name):
-        try:
-            with sqlite3.connect(self.db_path) as cnx:
-                cursor = cnx.cursor()
-
-                # Check if the table exists
-                tables = self.get_tables()
-                if (table_name,) not in tables:
-                    return False, f"Table '{table_name}' does not exist"
 
                 # Check if the column exists
-                columns = self.get_columns(table_name)
-                if not columns:
-                    return False, f"Error getting columns for table '{table_name}'"
+                if pk_column_name not in columns:
+                    result['status'] = False
+                    result['message'] = f"Column '{pk_column_name}' not found in table '{table_name}'"
+                    return result
 
-                if column_name not in columns:
-                    return False, f"Column '{column_name}' not found in table '{table_name}'"
+                # Get the foreign key information
+                cursor.execute(f"PRAGMA foreign_key_list({table_name})")
+                foreign_keys = cursor.fetchall()
 
-                # Check if the column is nullable
-                cursor.execute(f"PRAGMA table_info({table_name})")
-                nullable_columns = [col[1] for col in cursor.fetchall() if col[3] == 1]
-                if column_name in nullable_columns:
-                    return False, f"Column '{column_name}' cannot be set as a primary key because it is nullable"
-
-                # Set the primary key
-                cursor.execute("PRAGMA foreign_keys=off")
-                cursor.execute("BEGIN TRANSACTION")
-                cursor.execute(f"CREATE TEMPORARY TABLE {table_name}_backup AS SELECT * FROM {table_name}")
-                cursor.execute(f"DROP TABLE {table_name}")
+                # Create a new table with the same columns as the old table, but set the primary key
+                columns.remove(pk_column_name)
+                foreign_keys_sql = ', '.join(
+                    [f"FOREIGN KEY ({fk[3]}) REFERENCES {fk[2]}({fk[4]})" for fk in foreign_keys])
                 cursor.execute(
-                    f"CREATE TABLE {table_name} ({column_name} INTEGER PRIMARY KEY, UNIQUE ({column_name}), UNIQUE ({', '.join(columns)}))"
-                )
-                cursor.execute(f"INSERT INTO {table_name} SELECT * FROM {table_name}_backup")
-                cursor.execute(f"DROP TABLE {table_name}_backup")
-                cursor.execute("COMMIT")
-                cursor.execute("PRAGMA foreign_keys=on")
+                    f"CREATE TABLE temp_table ({pk_column_name} PRIMARY KEY, {', '.join(columns)}, {foreign_keys_sql})")
 
-                return True, f"Primary key set successfully for column '{column_name}' in table '{table_name}'"
+                # Copy the data from the old table to the new one
+                cursor.execute(f"INSERT INTO temp_table SELECT * FROM {table_name}")
+
+                # Delete the old table and rename the new table
+                cursor.execute(f"DROP TABLE {table_name}")
+                cursor.execute(f"ALTER TABLE temp_table RENAME TO {table_name}")
+
+                result['status'] = True
+                result['message'] = f"Primary key set to column '{pk_column_name}' in table '{table_name}'"
         except Exception as e:
-            return False, f"Error setting primary key: {str(e)}"
+            result['status'] = False
+            result['message'] = f"Error setting primary key: {str(e)}"
 
-    def set_column_not_nullable(self, table_name, column_name, is_nullable):
+        return result
+
+    def set_foreign_key(self, table_name: str, fk_column_name: str, referenced_table_name: str, referenced_column_name: str):
+        """
+        Set a column as a foreign key of a table.
+
+        Args:
+            table_name (str): The name of the table where the column is located.
+            column_name (str): The name of the column to set as the foreign key.
+            referenced_table_name (str): The name of the table that the foreign key references.
+            referenced_column_name (str): The name of the column that the foreign key references.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+
+                # Check if the table exists
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+                if not cursor.fetchone():
+                    result['status'] = False
+                    result['message'] = f"Table '{table_name}' not found"
+                    return result
+
+                # Get the current column names
+                cursor.execute(f"PRAGMA table_info({table_name})")
+                columns = [column[1] for column in cursor.fetchall()]
+
+                # Check if the column exists
+                if fk_column_name not in columns:
+                    result['status'] = False
+                    result['message'] = f"Column '{fk_column_name}' not found in table '{table_name}'"
+                    return result
+
+                # Get the primary key information
+                cursor.execute(f"PRAGMA table_info({table_name})")
+                primary_key_column = next((column[1] for column in cursor.fetchall() if column[5] == 1), None)
+
+                # Create a new table with the same columns as the old table, but set the foreign key
+                columns.remove(fk_column_name)
+                primary_key_sql = f"{primary_key_column} PRIMARY KEY," if primary_key_column else ""
+                cursor.execute(
+                    f"CREATE TABLE temp_table ({primary_key_sql} {fk_column_name}, {', '.join(columns)}, FOREIGN KEY ({fk_column_name}) REFERENCES {referenced_table_name}({referenced_column_name}))")
+
+                # Copy the data from the old table to the new one
+                cursor.execute(f"INSERT INTO temp_table SELECT * FROM {table_name}")
+
+                # Delete the old table and rename the new table
+                cursor.execute(f"DROP TABLE {table_name}")
+                cursor.execute(f"ALTER TABLE temp_table RENAME TO {table_name}")
+
+                result['status'] = True
+                result['message'] = f"Foreign key set to column '{fk_column_name}' in table '{table_name}'"
+        except Exception as e:
+            result['status'] = False
+            result['message'] = f"Error setting foreign key: {str(e)}"
+
+        return result
+
+    def delete_table(self, table_name: str):
+        """
+        Delete a table from the database.
+
+        Args:
+            table_name (str): The name of the table to delete.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+
+                # Check if the table exists
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+                if not cursor.fetchone():
+                    result['status'] = False
+                    result['message'] = f"Table '{table_name}' not found"
+                    return result
+
+                # Delete the table
+                cursor.execute(f"DROP TABLE {table_name}")
+
+                result['status'] = True
+                result['message'] = f"Table '{table_name}' deleted successfully"
+        except Exception as e:
+            result['status'] = False
+            result['message'] = f"Error deleting table: {str(e)}"
+
+        return result
+
+    def delete_column(self, table_name: str, column_name: str):
+        """
+        Delete a column from a table.
+
+        Args:
+            table_name (str): The name of the table where the column is located.
+            column_name (str): The name of the column to delete.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
@@ -196,60 +390,59 @@ class Querier:
                 cursor.execute(f"PRAGMA table_info({table_name})")
                 columns = [column[1] for column in cursor.fetchall()]
                 if column_name not in columns:
-                    return False, f"Column '{column_name}' not found in table '{table_name}'"
+                    result['status'] = False
+                    result['message'] = f"Column '{column_name}' not found in table '{table_name}'"
+                    return result
 
-                # Update the column's nullable status
-                cursor.execute(f"PRAGMA foreign_keys=off")
-                cursor.execute(f"BEGIN TRANSACTION")
-                cursor.execute(f"CREATE TEMPORARY TABLE {table_name}_backup AS SELECT * FROM {table_name}")
-                cursor.execute(f"DROP TABLE {table_name}")
-                nullable_clause = "" if is_nullable else "NOT NULL"
-                cursor.execute(
-                    f"CREATE TABLE {table_name} ({', '.join(columns).replace(column_name, f'{column_name} {nullable_clause}').replace(', ,', ',')})")
-                cursor.execute(f"INSERT INTO {table_name} SELECT * FROM {table_name}_backup")
-                cursor.execute(f"DROP TABLE {table_name}_backup")
-                cursor.execute(f"COMMIT")
-                cursor.execute(f"PRAGMA foreign_keys=on")
+                # Delete the column
+                cursor.execute(f"ALTER TABLE {table_name} DROP COLUMN {column_name}")
 
-                return True, f"Column '{column_name}' set as {'nullable' if is_nullable else 'not nullable'} " \
-                             f"in table '{table_name}'"
+                result['status'] = True
+                result['message'] = f"Column '{column_name}' deleted from table '{table_name}'"
         except Exception as e:
-            return False, f"Error setting column as {'nullable' if is_nullable else 'not nullable'}: {str(e)}"
+            result['status'] = False
+            result['message'] = f"Error deleting column: {str(e)}"
 
-    def set_foreign_key(self, column_name, main_table, secondary_table):
+        return result
+
+    def merge_tables(self, table1: str, table2: str, new_table: str):
+        """
+        Merge two tables into a new table.
+
+        Args:
+            table1 (str): The name of the first table to merge.
+            table2 (str): The name of the second table to merge.
+            new_table (str): The name of the new table.
+
+        Returns:
+            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            'message' is a string describing the result of the operation.
+        """
+        result = {'status': None, 'message': None}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
 
-                # Check if the main and secondary tables exist
-                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{main_table}'")
+                # Check if the tables exist
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table1}'")
                 if not cursor.fetchone():
-                    return False, f"Main table '{main_table}' not found"
+                    result['status'] = False
+                    result['message'] = f"Table '{table1}' not found"
+                    return result
 
-                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{secondary_table}'")
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table2}'")
                 if not cursor.fetchone():
-                    return False, f"Secondary table '{secondary_table}' not found"
+                    result['status'] = False
+                    result['message'] = f"Table '{table2}' not found"
+                    return result
 
-                # Check if the specified column exists in the main table
-                cursor.execute(f"PRAGMA table_info({main_table})")
-                columns = [col[1] for col in cursor.fetchall()]
-                if column_name not in columns:
-                    return False, f"Column '{column_name}' not found in main table '{main_table}'"
+                # Merge the tables
+                cursor.execute(f"CREATE TABLE {new_table} AS SELECT * FROM {table1} UNION ALL SELECT * FROM {table2}")
 
-                # Set foreign key constraint
-                cursor.execute(f"PRAGMA foreign_keys=on")
-                cursor.execute(f"PRAGMA foreign_key_list({main_table})")
-                existing_foreign_keys = cursor.fetchall()
-
-                for fk in existing_foreign_keys:
-                    if fk[3] == column_name and fk[2] == secondary_table:
-                        return False, f"Foreign key constraint already exists for column '{column_name}' " \
-                                      f"in table '{main_table}'"
-
-                cursor.execute(
-                    f"ALTER TABLE {main_table} ADD FOREIGN KEY ({column_name}) REFERENCES {secondary_table}({column_name})")
-
-                return True, f"Foreign key constraint set for column '{column_name}' in table '{main_table}' " \
-                             f"referencing table '{secondary_table}' "
+                result['status'] = True
+                result['message'] = f"Tables '{table1}' and '{table2}' merged into new table '{new_table}'"
         except Exception as e:
-            return False, f"Error setting foreign key: {str(e)}"
+            result['status'] = False
+            result['message'] = f"Error merging tables: {str(e)}"
+
+        return result

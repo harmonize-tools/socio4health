@@ -220,7 +220,7 @@ class Querier:
 
         Args:
             table_name (str): The name of the table where the column is located.
-            column_name (str): The name of the column to set as the primary key.
+            pk_column_name (str): The name of the column to set as the primary key.
 
         Returns:
             A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
@@ -280,7 +280,7 @@ class Querier:
 
         Args:
             table_name (str): The name of the table where the column is located.
-            column_name (str): The name of the column to set as the foreign key.
+            fk_column_name (str): The name of the column to set as the foreign key.
             referenced_table_name (str): The name of the table that the foreign key references.
             referenced_column_name (str): The name of the column that the foreign key references.
 

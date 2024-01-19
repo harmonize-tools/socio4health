@@ -76,7 +76,7 @@ class Querier:
         """
         query = f"PRAGMA table_info({table_name});"
         return self.execute_query(query)
-    
+
     def rename_table(self, old_table_name: str, new_table_name: str):
         """
         Rename a table in the database.
@@ -274,7 +274,8 @@ class Querier:
 
         return result
 
-    def set_foreign_key(self, table_name: str, fk_column_name: str, referenced_table_name: str, referenced_column_name: str):
+    def set_foreign_key(self, table_name: str, fk_column_name: str, referenced_table_name: str,
+                        referenced_column_name: str):
         """
         Set a column as a foreign key of a table.
 

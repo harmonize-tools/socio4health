@@ -32,7 +32,7 @@ class Transformer:
             df = pd.read_csv(self.file_path, usecols=headers, header=0 if headers is None else None)
         elif file_extension.lower() == '.txt':
             df = pd.read_table(self.file_path, usecols=headers, header=0 if headers is None else None)
-        elif file_extension.lower() == '.xlsx':
+        elif file_extension.lower() == '.xlsx' or file_extension.lower() == '.xls':
             df = pd.read_excel(self.file_path, usecols=headers, header=0 if headers is None else None)
         else:
             raise ValueError(f'Unsupported file type: {file_extension}')

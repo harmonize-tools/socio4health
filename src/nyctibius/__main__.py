@@ -13,7 +13,7 @@ def main():
 
     # Extract data
     my_url = 'https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata'
-    list_datainfo = harmonizer.extract(url=my_url)
+    list_datainfo = harmonizer.extract(url=my_url, depth=0)
     harmonizer = Harmonizer(list_datainfo)
 
     # Transform data

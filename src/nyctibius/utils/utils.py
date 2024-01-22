@@ -74,7 +74,7 @@ def get_path_filename_noext(path: str) -> str:
     return os.path.splitext(os.path.basename(path))[0]
 
 
-def get_path_extension(path: str)  -> str:
+def get_path_extension(path: str) -> str:
     """Return the extension from a given path.
 
     Args:
@@ -85,6 +85,7 @@ def get_path_extension(path: str)  -> str:
     """
     extension = pathlib.Path(path).suffix
     return extension.upper().replace('.', '')
+
 
 #################################################
 

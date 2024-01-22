@@ -5,7 +5,6 @@ import json
 class MiSpider(scrapy.Spider):
     name = 'mvp'
     start_urls = ['https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata']
-    #start_urls = input("Ingrese el link")
     links = {}  # Diccionario para almacenar los enlaces de Excel por enlace inicial
 
     def parse(self, response):

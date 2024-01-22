@@ -13,11 +13,11 @@ functions:
 """
 from typing import List
 
-from nyctibius.dto.data_info import DataInfo
-from nyctibius.enums.config_enum import ConfigEnum
-from nyctibius.etl.loader import Loader
-from nyctibius.etl.transformer import Transformer
-from nyctibius.etl.extractor import Extractor
+from dto.data_info import DataInfo
+from enums.config_enum import ConfigEnum
+from etl.loader import Loader
+from etl.transformer import Transformer
+from etl.extractor import Extractor
 
 
 class Harmonizer:
@@ -25,9 +25,9 @@ class Harmonizer:
     def __init__(self, datasets: List[DataInfo] = None):
         self._datasets = datasets if datasets is not None else []
 
-    def extract(self, url=None):
-        extractor = Extractor()
-        extractor.run_scrapy_spider()
+    def extract(self, url=None, depth=0):
+        extractor = Extractor(url, depth)
+        extractor.run_standard_spider()
         list_datainfo = extractor.extract()
         return list(list_datainfo.values())
 

@@ -1,7 +1,7 @@
 import sqlite3
 
-from nyctibius.dto.data_info import DataInfo
-from nyctibius.enums.config_enum import ConfigEnum
+from dto.data_info import DataInfo
+from enums.config_enum import ConfigEnum
 
 
 class Loader:

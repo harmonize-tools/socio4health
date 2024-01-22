@@ -3,11 +3,18 @@ import requests
 import zipfile
 import os
 import json
-from nyctibius.dto.data_info import DataInfo
+from dto.data_info import DataInfo
+from scrapy.crawler import CrawlerProcess
+from etl.standard_spider import StandardSpider  # Replace with your spider file's name
+
 
 
 class Extractor():
-    def run_scrapy_spider(self):
+    def __init__(self, url=None, depth=0):
+        self.url = url
+        self.depth = depth
+
+    def run_mvp_spider(self):
         # Ejecuta una Spider que hace Scrapping de una pagina del DANE 
         # Retorna los links hacia la descarga de archivos .zip
         try:
@@ -20,7 +27,18 @@ class Extractor():
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while running the spider: {e}")
 
-    def descargar_descomprimir_zip(self, url, carpeta_destino='../../data/input'):
+    def run_standard_spider(self):
+        #searches for excel and csv files
+        process = CrawlerProcess({
+            'USER_AGENT': 'Mozilla/5.0 (compatible; NictibiusBot/0.1)',
+            'LOG_LEVEL': 'CRITICAL'
+            # other Scrapy settings
+        })
+        process.crawl(StandardSpider, url=self.url, depth=self.depth)
+        process.start()
+        print(f"Successfully ran spider: Standard Spider")
+
+    def descargar_descomprimir_mvpzip(self, url, carpeta_destino='../../data/input'):
         response = requests.get(url)
         carpeta_temporal = ""
 
@@ -70,8 +88,7 @@ class Extractor():
 
         return archivos_a_borrar, list_datainfo_temp
 
-    def extract(self):
-        self.run_scrapy_spider()
+    def extract_mvp(self):
         with open("enlaces_vivienda.json", 'r', encoding='utf-8') as file:
             # Cargar el contenido del archivo en un diccionario
             departamentos = json.load(file)
@@ -80,12 +97,46 @@ class Extractor():
         for departamento, url in departamentos.items():
             print(f"{url}")
             # Descarga y descomprime el archivo ZIP principal
-            list_datainfo_temp = self.descargar_descomprimir_zip(url[:-1])
+            list_datainfo_temp = self.descargar_descomprimir_mvpzip(url[:-1])
             list_datainfo = list_datainfo | list_datainfo_temp
             print(f"Datos {departamento}: ----- Descarga Finalizada")
             break
+            
         os.remove("enlaces_vivienda.json")
         return list_datainfo
+    
+    def extract(self):
+        list_datainfo = {}
+        with open("Output_scrap.json", 'r', encoding='utf-8') as file:
+            # Cargar el contenido del archivo en un diccionario
+            links = json.load(file)
+
+        download_dir = '../../data/input'
+        if not os.path.exists(download_dir):
+            os.makedirs(download_dir)
+        
+        for filename, url in links.items():
+            try:
+                response = requests.get(url, stream=True)
+                response.raise_for_status()
+
+                # Save file to the directory
+                filepath = os.path.join(download_dir, filename)
+                with open(filepath, 'wb') as file:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:  # filter out keep-alive new chunks
+                            file.write(chunk)
+                
+                print(f"Downloaded '{filename}' from {url}")
+
+            except requests.exceptions.RequestException as e:
+                print(f"Error downloading {filename} from {url}: {e}")
+        
+            list_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url, description=("..."))
+
+        os.remove("Output_scrap.json")
+        return list_datainfo
+
 
 
 if __name__ == "__main__":

@@ -1,10 +1,6 @@
 import pandas as pd
 
-from nyctibius.etl.transformer import Transformer
-from nyctibius.harmonizer import Harmonizer
-from nyctibius.dto.data_info import DataInfo
-from nyctibius.enums.headers_enum import HeadersEnum
-from nyctibius.enums.config_enum import ConfigEnum
+from harmonizer import Harmonizer
 
 
 def main():
@@ -13,10 +9,13 @@ def main():
     harmonizer = Harmonizer()
 
     # Extract data
-    my_url = 'https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata'
-    list_datainfo = harmonizer.extract(url=my_url)
-    harmonizer = Harmonizer(list_datainfo)
+    #my_url = "https://www.dane.gov.co/index.php/estadisticas-por-tema"
+    my_url = "https://www.dane.gov.co/index.php/estadisticas-por-tema/comercio-internacional/exportaciones"
 
+    list_datainfo = harmonizer.extract(url=my_url, depth = 0)
+    print(list_datainfo)
+    """
+    harmonizer = Harmonizer(list_datainfo)
     # Transform data
     harmonizer.transform('Person')
 
@@ -26,7 +25,7 @@ def main():
     # Print the results
     for i, result in enumerate(results):
         print(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
-
+    """
 
 if __name__ == "__main__":
     main()

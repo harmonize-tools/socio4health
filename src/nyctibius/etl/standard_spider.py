@@ -6,7 +6,7 @@ import logging
 class StandardSpider(scrapy.Spider):
     name = 'standard'
 
-    def __init__(self, url=None, depth=0, *args, **kwargs):
+    def __init__(self, url=None, depth=0, ext=['.csv','.xls','.xlsx','.zip'], *args, **kwargs):
         super().__init__(*args, **kwargs)
         if url is None:
             logging.warning("No URL provided. Please specify a URL.")
@@ -14,6 +14,7 @@ class StandardSpider(scrapy.Spider):
         self.start_urls = [url]
         self.depth = depth
         self.links = {}
+        self.ext = ext
 
     def parse(self, response, current_depth=0):
         # Check if the current depth is less than or equal to the allowed depth
@@ -22,7 +23,7 @@ class StandardSpider(scrapy.Spider):
 
             for enlace in elementos:
                 full_url = response.urljoin(enlace)
-                if enlace.endswith('.csv') or enlace.endswith('.xls') or enlace.endswith('.xlsx'):
+                if any(enlace.endswith(extension) for extension in self.ext):
                     nombre_archivo = os.path.basename(enlace)
                     self.links[nombre_archivo] = full_url
                 elif current_depth < self.depth:

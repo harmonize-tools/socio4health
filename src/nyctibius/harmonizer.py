@@ -26,8 +26,8 @@ class Harmonizer:
     def __init__(self, dataInfoList: List[DataInfo] = None):
         self._dataInfoList = dataInfoList if dataInfoList is not None else []
 
-    def extract(self, url=None, depth=0):
-        extractor = Extractor(url, depth)
+    def extract(self, url=None, depth=0, ext = ['.csv','.xls','.xlsx','.zip']):
+        extractor = Extractor(url, depth, ext)
         extractor.run_standard_spider()
         list_datainfo = extractor.extract()
         self._dataInfoList = list(list_datainfo.values())

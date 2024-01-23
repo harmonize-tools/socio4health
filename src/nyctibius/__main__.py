@@ -1,10 +1,11 @@
 import pandas as pd
 
-from nyctibius.etl.transformer import Transformer
-from nyctibius.harmonizer import Harmonizer
-from nyctibius.dto.data_info import DataInfo
-from nyctibius.enums.headers_enum import HeadersEnum
-from nyctibius.enums.config_enum import ConfigEnum
+from etl.transformer import Transformer
+from harmonizer import Harmonizer
+from dto.data_info import DataInfo
+from enums.headers_enum import HeadersEnum
+from enums.config_enum import ConfigEnum
+from tqdm import tqdm
 
 
 def main():
@@ -12,8 +13,8 @@ def main():
     harmonizer = Harmonizer()
 
     # Extract data
-    my_url = 'https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata'
-    list_datainfo = harmonizer.extract(url=my_url, depth=0)
+    my_url = 'https://www.dane.gov.co/index.php/estadisticas-por-tema/comercio-internacional/exportaciones'
+    list_datainfo = harmonizer.extract(url=my_url, depth=0, ext=['.csv','.xls','.xlsx','.zip'])
     harmonizer = Harmonizer(list_datainfo)
 
     # Transform data

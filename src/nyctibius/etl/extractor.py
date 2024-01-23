@@ -10,9 +10,10 @@ from etl.standard_spider import StandardSpider  # Replace with your spider file'
 
 
 class Extractor():
-    def __init__(self, url=None, depth=0):
+    def __init__(self, url=None, depth=0, ext=['.csv','.xls','.xlsx','.zip']):
         self.url = url
         self.depth = depth
+        self.ext = ext
 
     def run_mvp_spider(self):
         # Ejecuta una Spider que hace Scrapping de una pagina del DANE 
@@ -34,7 +35,7 @@ class Extractor():
             'LOG_LEVEL': 'CRITICAL'
             # other Scrapy settings
         })
-        process.crawl(StandardSpider, url=self.url, depth=self.depth)
+        process.crawl(StandardSpider, url=self.url, depth=self.depth, ext = self.ext)
         process.start()
         print(f"Successfully ran spider: Standard Spider")
 

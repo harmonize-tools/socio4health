@@ -5,7 +5,6 @@ from harmonizer import Harmonizer
 from dto.data_info import DataInfo
 from enums.headers_enum import HeadersEnum
 from enums.config_enum import ConfigEnum
-from tqdm import tqdm
 
 
 def main():

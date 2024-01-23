@@ -6,7 +6,7 @@ import json
 from dto.data_info import DataInfo
 from scrapy.crawler import CrawlerProcess
 from etl.standard_spider import StandardSpider  # Replace with your spider file's name
-
+from tqdm import tqdm
 
 
 class Extractor():
@@ -115,8 +115,8 @@ class Extractor():
         download_dir = '../../data/input'
         if not os.path.exists(download_dir):
             os.makedirs(download_dir)
-        
-        for filename, url in links.items():
+        print("Downloading...")
+        for filename, url in tqdm(links.items()):
             try:
                 response = requests.get(url, stream=True)
                 response.raise_for_status()
@@ -128,7 +128,7 @@ class Extractor():
                         if chunk:  # filter out keep-alive new chunks
                             file.write(chunk)
                 
-                print(f"Downloaded '{filename}' from {url}")
+                #print(f"Downloaded '{filename}' from {url}")
 
             except requests.exceptions.RequestException as e:
                 print(f"Error downloading {filename} from {url}: {e}")

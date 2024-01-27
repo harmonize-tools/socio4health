@@ -41,7 +41,7 @@ if __name__ == "__main__":
     # Set up command line arguments
     parser = argparse.ArgumentParser(description='Extract, transform and load data.')
     parser.add_argument('--url', type=str, required=True, help='The URL to extract data from.')
-    parser.add_argument('--depth', type=int, default=1, help='The depth of the extraction.')
+    parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')
     parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'], help='The file extensions to '
                                                                                             'consider during '
                                                                                             'extraction.')

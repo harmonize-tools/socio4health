@@ -2,8 +2,8 @@ import os
 import sqlite3
 from pathlib import Path
 
-from dto.data_info import DataInfo
-from enums.config_enum import ConfigEnum
+from ..dto.data_info import DataInfo
+from ..enums.config_enum import ConfigEnum
 
 
 class Loader:

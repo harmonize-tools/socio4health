@@ -3,9 +3,9 @@ import requests
 import zipfile
 import os
 import json
-from dto.data_info import DataInfo
+from ..dto.data_info import DataInfo
 from scrapy.crawler import CrawlerProcess
-from etl.standard_spider import StandardSpider  # Replace with your spider file's name
+from ..etl.standard_spider import StandardSpider  # Replace with your spider file's name
 from tqdm import tqdm
 
 

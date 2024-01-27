@@ -1,1 +1,1 @@
-from nyctibius.harmonizer import Harmonizer
+from .harmonizer import Harmonizer

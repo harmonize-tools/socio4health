@@ -14,11 +14,11 @@ functions:
 import time
 from typing import List
 
-from dto.data_info import DataInfo
-from enums.config_enum import ConfigEnum
-from etl.loader import Loader
-from etl.transformer import Transformer
-from etl.extractor import Extractor
+from .dto.data_info import DataInfo
+from .enums.config_enum import ConfigEnum
+from .etl.loader import Loader
+from .etl.transformer import Transformer
+from .etl.extractor import Extractor
 
 
 class Harmonizer:

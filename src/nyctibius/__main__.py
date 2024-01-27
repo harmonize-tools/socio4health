@@ -1,31 +1,51 @@
-import pandas as pd
-
-from etl.transformer import Transformer
-from harmonizer import Harmonizer
-from dto.data_info import DataInfo
-from enums.headers_enum import HeadersEnum
-from enums.config_enum import ConfigEnum
+import argparse
+import logging
+from .harmonizer import Harmonizer
 
 
-def main():
-    # Create a Harmonizer instance
-    harmonizer = Harmonizer()
+def main(url, depth, ext):
+    """
+    Main function to extract, transform and load data.
 
-    # Extract data
-    my_url = 'https://www.dane.gov.co/index.php/estadisticas-por-tema/comercio-internacional/exportaciones'
-    list_datainfo = harmonizer.extract(url=my_url, depth=0, ext=['.csv','.xls','.xlsx','.zip'])
-    harmonizer = Harmonizer(list_datainfo)
+    Parameters:
+    url (str): The URL to extract data from.
+    depth (int): The depth of the extraction.
+    ext (list): The file extensions to consider during extraction.
+    """
+    try:
+        # Create a Harmonizer instance
+        harmonizer = Harmonizer()
 
-    # Transform data
-    harmonizer.transform()
+        # Extract data
+        list_datainfo = harmonizer.extract(url=url, depth=depth, ext=ext)
+        harmonizer = Harmonizer(list_datainfo)
 
-    # Load the data
-    results = harmonizer.load()
+        # Transform data
+        harmonizer.transform()
 
-    # Print the results
-    for i, result in enumerate(results):
-        print(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
-    
+        # Load the data
+        results = harmonizer.load()
+
+        # Log the results
+        for i, result in enumerate(results):
+            logging.info(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
+
+    except Exception as e:
+        logging.error(f"An error occurred: {str(e)}")
+
 
 if __name__ == "__main__":
-    main()
+    # Set up logging
+    logging.basicConfig(level=logging.INFO)
+
+    # Set up command line arguments
+    parser = argparse.ArgumentParser(description='Extract, transform and load data.')
+    parser.add_argument('--url', type=str, required=True, help='The URL to extract data from.')
+    parser.add_argument('--depth', type=int, default=1, help='The depth of the extraction.')
+    parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'], help='The file extensions to '
+                                                                                            'consider during '
+                                                                                            'extraction.')
+    args = parser.parse_args()
+
+    # Run the main function
+    main(args.url, args.depth, args.ext)

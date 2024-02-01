@@ -34,12 +34,7 @@ setup(
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='Python package Nyctibius is designed to streamline the complex task of gathering and consolidating '
-                'socio-demographic data from various sources into a cohesive relational database. Nyctibius empowers '
-                'users to effortlessly unify custom data sets from diverse socio-demographic sources, ensuring that '
-                'they can work with up-to-date and comprehensive information in a seamless manner. This package '
-                'facilitates the process of creating a centralized repository of socio-demographic data, simplifying '
-                'data management and analysis for users across various domains.',  # Optional
+    description='Nyctibius is a Python package for gathering and consolidating socio-demographic data.',  # Optional
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.

@@ -3,7 +3,7 @@ import logging
 from .harmonizer import Harmonizer
 
 
-def main(url, depth, ext):
+def main(path, url, depth, ext):
     """
     Main function to extract, transform and load data.
 
@@ -17,7 +17,7 @@ def main(url, depth, ext):
         harmonizer = Harmonizer()
 
         # Extract data
-        list_datainfo = harmonizer.extract(url=url, depth=depth, ext=ext)
+        list_datainfo = harmonizer.extract(path=path, url=url, depth=depth, ext=ext)
         harmonizer = Harmonizer(list_datainfo)
 
         # Transform data
@@ -40,7 +40,8 @@ if __name__ == "__main__":
 
     # Set up command line arguments
     parser = argparse.ArgumentParser(description='Extract, transform and load data.')
-    parser.add_argument('--url', type=str, required=True, help='The URL to extract data from.')
+    parser.add_argument('--path', type=str, help='The folder path to extract data from.')
+    parser.add_argument('--url', type=str, help='The URL to extract data from.')
     parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')
     parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'], help='The file extensions to '
                                                                                             'consider during '
@@ -48,4 +49,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Run the main function
-    main(args.url, args.depth, args.ext)
+    main(args.path, args.url, args.depth, args.ext)

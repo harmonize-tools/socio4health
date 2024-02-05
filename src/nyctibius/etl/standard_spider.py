@@ -17,10 +17,26 @@ class StandardSpider(scrapy.Spider):
         self.ext = ext
 
     def parse(self, response, current_depth=0):
-        # Check if the current depth is less than or equal to the allowed depth
         if current_depth <= self.depth:
-            elementos = response.css('a::attr(href)').getall()
+            # Process elements with the class "resource"
+            elementos = response.css('.resource')
+            for elemento in elementos:
+                enlace = elemento.css('a::attr(href)').extract_first()
+                if enlace is None:
+                    enlace = elemento.css('input[type="image"]::attr(onclick)').re_first(r"'(https://[^']+)'").replace(" ","")
+                    nombre_archivo = elemento.css('input[type="image"]::attr(title)').extract_first()
+                
+                if enlace:
+                    nombre_archivo = elemento.css('input[type="image"]::attr(title)').extract_first()
+                    if nombre_archivo:
+                        # Modify the file name by removing the first three and last three characters
+                        
+                        modified_nombre_archivo = nombre_archivo
+                        full_url = response.urljoin(enlace)
+                        self.links[modified_nombre_archivo] = full_url
 
+            # Continue the existing functionality for checking links and their extensions
+            elementos = response.css('a::attr(href)').getall()
             for enlace in elementos:
                 full_url = response.urljoin(enlace)
                 if any(enlace.endswith(extension) for extension in self.ext):
@@ -28,14 +44,14 @@ class StandardSpider(scrapy.Spider):
                     self.links[nombre_archivo] = full_url
                 elif current_depth < self.depth:
                     # Follow the link if it's not a file and within depth limit
-                    yield response.follow(enlace, self.parse, cb_kwargs={'current_depth': current_depth + 1})
+                    yield response.follow(enlace, self.parse2, cb_kwargs={'current_depth': current_depth + 1})
+
 
         # Log or print the links (you can also process them as needed)
-        for name, link in self.links.items():
-            self.log(f"Found file: {name} at {link}")
+        #for name, link in self.links.items():
+        #    self.log(f"Found file: {name} at {link}")
 
     def closed(self, reason):
         # Optional: save the links to a JSON file
         with open('Output_scrap.json', 'w') as file:
             json.dump(self.links, file, indent=4)
-        self.log(f'Links found and saved in enlaces_archivos.json')

@@ -26,7 +26,6 @@ class Transformer:
         # Get file extension
         _, file_extension = os.path.splitext(self.file_path)
         # TODO delete file when saved df
-        print('Transforming ', self.file_path, '...')
         # Depending on the file extension, read the file using the appropriate pandas function
         if file_extension.lower() == '.csv':
             df = pd.read_csv(self.file_path, usecols=headers, header=0 if headers is None else None)
@@ -37,5 +36,4 @@ class Transformer:
         else:
             raise ValueError(f'Unsupported file type: {file_extension}')
 
-        print('Successful transforming of', self.file_path, '!')
         return df

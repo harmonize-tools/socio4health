@@ -19,6 +19,7 @@ from .enums.config_enum import ConfigEnum
 from .etl.loader import Loader
 from .etl.transformer import Transformer
 from .etl.extractor import Extractor
+from tqdm import tqdm
 
 
 class Harmonizer:
@@ -26,33 +27,39 @@ class Harmonizer:
     def __init__(self, dataInfoList: List[DataInfo] = None):
         self._dataInfoList = dataInfoList if dataInfoList is not None else []
 
-    def extract(self, url=None, depth=0, ext = ['.csv','.xls','.xlsx','.zip']):
-        extractor = Extractor(url, depth, ext)
-        extractor.run_standard_spider()
+    def extract(self, path=None, url=None, depth=0, ext = ['.csv','.xls','.xlsx','.zip']):
+        print("----------------------")
+        print("Extracting ...")
+        extractor = Extractor(path, url, depth, ext)
         list_datainfo = extractor.extract()
         self._dataInfoList = list(list_datainfo.values())
+        print("Extraction completed")
         return self._dataInfoList
 
     def transform(self) -> List[DataInfo]:
-        for dataset in self._dataInfoList:
+        print("----------------------")
+        print("Transforming ...")
+        for dataset in tqdm(self._dataInfoList):
             if dataset is not None:
                 transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
                 transformed_data = transformer.transform_data(dataset.name)
                 dataset.data = transformed_data
+        print("Successful transformation")
         return self._dataInfoList
 
     def load(self) -> List[tuple]:
         results = []
         loader = Loader()
-        for dataset in self._dataInfoList:
+        print("----------------------")
+        print("Loading ...")
+        for dataset in tqdm(self._dataInfoList):
             if dataset is not None:
                 try:
-                    start_time = time.time()
                     loader.load_data(dataset)
-                    print("Tiempo: ", time.time() - start_time)
-                    results.append((True, "Data loaded successfully"))
+                    #results.append((True, "Data loaded successfully"))
                 except Exception as e:
                     results.append((False, f"Error loading data: {str(e)}"))
             else:
                 results.append((False, "No dataset to load"))
+        print("Data loaded successfully")
         return results

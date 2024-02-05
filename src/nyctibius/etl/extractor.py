@@ -69,10 +69,10 @@ class Extractor():
                     #print(f"Downloaded '{filename}' from {url}")
 
                 except requests.exceptions.RequestException as e:
-                        print(f"Error downloading {filename} from {url}: {e}")
+                        return (f"Error downloading {filename} from {url}: {e}")
             
                 list_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url, description=("..."))
-                break
+                
 
             os.remove("Output_scrap.json")
         if self.mode == 1:
@@ -83,8 +83,8 @@ class Extractor():
             for filename in files_list:
                 try:
                     list_datainfo[f"datainfo_{filename[0]}"] = DataInfo(file_path=filename[0], url=None, description=("..."))
-                except:
-                    pass
+                except requests.exceptions.RequestException as e:
+                        return (f"Error: {e}")
         return list_datainfo
 
 

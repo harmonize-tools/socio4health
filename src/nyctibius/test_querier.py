@@ -2,22 +2,22 @@ from nyctibius.sql.querier import Querier
 
 querier = Querier()
 
-# tables = querier.get_tables()
-# print(tables)
+tables = querier.get_tables()
+print(tables)
 
-# columns = querier.get_columns('CNPV2018_3FALL_A2_05')
-# print(columns)
+columns = querier.get_columns('CNPV2018_3FALL_A2_05')
+print(columns)
 
-# print(querier.rename_table("CNPV2018_3FALL_A2_05", "Deceased"))
+print(querier.rename_table("CNPV2018_3FALL_A2_05", "Deceased"))
 
-# print(querier.rename_column("Deceased", "TIPO_REG", "type"))
+print(querier.rename_column("Deceased", "TIPO_REG", "type"))
 
-# print(querier.rename_table_columns("Deceased", ['id', 'type', 'Department', 'Municipality', 'class', 'sourvey_id',
-#                                   'living', 'housing_id', 'num_fall', 'sex_fall', 'age_fall', 'death_cert']))
+print(querier.rename_table_columns("Deceased", ['id', 'type', 'Department', 'Municipality', 'class', 'sourvey_id',
+                                   'living', 'housing_id', 'num_fall', 'sex_fall', 'age_fall', 'death_cert']))
 
-# print(querier.set_primary_key("Deceased", "id"))
+print(querier.set_primary_key("Deceased", "id"))
 
-# print(querier.set_foreign_key("Deceased", "sourvey_id", "CNPV2018_1VIV_A2_05", "COD_ENCUESTAS"))
+print(querier.set_foreign_key("Deceased", "sourvey_id", "CNPV2018_1VIV_A2_05", "COD_ENCUESTAS"))
 
 query = """
 CREATE TABLE NewTable AS

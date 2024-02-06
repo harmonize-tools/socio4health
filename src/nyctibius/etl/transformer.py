@@ -2,6 +2,7 @@ import pandas as pd
 import os
 
 from pandas import DataFrame
+import pyreadstat
 
 
 class Transformer:
@@ -33,6 +34,8 @@ class Transformer:
             df = pd.read_table(self.file_path, usecols=headers, header=0 if headers is None else None)
         elif file_extension.lower() == '.xlsx' or file_extension.lower() == '.xls':
             df = pd.read_excel(self.file_path, usecols=headers, header=0 if headers is None else None)
+        elif file_extension.lower() == '.sav':
+            df, meta = pyreadstat.read_sav(self.file_path, usecols=headers)
         else:
             raise ValueError(f'Unsupported file type: {file_extension}')
 

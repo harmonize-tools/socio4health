@@ -29,7 +29,7 @@ To use the Nyctibius package, follow these steps:
 1. Import the package in your Python script:
 
    ```python
-   from Nyctibius import Harmonizer
+   from nyctibius import Harmonizer
    ```
 
 2. Create an instance of the `Harmonizer` class:

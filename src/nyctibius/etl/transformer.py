@@ -29,7 +29,7 @@ class Transformer:
         # TODO delete file when saved df
         # Depending on the file extension, read the file using the appropriate pandas function
         if file_extension.lower() == '.csv':
-            df = pd.read_csv(self.file_path, usecols=headers, header=0 if headers is None else None)
+            df = pd.read_csv(self.file_path, sep='[,|;]', usecols=headers, header=0 if headers is None else None)
         elif file_extension.lower() == '.txt':
             df = pd.read_table(self.file_path, usecols=headers, header=0 if headers is None else None)
         elif file_extension.lower() == '.xlsx' or file_extension.lower() == '.xls':

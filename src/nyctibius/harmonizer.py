@@ -30,7 +30,7 @@ class Harmonizer:
     def extract(self, path=None, url=None, depth=0, ext = ['.csv','.xls','.xlsx','.zip']):
         print("----------------------")
         print("Extracting ...")
-        extractor = Extractor(path, url, depth, ext)
+        extractor = Extractor(path, url, depth, down_ext=ext)
         list_datainfo = extractor.extract()
         self._dataInfoList = list(list_datainfo.values())
         print("Extraction completed")

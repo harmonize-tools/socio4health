@@ -29,7 +29,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.1',  # Required
+    version='0.0.3.1',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -136,7 +136,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','requests','openpyxl','xlsxwriter','dask','Scrapy','setuptools','SQLAlchemy','tqdm'],  # Optional
+    install_requires=['pandas','requests','openpyxl','xlsxwriter','dask','Scrapy','setuptools','SQLAlchemy','tqdm', 'xlrd', 'pyreadstat', 'py7zr'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"

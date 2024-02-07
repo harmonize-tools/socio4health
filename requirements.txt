@@ -1,5 +1,6 @@
 pandas~=2.1.3
 requests~=2.31.0
+xlrd
 openpyxl
 xlsxwriter
 dask~=2023.11.0
@@ -8,3 +9,4 @@ setuptools~=68.1.2
 SQLAlchemy~=2.0.23
 tqdm~=4.66.1
 pyreadstat~=1.2.6
+py7zr~=0.20.8

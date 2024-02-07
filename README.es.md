@@ -26,7 +26,7 @@ Para utilizar la biblioteca Harmonize Toolkit, sigue estos pasos:
 1. Importe el paquete en su script Python:
 
    ```python
-   from Nyctibius import Harmonizer
+   from nyctibius import Harmonizer
    ```
 
 2. Crea una instancia de la clase `Harmonizer`:

@@ -37,6 +37,7 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
 
         except Exception as e:
             logging.error(f"An error occurred: {str(e)}")
+
     elif mode == 'query':
         querier = Querier()
 
@@ -68,18 +69,13 @@ if __name__ == "__main__":
     # Set up command line arguments
     parser = argparse.ArgumentParser(description='Extract, transform and load data or run querier functions.')
     parser.add_argument('mode', type=str, choices=['etl', 'query'], help='The mode of operation.')
-
-    args = parser.parse_args()
-
-    if args.mode == 'etl':
-        parser.add_argument('--path', type=str, help='The folder path to extract data from.')
-        parser.add_argument('--url', type=str, help='The URL to extract data from.')
-        parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')
-        parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'],
-                            help='The file extensions to consider during extraction.')
-    elif args.mode == 'query':
-        parser.add_argument('--func', type=str, help='The function name to run.')
-        parser.add_argument('--args', nargs='*', default=[], help='The arguments to the function.')
+    parser.add_argument('--path', type=str, help='The folder path to extract data from.')
+    parser.add_argument('--url', type=str, help='The URL to extract data from.')
+    parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')
+    parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'],
+                        help='The file extensions to consider during extraction.')
+    parser.add_argument('--func', type=str, help='The function name to run.')
+    parser.add_argument('--args', nargs='*', default=[], help='The arguments to the function.')
 
     args = parser.parse_args()
 

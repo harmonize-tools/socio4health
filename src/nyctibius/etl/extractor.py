@@ -36,7 +36,7 @@ class Extractor():
 
     def run_standard_spider(self):
         #searches for excel and csv files
-        logging.getLogger('scrapy').setLevel(logging.CRITICAL)
+        logging.getLogger('scrapy').propagate = False
         logging.getLogger('urllib3').setLevel(logging.CRITICAL)
         process = CrawlerProcess({
             'LOG_LEVEL': 'CRITICAL',
@@ -44,7 +44,7 @@ class Extractor():
             'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
             # other Scrapy settings
         })
-        process.crawl(StandardSpider, url=self.url, depth=self.depth, ext = self.ext)
+        process.crawl(StandardSpider, url=self.url, depth=self.depth, down_ext = self.down_ext)
         process.start()
         print(f"Successfully ran spider: Standard Spider")
 
@@ -84,10 +84,9 @@ class Extractor():
 
                 except requests.exceptions.RequestException as e:
                         return (f"Error downloading {filename} from {url}: {e}")
-                break
-                 
+
             os.remove("Output_scrap.json")
-        
+
         if self.mode == 1:
             files_list = []
             for i in self.load_ext:
@@ -99,7 +98,7 @@ class Extractor():
                 except requests.exceptions.RequestException as e:
                         return (f"Error: {e}")
         return list_datainfo
-    
+
 
 
     def extract_and_process_archive(self, input_archive, target_directory, current_depth=0, max_depth=4):

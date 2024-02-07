@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from nyctibius.enums.config_enum import ConfigEnum
+from ..enums.config_enum import ConfigEnum
 
 
 class Querier:

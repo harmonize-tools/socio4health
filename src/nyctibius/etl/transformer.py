@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-
 from pandas import DataFrame
 
 
@@ -11,6 +10,7 @@ class Transformer:
     def __init__(self, file_path, db_file):
         self.file_path = file_path
         self.db_file = db_file
+
 
     def transform_data(self, headers=None) -> DataFrame:
         """
@@ -35,5 +35,4 @@ class Transformer:
             df = pd.read_excel(self.file_path, usecols=headers, header=0 if headers is None else None)
         else:
             raise ValueError(f'Unsupported file type: {file_extension}')
-
         return df

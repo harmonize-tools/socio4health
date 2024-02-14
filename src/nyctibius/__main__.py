@@ -1,12 +1,12 @@
 import argparse
 import logging
 from .harmonizer import Harmonizer
-from .sql.querier import Querier
+from .db.modifier import Modifier
 
 
 def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
     """
-    Main function to extract, transform and load data or run querier functions.
+    Main function to extract, transform and load data or run db functions.
 
     Parameters:
     mode (str): The mode of operation ('etl' or 'query').
@@ -39,18 +39,17 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
             logging.error(f"An error occurred: {str(e)}")
 
     elif mode == 'query':
-        querier = Querier()
+        modifier = Modifier()
 
         # Mapping of function names to functions
         func_mapping = {
-            'get_tables': querier.get_tables,
-            'get_columns': querier.get_columns,
-            'rename_table': querier.rename_table,
-            'rename_column': querier.rename_column,
-            'rename_table_columns': querier.rename_table_columns,
-            'set_primary_key': querier.set_primary_key,
-            'set_foreign_key': querier.set_foreign_key,
-            'execute_query': querier.execute_query,
+            'get_tables': modifier.get_tables,
+            'get_columns': modifier.get_columns,
+            'rename_table': modifier.rename_table,
+            'rename_column': modifier.rename_column,
+            'rename_table_columns': modifier.rename_table_columns,
+            'set_primary_key': modifier.set_primary_key,
+            'set_foreign_key': modifier.set_foreign_key,
         }
 
         # Get the function from the mapping
@@ -67,7 +66,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     # Set up command line arguments
-    parser = argparse.ArgumentParser(description='Extract, transform and load data or run querier functions.')
+    parser = argparse.ArgumentParser(description='Extract, transform and load data or run db functions.')
     parser.add_argument('mode', type=str, choices=['etl', 'query'], help='The mode of operation.')
     parser.add_argument('--path', type=str, help='The folder path to extract data from.')
     parser.add_argument('--url', type=str, help='The URL to extract data from.')

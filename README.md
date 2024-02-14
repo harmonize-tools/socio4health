@@ -57,8 +57,8 @@ To use the Nyctibius package, follow these steps:
 5. Import the querier module and create an instance of the `Querier` class:
 
    ```python
-   from nyctibius.sql.querier import Querier
-   querier = Querier()
+   from nyctibius.db.modifier import Modifier
+   querier = Modifier()
    ```
    
 6. Perfom queries and transformations:

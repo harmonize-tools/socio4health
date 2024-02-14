@@ -56,7 +56,6 @@ class Harmonizer:
             if dataset is not None:
                 try:
                     loader.load_data(dataset)
-                    #results.append((True, "Data loaded successfully"))
                 except Exception as e:
                     results.append((False, f"Error loading data: {str(e)}"))
             else:

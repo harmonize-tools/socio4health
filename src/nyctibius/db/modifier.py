@@ -3,15 +3,27 @@ import sqlite3
 from ..enums.config_enum import ConfigEnum
 
 
-class Querier:
+class Modifier:
     """Data Loader class"""
 
-    def __init__(self):
-        directory = os.path.dirname(ConfigEnum.DB_PATH.value)
+    def __init__(self, db_path=None):
+        """
+        Initialize the Modifier with the path to the SQLite database file.
+
+        If the db_path is not provided, the default path from ConfigEnum.DB_PATH.value will be used.
+
+        Args:
+            db_path (str, optional): The path to the SQLite database file. Defaults to ConfigEnum.DB_PATH.value.
+        """
+        if db_path is None:
+            db_path = ConfigEnum.DB_PATH.value
+            print(db_path)
+
+        directory = os.path.dirname(db_path)
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
 
-        self.db_path = ConfigEnum.DB_PATH.value
+        self.db_path = db_path
 
     def get_column_datatypes(self, table_name: str):
         """
@@ -21,36 +33,16 @@ class Querier:
             table_name (str): The name of the table.
 
         Returns:
-            A dictionary containing the status of the operation and the list of column datatypes or error message.
+            dict: A dictionary where each key is a column name and each value is its datatype.
         """
-        query = f"PRAGMA table_info({table_name});"
-        result = self.execute_query(query)
-        if result['status'] == 'success':
-            # Extract column names and datatypes
-            result['result'] = [(column[1], column[2]) for column in result['result']]
-        return result
-
-    def execute_query(self, query: str, params: tuple = ()):
-        """
-        Execute a SQL query.
-
-        Args:
-            query (str): The SQL query to execute.
-            params (tuple): The parameters to substitute in the query.
-
-        Returns:
-            A dictionary containing the status of the operation and the result or error message.
-        """
-        result = {'status': None, 'result': None, 'error': None}
+        result = {}
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
-                cursor.execute(query, params)
-                result['status'] = 'success'
-                result['result'] = cursor.fetchall()
+                cursor.execute(f'PRAGMA table_info("{table_name}");')
+                result = {row[1]: row[2] for row in cursor.fetchall()}
         except Exception as e:
-            result['status'] = 'failure'
-            result['error'] = str(e)
+            print(f"Error getting column datatypes: {str(e)}")
 
         return result
 
@@ -59,10 +51,18 @@ class Querier:
         Get a list of all tables in the database.
 
         Returns:
-            A dictionary containing the status of the operation and the list of tables or error message.
+            list: A list of table names.
         """
-        query = "SELECT name FROM sqlite_master WHERE type='table';"
-        return self.execute_query(query)
+        result = []
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                result = [row[0] for row in cursor.fetchall()]
+        except Exception as e:
+            print(f"Error getting tables: {str(e)}")
+
+        return result
 
     def get_columns(self, table_name: str):
         """
@@ -72,10 +72,18 @@ class Querier:
             table_name (str): The name of the table.
 
         Returns:
-            A dictionary containing the status of the operation and the list of columns or error message.
+            list: A list of column names.
         """
-        query = f"PRAGMA table_info({table_name});"
-        return self.execute_query(query)
+        result = []
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+                cursor.execute(f'PRAGMA table_info("{table_name}");')
+                result = [row[1] for row in cursor.fetchall()]
+        except Exception as e:
+            print(f"Error getting columns: {str(e)}")
+
+        return result
 
     def rename_table(self, old_table_name: str, new_table_name: str):
         """
@@ -92,7 +100,7 @@ class Querier:
         try:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
-                cursor.execute(f"ALTER TABLE {old_table_name} RENAME TO {new_table_name}")
+                cursor.execute(f'ALTER TABLE "{old_table_name}" RENAME TO "{new_table_name}"')
                 result['status'] = 'success'
                 result['message'] = f"Table '{old_table_name}' renamed to '{new_table_name}'"
         except Exception as e:
@@ -128,7 +136,7 @@ class Querier:
                     return result
 
                 # Rename the column
-                cursor.execute(f"ALTER TABLE {table_name} RENAME COLUMN {old_column_name} TO {new_column_name}")
+                cursor.execute(f'ALTER TABLE "{table_name}" RENAME COLUMN "{old_column_name}" TO "{new_column_name}"')
 
                 result['status'] = True
                 result['message'] = f"Column '{old_column_name}' renamed to '{new_column_name}' in table '{table_name}'"
@@ -163,7 +171,7 @@ class Querier:
                     return result
 
                 # Get the current column names
-                cursor.execute(f"PRAGMA table_info({table_name})")
+                cursor.execute(f"PRAGMA table_info('{table_name}')")
                 current_column_names = [column[1] for column in cursor.fetchall()]
 
                 # Check if the number of new column names matches the number of current column names
@@ -175,11 +183,11 @@ class Querier:
 
                 # Create a new table with the new column names and copy the data from the old table
                 cursor.execute(f"CREATE TABLE temp_table ({', '.join(new_column_names)})")
-                cursor.execute(f"INSERT INTO temp_table SELECT * FROM {table_name}")
+                cursor.execute(f"INSERT INTO temp_table SELECT * FROM '{table_name}'")
 
                 # Delete the old table and rename the new table
-                cursor.execute(f"DROP TABLE {table_name}")
-                cursor.execute(f"ALTER TABLE temp_table RENAME TO {table_name}")
+                cursor.execute(f"DROP TABLE '{table_name}'")
+                cursor.execute(f"ALTER TABLE temp_table RENAME TO '{table_name}'")
 
                 result['status'] = True
                 result['message'] = f"Columns in table '{table_name}' renamed successfully"
@@ -205,7 +213,7 @@ class Querier:
             with sqlite3.connect(self.db_path) as cnx:
                 cursor = cnx.cursor()
                 cursor.execute(
-                    f"DELETE FROM {table_name} WHERE rowid NOT IN (SELECT MIN(rowid) FROM {table_name} GROUP BY {column_name})")
+                    f"DELETE FROM '{table_name}' WHERE rowid NOT IN (SELECT MIN(rowid) FROM '{table_name}' GROUP BY '{column_name}')")
                 result['status'] = 'success'
                 result['message'] = f"Duplicates based on column '{column_name}' removed from table '{table_name}'"
         except Exception as e:
@@ -239,7 +247,7 @@ class Querier:
                     return result
 
                 # Get the current column names
-                cursor.execute(f"PRAGMA table_info({table_name})")
+                cursor.execute(f"PRAGMA table_info('{table_name}')")
                 columns = [column[1] for column in cursor.fetchall()]
 
                 # Check if the column exists
@@ -249,7 +257,7 @@ class Querier:
                     return result
 
                 # Get the foreign key information
-                cursor.execute(f"PRAGMA foreign_key_list({table_name})")
+                cursor.execute(f"PRAGMA foreign_key_list('{table_name}')")
                 foreign_keys = cursor.fetchall()
 
                 # Create a new table with the same columns as the old table, but set the primary key
@@ -257,14 +265,14 @@ class Querier:
                 foreign_keys_sql = ', '.join(
                     [f"FOREIGN KEY ({fk[3]}) REFERENCES {fk[2]}({fk[4]})" for fk in foreign_keys])
                 cursor.execute(
-                    f"CREATE TABLE temp_table ({pk_column_name} PRIMARY KEY, {', '.join(columns)}, {foreign_keys_sql})")
+                    f"CREATE TABLE temp_table ('{pk_column_name}' PRIMARY KEY, {', '.join(columns)}, '{foreign_keys_sql}')")
 
                 # Copy the data from the old table to the new one
-                cursor.execute(f"INSERT INTO temp_table SELECT * FROM {table_name}")
+                cursor.execute(f"INSERT INTO temp_table SELECT * FROM '{table_name}'")
 
                 # Delete the old table and rename the new table
-                cursor.execute(f"DROP TABLE {table_name}")
-                cursor.execute(f"ALTER TABLE temp_table RENAME TO {table_name}")
+                cursor.execute(f"DROP TABLE '{table_name}'")
+                cursor.execute(f"ALTER TABLE temp_table RENAME TO '{table_name}'")
 
                 result['status'] = True
                 result['message'] = f"Primary key set to column '{pk_column_name}' in table '{table_name}'"
@@ -302,7 +310,7 @@ class Querier:
                     return result
 
                 # Get the current column names
-                cursor.execute(f"PRAGMA table_info({table_name})")
+                cursor.execute(f"PRAGMA table_info('{table_name}')")
                 columns = [column[1] for column in cursor.fetchall()]
 
                 # Check if the column exists
@@ -312,21 +320,21 @@ class Querier:
                     return result
 
                 # Get the primary key information
-                cursor.execute(f"PRAGMA table_info({table_name})")
+                cursor.execute(f"PRAGMA table_info('{table_name}')")
                 primary_key_column = next((column[1] for column in cursor.fetchall() if column[5] == 1), None)
 
                 # Create a new table with the same columns as the old table, but set the foreign key
                 columns.remove(fk_column_name)
                 primary_key_sql = f"{primary_key_column} PRIMARY KEY," if primary_key_column else ""
                 cursor.execute(
-                    f"CREATE TABLE temp_table ({primary_key_sql} {fk_column_name}, {', '.join(columns)}, FOREIGN KEY ({fk_column_name}) REFERENCES {referenced_table_name}({referenced_column_name}))")
+                    f"CREATE TABLE temp_table ('{primary_key_sql}' '{fk_column_name}', {', '.join(columns)}, FOREIGN KEY ('{fk_column_name}') REFERENCES '{referenced_table_name}'('{referenced_column_name}'))")
 
                 # Copy the data from the old table to the new one
-                cursor.execute(f"INSERT INTO temp_table SELECT * FROM {table_name}")
+                cursor.execute(f"INSERT INTO temp_table SELECT * FROM '{table_name}'")
 
                 # Delete the old table and rename the new table
-                cursor.execute(f"DROP TABLE {table_name}")
-                cursor.execute(f"ALTER TABLE temp_table RENAME TO {table_name}")
+                cursor.execute(f"DROP TABLE '{table_name}'")
+                cursor.execute(f"ALTER TABLE temp_table RENAME TO '{table_name}'")
 
                 result['status'] = True
                 result['message'] = f"Foreign key set to column '{fk_column_name}' in table '{table_name}'"
@@ -360,7 +368,7 @@ class Querier:
                     return result
 
                 # Delete the table
-                cursor.execute(f"DROP TABLE {table_name}")
+                cursor.execute(f"DROP TABLE '{table_name}'")
 
                 result['status'] = True
                 result['message'] = f"Table '{table_name}' deleted successfully"
@@ -388,7 +396,7 @@ class Querier:
                 cursor = cnx.cursor()
 
                 # Check if the table and column exist
-                cursor.execute(f"PRAGMA table_info({table_name})")
+                cursor.execute(f"PRAGMA table_info('{table_name}')")
                 columns = [column[1] for column in cursor.fetchall()]
                 if column_name not in columns:
                     result['status'] = False
@@ -396,7 +404,7 @@ class Querier:
                     return result
 
                 # Delete the column
-                cursor.execute(f"ALTER TABLE {table_name} DROP COLUMN {column_name}")
+                cursor.execute(f"ALTER TABLE '{table_name}' DROP COLUMN '{column_name}'")
 
                 result['status'] = True
                 result['message'] = f"Column '{column_name}' deleted from table '{table_name}'"
@@ -438,7 +446,7 @@ class Querier:
                     return result
 
                 # Merge the tables
-                cursor.execute(f"CREATE TABLE {new_table} AS SELECT * FROM {table1} UNION ALL SELECT * FROM {table2}")
+                cursor.execute(f"CREATE TABLE '{new_table}' AS SELECT * FROM '{table1}' UNION ALL SELECT * FROM '{table2}'")
 
                 result['status'] = True
                 result['message'] = f"Tables '{table1}' and '{table2}' merged into new table '{new_table}'"

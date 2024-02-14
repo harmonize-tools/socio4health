@@ -5,13 +5,17 @@ import pyreadstat
 
 
 class Transformer:
-    """ Data Transformer class
-   """
+    """
+    A class used to transform data into a Python Dataframe.
+
+    Attributes:
+        file_path (str): The path to the source file.
+        db_file (str): The path to the SQLite database file.
+    """
 
     def __init__(self, file_path, db_file):
         self.file_path = file_path
         self.db_file = db_file
-
 
     def transform_data(self, headers=None) -> DataFrame:
         """

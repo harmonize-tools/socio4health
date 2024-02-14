@@ -54,8 +54,8 @@ Para utilizar la biblioteca Harmonize Toolkit, sigue estos pasos:
 5. Importa el módulo querier y crea una instancia de la clase `Querier`:
 
    ```python
-   from nyctibius.sql.querier import Querier
-   querier = Querier()
+   from nyctibius.db.modifier import Modifier
+   querier = Modifier()
    ```
    
 6. Realizar consultas y transformaciones:

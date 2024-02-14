@@ -54,24 +54,48 @@ To use the Nyctibius package, follow these steps:
    results = harmonizer.load()
    ```
 
-5. Import the querier module and create an instance of the `Querier` class:
+5. Import the modifier module and create an instance of the `Modifier` class:
 
    ```python
    from nyctibius.db.modifier import Modifier
-   querier = Modifier()
+   modifier = Modifier()
    ```
    
-6. Perfom queries and transformations:
+6. Perfom modifications:
 
    ```python
-   querier.execute_query('SELECT * FROM table_name')
-   querier.get_tables()
-   querier.get_columns('table_name')
-   querier.rename_table("table_name", "new_table_name")
-   querier.rename_column("table_name", "column_name", "new_column_name")
-   querier.rename_table_columns("table_name", ['column_1', 'column_2', 'column_3', ...]))
-   querier.set_primary_key("table_name", "column_name")
-   querier.set_foreign_key("table_name", "fk_column_name", "referenced_table_name", "referenced_column_name")
+   modifier.get_tables()
+   modifier.get_columns('table_name')
+   modifier.rename_table("table_name", "new_table_name")
+   modifier.rename_column("table_name", "column_name", "new_column_name")
+   modifier.rename_table_columns("table_name", ['column_1', 'column_2', 'column_3', ...]))
+   modifier.set_primary_key("table_name", "column_name")
+   modifier.set_foreign_key("table_name", "fk_column_name", "referenced_table_name", "referenced_column_name")
+   ```
+   
+7. Import the querier module and create an instance of the `Querier` class:
+
+   ```python
+   from nyctibius.db.querier import Querier
+   # Create an instance of the Querier class
+   querier = Querier()
+   
+   # Example of a SELECT query
+   df_select = querier.select("table_name", ["column1", "column2"], "column1 > 5", 10)
+   print(df_select)
+   
+   # Example of an INSERT query
+   querier.insert("table_name", ["column1", "column2"], "'value1', 'value2'")
+   
+   # Example of an UPDATE query
+   querier.update("table_name", "column1 = 'new_value'", "column2 = 'value2'")
+   
+   # Example of a DELETE query
+   querier.delete("table_name", "column1 = 'value1'")
+   
+   # Example of a JOIN query
+   df_join = querier.join("table1", "table2", ["table1.column1", "table2.column2"], "INNER", "table1.id = table2.id")
+   print(df_join)
    ```
 
 ## Supported Data Sources

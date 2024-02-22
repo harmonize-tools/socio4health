@@ -94,7 +94,7 @@ class Modifier:
             new_table_name (str): The new name for the table.
 
         Returns:
-            A dictionary containing the status of the operation and a message.
+            dict: A dictionary containing the status of the operation and a message.
         """
         result = {'status': None, 'message': None}
         try:
@@ -119,7 +119,7 @@ class Modifier:
             new_column_name (str): The new name for the column.
 
         Returns:
-            A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
+            dict: A dictionary containing 'status' and 'message'. 'status' is a boolean indicating whether the operation was successful or not.
             'message' is a string describing the result of the operation.
         """
         result = {'status': None, 'message': None}
@@ -446,12 +446,47 @@ class Modifier:
                     return result
 
                 # Merge the tables
-                cursor.execute(f"CREATE TABLE '{new_table}' AS SELECT * FROM '{table1}' UNION ALL SELECT * FROM '{table2}'")
+                cursor.execute(
+                    f"CREATE TABLE '{new_table}' AS SELECT * FROM '{table1}' UNION ALL SELECT * FROM '{table2}'")
 
                 result['status'] = True
                 result['message'] = f"Tables '{table1}' and '{table2}' merged into new table '{new_table}'"
         except Exception as e:
             result['status'] = False
             result['message'] = f"Error merging tables: {str(e)}"
+
+        return result
+
+    def duplicate_table(self, old_table_name, new_table_name):
+        """
+        Duplicate a table in the database.
+
+        Args:
+            old_table_name (str): The name of the table to duplicate.
+            new_table_name (str): The name of the new table.
+
+        Returns:
+            dict: A dictionary containing the status of the operation and a message.
+        """
+        result = {'status': None, 'message': None}
+        try:
+            with sqlite3.connect(self.db_path) as cnx:
+                cursor = cnx.cursor()
+
+                # Check if the old table exists
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{old_table_name}'")
+                if not cursor.fetchone():
+                    result['status'] = 'failure'
+                    result['message'] = f"Table '{old_table_name}' not found"
+                    return result
+
+                # Create the new table as a duplicate of the old table
+                cursor.execute(f"CREATE TABLE {new_table_name} AS SELECT * FROM {old_table_name}")
+
+                result['status'] = 'success'
+                result['message'] = f"Table '{old_table_name}' duplicated as '{new_table_name}'"
+        except Exception as e:
+            result['status'] = 'failure'
+            result['message'] = str(e)
 
         return result

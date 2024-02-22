@@ -1,7 +1,15 @@
-# Nyctibius - Streamlining sociodemographic data harmonizing.
+# Nyctibius - Streamlining sociodemographic data harmonizing. <img src="img/ny_logo.png" align="right" width="240" />
 
+<!-- badges: start -->
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/biomac-lab/harmonize/blob/main/README.md)
 [![es](https://img.shields.io/badge/lang-es-yellow.svg)](https://github.com/biomac-lab/harmonize/blob/main/README.es.md)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
+[![R-CMD-check](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/%7B%7B%20gh_repo%20%7D%7D/branch/main/graph/badge.svg)](https://app.codecov.io/gh/%7B%7B%20gh_repo%20%7D%7D?branch=main)
+[![lifecycle-concept](https://raw.githubusercontent.com/reconverse/reconverse.github.io/master/images/badge-concept.svg)](https://www.reconverse.org/lifecycle.html#concept)
+<!-- badges: end -->
 
 The Python package Nyctibius is designed to streamline the complex task of gathering and consolidating sociodemographic data from various sources into a cohesive relational database. Nyctibius empowers users to effortlessly unify custom data sets from diverse socio-demographic sources, ensuring that they can work with up-to-date and comprehensive information in a seamless manner. This package facilitates the process of creating a harmonized repository of socio-demographic data, simplifying data management and analysis for users across various domains.
 
@@ -15,6 +23,7 @@ The Python package Nyctibius is designed to streamline the complex task of gathe
 
 ## Installation
 
+For full documentation, please refer to the [Nyctibius documentation](https://drive.google.com/file/d/1f2im1gzYpxrvfmiPllAvYWC21-ZzYLNg/view?usp=sharing).
 
 You can install the Nyctibius package using pip. Make sure you have Python 3.x installed on your system; the package requires Python version 3.7 or higher.
 
@@ -58,44 +67,28 @@ To use the Nyctibius package, follow these steps:
 
    ```python
    from nyctibius.db.modifier import Modifier
-   modifier = Modifier()
+   modifier = Modifier(db_path='../../data/output/nyctibius.db')
    ```
    
 6. Perfom modifications:
 
    ```python
-   modifier.get_tables()
-   modifier.get_columns('table_name')
-   modifier.rename_table("table_name", "new_table_name")
-   modifier.rename_column("table_name", "column_name", "new_column_name")
-   modifier.rename_table_columns("table_name", ['column_1', 'column_2', 'column_3', ...]))
-   modifier.set_primary_key("table_name", "column_name")
-   modifier.set_foreign_key("table_name", "fk_column_name", "referenced_table_name", "referenced_column_name")
+   tables = modifier.get_tables()
+   print(tables)
    ```
    
 7. Import the querier module and create an instance of the `Querier` class:
 
    ```python
    from nyctibius.db.querier import Querier
-   # Create an instance of the Querier class
-   querier = Querier()
-   
-   # Example of a SELECT query
-   df_select = querier.select("table_name", ["column1", "column2"], "column1 > 5", 10)
-   print(df_select)
-   
-   # Example of an INSERT query
-   querier.insert("table_name", ["column1", "column2"], "'value1', 'value2'")
-   
-   # Example of an UPDATE query
-   querier.update("table_name", "column1 = 'new_value'", "column2 = 'value2'")
-   
-   # Example of a DELETE query
-   querier.delete("table_name", "column1 = 'value1'")
-   
-   # Example of a JOIN query
-   df_join = querier.join("table1", "table2", ["table1.column1", "table2.column2"], "INNER", "table1.id = table2.id")
-   print(df_join)
+   querier = Querier(db_path='data/output/nyctibius.db')
+   ```
+
+8. Perform queries:
+
+   ```python
+   df = querier.select(table="Estructura CHC_2017").execute()
+   print(df)
    ```
 
 ## Supported Data Sources

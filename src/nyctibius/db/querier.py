@@ -32,6 +32,7 @@ class Querier:
             os.makedirs(directory, exist_ok=True)
 
         self.db_path = db_path
+        self.query = ''
 
     def _execute_query(self, query, params=()):
         """
@@ -47,100 +48,135 @@ class Querier:
         with sqlite3.connect(self.db_path) as cnx:
             return pd.read_sql_query(query, cnx, params=params)
 
-    def select(self, table, columns='*', where=None, limit=None):
+    def select(self, table, columns=None):
         """
-        Execute a SELECT query.
+        Start a SELECT query for a specific table and columns.
 
         Args:
             table (str): The name of the table to select from.
-            columns (str or list, optional): The columns to select. Defaults to '*'.
-            where (str, optional): The WHERE clause of the query.
-            limit (int, optional): The maximum number of rows to return.
+            columns (list, optional): The columns to select. Defaults to ['*'].
 
         Returns:
-            pandas.DataFrame: The result of the query.
+            Querier: The current Querier instance.
         """
+        if columns is None:
+            columns = ['*']
         if isinstance(columns, list):
             columns = ', '.join(columns)
+        self.query = f'SELECT {columns} FROM "{table}"'
+        return self
 
-        query = f'SELECT {columns} FROM "{table}"'
-        if where:
-            query += f" WHERE {where}"
-        if limit is not None:
-            query += f" LIMIT {limit}"
-        return self._execute_query(query)
-
-    def insert(self, table, columns, values):
+    def filter(self, condition, operator='AND'):
         """
-        Execute an INSERT query.
+        Add a condition to the query.
 
         Args:
-            table (str): The name of the table to insert into.
-            columns (str or list, optional): The columns to insert values into.
-            values (str): The values to insert.
+            condition (str): The condition for the clause.
+            operator (str, optional): The operator for the clause. Defaults to 'AND'.
+
+        Returns:
+            Querier: The current Querier instance.
+        """
+        if operator not in ['AND', 'OR']:
+            raise ValueError("Operator must be either 'AND' or 'OR'")
+
+        if 'WHERE' in self.query:
+            self.query += f' {operator} {condition}'
+        else:
+            self.query += f' WHERE {condition}'
+        return self
+
+    def filter_in(self, column, values, operator='AND', not_in=False):
+        """
+        Add an IN or NOT IN condition to the query.
+
+        Args:
+            column (str): The column for the IN condition.
+            values (list): The values for the IN condition.
+            operator (str, optional): The operator for the clause. Defaults to 'AND'.
+            not_in (bool, optional): Whether it's a NOT IN condition. Defaults to False.
+
+        Returns:
+            Querier: The current Querier instance.
+        """
+        if operator not in ['AND', 'OR']:
+            raise ValueError("Operator must be either 'AND' or 'OR'")
+
+        values = ', '.join(map(str, values))
+        in_clause = 'NOT IN' if not_in else 'IN'
+
+        if 'WHERE' in self.query:
+            self.query += f' {operator} {column} {in_clause} ({values})'
+        else:
+            self.query += f' WHERE {column} {in_clause} ({values})'
+        return self
+
+    def filter_like(self, column, pattern, condition_type, operator='AND'):
+        """
+        Add a LIKE condition to the query that checks if a column starts with, ends with, or contains a pattern.
+
+        Args:
+            column (str): The column for the LIKE condition.
+            pattern (str): The pattern for the LIKE condition.
+            condition_type (str): The type of LIKE condition. Must be 'startswith', 'endswith', or 'contains'.
+            operator (str, optional): The operator for the clause. Defaults to 'AND'.
+
+        Returns:
+            Querier: The current Querier instance.
+        """
+        if operator not in ['AND', 'OR']:
+            raise ValueError("Operator must be either 'AND' or 'OR'")
+        if condition_type not in ['startswith', 'endswith', 'contains']:
+            raise ValueError("Condition type must be either 'startswith', 'endswith', or 'contains'")
+
+        if condition_type == 'startswith':
+            pattern = f'{pattern}%'
+        elif condition_type == 'endswith':
+            pattern = f'%{pattern}'
+        else:  # condition_type == 'contains'
+            pattern = f'%{pattern}%'
+
+        if 'WHERE' in self.query:
+            self.query += f' {operator} {column} LIKE "{pattern}"'
+        else:
+            self.query += f' WHERE {column} LIKE "{pattern}"'
+        return self
+
+    def join(self, table, join_type='INNER', on_condition=None):
+        """
+        Add a JOIN clause to the query.
+
+        Args:
+            table (str): The table to join with.
+            join_type (str, optional): The type of join. Defaults to 'INNER'.
+            on_condition (str, optional): The condition for the ON clause. Defaults to None.
+
+        Returns:
+            Querier: The current Querier instance.
+        """
+        self.query += f' {join_type} JOIN "{table}"'
+        if on_condition is not None:
+            self.query += f' ON {on_condition}'
+        return self
+
+    def limit(self, limit):
+        """
+        Add a LIMIT clause to the query.
+
+        Args:
+            limit (int): The maximum number of rows to return.
+
+        Returns:
+            Querier: The current Querier instance.
+        """
+        self.query += f' LIMIT {limit}'
+        return self
+
+    def execute(self):
+        """
+        Execute the current query and return the result as a DataFrame.
 
         Returns:
             pandas.DataFrame: The result of the query.
         """
-        if isinstance(columns, list):
-            columns = ', '.join(columns)
-
-        query = f'INSERT INTO "{table}" ({columns}) VALUES ({values})'
-        return self._execute_query(query)
-
-    def update(self, table, set_clause, where=None):
-        """
-        Execute an UPDATE query.
-
-        Args:
-            table (str): The name of the table to update.
-            set_clause (str): The SET clause of the query.
-            where (str, optional): The WHERE clause of the query.
-
-        Returns:
-            pandas.DataFrame: The result of the query.
-        """
-        query = f'UPDATE "{table}" SET {set_clause}'
-        if where:
-            query += f" WHERE {where}"
-        return self._execute_query(query)
-
-    def delete(self, table, where=None):
-        """
-        Execute a DELETE query.
-
-        Args:
-            table (str): The name of the table to delete from.
-            where (str, optional): The WHERE clause of the query.
-
-        Returns:
-            pandas.DataFrame: The result of the query.
-        """
-        query = f'DELETE FROM "{table}"'
-        if where:
-            query += f" WHERE {where}"
-        return self._execute_query(query)
-
-    def join(self, table1, table2, columns='*', join_type='INNER', on_condition=None):
-        """
-        Execute a JOIN query.
-
-        Args:
-            table1 (str): The name of the first table to join.
-            table2 (str): The name of the second table to join.
-            columns (str or list, optional): The columns to select. Defaults to '*'.
-            join_type (str, optional): The type of join to perform. Defaults to 'INNER'.
-            on_condition (str, optional): The condition for the join.
-
-        Returns:
-            pandas.DataFrame: The result of the query.
-        """
-
-        if isinstance(columns, list):
-            columns = ', '.join(columns)
-
-        if on_condition is None:
-            raise ValueError("The 'on_condition' argument must be provided for a join operation.")
-
-        query = f'SELECT {columns} FROM "{table1}" {join_type} JOIN "{table2}" ON {on_condition}'
-        return self._execute_query(query)
+        return self._execute_query(self.query)

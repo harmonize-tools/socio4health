@@ -481,7 +481,7 @@ class Modifier:
                     return result
 
                 # Create the new table as a duplicate of the old table
-                cursor.execute(f"CREATE TABLE {new_table_name} AS SELECT * FROM {old_table_name}")
+                cursor.execute(f"CREATE TABLE '{new_table_name}' AS SELECT * FROM '{old_table_name}'")
 
                 result['status'] = 'success'
                 result['message'] = f"Table '{old_table_name}' duplicated as '{new_table_name}'"

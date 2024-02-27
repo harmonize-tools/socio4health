@@ -3,7 +3,7 @@ import json
 
 
 class MiSpi1der(scrapy.Spider):
-    name = 'mvp'
+    name = 'censo'
     start_urls = ['https://microdatos.dane.gov.co/index.php/catalog/643/get_microdata']
     links = {}  # Diccionario para almacenar los enlaces de Excel por enlace inicial
 

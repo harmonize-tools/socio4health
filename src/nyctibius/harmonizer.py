@@ -27,10 +27,10 @@ class Harmonizer:
     def __init__(self, dataInfoList: List[DataInfo] = None):
         self._dataInfoList = dataInfoList if dataInfoList is not None else []
 
-    def extract(self, path=None, url=None, depth=0, ext = ['.csv','.xls','.xlsx','.zip']):
+    def extract(self, path, url, depth, ext):
         print("----------------------")
         print("Extracting ...")
-        extractor = Extractor(path, url, depth, down_ext=ext)
+        extractor = Extractor(path, url, depth, down_ext=ext, download_dir="data/input")
         list_datainfo = extractor.extract()
         self._dataInfoList = list(list_datainfo.values())
         print("Extraction completed")

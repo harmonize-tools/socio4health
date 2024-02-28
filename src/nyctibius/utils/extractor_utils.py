@@ -21,7 +21,7 @@ def run_standard_spider(url, depth, down_ext):
         })
         process.crawl(StandardSpider, url=url, depth=depth, down_ext = down_ext)
         process.start()
-        print(f"Successfully ran spider: Standard Spider")
+        print(f"Successfully ran spider: Standard Spider") 
 
 def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=4, found_files=set()):
         if current_depth > max_depth:

@@ -7,6 +7,7 @@ import tempfile
 import tarfile
 import py7zr
 import os
+import requests
 
 
 def run_standard_spider(url, depth, down_ext):
@@ -21,7 +22,21 @@ def run_standard_spider(url, depth, down_ext):
         })
         process.crawl(StandardSpider, url=url, depth=depth, down_ext = down_ext)
         process.start()
-        print(f"Successfully ran spider: Standard Spider") 
+
+def download_request(url, filename, download_dir):
+            try:
+                # Request to download
+                response = requests.get(url, stream=True)
+                response.raise_for_status()
+                filepath = os.path.join(download_dir, filename)
+                # Save file to the directory
+                with open(filepath, 'wb') as file:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:
+                            file.write(chunk)
+                return filepath
+            except requests.exceptions.RequestException as e:
+                            return (f"Error downloading {filename} from {url}: {e}")  
 
 def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=4, found_files=set()):
         if current_depth > max_depth:

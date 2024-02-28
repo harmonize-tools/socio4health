@@ -8,6 +8,9 @@ class DataInfo:
         self._description = description
         self._url = url
         self._data = data
+    def __str__(self):
+        DataInfo_dict = {"name":self._name, "file_path":self._file_path, "url":self._url, "description":self._description, "data":self._data}
+        return str(DataInfo_dict)
 
     @property
     def file_path(self):

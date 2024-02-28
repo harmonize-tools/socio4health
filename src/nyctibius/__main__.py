@@ -17,12 +17,13 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
     args (list): The arguments to the function (for 'query' mode).
     """
     if mode == 'etl':
-        try:
+        #try:
             # Create a Harmonizer instance
             harmonizer = Harmonizer()
 
             # Extract data
             dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, ext=ext)
+            print(dict_datainfo[0])
             harmonizer = Harmonizer(dict_datainfo)
 
             # Transform data
@@ -35,8 +36,8 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
             for i, result in enumerate(results):
                 logging.info(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
 
-        except Exception as e:
-            logging.error(f"An error occurred: {str(e)}")
+        #except Exception as e:
+        #    logging.error(f"An error occurred: {str(e)}")
 
     elif mode == 'query':
         modifier = Modifier()

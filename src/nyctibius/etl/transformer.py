@@ -3,6 +3,8 @@ import os
 from pandas import DataFrame
 import pyreadstat
 
+from nyctibius.utils.utils import cell_to_indices
+
 
 class Transformer:
     """
@@ -19,15 +21,15 @@ class Transformer:
 
     def transform_data(self, headers=None) -> DataFrame:
         """
-       Reads a file (CSV, TXT, or XLSX), selects specified columns, and writes the transformed data
-       to a SQLite database.
+        Reads a file (CSV, TXT, or XLSX), selects specified columns, and writes the transformed data
+        to a SQLite database.
 
-       Args:
-           headers (List[str]): Path to the file (CSV, TXT, or XLSX)
+        Args:
+            headers (List[str]): Path to the file (CSV, TXT, or XLSX)
 
-       Returns:
-           Dataframe: Dataframe of the transformed file
-       """
+        Returns:
+            Dataframe: Dataframe of the transformed file
+        """
         # Get file extension
         _, file_extension = os.path.splitext(self.file_path)
         # TODO delete file when saved df
@@ -37,7 +39,16 @@ class Transformer:
         elif file_extension.lower() == '.txt':
             df = pd.read_table(self.file_path, usecols=headers, header=0 if headers is None else None)
         elif file_extension.lower() == '.xlsx' or file_extension.lower() == '.xls':
-            df = pd.read_excel(self.file_path, usecols=headers, header=0 if headers is None else None)
+            while True:
+                cell = input("Enter the start cell (e.g., A1): ")
+                start_row, start_column = cell_to_indices(cell)
+                df = pd.read_excel(self.file_path, usecols=range(start_column, None), skiprows=start_row,
+                                   header=0 if headers is None else None)
+                print(df.iloc[0])
+                print(df.iloc[1])
+                confirmation = input("Is this the correct starting row that includes column names? (yes/no): ")
+                if confirmation.lower() == 'yes':
+                    break
         elif file_extension.lower() == '.sav':
             df, meta = pyreadstat.read_sav(self.file_path, usecols=headers)
         else:

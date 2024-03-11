@@ -96,3 +96,15 @@ def read_csv_file(file_path: str, columns):
         for row in csv_reader:
             data.append(row)
     return data
+
+
+def cell_to_indices(cell):
+    column_str = ''.join(filter(str.isalpha, cell))
+    row_str = ''.join(filter(str.isdigit, cell))
+
+    column = 0
+    for char in column_str:
+        column = column * 26 + (ord(char.upper()) - ord('A')) + 1
+    row = int(row_str)
+
+    return row - 1, column - 1

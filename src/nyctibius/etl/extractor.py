@@ -9,9 +9,10 @@ from ..utils.extractor_utils import run_standard_spider, compressed2files, downl
 
 
 class Extractor():
-    def __init__(self, path=None, url=None, depth=0, down_ext=['.csv','.xls','.xlsx', ".txt", ".sav", ".zip"], download_dir="data/input"):
+    def __init__(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
+                 download_dir="data/input"):
         # Set variables for online scrap
-        self.compressed_ext = ['.zip','.7z', '.tar', '.gz', '.tgz']
+        self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.url = url
         self.depth = depth
         self.down_ext = down_ext
@@ -21,21 +22,21 @@ class Extractor():
         # Set mode
         self.mode = -1
         if path and url:
-            raise ValueError(f'Use only path or url mode. If you need to use both, create 2 datainfos and merge it to the transformer')
-        elif not(path or url):
+            raise ValueError(
+                f'Use only path or url mode. If you need to use both, create 2 datainfos and merge it to the transformer')
+        elif not (path or url):
             raise ValueError(f'Use at least a path or an url.')
         elif url:
             self.mode = 0
         elif path:
             self.mode = 1
 
-
     def extract(self):
         # Set initial variables
         dict_datainfo = {}
         filepath = ""
 
-        if self.mode == 0: # URL MODE
+        if self.mode == 0:  # URL MODE
             # Run scraper and create a variable with the links on a temporal json with the extraction
             run_standard_spider(self.url, self.depth, self.down_ext)
             with open("Output_scrap.json", 'r', encoding='utf-8') as file:
@@ -48,16 +49,18 @@ class Extractor():
                 # Iterate over the links to download files
                 for filename, url in tqdm(links.items()):
                     # Request file download
-                    filepath = download_request(url, filename, self.download_dir)                    
+                    filepath = download_request(url, filename, self.download_dir)
                     # Check if the file is a compressed archive to extract files and add them to the DataInfo dictionary 
                     extracted_files = []
                     if any(filepath.endswith(ext) for ext in self.compressed_ext):
                         extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                         for extracted_file in extracted_files:
-                            dict_datainfo[f"datainfo_{os.path.basename(extracted_file)}"] = DataInfo(file_path=extracted_file, url=url, description=("..."))
+                            dict_datainfo[f"datainfo_{os.path.basename(extracted_file)}"] = DataInfo(
+                                file_path=extracted_file, url=url, description=("..."))
                     # If it is not a compressed archive, it is added to the DataInfo dictionary
                     else:
-                        dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url, description=("..."))
+                        dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url,
+                                                                         description=("..."))
                 # Remove temporal extraction file
                 os.remove("Output_scrap.json")
             # Scraper did not found links
@@ -66,42 +69,45 @@ class Extractor():
                     # Request to download
                     filename = self.url.split("/")[-1]
                     filepath = download_request(self.url, filename, self.download_dir)
-                    print(f"Successfully downloaded") 
-                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url, description=("..."))
+                    print(f"Successfully downloaded")
+                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url,
+                                                                     description=("..."))
                 # Exception if source are not available
                 except Exception as e:
                     error = f"{e}"
                     logging.error(f"Error downloading: \n{e}")
                     return error
-            
 
-        if self.mode == 1: # LOCAL MODE
+        if self.mode == 1:  # LOCAL MODE
             # Set variables to create DataInfo dictionary
             files_list = []
             compressed_list = []
             # Order extensions to process
             compressed_inter = set(self.compressed_ext) & set(self.down_ext)
-            iter_ext = list(compressed_inter) + list(set(self.down_ext)-compressed_inter) 
+            iter_ext = list(compressed_inter) + list(set(self.down_ext) - compressed_inter)
             # Iter over ordered extensions to get all files of interest
             for ext in iter_ext:
                 full_pattern = os.path.join(self.path, f"*{ext}")
                 if ext in self.compressed_ext:
                     compressed_list.extend(glob.glob(full_pattern))
                     for filepath in compressed_list:
-                        extracted_files = list(compressed2files(input_archive=filepath, target_directory=self.download_dir, down_ext=self.down_ext))
+                        extracted_files = list(
+                            compressed2files(input_archive=filepath, target_directory=self.download_dir,
+                                             down_ext=self.down_ext))
                     files_list.extend(extracted_files)
                 else:
                     files_list.extend(glob.glob(full_pattern))
             # Create DataInfos
             for filename in tqdm(files_list):
                 try:
-                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filename, url="local", description=("..."))
+                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filename, url="local",
+                                                                     description=("..."))
                 except Exception as e:
-                        raise ValueError(f"Error: {e}")
-                
+                    raise ValueError(f"Error: {e}")
+
         return dict_datainfo
 
-    
+
 if __name__ == "__main__":
     extractor = Extractor()
     extractor.extract()

@@ -11,22 +11,20 @@ functions:
 
     * list_sources - returns the current list of sources
 """
-import time
 from typing import List
-
 from .dto.data_info import DataInfo
 from .enums.config_enum import ConfigEnum
 from .etl.loader import Loader
 from .etl.transformer import Transformer
 from .etl.extractor import Extractor
 from tqdm import tqdm
-import logging
 
 
 class Harmonizer:
 
     def __init__(self, dataInfoList: List[DataInfo] = None):
         self._dataInfoList = dataInfoList if dataInfoList is not None else []
+
     def extract(self, path, url, depth, ext):
         print("----------------------")
         print("Extracting ...")
@@ -36,10 +34,10 @@ class Harmonizer:
             self._dataInfoList = list(list_datainfo.values())
             print("Extraction completed")
             return self._dataInfoList
-        except:
-            logging.error(f"Empty DataInfo")
-            self._dataInfoList = list_datainfo
-            return self._dataInfoList
+        except Exception as e:
+            print(f"An error occurred during extraction: {e}")
+            # Handle the exception as needed
+            return []
 
     def transform(self) -> List[DataInfo]:
         print("----------------------")
@@ -47,11 +45,19 @@ class Harmonizer:
         if isinstance(self._dataInfoList, list) and self._dataInfoList:
             for dataset in tqdm(self._dataInfoList):
                 if dataset is not None:
-                    transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
-                    transformed_data = transformer.transform_data(dataset.name)
-                    dataset.data = transformed_data
+                    try:
+                        print(f"Transforming dataset: {dataset.name}")
+                        transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
+                        transformed_data = transformer.transform_data(dataset.name)
+                        dataset.data = transformed_data
+                        print(f"Successfully transformed dataset: {dataset.name}")
+                    except Exception as e:
+                        print(f"Exception while transforming data: {str(e)}")
+                else:
+                    print("Dataset is None")
             print("Successful transformation")
         else:
+            print("self._dataInfoList is not a list or is empty")
             raise ValueError(f"Empty DataInfo. Check extraction process\n{self._dataInfoList}")
         return self._dataInfoList
 
@@ -66,10 +72,13 @@ class Harmonizer:
                     try:
                         loader.load_data(dataset)
                     except Exception as e:
+                        print(f"Exception while loading data: {str(e)}")
                         results.append((False, f"Error loading data: {str(e)}"))
                 else:
+                    print("Dataset is None")
                     results.append((False, "No dataset to load"))
             print("Data loaded successfully")
         else:
+            print("self._dataInfoList is not a list or is empty")
             raise ValueError(f"Empty DataInfo. Check extraction process")
         return results

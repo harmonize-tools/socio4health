@@ -3,8 +3,6 @@ import os
 from pandas import DataFrame
 import pyreadstat
 
-from nyctibius.utils.utils import cell_to_indices
-
 
 class Transformer:
     """
@@ -35,17 +33,16 @@ class Transformer:
         # TODO delete file when saved df
         # Depending on the file extension, read the file using the appropriate pandas function
         if file_extension.lower() == '.csv':
-            df = pd.read_csv(self.file_path, sep='[,|;]', engine='python', usecols=headers, header=0 if headers is None else None)
+            df = pd.read_csv(self.file_path, sep='[,|;]', engine='python', usecols=headers,
+                             header=0 if headers is None else None)
         elif file_extension.lower() == '.txt':
             df = pd.read_table(self.file_path, usecols=headers, header=0 if headers is None else None)
         elif file_extension.lower() == '.xlsx' or file_extension.lower() == '.xls':
             while True:
-                cell = input("Enter the start cell (e.g., A1): ")
-                start_row, start_column = cell_to_indices(cell)
-                df = pd.read_excel(self.file_path, usecols=range(start_column, None), skiprows=start_row,
-                                   header=0 if headers is None else None)
+                start_row = input("Enter the start row (e.g., 1): ")
+
+                df = pd.read_excel(self.file_path, skiprows=int(start_row) - 1, header=0 if headers is None else None)
                 print(df.iloc[0])
-                print(df.iloc[1])
                 confirmation = input("Is this the correct starting row that includes column names? (yes/no): ")
                 if confirmation.lower() == 'yes':
                     break

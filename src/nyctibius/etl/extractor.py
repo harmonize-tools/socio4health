@@ -69,7 +69,7 @@ class Extractor():
                     # Request to download
                     filename = self.url.split("/")[-1]
                     filepath = download_request(self.url, filename, self.download_dir)
-                    print(f"Successfully downloaded")
+                    print(f"Successfully downloaded.")
                     dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url,
                                                                      description=("..."))
                 # Exception if source are not available

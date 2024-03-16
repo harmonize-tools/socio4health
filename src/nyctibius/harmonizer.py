@@ -46,11 +46,10 @@ class Harmonizer:
             for dataset in tqdm(self._dataInfoList):
                 if dataset is not None:
                     try:
-                        print(f"Transforming dataset: {dataset.name}")
+                        print(dataset.file_path)
                         transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
-                        transformed_data = transformer.transform_data(dataset.name)
+                        transformed_data = transformer.transform_data()
                         dataset.data = transformed_data
-                        print(f"Successfully transformed dataset: {dataset.name}")
                     except Exception as e:
                         print(f"Exception while transforming data: {str(e)}")
                 else:
@@ -61,8 +60,7 @@ class Harmonizer:
             raise ValueError(f"Empty DataInfo. Check extraction process\n{self._dataInfoList}")
         return self._dataInfoList
 
-    def load(self) -> List[tuple]:
-        results = []
+    def load(self):
         loader = Loader()
         print("----------------------")
         print("Loading ...")
@@ -73,12 +71,9 @@ class Harmonizer:
                         loader.load_data(dataset)
                     except Exception as e:
                         print(f"Exception while loading data: {str(e)}")
-                        results.append((False, f"Error loading data: {str(e)}"))
                 else:
                     print("Dataset is None")
-                    results.append((False, "No dataset to load"))
             print("Data loaded successfully")
         else:
             print("self._dataInfoList is not a list or is empty")
             raise ValueError(f"Empty DataInfo. Check extraction process")
-        return results

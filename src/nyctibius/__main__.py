@@ -1,5 +1,4 @@
 import argparse
-import logging
 from .harmonizer import Harmonizer
 from .db.modifier import Modifier
 
@@ -30,14 +29,7 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
             harmonizer.transform()
 
             # Load the data
-            results = harmonizer.load()
-
-            # Log the results
-            for i, result in enumerate(results):
-                logging.info(f"Dataset {i + 1}: Success: {result[0]}, Message: {result[1]}")
-
-        #except Exception as e:
-        #    logging.error(f"An error occurred: {str(e)}")
+            harmonizer.load()
 
     elif mode == 'query':
         modifier = Modifier()
@@ -63,9 +55,6 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
 
 
 if __name__ == "__main__":
-    # Set up logging
-    logging.basicConfig(level=logging.INFO)
-
     # Set up command line arguments
     parser = argparse.ArgumentParser(description='Extract, transform and load data or run db functions.')
     parser.add_argument('mode', type=str, choices=['etl', 'query'], help='The mode of operation.')

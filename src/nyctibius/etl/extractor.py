@@ -56,11 +56,10 @@ class Extractor():
                         extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                         for extracted_file in extracted_files:
                             dict_datainfo[f"datainfo_{os.path.basename(extracted_file)}"] = DataInfo(
-                                file_path=extracted_file, url=url, description=("..."))
+                                file_path=extracted_file, url=url)
                     # If it is not a compressed archive, it is added to the DataInfo dictionary
                     else:
-                        dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url,
-                                                                         description=("..."))
+                        dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url)
                 # Remove temporal extraction file
                 os.remove("Output_scrap.json")
             # Scraper did not found links
@@ -70,8 +69,7 @@ class Extractor():
                     filename = self.url.split("/")[-1]
                     filepath = download_request(self.url, filename, self.download_dir)
                     print(f"Successfully downloaded.")
-                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url,
-                                                                     description=("..."))
+                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url)
                 # Exception if source are not available
                 except Exception as e:
                     error = f"{e}"
@@ -100,8 +98,7 @@ class Extractor():
             # Create DataInfos
             for filename in tqdm(files_list):
                 try:
-                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filename, url="local",
-                                                                     description=("..."))
+                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filename, url="local")
                 except Exception as e:
                     raise ValueError(f"Error: {e}")
 

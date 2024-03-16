@@ -52,8 +52,6 @@ class Loader:
 
                 # Create the table
                 name = Path(dataInfo.file_path).stem
-                if dataInfo.name is not None:
-                    name = dataInfo.name
                 dataInfo.data.to_sql(name, cnx, if_exists='append', chunksize=1000)
 
                 # Optimize the database

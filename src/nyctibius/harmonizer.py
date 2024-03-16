@@ -46,7 +46,6 @@ class Harmonizer:
             for dataset in tqdm(self._dataInfoList):
                 if dataset is not None:
                     try:
-                        print(dataset.file_path)
                         transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
                         transformed_data = transformer.transform_data()
                         dataset.data = transformed_data

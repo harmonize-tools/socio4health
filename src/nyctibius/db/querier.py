@@ -180,3 +180,12 @@ class Querier:
             pandas.DataFrame: The result of the query.
         """
         return self._execute_query(self.query)
+
+    def get_query_string(self):
+        """
+        Get the current query string.
+
+        Returns:
+            str: The current query string.
+        """
+        return self.query

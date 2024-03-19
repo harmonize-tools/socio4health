@@ -28,16 +28,16 @@ class Harmonizer:
     def extract(self, path, url, depth, ext):
         print("----------------------")
         print("Extracting ...")
+        extractor = Extractor(path, url, depth, down_ext=ext, download_dir="data/input")
+        list_datainfo = extractor.extract()
         try:
-            extractor = Extractor(path, url, depth, down_ext=ext, download_dir="data/input")
-            list_datainfo = extractor.extract()
+            list(list_datainfo.values())[0]
             self._dataInfoList = list(list_datainfo.values())
             print("Extraction completed")
             return self._dataInfoList
         except Exception as e:
-            print(f"An error occurred during extraction: {e}")
-            # Handle the exception as needed
-            return []
+            print(f"Exception while extracting data: {e}")
+
 
     def transform(self) -> List[DataInfo]:
         print("----------------------")
@@ -50,13 +50,13 @@ class Harmonizer:
                         transformed_data = transformer.transform_data()
                         dataset.data = transformed_data
                     except Exception as e:
-                        print(f"Exception while transforming data: {str(e)}")
+                        print(f"\nException while transforming data: {e}")
                 else:
                     print("Dataset is None")
             print("Successful transformation")
         else:
             print("self._dataInfoList is not a list or is empty")
-            raise ValueError(f"Empty DataInfo. Check extraction process\n{self._dataInfoList}")
+            raise ValueError(f"Empty DataInfo. Check extraction process")
         return self._dataInfoList
 
     def load(self):
@@ -69,7 +69,7 @@ class Harmonizer:
                     try:
                         loader.load_data(dataset)
                     except Exception as e:
-                        print(f"Exception while loading data: {str(e)}")
+                        print(f"\nException while loading data: {e}")
                 else:
                     print("Dataset is None")
             print("Data loaded successfully")

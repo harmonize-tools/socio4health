@@ -22,7 +22,6 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
 
             # Extract data
             dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, ext=ext)
-            print(dict_datainfo[0])
             harmonizer = Harmonizer(dict_datainfo)
 
             # Transform data

@@ -51,7 +51,7 @@ class Extractor():
                         tarea = True
                         files2download = int(input(f"How many files do you want to download? [number] "))
                         assert files2download>0, "Number must be higer than 0" 
-                        links = dict(islice(links.items(),files2download))
+                        links = dict(islice(links.items(), files2download))
                     else:
                         pass
                 else:
@@ -102,6 +102,9 @@ class Extractor():
             compressed_inter = set(self.compressed_ext) & set(self.down_ext)
             iter_ext = list(compressed_inter) + list(set(self.down_ext)-compressed_inter) 
             # Iter over ordered extensions to get all files of interest
+
+            extracted_files = []
+
             for ext in iter_ext:
                 full_pattern = os.path.join(self.path, f"*{ext}")
                 if ext in self.compressed_ext:
@@ -117,6 +120,10 @@ class Extractor():
                     dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filename, url="local")
                 except Exception as e:
                         raise ValueError(f"Error: {e}")
+                
+            if not dict_datainfo:
+                filename = self.path.split("/")[-1].split(".")[0]
+                dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=self.path, url="local")
         
         
         return dict_datainfo

@@ -3,7 +3,7 @@ from .harmonizer import Harmonizer
 from .db.modifier import Modifier
 
 
-def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
+def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, func_name=None, *args):
     """
     Main function to extract, transform and load data or run db functions.
 
@@ -21,7 +21,7 @@ def main(mode, path=None, url=None, depth=0, ext=None, func_name=None, *args):
             harmonizer = Harmonizer()
 
             # Extract data
-            dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, ext=ext)
+            dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
             harmonizer = Harmonizer(dict_datainfo)
 
             # Transform data
@@ -60,6 +60,7 @@ if __name__ == "__main__":
     parser.add_argument('--path', type=str, help='The folder path to extract data from.')
     parser.add_argument('--url', type=str, help='The URL to extract data from.')
     parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')
+    parser.add_argument('--download_dir', type=str, default="data/input", help='help="Specify the directory path where the downloaded files will be saved. Default is data/input')
     parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'],
                         help='The file extensions to consider during extraction.')
     parser.add_argument('--func', type=str, help='The function name to run.')

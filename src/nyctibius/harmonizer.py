@@ -25,10 +25,10 @@ class Harmonizer:
     def __init__(self, dataInfoList: List[DataInfo] = None):
         self._dataInfoList = dataInfoList if dataInfoList is not None else []
 
-    def extract(self, path, url, depth, ext):
+    def extract(self, path=None, url=None, depth=0, down_ext=['.csv','.xls','.xlsx', ".txt", ".sav", ".zip"], download_dir="data/input") -> list:
         print("----------------------")
         print("Extracting ...")
-        extractor = Extractor(path, url, depth, down_ext=ext, download_dir="data/input")
+        extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
         list_datainfo = extractor.extract()
         try:
             list(list_datainfo.values())[0]

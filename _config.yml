@@ -2,5 +2,4 @@ title: Nyctibius
 logo: img/ny_logo.png
 #description: text below image
 #show_downloads: true
-remote_theme: jekyll-theme-chirpy
-#changessss
+theme: jekyll-theme-minimal

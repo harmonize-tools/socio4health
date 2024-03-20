@@ -43,7 +43,6 @@ class Extractor():
             while not tarea:
                 if len(links) > 30:
                     all = input(f"The provided link contains {len(links)} files. Would you like to download all of them? [Y/N]: ").strip().lower()
-                    #breakpoint()
                     if "y" == all:
                         tarea = True
                     elif "n" == all:

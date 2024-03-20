@@ -21,6 +21,7 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
             harmonizer = Harmonizer()
 
             # Extract data
+
             dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
             harmonizer = Harmonizer(dict_datainfo)
 
@@ -69,4 +70,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Run the main function
-    main(args.mode, args.path, args.url, args.depth, args.ext, args.func, *args.args)
+    main(args.mode, args.path, args.url, args.depth, args.ext, args.download_dir, args.func, *args.args)

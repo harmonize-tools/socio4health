@@ -1,14 +1,15 @@
 import pandas as pd
-
+import io
 
 class DataInfo:
     def __init__(self, file_path=None, url=None, data=None):
         self._file_path = file_path
         self._url = url
         self._data = data
+        self._info = "Empty"
 
     def __str__(self):
-        DataInfo_dict = {"file_path": self._file_path, "url": self._url}
+        DataInfo_dict = {"file_path": self._file_path, "url": self._url, "info":self._info}
         return str(DataInfo_dict)
 
     @property
@@ -47,5 +48,12 @@ class DataInfo:
             raise TypeError('data must be a pandas DataFrame')
         try:
             self._data = data
+            with io.StringIO() as buffer:
+                self._data.info(buf=buffer)
+                self._info = buffer.getvalue().split("\n")[:-1]
         except Exception as e:
             raise Exception(f'Error setting data: {e}')
+        
+    @property
+    def info(self):
+        return self._info

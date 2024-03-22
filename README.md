@@ -1,4 +1,4 @@
-# Nyctibius - Streamlining sociodemographic data harmonizing. <img src="img/ny_logo.png" align="right" width="240" />
+# Nyctibius - Streamlining sociodemographic data harmonizing. <img src="docs/img/ny_logo.png" align="right" width="240" />
 
 <!-- badges: start -->
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/biomac-lab/harmonize/blob/main/README.md)

@@ -1,4 +1,4 @@
-# Nyctibius - Simplificación de la integración de datos sociodemográficos.<img src="img/ny_logo.png" align="right" width="240" />
+# Nyctibius - Simplificación de la integración de datos sociodemográficos.<img src="docs/img/ny_logo.png" align="right" width="240" />
 
 <!-- badges: start -->
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/biomac-lab/harmonize/blob/main/README.md)

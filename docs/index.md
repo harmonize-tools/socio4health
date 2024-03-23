@@ -13,11 +13,23 @@ The Python package [Nyctibius] is designed to streamline the complex task of gat
 - Effectively manage data inconsistencies and discrepancies for enhanced accuracy.
 - Support for various data formats, including .csv, .xlsx, .xls, .txt, and zip files, ensuring versatility in sourcing information.
 
-[README]to learn more about how to use this theme.
+[README] to learn more about how to use this theme.
 
+## About the Project
+
+Developed by [Erick Lozano] and [Diego Irreño], © 2017-2024
+
+## License
+
+Just the Docs is distributed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute this theme in accordance with the terms of the license.
+
+## Code of Conduct
+
+Just the Docs is committed to fostering a welcoming community. We believe in the importance of creating a safe and welcoming environment for everyone. To ensure this, we adhere to a Code of Conduct, which can be viewed on our [GitHub repository](https://github.com/just-the-docs/just-the-docs/blob/main/CODE_OF_CONDUCT.md).
+ 
 ----
 
-[^1]: [It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll#creating-your-site).
-
+[ErickGH]: https://github.com/Ersebreck
+[DiegoGH]: https://github.com/dirreno
 [Nyctibius]: https://github.com/Ersebreck/Nyctibius
 [README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md

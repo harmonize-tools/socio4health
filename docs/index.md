@@ -3,6 +3,8 @@ title: Home
 layout: home
 ---
 
+# Home
+
 The Python package [Nyctibius] is designed to streamline the complex task of gathering and consolidating sociodemographic data from various sources into a cohesive relational database. Nyctibius empowers users to effortlessly unify custom data sets from diverse socio-demographic sources, ensuring that they can work with up-to-date and comprehensive information in a seamless manner. This package facilitates the process of creating a harmonized repository of socio-demographic data, simplifying data management and analysis for users across various domains.
 
 ## Features
@@ -17,7 +19,7 @@ The Python package [Nyctibius] is designed to streamline the complex task of gat
 
 ## About the Project
 
-Developed by [Erick Lozano] and [Diego Irreño], © 2017-2024
+Developed by [Erick Lozano] and [Diego Irreño], © 2024
 
 ## License
 

@@ -9,3 +9,4 @@ aux_links: # remove if you don't want this link to appear on your pages
 
 logo: "./img/ny_logo.png"
 title_only_logo: false
+favicon_ico: "./img/ny_icon.ico"

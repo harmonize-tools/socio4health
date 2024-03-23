@@ -1,4 +1,4 @@
-title: Just the Docs Template
+title: Nyctibius
 description: A starter template for a Jeykll site using the Just the Docs theme!
 theme: just-the-docs
 
@@ -7,4 +7,5 @@ url: https://ersebreck.github.io/Nyctibius
 aux_links: # remove if you don't want this link to appear on your pages
   Template Repository: https://ersebreck.github.io/Nyctibius
 
-logo: "../img/ny_logo.png"
+logo: "/img/ny_logo.png"
+title_only_logo: false

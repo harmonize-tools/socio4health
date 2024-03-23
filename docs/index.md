@@ -21,15 +21,23 @@ Developed by [Erick Lozano] and [Diego Irreño], © 2017-2024
 
 ## License
 
-Just the Docs is distributed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute this theme in accordance with the terms of the license.
+Just the Docs is distributed under the [MIT License]. Feel free to use, modify, and distribute this theme in accordance with the terms of the license.
 
+## Contributing
+
+
+Contributions to Just the Docs are warmly embraced! If you're keen on contributing, kindly initiate a discussion regarding the proposed change through an issue, email, or any other suitable means with the repository owners before implementing it. Further details on becoming a contributor can be found in our [GitHub repository].
 ## Code of Conduct
 
-Just the Docs is committed to fostering a welcoming community. We believe in the importance of creating a safe and welcoming environment for everyone. To ensure this, we adhere to a Code of Conduct, which can be viewed on our [GitHub repository](https://github.com/just-the-docs/just-the-docs/blob/main/CODE_OF_CONDUCT.md).
+
+Nyctibius is dedicated to nurturing an inclusive community. We value the significance of establishing a safe and inviting atmosphere for all individuals. To uphold this principle, we strictly follow a Code of Conduct, which can be viewed [Here].
  
 ----
 
-[ErickGH]: https://github.com/Ersebreck
-[DiegoGH]: https://github.com/dirreno
+[Erick Lozano]: https://github.com/Ersebreck
+[Diego Irreño]: https://github.com/dirreno
+[MIT License]: https://opensource.org/licenses/MIT
 [Nyctibius]: https://github.com/Ersebreck/Nyctibius
 [README]: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
+[GitHub repository]: https://github.com/Ersebreck/Nyctibius
+[Here]: https://github.com/Ersebreck/Nyctibius/blob/main/CODE_OF_CONDUCT.md

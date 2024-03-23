@@ -57,8 +57,6 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: "docs/_site/"
-      - name: List contents of _site directory
-        run: ls -la docs/_site/
 
   # Deployment job
   deploy:

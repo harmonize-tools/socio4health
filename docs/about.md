@@ -1,11 +1,12 @@
 ---
 title: About
 layout: about
+nav_order: 2
 ---
 
-# About [Library Name]
+# About Nyctibius
 
-[Library Name] is a [brief description of the library]. It aims to [briefly mention the main goal or purpose of the library]. Developed with [mention technologies or languages used], it provides [highlight key features or functionalities of the library].
+Nyctibius is a Python package designed to streamline the complex task of gathering and consolidating sociodemographic data from various sources into a cohesive relational database. It aims to empower users to effortlessly unify custom data sets from diverse socio-demographic sources, ensuring that they can work with up-to-date and comprehensive information in a seamless manner. Developed with Python, it provides features such as seamless retrieval of data from online data sources through web scraping, effortless extraction of data from diverse sources, precise queries and transformations, effective management of data inconsistencies and discrepancies, and support for various data formats.
 
 ## Background
 
@@ -15,12 +16,6 @@ layout: about
 
 [Explain the goals and objectives of the library. Describe the problems it aims to solve, the needs it addresses, and the target audience it serves.]
 
-## Key Features
-
-- **Feature 1:** [Brief description of feature 1]
-- **Feature 2:** [Brief description of feature 2]
-- **Feature 3:** [Brief description of feature 3]
-- [Add more features as needed]
 
 ## Technology Stack
 

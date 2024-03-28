@@ -1,9 +1,12 @@
 ---
 title: Home
 layout: home
+nav_order: 1
 ---
 
-# Home
+# Welcome to Nyctibius
+
+Welcome to the official GitHub Pages site for Nyctibius! This site serves as the central hub for all documentation, resources, and updates related to the library.
 
 ## Introduction
 

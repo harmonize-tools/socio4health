@@ -1,4 +1,4 @@
-# Contributor Covenant Code of Conduct
+# Nyctibius Code of Conduct
 
 ## Our Pledge
 

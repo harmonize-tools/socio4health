@@ -5,7 +5,7 @@ theme: just-the-docs
 url: https://ersebreck.github.io/Nyctibius
 
 aux_links: # remove if you don't want this link to appear on your pages
-  Template Repository: https://ersebreck.github.io/Nyctibius
+  Repository: https://github.com/Ersebreck/Nyctibius
 
 logo: "./img/ny_logo.png"
 title_only_logo: false

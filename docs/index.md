@@ -20,14 +20,11 @@ The Python package [Nyctibius]  is an extraction, transformation, loading and AI
 
 - **Transformation:**
   - Consolidating extracted data into pandas DataFrame.
-    - Ensure data types are consistent.
-    - Handle missing values appropriately.
   - Optimizing the transformation process of large files.
     - Implement parallel processing for large files.
     - Use efficient data structures to reduce memory footprint.
   - Effectively manage data inconsistencies and discrepancies for enhanced accuracy.
     - Apply anomaly detection algorithms.
-    - Use data validation frameworks to ensure quality.
 
 - **Load:**
   - Consolidating transformed data into a cohesive relational database.

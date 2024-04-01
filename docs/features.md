@@ -1,7 +1,7 @@
 ---
-title: Getting Started
+title: Features
 layout: page
-nav_order: 3
+nav_order: 4
 ---
 
 # Features

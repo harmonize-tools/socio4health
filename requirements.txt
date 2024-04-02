@@ -1,9 +1,6 @@
 pandas~=2.1.3
 requests~=2.31.0
-openpyxl
-dask~=2023.11.0
 Scrapy~=2.11.1
-setuptools~=68.1.2
 tqdm~=4.66.1
 pyreadstat~=1.2.6
 py7zr~=0.20.8

@@ -181,7 +181,6 @@ class Querier:
         """
         return self._execute_query(self.query)
 
-    
     def __str__(self) -> str:
         """
         Get the current query string.

@@ -165,7 +165,7 @@ class BirdAgent(Agent):
         config = None
         with open(filename, 'r') as file:
             config = json.load(file)
-        with open("keys.json", "r") as file:
+        with open("configure.json", "r") as file:
             keys = json.load(file)
         llm = OpenAI(api_token="sk-"+keys["pandasai2"], temperature=0, seed=888)
         os.environ["PANDASAI_API_KEY"]  = keys["pandasai1"]

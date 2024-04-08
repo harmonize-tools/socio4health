@@ -1,0 +1,11 @@
+{
+  "save_logs": true,
+  "verbose": false,
+  "enforce_privacy": true,
+  "enable_cache": true,
+  "use_error_correction_framework": true,
+  "max_retries": 3,
+  "open_charts": true,
+  "save_charts": true,
+  "save_charts_path": "data/output"
+}

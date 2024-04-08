@@ -9,7 +9,7 @@ from pandasai import Agent
 import pandas as pd
 import os
 import json
-from ..db.modifier import Modifier
+from .db.modifier import Modifier
 from pandasai.connectors import SqliteConnector, PandasConnector
 from pandasai.llm import OpenAI
 import warnings

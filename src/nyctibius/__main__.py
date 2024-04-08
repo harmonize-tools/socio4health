@@ -1,6 +1,7 @@
 import argparse
 from .harmonizer import Harmonizer
 from .db.modifier import Modifier
+from .llm.bird_agent import BirdAgent
 
 
 def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, func_name=None, *args):
@@ -30,6 +31,11 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
 
             # Load the data
             harmonizer.load()
+
+            # Chat
+            agent = BirdAgent()
+            response = agent.chat(input())
+            print(response)
 
     elif mode == 'query':
         modifier = Modifier()

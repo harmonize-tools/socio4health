@@ -29,7 +29,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.8',  # Required
+    version='0.0.9',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -122,7 +122,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enums', 'nyctibius.etl', 'nyctibius.db', 'nyctibius.utils'],  # Required
+    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enums', 'nyctibius.etl', 'nyctibius.db', 'nyctibius.utils', 'pandasai', 'matplotlib', 'numpy'],  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -136,7 +136,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'setuptools'],  # Optional
+    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"

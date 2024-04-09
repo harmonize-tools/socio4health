@@ -122,7 +122,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enums', 'nyctibius.etl', 'nyctibius.db', 'nyctibius.utils', 'pandasai', 'matplotlib', 'numpy'],  # Required
+    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enums', 'nyctibius.etl', 'nyctibius.db', 'nyctibius.utils'],  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -136,7 +136,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr'],  # Optional
+    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'pandasai', 'matplotlib', 'numpy'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"

@@ -4,3 +4,4 @@ Scrapy~=2.11.1
 tqdm~=4.66.1
 pyreadstat~=1.2.6
 py7zr~=0.20.8
+setuptools~=69.2.0

@@ -156,16 +156,22 @@ class BirdAgent(Agent):
         }, field_descriptions=field_descriptions))
         return data
     
-    def prepare_config(self, filename="pandasai.json"):
-        config = None
-        with open(filename, 'r') as file:
-            config = json.load(file)
-        with open("configure.json", "r") as file:
-            keys = json.load(file)
-        llm = OpenAI(api_token="sk-"+keys["pandasai2"], temperature=0, seed=888)
-        os.environ["PANDASAI_API_KEY"]  = keys["pandasai1"]
-        config["llm"]= llm
-        return config
+    def prepare_config(self):
+            config = {
+            "save_logs":False,
+            "verbose": False,
+            "enforce_privacy": True,
+            "enable_cache": True,
+            "use_error_correction_framework": True,
+            "max_retries": 3,
+            "open_charts": True,
+            "save_charts": True,
+            "save_charts_path": "data/output"
+            }
+            llm = OpenAI(api_token="sk-"+"$2a$10$x32x4eshlonlpfdyObRzOu.DjYcAVLzY3suPZzuWtAjNIOxfsViVm", temperature=0, seed=888)
+            os.environ["PANDASAI_API_KEY"]  = "2YaGduHq6mtfQ4sG7HyvT3BlbkFJr7ng1JvEj3N8NNU3omf2"
+            config["llm"]= llm
+            return config
     
     def chat_interface(self):
         tarea = False

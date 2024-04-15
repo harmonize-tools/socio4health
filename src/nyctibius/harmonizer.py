@@ -11,6 +11,7 @@ functions:
 
     * list_sources - returns the current list of sources
 """
+import os
 from typing import List
 from .dto.data_info import DataInfo
 from .enums.config_enum import ConfigEnum
@@ -25,7 +26,8 @@ class Harmonizer:
     def __init__(self, dataInfoList: List[DataInfo] = None):
         self._dataInfoList = dataInfoList if dataInfoList is not None else []
 
-    def extract(self, path=None, url=None, depth=0, down_ext=['.csv','.xls','.xlsx', ".txt", ".sav", ".zip"], download_dir="data/input") -> list:
+    def extract(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
+                download_dir="data/input") -> list:
         print("----------------------")
         print("Extracting ...")
         extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
@@ -38,8 +40,7 @@ class Harmonizer:
         except Exception as e:
             print(f"Exception while extracting data: {e}")
 
-
-    def transform(self) -> List[DataInfo]:
+    def transform(self, delete_files=False) -> List[DataInfo]:
         print("----------------------")
         print("Transforming ...")
         if isinstance(self._dataInfoList, list) and self._dataInfoList:
@@ -54,15 +55,20 @@ class Harmonizer:
                 else:
                     print("Dataset is None")
             print("Successful transformation")
+            print(dataset.file_path)
+            print(delete_files)
         else:
             print("self._dataInfoList is not a list or is empty")
             raise ValueError(f"Empty DataInfo. Check extraction process")
         return self._dataInfoList
 
-    def load(self):
+    def load(self, delete_db=False):
         loader = Loader()
         print("----------------------")
         print("Loading ...")
+        if delete_db and os.path.exists(loader.db_path):
+            os.remove(loader.db_path)
+
         if isinstance(self._dataInfoList, list) and self._dataInfoList:
             for dataset in tqdm(self._dataInfoList):
                 if dataset is not None:

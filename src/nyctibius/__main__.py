@@ -17,25 +17,24 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
     args (list): The arguments to the function (for 'query' mode).
     """
     if mode == 'etl':
-        #try:
-            # Create a Harmonizer instance
-            harmonizer = Harmonizer()
+        # Create a Harmonizer instance
+        harmonizer = Harmonizer()
 
-            # Extract data
+        # Extract data
 
-            dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
-            harmonizer = Harmonizer(dict_datainfo)
+        dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
+        harmonizer = Harmonizer(dict_datainfo)
 
-            # Transform data
-            harmonizer.transform()
+        # Transform data
+        harmonizer.transform(delete_files=True)
 
-            # Load the data
-            harmonizer.load()
+        # Load the data
+        harmonizer.load(delete_db=True)
 
-            # Chat
-            agent = BirdAgent()
-            response = agent.chat(input("Chat with the db: "))
-            print(response)
+        # Chat
+        agent = BirdAgent()
+        response = agent.chat(input("Chat with the db: "))
+        print(response)
 
     elif mode == 'query':
         modifier = Modifier()

@@ -50,13 +50,13 @@ class Harmonizer:
                         transformer = Transformer(dataset.file_path, ConfigEnum.DB_PATH.value)
                         transformed_data = transformer.transform_data()
                         dataset.data = transformed_data
+                        if delete_files:
+                            os.remove(dataset.file_path)
                     except Exception as e:
                         print(f"\nException while transforming data: {e}")
                 else:
                     print("Dataset is None")
             print("Successful transformation")
-            print(dataset.file_path)
-            print(delete_files)
         else:
             print("self._dataInfoList is not a list or is empty")
             raise ValueError(f"Empty DataInfo. Check extraction process")

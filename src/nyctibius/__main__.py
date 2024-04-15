@@ -31,10 +31,6 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
         # Load the data
         harmonizer.load(delete_db=True)
 
-        # Chat
-        agent = BirdAgent()
-        print(agent.chat(input("Chat with the db: ")))
-
     elif mode == 'query':
         modifier = Modifier()
 
@@ -57,11 +53,15 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
 
         print(result)
 
+    elif mode == 'chat':
+        agent = BirdAgent()
+        print(agent.chat_interface())
+
 
 if __name__ == "__main__":
     # Set up command line arguments
     parser = argparse.ArgumentParser(description='Extract, transform and load data or run db functions.')
-    parser.add_argument('mode', type=str, choices=['etl', 'query'], help='The mode of operation.')
+    parser.add_argument('mode', type=str, choices=['etl', 'query', 'chat'], help='The mode of operation.')
     parser.add_argument('--path', type=str, help='The folder path to extract data from.')
     parser.add_argument('--url', type=str, help='The URL to extract data from.')
     parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')

@@ -55,7 +55,7 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
 
     elif mode == 'chat':
         agent = BirdAgent()
-        print(agent.chat_interface())
+        breakpoint()
 
 
 if __name__ == "__main__":

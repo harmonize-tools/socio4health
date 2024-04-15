@@ -54,8 +54,6 @@ class Extractor():
                         pass
                 else:
                     tarea = True
-        
-            assert links, "No files were found at the specified link. \nPlease verify the URL, search depth, and file extensions to ensure they are correct."
 
             # Set download folder
             if not os.path.exists(self.download_dir):
@@ -73,23 +71,35 @@ class Extractor():
                         extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                         for extracted_file in extracted_files:
                             dict_datainfo[f"datainfo_{os.path.basename(extracted_file)}"] = DataInfo(file_path=extracted_file, url=url)
+                        os.remove(filepath)
                     # If it is not a compressed archive, it is added to the DataInfo dictionary
                     else:
                         dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=url)
-                # Remove temporal extraction file
-                os.remove("Output_scrap.json")
             # Scraper did not found links
             else:
                 try:
                     # Request to download
                     filename = self.url.split("/")[-1]
+                    if len(filename.split(".")) == 1:
+                        filename += ".zip"
+                    else:
+                        dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url)
                     filepath = download_request(self.url, filename, self.download_dir)
-                    print(f"Successfully downloaded.")
-                    dict_datainfo[f"datainfo_{filename}"] = DataInfo(file_path=filepath, url=self.url)
+                    print(f"Successfully downloaded {filename} file.")
+                    if any(filepath.endswith(ext) for ext in self.compressed_ext):
+                        extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
+                        print(f"{filename} contains: {extracted_files}")
+                        for extracted_file in extracted_files:
+                            dict_datainfo[f"datainfo_{os.path.basename(extracted_file)}"] = DataInfo(file_path=extracted_file, url=self.url)
+                            filepath = filepath.replace("\\","/")
+                            try:
+                                os.remove(filepath)
+                            except:
+                                pass
                 # Exception if source are not available
                 except Exception as e:
-                    raise ValueError(f"Error downloading: \n{e}")
-                
+                    raise ValueError(f"Error downloading: \n{e}\nNo files were found at the specified link. \nPlease verify the URL, search depth, and file extensions to ensure they are correct.")
+            os.remove("Output_scrap.json")
             assert dict_datainfo, (f"\nSuccessfully downloaded files with the following extensions: {extracted_extensions}. "
     "However, it appears there are no files matching your requested extensions: {self.down_ext} within any compressed files. "
     "Please ensure the requested file extensions are correct and present within the compressed files.")

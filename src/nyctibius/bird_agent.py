@@ -168,8 +168,8 @@ class BirdAgent(Agent):
             "save_charts": True,
             "save_charts_path": "data/output"
             }
-            llm = OpenAI(api_token="sk-"+"$2a$10$x32x4eshlonlpfdyObRzOu.DjYcAVLzY3suPZzuWtAjNIOxfsViVm", temperature=0, seed=888)
-            os.environ["PANDASAI_API_KEY"]  = "2YaGduHq6mtfQ4sG7HyvT3BlbkFJr7ng1JvEj3N8NNU3omf2"
+            llm = OpenAI(api_token=("sk-"+"2YaGduHq6mtfQ4sG7HyvT3BlbkFJr7ng1JvEj3N8NNU3omf2"), temperature=0, seed=888)
+            os.environ["PANDASAI_API_KEY"]  = "$2a$10$x32x4eshlonlpfdyObRzOu.DjYcAVLzY3suPZzuWtAjNIOxfsViVm"
             config["llm"]= llm
             return config
     

@@ -33,8 +33,7 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
 
         # Chat
         agent = BirdAgent()
-        response = agent.chat(input("Chat with the db: "))
-        print(response)
+        print(agent.chat(input("Chat with the db: ")))
 
     elif mode == 'query':
         modifier = Modifier()

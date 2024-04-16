@@ -1,4 +1,4 @@
-pandas
+pandas~=2.0.3
 requests~=2.31.0
 Scrapy~=2.11.1
 tqdm~=4.66.1

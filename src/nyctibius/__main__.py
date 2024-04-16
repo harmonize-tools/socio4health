@@ -27,7 +27,6 @@ def main(mode:str, path:str, url:str, depth:int, down_ext:list, download_dir:str
 
         # Transform data
         harmonizer.transform(delete_files=True)
-
         # Load the data
         harmonizer.load(delete_db=True)
 

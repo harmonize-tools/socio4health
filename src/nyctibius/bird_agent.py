@@ -5,6 +5,7 @@ from pandasai import Agent
 import os
 import json
 from .db.modifier import Modifier
+from .dto.data_info import DataInfo
 from pandasai.connectors import SqliteConnector, PandasConnector
 from pandasai.llm import OpenAI
 import warnings
@@ -26,8 +27,7 @@ class BirdAgent(Agent):
         self.dfs = dfs
         self.dfs = self.prepare_data()
         self.config = self.prepare_config()
-        super().__init__(self.dfs,self.config,memory_size,pipeline,vectorstore,description)  
-        logging.getLogger('pandasai').propagate = False
+        super().__init__(self.dfs,self.config,memory_size,pipeline,vectorstore,description)
 
     def generate_code(self, prompt:str, output_type=None):
         self.last_code_generated = super().generate_code(prompt, output_type)
@@ -131,16 +131,27 @@ class BirdAgent(Agent):
             if ".db" in self.dfs:
                 data = self.prepare_db(self.dfs)
             else:
-                raise ValueError("Path must direct to a .db file")
+                raise ValueError("Path must reference to a .db file")
         elif isinstance(self.dfs, list):
             data = self.prepare_df(self.dfs)
+        elif isinstance(self.dfs, pd.DataFrame):
+            data = self.dfs
+        elif isinstance(self.dfs, DataInfo):
+            data= [PandasConnector({"original_df":self.dfs.data}, field_descriptions=None)]
         else:
             raise ValueError("Data not valid. It must be a .db file or a list of Dataframe/DataInfo objects")
         return data
     def prepare_df(self, field_descriptions=None):
         data = []
-        for df in self.dfs:
-            data.append(PandasConnector({"original_df":df.data}, field_descriptions=field_descriptions))
+        try:
+            if isinstance(self.dfs[0], pd.DataFrame):
+                for df in self.dfs:
+                    data.append(PandasConnector({"original_df":df}, field_descriptions=field_descriptions))
+            elif isinstance(self.dfs[0], DataInfo):
+                for df in self.dfs:
+                    data.append(PandasConnector({"original_df":df.data}, field_descriptions=field_descriptions))
+        except Exception as e:
+                    raise ValueError(f"Error preparing data to chat: {e}") 
         return data
 
     def prepare_db(self, db_path="data\\output\\nyctibius.db", field_descriptions=None): 

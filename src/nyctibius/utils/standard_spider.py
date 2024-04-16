@@ -3,11 +3,12 @@ import json
 import os
 import logging
 from scrapy.exceptions import IgnoreRequest
+import copy
 
 class StandardSpider(scrapy.Spider):
     name = 'standard'
 
-    def __init__(self, url=None, depth=0, ext=['.csv','.xls','.xlsx','.zip'], *args, **kwargs):
+    def __init__(self, url=None, depth=0, ext=['.csv','.xls','.xlsx','.zip'], key_words=[], *args, **kwargs):
         super().__init__(*args, **kwargs)
         if url is None:
             logging.warning("No URL provided. Please specify a URL.")
@@ -16,6 +17,7 @@ class StandardSpider(scrapy.Spider):
         self.depth = depth
         self.links = {}
         self.ext = ext
+        self.key_words = key_words
 
     def parse(self, response, current_depth=0):
         if current_depth <= self.depth:
@@ -25,10 +27,15 @@ class StandardSpider(scrapy.Spider):
                 for elemento in elementos:
                     enlace = elemento.attrib['href']
                     full_url = response.urljoin(enlace)
-                    
+                    if "Registro-de-activos-de-informacion" in full_url:
+                        continue
                     if any(enlace.endswith(extension) for extension in self.ext):
                         nombre_archivo = os.path.basename(enlace)
-                        self.links[nombre_archivo] = full_url
+                        if self.key_words:  # Ensure key_words is not empty or None
+                            if any(key_word in nombre_archivo for key_word in self.key_words):
+                                self.links[nombre_archivo] = full_url
+                        else:
+                            self.links[nombre_archivo] = full_url
                     elif current_depth < self.depth:
                         yield response.follow(enlace, self.parse, cb_kwargs={'current_depth': current_depth + 1})
 
@@ -38,9 +45,14 @@ class StandardSpider(scrapy.Spider):
                     onclick_url = input_element.css('::attr(onclick)').re_first(r"'(https://[^']+)'")
                     if onclick_url:
                         onclick_url = onclick_url.replace(" ", "")
-                        nombre_archivo = input_element.css('::attr(title)').extract_first()
+                        nombre_archivo = copy.deepcopy(input_element.css('::attr(title)').extract_first())
                         if nombre_archivo:
-                            self.links[nombre_archivo] = response.urljoin(onclick_url)
+                            if self.key_words:  # Ensure key_words is not empty or None
+                                if any(key_word in nombre_archivo for key_word in self.key_words):
+                                    self.links[nombre_archivo] = response.urljoin(onclick_url)
+                            else:
+                                 self.links[nombre_archivo] = response.urljoin(onclick_url)
+
 
             except IgnoreRequest:
                 self.logger.warning("Request ignored due to robots.txt restriction.")

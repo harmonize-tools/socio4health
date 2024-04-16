@@ -10,7 +10,7 @@ import os
 import requests
 
 
-def run_standard_spider(url, depth, down_ext):
+def run_standard_spider(url, depth, down_ext, key_words):
         #searches for excel and csv files
         logging.getLogger('scrapy').propagate = False
         logging.getLogger('urllib3').setLevel(logging.CRITICAL)
@@ -20,7 +20,7 @@ def run_standard_spider(url, depth, down_ext):
             'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
             # other Scrapy settings
         })
-        process.crawl(StandardSpider, url=url, depth=depth, down_ext = down_ext)
+        process.crawl(StandardSpider, url=url, depth=depth, down_ext = down_ext, key_words = key_words)
         process.start()
 
 def download_request(url, filename, download_dir):

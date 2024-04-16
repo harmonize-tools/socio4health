@@ -4,7 +4,7 @@ from .db.modifier import Modifier
 from .bird_agent import BirdAgent
 
 
-def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, func_name=None, *args):
+def main(mode:str, path:str, url:str, depth:int, down_ext:list, download_dir:str, key_words:str, func_name:None, *args):
     """
     Main function to extract, transform and load data or run db functions.
 
@@ -22,7 +22,7 @@ def main(mode, path=str, url=str, depth=int, down_ext=list, download_dir=str, fu
 
         # Extract data
 
-        dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir)
+        dict_datainfo = harmonizer.extract(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir, key_words=key_words)
         harmonizer = Harmonizer(dict_datainfo)
 
         # Transform data
@@ -68,10 +68,11 @@ if __name__ == "__main__":
     parser.add_argument('--download_dir', type=str, default="data/input", help='help="Specify the directory path where the downloaded files will be saved. Default is data/input')
     parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'],
                         help='The file extensions to consider during extraction.')
+    parser.add_argument('--key_words', nargs='+', default=[], help='Key words to extract files')
     parser.add_argument('--func', type=str, help='The function name to run.')
     parser.add_argument('--args', nargs='*', default=[], help='The arguments to the function.')
 
     args = parser.parse_args()
 
     # Run the main function
-    main(args.mode, args.path, args.url, args.depth, args.ext, args.download_dir, args.func, *args.args)
+    main(args.mode, args.path, args.url, args.depth, args.ext, args.download_dir, args.key_words, args.func, *args.args)

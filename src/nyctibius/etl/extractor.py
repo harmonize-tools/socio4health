@@ -7,13 +7,14 @@ from ..utils.extractor_utils import run_standard_spider, compressed2files, downl
 from itertools import islice
 
 class Extractor():
-    def __init__(self, path=str, url=str, depth=int, down_ext=list, download_dir=str):
+    def __init__(self, path:str, url:str, depth:int, down_ext:list, download_dir:str, key_words:list):
         # Set variables for online scrap
         self.compressed_ext = ['.zip','.7z', '.tar', '.gz', '.tgz']
         self.url = url
         self.depth = depth
         self.down_ext = down_ext
         self.download_dir = download_dir
+        self.key_words = key_words
         # Set variables for local files
         self.path = path
         # Set mode
@@ -36,7 +37,7 @@ class Extractor():
         if self.mode == 0: # URL MODE
             extracted_extensions = set()
             # Run scraper and create a variable with the links on a temporal json with the extraction
-            run_standard_spider(self.url, self.depth, self.down_ext)
+            run_standard_spider(self.url, self.depth, self.down_ext, self.key_words)
             with open("Output_scrap.json", 'r', encoding='utf-8') as file:
                 links = json.load(file)
             tarea = False

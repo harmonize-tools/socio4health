@@ -82,3 +82,16 @@ class Harmonizer:
         else:
             print("self._dataInfoList is not a list or is empty")
             raise ValueError(f"Empty DataInfo. Check extraction process")
+
+    def export(self, df, export_path):
+        """
+        Export a DataFrame to a CSV file.
+
+        Args:
+            df (DataFrame): The DataFrame to export.
+            export_path (str): The path to export the DataFrame to.
+        """
+        try:
+            df.to_csv(export_path, index=False)
+        except Exception as e:
+            raise ValueError(f'Error exporting DataFrame: {str(e)}')

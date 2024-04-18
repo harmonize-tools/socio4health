@@ -91,7 +91,10 @@ class Harmonizer:
             df (DataFrame): The DataFrame to export.
             file_name (str): The name of the file.
         """
+        # Replace spaces in the filename with underscores
+        file_name = file_name.replace(" ", "_")
+
         try:
-            df.to_csv(f"data/input/{file_name}.csv", index=False)
+            df.to_csv(f"data/output/{file_name}.csv", index=False)
         except Exception as e:
             raise ValueError(f'Error exporting DataFrame: {str(e)}')

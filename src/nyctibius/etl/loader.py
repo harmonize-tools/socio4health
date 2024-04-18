@@ -52,6 +52,7 @@ class Loader:
 
                 # Create the table
                 name = Path(dataInfo.file_path).stem
+                name = name.replace(" ", "_")
                 dataInfo.data.to_sql(name, cnx, if_exists='append', chunksize=1000)
 
                 # Optimize the database

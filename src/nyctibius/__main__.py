@@ -62,7 +62,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Extract, transform and load data or run db functions.')
     parser.add_argument('mode', type=str, choices=['etl', 'query', 'chat'], help='The mode of operation.')
     parser.add_argument('--path', type=str, help='The folder path to extract data from.')
-    parser.add_argument('--url', type=str, help='The URL to extract data from.')
+    parser.add_argument('--urls', nargs='+', default=[], help='The URL to extract data from.')
     parser.add_argument('--depth', type=int, default=0, help='The depth of the extraction.')
     parser.add_argument('--download_dir', type=str, default="data/input", help='help="Specify the directory path where the downloaded files will be saved. Default is data/input')
     parser.add_argument('--ext', nargs='+', default=['.csv', '.xls', '.xlsx', '.zip'],
@@ -74,4 +74,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Run the main function
-    main(args.mode, args.path, args.url, args.depth, args.ext, args.download_dir, args.key_words, args.func, *args.args)
+    main(args.mode, args.path, args.urls, args.depth, args.ext, args.download_dir, args.key_words, args.func, *args.args)

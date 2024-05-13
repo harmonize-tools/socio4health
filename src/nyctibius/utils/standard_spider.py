@@ -8,12 +8,12 @@ import copy
 class StandardSpider(scrapy.Spider):
     name = 'standard'
 
-    def __init__(self, url=None, depth=0, ext=['.csv','.xls','.xlsx','.zip'], key_words=[], *args, **kwargs):
+    def __init__(self, urls=None, depth=0, ext=['.csv','.xls','.xlsx','.zip'], key_words=[], *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if url is None:
+        if urls is None:
             logging.warning("No URL provided. Please specify a URL.")
             return
-        self.start_urls = [url]
+        self.start_urls = urls
         self.depth = depth
         self.links = {}
         self.ext = ext

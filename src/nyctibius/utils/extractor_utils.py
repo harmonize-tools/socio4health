@@ -10,7 +10,7 @@ import os
 import requests
 
 
-def run_standard_spider(url, depth, down_ext, key_words):
+def run_standard_spider(urls, depth, down_ext, key_words):
         #searches for excel and csv files
         logging.getLogger('scrapy').propagate = False
         logging.getLogger('urllib3').setLevel(logging.CRITICAL)
@@ -20,7 +20,12 @@ def run_standard_spider(url, depth, down_ext, key_words):
             'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
             # other Scrapy settings
         })
-        process.crawl(StandardSpider, url=url, depth=depth, down_ext = down_ext, key_words = key_words)
+
+        # Ensure that `urls` is a list even if a single URL is provided
+        if not isinstance(urls, list):
+            urls = [urls]
+
+        process.crawl(StandardSpider, urls=urls, depth=depth, down_ext = down_ext, key_words = key_words)
         process.start()
 
 def download_request(url, filename, download_dir):
@@ -71,6 +76,3 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
                         shutil.move(file_path, destination_path)
                         found_files.add(destination_path)
         return found_files
-
-
-

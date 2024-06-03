@@ -8,3 +8,4 @@ pandasai~=2.0.30
 openpyxl~=3.1.2
 matplotlib
 numpy
+duckdb

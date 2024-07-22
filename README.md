@@ -1,149 +1,193 @@
-# Nyctibius - Streamlining sociodemographic data harmonizing. <img src="docs/img/ny_logo.png" align="right" width="240" />
+# Example <a href='https://www.harmonize-tools.org/'><img src='https://harmonize-tools.github.io/harmonize-logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/biomac-lab/harmonize/blob/main/README.md)
-[![es](https://img.shields.io/badge/lang-es-yellow.svg)](https://github.com/biomac-lab/harmonize/blob/main/README.es.md)
-[![License:
-MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
-[![R-CMD-check](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/%7B%7B%20gh_repo%20%7D%7D/branch/main/graph/badge.svg)](https://app.codecov.io/gh/%7B%7B%20gh_repo%20%7D%7D?branch=main)
-[![lifecycle-concept](https://raw.githubusercontent.com/reconverse/reconverse.github.io/master/images/badge-concept.svg)](https://www.reconverse.org/lifecycle.html#concept)
+
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![R-CMD-check](https://github.com/epiforecasts/EpiNow2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/epiforecasts/EpiNow2/actions/workflows/R-CMD-check.yaml)
+[![MIT
+license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/epiforecasts/EpiNow2/blob/main/LICENSE.md/)
+[![GitHub
+contributors](https://img.shields.io/github/contributors/epiforecasts/EpiNow2)](https://github.com/epiforecasts/EpiNow2/graphs/contributors)
+
+[![universe](https://epiforecasts.r-universe.dev/badges/EpiNow2)](http://epiforecasts.r-universe.dev/ui/#package:EpiNow2)
+[![GitHub
+commits](https://img.shields.io/github/commits-since/epiforecasts/EpiNow2/v1.4.0.svg?color=orange)](https://GitHub.com/epiforecasts/EpiNow2/commit/main/)
+[![DOI](https://zenodo.org/badge/272995211.svg)](https://zenodo.org/badge/latestdoi/272995211)
 <!-- badges: end -->
 
-The Python package Nyctibius is designed to streamline the complex task of gathering and consolidating sociodemographic data from various sources into a cohesive relational database. Nyctibius empowers users to effortlessly unify custom data sets from diverse socio-demographic sources, ensuring that they can work with up-to-date and comprehensive information in a seamless manner. This package facilitates the process of creating a harmonized repository of socio-demographic data, simplifying data management and analysis for users across various domains.
+## Overview
+<p style="font-family: Arial, sans-serif; font-size: 14px;">
+  Welcome to the Harmonize Health Project repository. This repository is dedicated to improving health outcomes by integrating various health data sources into a unified framework. Our tools and documentation are designed to facilitate data harmonization, analysis, and reporting for health researchers and practitioners. 
+</p>
+<p style="font-family: Arial, sans-serif; font-size: 14px;">
+  <em>Join us in our mission to harmonize health data and enhance the quality of healthcare research.</em>
+</p>
 
-## Features
 
-- **Extraction:**
-  - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-  - Support for various data formats, including `.csv`, `.xlsx`, `.xls`, `.txt`, `.sav`, and compressed files, ensuring versatility in sourcing information.
+## Dependencies
 
-- **Transformation:**
-  - Consolidating extracted data into pandas DataFrame.
-  - Optimizing the transformation process of large files.
-    - Implement parallel processing for large files.
-    - Use efficient data structures to reduce memory footprint.
-  - Effectively manage data inconsistencies and discrepancies for enhanced accuracy.
-    - Apply anomaly detection algorithms.
-- **Load:**
-  - Consolidating transformed data into a cohesive relational database.
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://cran.r-project.org/web/packages/dplyr/index.html" target="_blank">
+        <img src="https://tidyverse.tidyverse.org/logo.png" height="50" alt="dplyr logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>dplyr</strong><br>
+      Provides a set of tools for efficiently manipulating datasets in R.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://cran.r-project.org/web/packages/ggplot2/index.html" target="_blank">
+        <img src="https://imgs.search.brave.com/7xErK1yv_WwEZ-syGmCUbH4n1THQcF7ukwTLS42zAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9yLWdy/YXBoLWdhbGxlcnku/Y29tL2ltZy9vdGhl/ci9nZ3Bsb3QySGV4/LmpwZw" height="50" alt="ggplot2 logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>ggplot2</strong><br>
+      Used for creating complex plots from data in a data frame.<br>
+    </td>
+  </tr>
+</table>
 
-- **Query:**
-  - Conduct precise queries and apply transformations to meet specific criteria.
 
-- **AI Query & Visualization:**
-  - Using natural language input to query data (Answers from values to subsets)
-  - Using natural language input to create simple visualizations of data
-
-  
-## Who should use Nyctibius?
-
-Nyctibius is ideal for data analysts, scientists, and researchers who frequently handle large volumes of data from varied sources and are looking for a streamlined way to consolidate, query, and visualize their data. It's also a great tool for developers working on projects that require the integration of disparate data sets into a single, manageable format. Additionally, business intelligence professionals and decision-makers will find Nyctibius invaluable for generating insights through natural language queries and visualizations, making complex data more accessible and actionable. In essence, anyone looking to simplify their data workflows, from extraction to visualization, and leverage AI for natural language querying will benefit greatly from using Nyctibius.
 
 ## Installation
 
-For full documentation, please refer to the [Nyctibius documentation](https://drive.google.com/file/d/1f2im1gzYpxrvfmiPllAvYWC21-ZzYLNg/view?usp=sharing).
+You can install the latest version of the package from GitHub using the `remotes` package:
 
-You can install the Nyctibius package using pip. Make sure you have Python 3.x installed on your system; the package requires Python version 3.7 or higher.
+```R
+# Install remotes if you haven't already
+install.packages("remotes")
 
-```shell
-pip install nyctibius
+# Install the package from GitHub
+remotes::install_github("your_username/your_package_name")
 ```
 
-## Usage
+## How to Use it / Vignette
 
-To use the Nyctibius package, follow these steps:
+This document provides a guide to working with NetCDF files in R using the `ncdf4` and `raster` packages. The following example demonstrates how to read a NetCDF file, extract data, and visualize it.
 
-1. Import the package in your Python script:
+<details>
+<summary>
+  Vignette
+</summary>
+  
+## Prerequisites
 
-   ```python
-   from nyctibius import Harmonizer
-   ```
+Before running the script, ensure you have the necessary packages installed. You can install them using the following commands:
 
-2. Create an instance of the `Harmonizer` class:
+```r
+install.packages("ncdf4")
+install.packages("raster")
+install.packages("ggplot2")
+```
 
-   ```python
-   harmonizer = Harmonizer()
-   ```
+## R script
+```r
+# Load necessary libraries
+library(ncdf4)
+library(raster)
+library(ggplot2)
 
-3. Extract data from online sources and create a list of data information:
+# Set the path to your NetCDF file
+nc_file <- "path/to/your/file.nc"
 
-   ```python
-   url = 'https://www.example.com'
-   depth = 0
-   ext = 'csv'
-   list_datainfo = harmonizer.extract(url=url, depth=depth, ext=ext)
-   harmonizer = Harmonizer(list_datainfo)
-   ```
+# Open the NetCDF file
+nc <- nc_open(nc_file)
 
-4. Load the data from the list of data information and merge it into a relational database:
+# Print the NetCDF file summary
+print(nc)
 
-   ```python
-   results = harmonizer.load()
-   ```
+# Extract data from a specific variable (e.g., 'temperature')
+# Replace 'temperature' with the actual variable name in your NetCDF file
+var_name <- "temperature"
+temperature <- ncvar_get(nc, var_name)
 
-5. Import the modifier module and create an instance of the `Modifier` class:
+# Get the dimensions of the data
+lon <- ncvar_get(nc, "lon")
+lat <- ncvar_get(nc, "lat")
+time <- ncvar_get(nc, "time")
 
-   ```python
-   from nyctibius.db.modifier import Modifier
-   modifier = Modifier(db_path='../../data/output/nyctibius.db')
-   ```
-   
-6. Perfom modifications:
+# Close the NetCDF file
+nc_close(nc)
 
-   ```python
-   tables = modifier.get_tables()
-   print(tables)
-   ```
-   
-7. Import the querier module and create an instance of the `Querier` class:
+# Create a raster layer for the first time step (if applicable)
+# Modify the indexing based on your data structure
+r <- raster(t(temperature[,,1]), xmn=min(lon), xmx=max(lon), ymn=min(lat), ymx=max(lat), crs=CRS("+proj=longlat +datum=WGS84"))
 
-   ```python
-   from nyctibius.db.querier import Querier
-   querier = Querier(db_path='data/output/nyctibius.db')
-   ```
+# Plot the raster layer using base R plot
+plot(r, main=paste("Temperature at Time Step 1"))
 
-8. Perform queries:
+# Convert the raster to a data frame for ggplot2 visualization
+r_df <- as.data.frame(r, xy=TRUE)
 
-   ```python
-   df = querier.select(table="Estructura CHC_2017").execute()
-   print(df)
-   ```
+# Plot the raster layer using ggplot2
+ggplot(r_df, aes(x=x, y=y, fill=layer)) +
+  geom_raster() +
+  coord_fixed() +
+  scale_fill_viridis_c() +
+  labs(title="Temperature at Time Step 1", x="Longitude", y="Latitude", fill="Temperature") +
+  theme_minimal()
+```
+</details>
 
-## Supported Data Sources
+## Resources
 
-The package supports the following sources:
+<details>
+<summary>
+Package Website
+</summary>
 
-- Colombian microdata links from National Administrative Department of Statistics (DANE)
-- Local files
-- Open data sources
+The [`example` website](https://cran.r-project.org/) package website includes a function reference, a model outline, and case studies using the package. The site mainly concerns the release version, but you can also find documentation for the latest development version.
 
-Please note that accessing data from these organizations may require authentication or specific credentials. Make sure you have the necessary permissions before using the library.
+</details>
+<details>
+<summary>
+Organisation Website
+</summary>
+
+[Harmonize](https://www.harmonize-tools.org/) is an international develop cost-effective and reproducible digital tools for stakeholders in hotspots affected by a changing climate in Latin America & the Caribbean (LAC), including cities, small islands, highlands, and the Amazon rainforest.
+
+The project consists of resources and [tools](https://harmonize-tools.github.io/) developed in conjunction with different teams from Brazil, Colombia, Dominican Republic, Peru and Spain.
+
+</details>
+
+## Organizations
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://www.bsc.es/" target="_blank">
+        <img src="https://imgs.search.brave.com/t_FUOTCQZmDh3ddbVSX1LgHYq4mzCxvVA8U_YHywMTc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zb21t/YS5lcy93cC1jb250/ZW50L3VwbG9hZHMv/MjAyMi8wNC9CU0Mt/Ymx1ZS1zbWFsbC5q/cGc" height="64" alt="dplyr logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>GHR</strong><br>
+      Global Health Resilience
+    </td>
+  </tr>
+</table>
 
 
-## License
+## Authors / Contact information
 
-The Nyctibius package is open-source and released under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute this library in accordance with the terms of the license.
+List the authors/contributors of the package and provide contact information if users have questions or feedback.
+</br>
+</br>
+<a href="https://github.com/drrachellowe">
+  <img src="https://imgs.search.brave.com/5LHcD0fArBHiqOOzb1AlCj7YGRHVMHCZcK_kYao0aos/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/aWNvbnMtcG5nLmZy/ZWVwaWsuY29tLzI1/Ni80NjYxLzQ2NjEz/MTgucG5nP3NlbXQ9/YWlzX2h5YnJpZA" style="width: 50px; height: auto;" />
+</a>
+<span style="display: flex; align-items: center; margin-left: 10px;">
+  <strong>Rachel Lowe</strong> (developer)
+  <a href="https://orcid.org/0000-0003-3939-7343" style="margin-left: 10px;">
+    <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" alt="ORCID" style="width: 16px; height: 16px;" />
+  </a>
+</span>
 
-## Acknowledgements
+## Citation
 
-We would like to thank the following entities for providing the data used and the economic financial support for the development of this package:
-
-- National Administrative Department of Statistics (DANE)
-- Barcelona Supercomputing Center (BSC)
-- Universidad de los Andes
-
-## Contact
-
-For any questions, suggestions, or feedback regarding the package please contact:
-
-Erick lozano,
-Email: es.lozano@uniandes.edu.co
-
-Diego Irreño,
-Email: dirreno@unal.edu.co
-
-## Disclaimer
-
-This library is not officially affiliated with or endorsed by any of the mentioned official organizations. The data provided by this library is sourced from publicly available information and may not always reflect the most current or accurate data. Please verify the information with the respective official sources for critical use cases.
+- **APA Format:**
+  - Lowe, R. (2020). *How to use the NetCDF files*. Package documentation. Retrieved from https://cran.r-project.org/).

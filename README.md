@@ -1,4 +1,4 @@
-# Example <a href='https://www.harmonize-tools.org/'><img src='https://harmonize-tools.github.io/harmonize-logo.png' align="right" height="139" /></a>
+# socio4health <a href='https://www.harmonize-tools.org/'><img src='https://harmonize-tools.github.io/harmonize-logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -9,7 +9,7 @@ license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/
 [![GitHub
 contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4health)](https://github.com/harmonize-tools/socio4health/graphs/contributors)
 [![GitHub
-commits](https://img.shields.io/github/commits-since/harmonize-tools/socio4health/0.1.0.svg?color=orange)](https://github.com/harmonize-tools/socio4health/commit/main)
+commits](https://img.shields.io/github/commits-since/harmonize-tools/socio4health/v0.0.14.svg?color=orange)](https://github.com/harmonize-tools/socio4health/commit/main)
 <!-- badges: end -->
 
 ## Overview

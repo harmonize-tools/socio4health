@@ -9,7 +9,7 @@ license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/
 [![GitHub
 contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4health)](https://github.com/harmonize-tools/socio4health/graphs/contributors)
 [![GitHub
-commits](https://img.shields.io/github/commits-since/harmonize-tools/socio4health/latest.svg?color=purple)](https://github.com/harmonize-tools/socio4health/commit/main)
+commits](https://badgen.net/github/commits/harmonize-tools/socio4health/main)
 <!-- badges: end -->
 
 ## Overview

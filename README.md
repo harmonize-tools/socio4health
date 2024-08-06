@@ -244,6 +244,7 @@ List the authors/contributors of the package and provide contact information if 
 <span style="display: flex; align-items: center; margin-left: 10px;">
   <strong>Diego Irreño</strong> (developer)
 </span>
+</br>
 <a href="https://github.com/Ersebreck">
   <img src="https://avatars.githubusercontent.com/u/81669194?v=4" style="width: 50px; height: auto;" />
 </a>

@@ -202,7 +202,7 @@ To use the Nyctibius package, follow these steps:
 Package Website
 </summary>
 
-The [socio4health website]([https://cran.r-project.org/](https://ersebreck.github.io/Nyctibius/)) package website includes a function reference, a model outline, and case studies using the package. The site mainly concerns the release version, but you can also find documentation for the latest development version.
+The [socio4health website](https://ersebreck.github.io/Nyctibius/) package website includes a function reference, a model outline, and case studies using the package. The site mainly concerns the release version, but you can also find documentation for the latest development version.
 
 </details>
 <details>

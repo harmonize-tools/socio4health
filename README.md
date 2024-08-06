@@ -31,18 +31,95 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
     </td>
     <td align="left">
       <strong>Pandas</strong><br>
-      Pandas is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool, built on top of the Python programming language.<br>
+      Pandas is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool.<br>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <a href="https://cran.r-project.org/web/packages/ggplot2/index.html" target="_blank">
-        <img src="https://imgs.search.brave.com/7xErK1yv_WwEZ-syGmCUbH4n1THQcF7ukwTLS42zAyM/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9yLWdy/YXBoLWdhbGxlcnku/Y29tL2ltZy9vdGhl/ci9nZ3Bsb3QySGV4/LmpwZw" height="50" alt="ggplot2 logo">
+      <a href="https://numpy.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/288276?s=48&v=4" height="50" alt="numpy logo">
       </a>
     </td>
     <td align="left">
-      <strong>ggplot2</strong><br>
-      Used for creating complex plots from data in a data frame.<br>
+      <strong>Numpy</strong><br>
+      The fundamental package for scientific computing with Python.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://scrapy.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/733635?s=48&v=4" height="50" alt="scrapy logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>Scrapy</strong><br>
+      Framework for extracting the data you need from websites.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://pandas-ai.com/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/154438448?s=48&v=4" height="50" alt="ggplot2 logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>Pandasai</strong><br>
+      Integrates generative artificial intelligence capabilities into pandas, making dataframes conversational.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://openpyxl.readthedocs.io/en/stable/" target="_blank">
+        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
+      </a>
+    </td>
+    <td align="left">
+      <strong>openpyxl</strong><br>
+      Read/write Excel 2010 xlsx/xlsm/xltx/xltm files.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://py7zr.readthedocs.io/en/latest/" target="_blank">
+        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
+      </a>
+    </td>
+    <td align="left">
+      <strong>py7zr</strong><br>
+      Used for uncompress zip files.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://pypi.org/project/pyreadstat/" target="_blank">
+        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
+      </a>
+    </td>
+    <td align="left">
+      <strong>pyreadstat</strong><br>
+      ead and write SAS (sas7bdat, sas7bcat, xport/xpt), SPSS (sav, zsav, por) and Stata (dta) files into/from pandas data frames.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://tqdm.github.io/" target="_blank">
+        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
+      </a>
+    </td>
+    <td align="left">
+      <strong>tqdm</strong><br>
+      Used for console loading bars.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://requests.readthedocs.io/en/latest/" target="_blank">
+        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
+      </a>
+    </td>
+    <td align="left">
+      <strong>requests</strong><br>
+      HTTP library for Python, built for human beings.<br>
     </td>
   </tr>
 </table>

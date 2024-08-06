@@ -131,80 +131,69 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 You can install the latest version of the package from GitHub using the `remotes` package:
 
 ```R
-# Install remotes if you haven't already
-install.packages("remotes")
-
-# Install the package from GitHub
-remotes::install_github("your_username/your_package_name")
+# Install using pip
+pip install nyctibius
 ```
 
-## How to Use it / Vignette
+## How to Use it
 
-This document provides a guide to working with NetCDF files in R using the `ncdf4` and `raster` packages. The following example demonstrates how to read a NetCDF file, extract data, and visualize it.
+To use the Nyctibius package, follow these steps:
 
-<details>
-<summary>
-  Vignette
-</summary>
-  
-## Prerequisites
+1. Import the package in your Python script:
 
-Before running the script, ensure you have the necessary packages installed. You can install them using the following commands:
+   ```python
+   from nyctibius import Harmonizer
+   ```
 
-```r
-install.packages("ncdf4")
-install.packages("raster")
-install.packages("ggplot2")
-```
+2. Create an instance of the `Harmonizer` class:
 
-## R script
-```r
-# Load necessary libraries
-library(ncdf4)
-library(raster)
-library(ggplot2)
+   ```python
+   harmonizer = Harmonizer()
+   ```
 
-# Set the path to your NetCDF file
-nc_file <- "path/to/your/file.nc"
+3. Extract data from online sources and create a list of data information:
 
-# Open the NetCDF file
-nc <- nc_open(nc_file)
+   ```python
+   url = 'https://www.example.com'
+   depth = 0
+   ext = 'csv'
+   list_datainfo = harmonizer.extract(url=url, depth=depth, ext=ext)
+   harmonizer = Harmonizer(list_datainfo)
+   ```
 
-# Print the NetCDF file summary
-print(nc)
+4. Load the data from the list of data information and merge it into a relational database:
 
-# Extract data from a specific variable (e.g., 'temperature')
-# Replace 'temperature' with the actual variable name in your NetCDF file
-var_name <- "temperature"
-temperature <- ncvar_get(nc, var_name)
+   ```python
+   results = harmonizer.load()
+   ```
 
-# Get the dimensions of the data
-lon <- ncvar_get(nc, "lon")
-lat <- ncvar_get(nc, "lat")
-time <- ncvar_get(nc, "time")
+5. Import the modifier module and create an instance of the `Modifier` class:
 
-# Close the NetCDF file
-nc_close(nc)
+   ```python
+   from nyctibius.db.modifier import Modifier
+   modifier = Modifier(db_path='../../data/output/nyctibius.db')
+   ```
+   
+6. Perfom modifications:
 
-# Create a raster layer for the first time step (if applicable)
-# Modify the indexing based on your data structure
-r <- raster(t(temperature[,,1]), xmn=min(lon), xmx=max(lon), ymn=min(lat), ymx=max(lat), crs=CRS("+proj=longlat +datum=WGS84"))
+   ```python
+   tables = modifier.get_tables()
+   print(tables)
+   ```
+   
+7. Import the querier module and create an instance of the `Querier` class:
 
-# Plot the raster layer using base R plot
-plot(r, main=paste("Temperature at Time Step 1"))
+   ```python
+   from nyctibius.db.querier import Querier
+   querier = Querier(db_path='data/output/nyctibius.db')
+   ```
 
-# Convert the raster to a data frame for ggplot2 visualization
-r_df <- as.data.frame(r, xy=TRUE)
+8. Perform queries:
 
-# Plot the raster layer using ggplot2
-ggplot(r_df, aes(x=x, y=y, fill=layer)) +
-  geom_raster() +
-  coord_fixed() +
-  scale_fill_viridis_c() +
-  labs(title="Temperature at Time Step 1", x="Longitude", y="Latitude", fill="Temperature") +
-  theme_minimal()
-```
-</details>
+   ```python
+   df = querier.select(table="Estructura CHC_2017").execute()
+   print(df)
+   ```
 
 ## Resources
 
@@ -213,7 +202,7 @@ ggplot(r_df, aes(x=x, y=y, fill=layer)) +
 Package Website
 </summary>
 
-The [`example` website](https://cran.r-project.org/) package website includes a function reference, a model outline, and case studies using the package. The site mainly concerns the release version, but you can also find documentation for the latest development version.
+The [socio4health website]([https://cran.r-project.org/](https://ersebreck.github.io/Nyctibius/)) package website includes a function reference, a model outline, and case studies using the package. The site mainly concerns the release version, but you can also find documentation for the latest development version.
 
 </details>
 <details>
@@ -249,17 +238,15 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
 List the authors/contributors of the package and provide contact information if users have questions or feedback.
 </br>
 </br>
-<a href="https://github.com/drrachellowe">
-  <img src="https://imgs.search.brave.com/5LHcD0fArBHiqOOzb1AlCj7YGRHVMHCZcK_kYao0aos/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/aWNvbnMtcG5nLmZy/ZWVwaWsuY29tLzI1/Ni80NjYxLzQ2NjEz/MTgucG5nP3NlbXQ9/YWlzX2h5YnJpZA" style="width: 50px; height: auto;" />
+<a href="https://github.com/dirreno">
+  <img src="https://avatars.githubusercontent.com/u/39099417?v=4" style="width: 50px; height: auto;" />
 </a>
 <span style="display: flex; align-items: center; margin-left: 10px;">
-  <strong>Rachel Lowe</strong> (developer)
-  <a href="https://orcid.org/0000-0003-3939-7343" style="margin-left: 10px;">
-    <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" alt="ORCID" style="width: 16px; height: 16px;" />
-  </a>
+  <strong>Diego Irreño</strong> (developer)
 </span>
-
-## Citation
-
-- **APA Format:**
-  - Lowe, R. (2020). *How to use the NetCDF files*. Package documentation. Retrieved from https://cran.r-project.org/).
+<a href="https://github.com/Ersebreck">
+  <img src="https://avatars.githubusercontent.com/u/81669194?v=4" style="width: 50px; height: auto;" />
+</a>
+<span style="display: flex; align-items: center; margin-left: 10px;">
+  <strong>Erick Lozano</strong> (developer)
+</span>

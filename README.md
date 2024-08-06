@@ -25,13 +25,13 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 <table>
   <tr>
     <td align="center">
-      <a href="https://cran.r-project.org/web/packages/dplyr/index.html" target="_blank">
-        <img src="https://tidyverse.tidyverse.org/logo.png" height="50" alt="dplyr logo">
+      <a href="https://pandas.pydata.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/21206976?s=280&v=4" height="50" alt="pandas logo">
       </a>
     </td>
     <td align="left">
-      <strong>dplyr</strong><br>
-      Provides a set of tools for efficiently manipulating datasets in R.<br>
+      <strong>Pandas</strong><br>
+      Pandas is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool, built on top of the Python programming language.<br>
     </td>
   </tr>
   <tr>

@@ -13,7 +13,7 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Overview
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources into a unified relational database structure and visualize or querying it using natural language.
+  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources focusing in sociodemografic and census datasets from Colombia, Brasil and Peru, into a unified relational database structure and visualize or querying it using natural language.
 </p>
 
 
@@ -219,12 +219,13 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
   <tr>
     <td align="center">
       <a href="https://www.bsc.es/" target="_blank">
-        <img src="https://imgs.search.brave.com/t_FUOTCQZmDh3ddbVSX1LgHYq4mzCxvVA8U_YHywMTc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zb21t/YS5lcy93cC1jb250/ZW50L3VwbG9hZHMv/MjAyMi8wNC9CU0Mt/Ymx1ZS1zbWFsbC5q/cGc" height="64" alt="dplyr logo">
+        <img src="https://imgs.search.brave.com/t_FUOTCQZmDh3ddbVSX1LgHYq4mzCxvVA8U_YHywMTc/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9zb21t/YS5lcy93cC1jb250/ZW50L3VwbG9hZHMv/MjAyMi8wNC9CU0Mt/Ymx1ZS1zbWFsbC5q/cGc" height="64" alt="bsc logo">
       </a>
     </td>
-    <td align="left">
-      <strong>GHR</strong><br>
-      Global Health Resilience
+    <td align="center">
+      <a href="https://uniandes.edu.co/" target="_blank">
+        <img src="https://uniandes.edu.co/sites/default/files/logo-header_0_0.png" height="64" alt="uniandes logo">
+      </a>
     </td>
   </tr>
 </table>

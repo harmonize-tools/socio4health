@@ -224,7 +224,7 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
     </td>
     <td align="center">
       <a href="https://uniandes.edu.co/" target="_blank">
-        <img src="https://uniandes.edu.co/sites/default/files/logo-header_0_0.png" height="64" alt="uniandes logo">
+        <img src="https://uniandes.edu.co/sites/default/files/logo-uniandes.png" height="64" alt="uniandes logo">
       </a>
     </td>
   </tr>

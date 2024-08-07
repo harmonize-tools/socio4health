@@ -13,10 +13,7 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Overview
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Welcome to the Harmonize Health Project repository. This repository is dedicated to improving health outcomes by integrating various health data sources into a unified framework. Our tools and documentation are designed to facilitate data harmonization, analysis, and reporting for health researchers and practitioners. 
-</p>
-<p style="font-family: Arial, sans-serif; font-size: 14px;">
-  <em>Join us in our mission to harmonize health data and enhance the quality of healthcare research.</em>
+  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources into a unified relational database structure and visualize or querying it using natural language.
 </p>
 
 

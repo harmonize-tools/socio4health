@@ -16,6 +16,14 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
   Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources focusing in sociodemografic and census datasets from Colombia, Brasil and Peru, into a unified relational database structure and visualize or querying it using natural language.
 </p>
 
+- Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
+- Support for various data formats, including .csv, .xlsx, .xls, .txt, .sav, and compressed files, ensuring versatility in sourcing information.
+- Consolidating extracted data into pandas DataFrame.
+- Consolidating transformed data into a cohesive relational database.
+- Conduct precise queries and apply transformations to meet specific criteria.
+- Using natural language input to query data (Answers from values to subsets)
+- Using natural language input to create simple visualizations of data
+
 
 ## Dependencies
 
@@ -64,64 +72,13 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
       Integrates generative artificial intelligence capabilities into pandas, making dataframes conversational.<br>
     </td>
   </tr>
-  <tr>
-    <td align="center">
-      <a href="https://openpyxl.readthedocs.io/en/stable/" target="_blank">
-        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
-      </a>
-    </td>
-    <td align="left">
-      <strong>openpyxl</strong><br>
-      Read/write Excel 2010 xlsx/xlsm/xltx/xltm files.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://py7zr.readthedocs.io/en/latest/" target="_blank">
-        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
-      </a>
-    </td>
-    <td align="left">
-      <strong>py7zr</strong><br>
-      Used for uncompress zip files.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://pypi.org/project/pyreadstat/" target="_blank">
-        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
-      </a>
-    </td>
-    <td align="left">
-      <strong>pyreadstat</strong><br>
-      ead and write SAS (sas7bdat, sas7bcat, xport/xpt), SPSS (sav, zsav, por) and Stata (dta) files into/from pandas data frames.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://tqdm.github.io/" target="_blank">
-        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
-      </a>
-    </td>
-    <td align="left">
-      <strong>tqdm</strong><br>
-      Used for console loading bars.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://requests.readthedocs.io/en/latest/" target="_blank">
-        <img src="https://github.com/harmonize-tools/socio4health/blob/main/docs/img/external-link-alt.svg" height="50" alt="external link">
-      </a>
-    </td>
-    <td align="left">
-      <strong>requests</strong><br>
-      HTTP library for Python, built for human beings.<br>
-    </td>
-  </tr>
 </table>
 
-
+- <a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a>
+- <a href="https://py7zr.readthedocs.io/en/latest/">py7zr</a>
+- <a href="https://pypi.org/project/pyreadstat/">pyreadstat</a>
+- <a href="https://tqdm.github.io/">tqdm</a>
+- <a href="https://requests.readthedocs.io/en/latest/">requests</a>
 
 ## Installation
 

@@ -21,7 +21,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 # Fields marked as "Optional" may be commented out.
 
 setup(
-    name='nyctibius',  # Required
+    name='socio4health',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -29,12 +29,12 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.0.14',  # Required
+    version='0.1.0',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='Nyctibius is a Python package for gathering and consolidating socio-demographic data.',  # Optional
+    description='Socio4health is a Python package for gathering and consolidating socio-demographic data.',  # Optional
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -62,11 +62,11 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/Ersebreck/Nyctibius',  # Optional
+    url='https://github.com/harmonize-tools/socio4health',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
-    author='Erick Lozano, Diego Irreño y Cristian Amaya',  # Optional
+    author='Erick Lozano, Diego Irreño',  # Optional
 
     # This should be a valid email address corresponding to the author listed
     # above.
@@ -122,7 +122,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=['nyctibius', 'nyctibius.dto', 'nyctibius.enums', 'nyctibius.etl', 'nyctibius.db', 'nyctibius.utils'],  # Required
+    packages=['socio4health', 'socio4health.dto', 'socio4health.enums', 'socio4health.etl', 'socio4health.db', 'socio4health.utils'],  # Required
 
     # Specify which Python versions you support. In contrast to the
     # 'Programming Language' classifiers above, 'pip install' will check this
@@ -154,7 +154,7 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.
     package_data={  # Optional
-        'nyctibius': ['src/nyctibius/config/*.json'],
+        'socio4health': ['src/socio4health/config/*.json'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -162,7 +162,7 @@ setup(
     # http://docs.python.org/distutils/setupscript.html#installing-additional-files
     #
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('harmonize_data', glob('src/nyctibius/config/*.json'))
+    data_files=[('harmonize_data', glob('src/socio4health/config/*.json'))
                 ],  # Optional
 
     # To provide executable scripts, use entry points in preference to the

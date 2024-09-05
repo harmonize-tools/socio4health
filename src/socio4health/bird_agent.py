@@ -15,7 +15,7 @@ class BirdAgent(Agent):
 
     def __init__(
         self,
-        dfs="data\\output\\nyctibius.db",
+        dfs="data\\output\\socio4health.db",
         config:dict=None,
         memory_size=10,
         pipeline=None,
@@ -154,7 +154,7 @@ class BirdAgent(Agent):
                     raise ValueError(f"Error preparing data to chat: {e}") 
         return data
 
-    def prepare_db(self, db_path="data\\output\\nyctibius.db", field_descriptions=None): 
+    def prepare_db(self, db_path="data\\output\\socio4health.db", field_descriptions=None):
         data = []
         for table in Modifier(db_path).get_tables():
             data.append(SqliteConnector(config={

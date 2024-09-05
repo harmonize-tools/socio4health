@@ -4,7 +4,7 @@ import pandas as pd
 
 import sqlite3
 
-from nyctibius.enums.config_enum import ConfigEnum
+from socio4health.enums.config_enum import ConfigEnum
 
 
 class Querier:

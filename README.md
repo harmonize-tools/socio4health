@@ -96,7 +96,7 @@ To use the Nyctibius package, follow these steps:
 1. Import the package in your Python script:
 
    ```python
-   from nyctibius import Harmonizer
+   from socio4health import Harmonizer
    ```
 
 2. Create an instance of the `Harmonizer` class:
@@ -124,7 +124,7 @@ To use the Nyctibius package, follow these steps:
 5. Import the modifier module and create an instance of the `Modifier` class:
 
    ```python
-   from nyctibius.db.modifier import Modifier
+   from socio4health.db.modifier import Modifier
    modifier = Modifier(db_path='../../data/output/nyctibius.db')
    ```
    
@@ -138,8 +138,8 @@ To use the Nyctibius package, follow these steps:
 7. Import the querier module and create an instance of the `Querier` class:
 
    ```python
-   from nyctibius.db.querier import Querier
-   querier = Querier(db_path='data/output/nyctibius.db')
+   from socio4health.db.querier import Querier
+   querier = Querier(db_path='data/output/socio4health.db')
    ```
 
 8. Perform queries:

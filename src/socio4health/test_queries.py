@@ -1,10 +1,10 @@
-from nyctibius.db.modifier import Modifier
-from nyctibius.db.querier import Querier
+from socio4health.db.modifier import Modifier
+from socio4health.db.querier import Querier
 
-querier = Querier(db_path='../../data/output/nyctibius.db')
+querier = Querier(db_path='../../data/output/socio4health.db')
 
 # Initialize the Querier
-querier = Querier(db_path='../../data/output/nyctibius.db')
+querier = Querier(db_path='../../data/output/socio4health.db')
 
 # Select all columns from the table
 df = querier.select(table="Estructura CHC_2017").execute()
@@ -39,7 +39,7 @@ print(df)
 # ________________________________________________________________________________
 
 # Initialize the Modifier
-modifier = Modifier(db_path='../../data/output/nyctibius.db')
+modifier = Modifier(db_path='../../data/output/socio4health.db')
 
 # Get the datatypes of all columns in the table
 datatypes = modifier.get_column_datatypes(table_name="Estructura CHC_2017")

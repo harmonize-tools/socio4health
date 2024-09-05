@@ -1,0 +1,59 @@
+{
+    "school_education": {
+        "option": {
+            "1": {
+                "label": "Does go to school",
+                "detailed": {
+                    "10": "Does go to school (not specified)",
+                    "11": "Does go to public school",
+                    "12": "Does go to private school"
+                }
+
+            },
+            "2": {
+                "label": "Does not go to school",
+                "detailed": {
+                    "20": "Does not go to school (not specified)",
+                    "21": "Does not, already went to school",
+                    "22": "Does not, never went to school"
+                }
+            },
+            "3": {
+                "label": "Does not report",
+                "detailed": {
+                    "30": "Does not report (not specified)"
+                }
+            }
+        },
+        "PA_ASISTENCIA": {
+            "1": "Si",
+            "2": "No",
+            "9": "No informa",
+            "mapping_to_detailed": {
+                "1": "10",
+                "2": "20",
+                "9": "30"
+            }
+        },
+        "V0628": {
+            "1": "Sim, pública",
+            "2": "Sim, particular",
+            "3": "Não, já frequentou",
+            "4": "Não, nunca frequentou",
+            "mapping_to_detailed": {
+                "1": "11",
+                "2": "12",
+                "3": "21",
+                "4": "22"
+            }
+        },
+        "c5_p14": {
+            "1": "si, asiste a algún colegio, instituto o universidad",
+            "2": "no, asiste a algún colegio, instituto o universidad",
+            "mapping_to_detailed": {
+                "1": "10",
+                "2": "20"
+            }
+        }
+    }
+}

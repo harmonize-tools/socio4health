@@ -13,7 +13,7 @@ Welcome to the Getting Started section of Nyctibius. This guide will walk you th
 To install Nyctibius, you can use the following command:
 
 ```shell
-pip install nyctibius
+pip install socio4health
 ```
 
 Make sure you have Python 3.x installed on your system; the package requires Python version 3.7 or higher.
@@ -25,7 +25,7 @@ To use the Nyctibius package, follow these steps:
 1. Import the package in your Python script:
 
    ```python
-   from nyctibius import Harmonizer
+   from socio4health import Harmonizer
    ```
 
 2. Create an instance of the `Harmonizer` class:
@@ -63,7 +63,7 @@ After loading the data, you can perform modifications and queries on the databas
 6. Import the modifier module and create an instance of the `Modifier` class:
 
     ```python
-    from nyctibius.db.modifier import Modifier
+    from socio4health.db.modifier import Modifier
     modifier = Modifier(db_path='_path_/data/output/nyctibius.db')
     ```
 
@@ -77,7 +77,7 @@ After loading the data, you can perform modifications and queries on the databas
 8. Import the querier module and create an instance of the `Querier` class:
 
     ```python
-    from nyctibius.db.querier import Querier
+    from socio4health.db.querier import Querier
     querier = Querier(db_path='_path_/data/output/nyctibius.db')
     ```
 

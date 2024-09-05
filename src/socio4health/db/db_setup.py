@@ -147,5 +147,5 @@ class DatabaseSetup:
 
 
 if __name__ == '__main__':
-    db_setup = DatabaseSetup('data/output/nyctibius.db')
+    db_setup = DatabaseSetup('data/output/socio4health.db')
     db_setup.create_default_census_schema_co()

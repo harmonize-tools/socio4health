@@ -78,10 +78,11 @@ for i, result in enumerate(results):
 Queries the loaded datasets using SQL queries.
 
 Create a querier intance
-```python
-from nyctibius.db.querier import Querier
 
-querier = Querier(db_path='data/output/nyctibius.db')
+```python
+from socio4health.db.querier import Querier
+
+querier = Querier(db_path='data/output/socio4health.db')
 ```
 ### Start a SELECT query for a specific table and columns.
 Select all columns from the table
@@ -185,10 +186,11 @@ df = querier.select(table="Estructura CHC_2017").limit(5).execute()
 ## Modifier
 
 Initialize the Modifier instance
-```python
-from nyctibius.db.modifier import Modifier
 
-modifier = Modifier(db_path='data/output/nyctibius.db')
+```python
+from socio4health.db.modifier import Modifier
+
+modifier = Modifier(db_path='data/output/socio4health.db')
 ```
 
 ### Get a list of all tables in the database

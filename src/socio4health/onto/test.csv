@@ -1,0 +1,38 @@
+AREA_CLASS,LABEL,CO12018=UA_CLASE,BR12010=V1006,PE12017=AREA,
+10,Urban,1=Cabecera Municipal,1=Urbana,1=urbano,
+20,Rural,4=Resto Rural (2 y 3),2=Rural,2=rural,
+21,Populated center,2=Centro Poblado,,,
+22,Scattered rural,3=Rural Disperso,,,
+DWELLING_TYPE,LABEL,CO12018=V_TIPO_VIV,CO12018=L_TIPO_INST,BR12010=V4002,PE12017=C2_P1
+100,House (not specified),1=Casa,,11=Casa,
+101,House independent,,,,1=casa independiente
+102,House in condo,,,12=Casa de vila ou em condomínio,3=vivienda en quinta
+103,House in neighborhood,,,,"4=vivienda en casa de vecindad (callejón, solar o corralón )"
+200,Apartment (not specified),2=Apartamento,,13=Apartamento,2=departamento en edificio
+300,Traditional Dwelling (not specified),,,,
+301,Hut or cottage,,,,5=choza o cabaña
+302,Indigenous Dwelling,4=Vivienda tradicional Indigena,,15=Oca ou maloca,
+303,Other traditional dwelling,"5=Vivienda tradicional Etnica (Afrocolombiana, Isleña, Rrom)",,,
+304,Temp indigenous dwelling,,13=Casa de paso indígena,,
+400,Penitentiary (not specified),,1=Centro penitenciario,"64=Penitenciária, presídio ou casa de detenção com morador",11=establecimiento penitenciario
+500,Other (not specified),"6=Otro (contenedor, carpa, embarcacion, vagOn, cueva, refugio natural, etc.)",,"53=Outro (vagão, trailer, gruta, etc)",
+501,Other Individual,,,65=Outro com morador,8=otro tipo de vivienda particular
+502,Other Colective,,,,16=otro tipo de vivienda colectiva
+503,Room,3=Tipo cuarto,,"14=Habitação em: casa de cômodos, cortiço ou cabeça de porco",
+504,Childcare institution,,"2=Institución de protección e internado preventivo para niños, niñas y adolescentes",,13=centro de atención residencial para niñas/os y adolescentes
+505,Eldercare institution,,3=Centro de protección y atención al adulto mayor,,12=centro de atención residencial para adultos mayores
+506,Religious Institution,,"4=Convento, seminario, monasterio u otras instituciones similiares",,"14=conventos, monasterios o similares"
+507,Educational Institution,,5=Sede educativa con Población interna,,
+508,Military Institution,,"6=Cuartel, guarnicion militar (Ejército, Armada y Fuerza Aérea)",,"15=cuartel, campamento, base de ffaa o pnp"
+509,Police Institution,,"7=Comando de policía, estacion de policía",,
+510,Woking camp,,8=Campamento de trabajo,63=Alojamento de trabalhadores com morador,
+511,Brothel,,9=Casa de lenocinio o prostíbulo,,
+512,Shelter for displaced persons,,10=Albergue de desplazados,,
+513,Hogar de paz,,11=Hogar de paz,,
+514,Rehab center,,12=Centro de rehabilitación funcional,,
+515,Improvised Tent,,,51=Tenda ou barraca,6=vivienda improvisada
+516,Inside a establishment,,,52=Dentro de estabelecimento,7=local no destinado para habitación humana
+517,Hotel and catering establishment,,,"62=Hotel, pensão e similares com morador","9=hotel, hostal, hospedaje, casa pensión"
+518,Health Institution,,,"61=Asilo, orfanato e similares  com morador",10=establecimiento de salud
+519,On the street,,,,17=en la calle (personas sin vivienda)
+520,"Gatehouse, port, airport or

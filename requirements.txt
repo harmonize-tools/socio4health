@@ -1,10 +1,9 @@
-pandas~=2.0.3
 requests~=2.31.0
 Scrapy~=2.11.1
 tqdm~=4.66.1
 pyreadstat~=1.2.6
 py7zr~=0.20.8
-pandasai~=2.0.30
+pandas~=2.2.3
 openpyxl~=3.1.2
 matplotlib
 numpy

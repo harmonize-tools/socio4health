@@ -2,29 +2,29 @@ import pandas as pd
 import os
 from pandas import DataFrame
 import pyreadstat
+import re
 
 
 class Transformer:
     """
-    A class used to transform data into a Python Dataframe.
+    A class used to transform data into a Parquet file.
 
     Attributes:
         file_path (str): The path to the source file.
-        db_file (str): The path to the SQLite database file.
+        output_path (str): The path to save the output Parquet file.
     """
 
-    def __init__(self, file_path, db_file):
+    def __init__(self, file_path: str, output_path: str):
         self.file_path = file_path
-        self.db_file = db_file
+        self.output_path = output_path
 
-    def _read_csv(self):
-        return pd.read_csv(self.file_path, sep='[,|;]', engine='python')
+    def _read_csv(self) -> DataFrame:
+        return pd.read_csv(self.file_path, sep=r'[,;]', engine='python')
 
-    def _read_txt(self):
-        return pd.read_table(self.file_path, sep='[,|;]', engine='python')
+    def _read_txt(self) -> DataFrame:
+        return pd.read_table(self.file_path, sep=r'[,;]', engine='python')
 
-    def _read_excel(self):
-        df = None
+    def _read_excel(self) -> DataFrame:
         start_row = self._find_header_row()
         try:
             df = pd.read_excel(self.file_path, engine='openpyxl', skiprows=start_row)
@@ -32,24 +32,23 @@ class Transformer:
             raise ValueError(f'Error reading Excel file: {str(e)}')
         return df
 
-    def _find_header_row(self):
+    def _find_header_row(self) -> int:
         for i in range(20):  # Adjust range as needed
             df = pd.read_excel(self.file_path, engine='openpyxl', nrows=1, skiprows=i)
             if not df.empty and not df.columns.str.contains('Unnamed').any():
                 return i
-        raise ValueError('Valid header not found in the first 20 rows')  # Adjust error message as needed
+        raise ValueError('Valid header not found in the first 20 rows')
 
-    def _read_sav(self):
+    def _read_sav(self) -> DataFrame:
         df, meta = pyreadstat.read_sav(self.file_path)
         return df
 
-    def transform_data(self) -> DataFrame:
+    def transform_and_save(self) -> None:
         """
-        Reads a file (CSV, TXT, or XLSX), selects specified columns, and writes the transformed data
-        to a SQLite database.
+        Reads a file (CSV, TXT, XLSX, or SAV) and saves the transformed data to a Parquet file.
 
         Returns:
-            Dataframe: Dataframe of the transformed file
+            None
         """
         _, file_extension = os.path.splitext(self.file_path)
         try:
@@ -63,6 +62,12 @@ class Transformer:
                 df = self._read_sav()
             else:
                 raise ValueError(f'Unsupported file type: {file_extension}')
-            return df
+
+            os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
+            df.to_parquet(self.output_path, index=False)
+        except pd.errors.ParserError:
+            raise ValueError('Error parsing the file, please check the content.')
+        except FileNotFoundError:
+            raise ValueError(f'File not found: {self.file_path}')
         except Exception as e:
-            raise
+            raise ValueError(f'An error occurred: {str(e)}')

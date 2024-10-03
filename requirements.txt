@@ -3,7 +3,8 @@ Scrapy~=2.11.1
 tqdm~=4.66.1
 pyreadstat~=1.2.6
 py7zr~=0.20.8
-pandas~=2.2.3
+pandas
+pyarrow
 openpyxl~=3.1.2
 matplotlib
 numpy

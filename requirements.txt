@@ -8,3 +8,4 @@ pyarrow
 openpyxl~=3.1.2
 matplotlib
 numpy
+duckdb

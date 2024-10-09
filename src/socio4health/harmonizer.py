@@ -3,8 +3,9 @@ from typing import List
 import pandas as pd
 from tqdm import tqdm
 from .dto.data_info import DataInfo
-from .etl.transformer import Transformer
 from .etl.extractor import Extractor
+from .etl.transformer import Transformer
+
 
 class Harmonizer:
 
@@ -29,7 +30,8 @@ class Harmonizer:
         """
         print("----------------------")
         print("Extracting data...")
-        extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir, key_words=key_words)
+        extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir,
+                              key_words=key_words)
         try:
             list_datainfo = extractor.extract()
             self._dataInfoList = list(list_datainfo.values())
@@ -38,6 +40,34 @@ class Harmonizer:
         except Exception as e:
             print(f"Exception while extracting data: {e}")
             raise ValueError(f"Extraction failed: {str(e)}")
+
+    def select_columns(self, dataset: DataInfo) -> List[str]:
+        """
+        Allows the user to select columns from the extracted data.
+
+        Args:
+            dataset (DataInfo): Dataset information object.
+
+        Returns:
+            List[str]: A list of selected columns.
+        """
+        print("----------------------")
+        print(f"Selecting columns from {dataset.file_path}...")
+
+        transformer = Transformer(file_path=dataset.file_path, output_path=None)
+        available_columns = transformer.get_available_columns()  # Get available columns from the Transformer
+
+        print("Available columns:")
+        print(available_columns)
+
+        # Here you could implement any user interface or selection process
+        # For this example, we will simulate the selection by asking the user to input column names
+        selected_columns = input("Enter the columns you want to select, separated by commas (leave blank for all): ")
+        if not selected_columns.strip():
+            # If no columns are selected, return all columns
+            return available_columns
+        else:
+            return [col.strip() for col in selected_columns.split(',')]
 
     def transform(self, delete_files=False) -> List[DataInfo]:
         """
@@ -59,8 +89,22 @@ class Harmonizer:
         for dataset in tqdm(self._dataInfoList, desc="Transforming files"):
             if dataset is not None:
                 try:
-                    output_file_path = os.path.join("data/output", f"{os.path.splitext(os.path.basename(dataset.file_path))[0]}.parquet")
-                    transformer = Transformer(dataset.file_path, output_file_path)
+                    selected_columns = self.select_columns(dataset)
+
+                    output_file_path = os.path.join("data/output",
+                                                    f"{os.path.splitext(os.path.basename(dataset.file_path))[0]}.parquet")
+
+                    # Initialize the Transformer with selected columns and automatically detected dtypes
+                    transformer = Transformer(dataset.file_path, output_file_path, columns=selected_columns)
+
+                    # Detect dtypes automatically
+                    detected_dtypes = transformer.auto_detect_dtypes()
+                    print(f"Detected dtypes for {dataset.file_path}: {detected_dtypes}")
+
+                    # Set dtypes in the Transformer
+                    transformer.dTypes = detected_dtypes
+
+                    # Perform the transformation
                     transformer.transform_and_save()
 
                     if delete_files:

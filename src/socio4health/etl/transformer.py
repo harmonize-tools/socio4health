@@ -5,33 +5,46 @@ import os
 from pandas import DataFrame
 import pyreadstat
 
+from socio4health.onto.translator import Translator
+
 
 class Transformer:
     """
     A class used to transform data into a Parquet file, with column and dtype options.
 
     Attributes:
-        file_path (str): The path to the source file.
         output_path (str): The path to save the output Parquet file.
         data_info (DataInfo): Data information object.
-        columns (list): A list of columns to select.
-        dTypes (dict): A dictionary to map columns to specific data types.
+        selected_columns (list): A list of columns to select.
     """
 
-    def __init__(self, output_path: str, columns=None, data_info=None):
+    def __init__(self, output_path: str, data_info=None):
         self.output_path = output_path
-        self.columns = columns if columns else []
+        self.selected_columns = []
         self.data_info = data_info
 
     @property
-    def columns(self):
-        return self._columns
+    def selected_columns(self):
+        return self._selected_columns
 
-    @columns.setter
-    def columns(self, columns):
-        if not isinstance(columns, list):
+    @selected_columns.setter
+    def selected_columns(self, selected_columns):
+        if not isinstance(selected_columns, list):
             raise ValueError("Columns must be a list")
-        self._columns = columns
+        self._selected_columns = selected_columns
+
+    def set_columns(self, selected_columns, harmonized=True, mapping_path=None):
+        """
+        Sets the selected columns by harmonizing them using the Translator.
+        """
+        if not isinstance(selected_columns, list):
+            raise ValueError("Columns must be a list")
+        if not harmonized:
+            self.selected_columns = selected_columns
+        translator = Translator(mapping_path)
+        translated_columns = [translator.mapped_to_variable(col) for col in selected_columns]
+        translated_columns = [col for col in translated_columns if col is not None]
+        self.selected_columns = translated_columns
 
     def _read_csv(self, nrows=None) -> DataFrame:
         """Reads CSV file, optionally with specified columns, dtypes, and nrows."""
@@ -39,8 +52,8 @@ class Transformer:
             self.data_info.file_path,
             engine='python',
             sep=r'[,;]',
-            usecols=self.columns if self.columns else None,
-            nrows=nrows  # Adding nrows for preview purposes
+            usecols=self.selected_columns if self.selected_columns else None,
+            nrows=nrows
         )
 
     def _read_txt(self, nrows=None) -> DataFrame:
@@ -49,7 +62,7 @@ class Transformer:
             self.data_info.file_path,
             engine='python',
             sep=r'[,;]',
-            usecols=self.columns if self.columns else None,
+            usecols=self.selected_columns if self.selected_columns else None,
             nrows=nrows
         )
 
@@ -61,7 +74,7 @@ class Transformer:
                 self.data_info.file_path,
                 engine='openpyxl',
                 skiprows=start_row,
-                usecols=self.columns if self.columns else None,
+                usecols=self.selected_columns if self.selected_columns else None,
                 nrows=nrows
             )
         except Exception as e:
@@ -79,11 +92,11 @@ class Transformer:
     def _read_sav(self, nrows=None) -> DataFrame:
         """Reads SAV file (SPSS format) with optional column and dtype handling."""
         df, meta = pyreadstat.read_sav(self.data_info.file_path, row_limit=nrows)
-        if self.columns:
-            df = df[self.columns]
+        if self.selected_columns:
+            df = df[self.selected_columns]
         return df
 
-    def available_columns(self) -> list:
+    def available_columns(self, harmonized=True, mapping_path=None) -> list:
         """
         Fetches the available columns in the source file, depending on the file type.
 
@@ -104,7 +117,15 @@ class Transformer:
             else:
                 raise ValueError(f'Unsupported file type: {file_extension}')
 
-            return df.columns.tolist()
+            available_columns = df.columns.tolist()
+
+            if harmonized:
+                translator = Translator(mapping_path)
+                translated_columns = [translator.variable_to_mapped(col) for col in available_columns]
+                translated_columns = [col for col in translated_columns if col is not None]
+                available_columns = translated_columns
+
+            return available_columns
 
         except pd.errors.ParserError:
             raise ValueError('Error parsing the file, please check the content.')
@@ -113,7 +134,7 @@ class Transformer:
         except Exception as e:
             raise ValueError(f'An error occurred: {str(e)}')
 
-    def select_columns_CLI(self) -> None:
+    def selected_columns_CLI(self) -> None:
         """
         Prompts the user to select columns from the available columns in the source file.
 
@@ -128,9 +149,9 @@ class Transformer:
             invalid_columns = [col for col in selected_columns if col not in available_columns]
             if invalid_columns:
                 raise ValueError(f"Invalid columns selected: {invalid_columns}")
-            self.columns = selected_columns
+            self.selected_columns = selected_columns
         else:
-            self.columns = available_columns
+            self.selected_columns = available_columns
 
     def transform(self, delete_files=False) -> None:
         """
@@ -159,8 +180,8 @@ class Transformer:
                 raise ValueError(f'Unsupported file type: {file_extension}')
 
             # Prompt user to select columns if not already provided
-            if not self.columns:
-                self.select_columns()
+            if not self.selected_columns:
+                self.selected_columns_CLI()
 
             # Ensure the output directory exists, only if the output path includes a directory
             output_dir = os.path.dirname(self.output_path)
@@ -168,7 +189,7 @@ class Transformer:
                 os.makedirs(output_dir, exist_ok=True)
 
             # Save DataFrame to Parquet
-            df[self.columns].to_parquet(self.output_path, index=False)
+            df[self.selected_columns].to_parquet(self.output_path, index=False)
 
             # If delete_files is True, delete the original file
             if delete_files:

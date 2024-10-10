@@ -20,6 +20,7 @@ class Transformer:
 
     def __init__(self, output_path: str, data_info=None):
         self.output_path = output_path
+        self.original_columns = []
         self.selected_columns = []
         self.data_info = data_info
 
@@ -41,10 +42,13 @@ class Transformer:
             raise ValueError("Columns must be a list")
         if not harmonized:
             self.selected_columns = selected_columns
-        translator = Translator(mapping_path)
-        translated_columns = [translator.mapped_to_variable(col) for col in selected_columns]
-        translated_columns = [col for col in translated_columns if col is not None]
-        self.selected_columns = translated_columns
+        else:
+            translator = Translator(mapping_path, data_info=self.data_info)
+            translated_columns = [translator.mapped_to_variable(col) for col in selected_columns]
+            translated_columns = [col for col in translated_columns if col is not None]
+            print(f"Selected columns: {selected_columns}")
+            print(f"Translated columns: {translated_columns}")
+            self.selected_columns = translated_columns
 
     def _read_csv(self, nrows=None) -> DataFrame:
         """Reads CSV file, optionally with specified columns, dtypes, and nrows."""
@@ -96,12 +100,17 @@ class Transformer:
             df = df[self.selected_columns]
         return df
 
-    def available_columns(self, harmonized=True, mapping_path=None) -> list:
+    def available_columns(self, harmonized=True, mapping_path=None) -> dict:
         """
-        Fetches the available columns in the source file, depending on the file type.
+        Fetches the available columns in the source file, depending on the file type,
+        returning a mapping of translated columns to their original names.
+
+        Args:
+            harmonized (bool): Whether to return harmonized (translated) column names.
+            mapping_path (str): Path to the mapping file for translation.
 
         Returns:
-            list: List of available column names.
+            dict: A dictionary mapping translated column names to their original names.
         """
         _, file_extension = os.path.splitext(self.data_info.file_path)
         df = None
@@ -118,14 +127,23 @@ class Transformer:
                 raise ValueError(f'Unsupported file type: {file_extension}')
 
             available_columns = df.columns.tolist()
+            if not self.original_columns:
+                self.original_columns = available_columns
+
+            column_mapping = {}  # Dictionary to hold the mapping
 
             if harmonized:
-                translator = Translator(mapping_path)
-                translated_columns = [translator.variable_to_mapped(col) for col in available_columns]
-                translated_columns = [col for col in translated_columns if col is not None]
-                available_columns = translated_columns
+                translator = Translator(mapping_path, data_info=self.data_info)
+                for col in available_columns:
+                    translated_col = translator.variable_to_mapped(col)
+                    if translated_col is not None:
+                        column_mapping[translated_col] = col
 
-            return available_columns
+            else:
+                # If not harmonized, return original columns as keys
+                column_mapping = {col: col for col in available_columns}
+
+            return column_mapping
 
         except pd.errors.ParserError:
             raise ValueError('Error parsing the file, please check the content.')
@@ -179,19 +197,17 @@ class Transformer:
             else:
                 raise ValueError(f'Unsupported file type: {file_extension}')
 
-            # Prompt user to select columns if not already provided
             if not self.selected_columns:
-                self.selected_columns_CLI()
+                self.selected_columns = self.available_columns(harmonized=False)
 
-            # Ensure the output directory exists, only if the output path includes a directory
-            output_dir = os.path.dirname(self.output_path)
-            if output_dir:
-                os.makedirs(output_dir, exist_ok=True)
+            if self.output_path and not os.path.exists(self.output_path):
+                os.makedirs(self.output_path, exist_ok=True)
+                logging.info(f"Created output directory: {self.output_path}")
 
-            # Save DataFrame to Parquet
-            df[self.selected_columns].to_parquet(self.output_path, index=False)
+            parquet_file = os.path.join(self.output_path,
+                                        f"{os.path.splitext(os.path.basename(self.data_info.file_path))[0]}.parquet")
+            df[self.selected_columns].to_parquet(parquet_file, index=False)
 
-            # If delete_files is True, delete the original file
             if delete_files:
                 try:
                     os.remove(self.data_info.file_path)

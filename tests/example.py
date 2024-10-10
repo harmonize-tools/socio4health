@@ -17,7 +17,9 @@ datainfo_list = extractor.extract()
 
 for data_info in datainfo_list:
     transformer = Transformer(data_info=data_info, output_path=output_path)
-    sc = transformer.available_columns()
-    transformer.set_columns(selected_columns=sc)
-    print(f"Selected columns: {transformer.selected_columns}")
-    transformer.transform()
+    col_dict = transformer.available_columns()
+    print(col_dict)
+    trans_columns = list(col_dict.keys())
+    print(trans_columns)
+    #transformer.set_columns(selected_columns=sc)
+    #transformer.transform()

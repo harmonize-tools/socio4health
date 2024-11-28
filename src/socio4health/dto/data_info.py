@@ -1,5 +1,6 @@
-import pandas as pd
 import logging
+
+from socio4health.enums.data_info_enum import CountryEnum, DataSourceTypeEnum
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -15,25 +16,29 @@ class DataInfo:
         _country (str): The country of the data.
         _year (int): The year of the data.
         _data_source_type (str): The type of data source
+        _is_aggregated (bool): A flag to indicate if the data is aggregated
     """
 
-    def __init__(self, file_path=None, url=None, country=None, year=None, data_source_type=None):
+    def __init__(self, file_path=None, url=None, country=None, year=None, data_source_type=None, is_aggregated=False):
         self._file_path = file_path
         self._url = url
         self._country = country
         self._year = year
         self._data_source_type = data_source_type
+        self._is_aggregated = is_aggregated
+        #Agregar data
 
     def __str__(self):
         """Return a string representation of the DataInfo object."""
-        DataInfo_dict = {
+        data_info_dict = {
             "file_path": self.file_path,
             "url": self.url,
             "country": self.country,
             "year": self.year,
-            "data_source_type": self.data_source_type
+            "data_source_type": self.data_source_type,
+            "is_aggregated": self.is_aggregated
         }
-        return str(DataInfo_dict)
+        return str(data_info_dict)
 
     @property
     def file_path(self):
@@ -75,6 +80,8 @@ class DataInfo:
             raise TypeError('country must be a string')
         if country and not country.strip():
             raise ValueError('country cannot be an empty string')
+        if country not in CountryEnum.__members__:
+            raise ValueError(f'country must be one of {list(CountryEnum.__members__.keys())}')
         self._country = country
 
     @property
@@ -103,4 +110,18 @@ class DataInfo:
             raise TypeError('type must be a string')
         if data_source_type and not data_source_type.strip():
             raise ValueError('type cannot be an empty string')
+        if data_source_type not in DataSourceTypeEnum.__members__:
+            raise ValueError(f'type must be one of {list(DataSourceTypeEnum.__members__.keys())}')
         self._data_source_type = data_source_type
+
+    @property
+    def is_aggregated(self):
+        """Get the type."""
+        return self._is_aggregated
+
+    @is_aggregated.setter
+    def is_aggregated(self, is_aggregated):
+        """Set data source type with validation."""
+        if is_aggregated is not None and not isinstance(is_aggregated, bool):
+            raise TypeError('type must be a boolean')
+        self._is_aggregated = is_aggregated

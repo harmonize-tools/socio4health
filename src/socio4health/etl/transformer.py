@@ -5,7 +5,7 @@ import os
 from pandas import DataFrame
 import pyreadstat
 
-from socio4health.onto.translator import Translator
+from socio4health.dict.translator import Translator
 
 
 class Transformer:
@@ -133,8 +133,9 @@ class Transformer:
             column_mapping = {}  # Dictionary to hold the mapping
 
             if harmonized:
-                translator = Translator(mapping_path, data_info=self.data_info)
+                translator = Translator(data_info=self.data_info)
                 for col in available_columns:
+                    #aqui es donde se hace la harmonizacion
                     translated_col = translator.variable_to_mapped(col)
                     if translated_col is not None:
                         column_mapping[translated_col] = col

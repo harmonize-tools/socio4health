@@ -57,7 +57,7 @@ class Harmonizer:
         self.transformer = transformer
 
     def extract(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
-                download_dir="data/input", key_words=[]) -> List[pd.DataFrame]:
+                download_dir="data/input", key_words=[], encoding='latin1') -> List[pd.DataFrame]:
         """
         Extract data based on the provided configuration.
 
@@ -68,6 +68,7 @@ class Harmonizer:
             down_ext (list): List of file extensions to download.
             download_dir (str): Directory to save downloaded files.
             key_words (list): Keywords to filter the files.
+            encoding (str): Encoding of the files.
 
         Returns:
             List[pd.DataFrame]: A list of extracted data as DataFrames.
@@ -77,10 +78,9 @@ class Harmonizer:
 
         if self.extractor is None:
             self.extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir,
-                                       key_words=key_words)
+                                       key_words=key_words, encoding=encoding)
         try:
-            list_datainfo = self.extractor.extract()
-            self.dataframes = [pd.read_csv(info.origin_file) for info in list_datainfo.values()]
+            self.dataframes = self.extractor.extract()
             print("Extraction completed")
             return self.dataframes
         except Exception as e:

@@ -1,8 +1,5 @@
-from socio4health import DataInfo
 import pandas as pd
-
 from socio4health.enums.data_info_enum import CountryEnum, DataSourceTypeEnum
-
 
 def read_csv_dict(file_path: str) -> pd.DataFrame:
     """
@@ -21,35 +18,47 @@ def read_csv_dict(file_path: str) -> pd.DataFrame:
         print(f"Error reading CSV file: {e}")
         raise ValueError(f"Error reading CSV file: {str(e)}")
 
-
 class Translator:
-    def __init__(self, data_info: DataInfo):
+    def __init__(self, dataframe: pd.DataFrame):
         self.dictionary = None
-        self.data_info = data_info
+        self.dataframe = dataframe
 
-    def select_dictionary(self, dictionary):
+    def select_dictionary(self, country: CountryEnum, year: int, data_source_type: DataSourceTypeEnum):
         """
         Selects the dictionary to use for translation.
 
         Args:
-            dictionary (str): CSV file with the dictionary to use for translation.
+            country (CountryEnum): Country of the dataset.
+            year (int): Year of the dataset.
+            data_source_type (DataSourceTypeEnum): Type of the data source.
         """
-        if self.data_info is None:
-            raise ValueError("DataInfo object must be provided to select dictionary.")
+        if country is None or year is None or data_source_type is None:
+            raise ValueError("Country, year, and data source type must be provided to select dictionary.")
 
-        if dictionary is None:
-            if self.data_info.country is CountryEnum.COLOMBIA and self.data_info.year is 2018 and self.data_info.data_source_type is DataSourceTypeEnum.CENSUS:
-                dictionary = read_csv_dict('files/COL2018.csv')
-            elif self.data_info.country is CountryEnum.BRAZIL and self.data_info.year is 2010 and self.data_info.data_source_type is DataSourceTypeEnum.CENSUS:
-                dictionary = read_csv_dict('files/BRA2010.csv')
-            elif self.data_info.country is CountryEnum.PERU and self.data_info.year is 2017 and self.data_info.data_source_type is DataSourceTypeEnum.CENSUS:
-                dictionary = read_csv_dict('files/PER2017.csv')
-            else:
-                raise ValueError("Dictionary not found for the specified country, year, and data source type.")
+        if country is CountryEnum.COLOMBIA and year == 2018 and data_source_type is DataSourceTypeEnum.CENSUS:
+            dictionary = read_csv_dict('files/COL2018.csv')
+        elif country is CountryEnum.BRAZIL and year == 2010 and data_source_type is DataSourceTypeEnum.CENSUS:
+            dictionary = read_csv_dict('files/BRA2010.csv')
+        elif country is CountryEnum.PERU and year == 2017 and data_source_type is DataSourceTypeEnum.CENSUS:
+            dictionary = read_csv_dict('files/PER2017.csv')
+        else:
+            raise ValueError("Dictionary not found for the specified country, year, and data source type.")
 
         self.dictionary = dictionary
 
-    def translate(self, df_data, dictionary) -> pd.DataFrame:
-        #continuar
+    def translate(self, df_data: pd.DataFrame) -> pd.DataFrame:
+        """
+        Translates the DataFrame using the selected dictionary.
 
+        Args:
+            df_data (pd.DataFrame): DataFrame to be translated.
 
+        Returns:
+            pd.DataFrame: Translated DataFrame.
+        """
+        if self.dictionary is None:
+            raise ValueError("Dictionary must be selected before translation.")
+
+        # Implement translation logic here
+        # Example: df_data.rename(columns=self.dictionary, inplace=True)
+        return df_data

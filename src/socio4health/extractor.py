@@ -11,9 +11,8 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-class Extractor():
-    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list):
-        # Initialize variables for online scraping
+class Extractor:
+    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list, encoding: str = 'latin1'):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.url = url
         self.depth = depth
@@ -23,6 +22,7 @@ class Extractor():
         self.path = path
         self.mode = -1
         self.dataframes = []
+        self.encoding = encoding
 
         if path and url:
             logging.error('Both path and URL cannot be specified. Please choose one.')
@@ -56,7 +56,6 @@ class Extractor():
         logging.info("Extracting data in online mode...")
         extracted_extensions = set()
 
-        # Run scraper and create a temporary JSON with the extraction links
         run_standard_spider(self.url, self.depth, self.down_ext, self.key_words)
 
         try:
@@ -81,33 +80,27 @@ class Extractor():
             else:
                 tarea = True
 
-        # Set download folder
         if not os.path.exists(self.download_dir):
             os.makedirs(self.download_dir)
             logging.info(f"Created download directory: {self.download_dir}")
 
-        # Scraper found links
         if links:
-            # Iterate over the links to download files
             for filename, url in tqdm(links.items()):
-                # Request file download
                 filepath = download_request(url, filename, self.download_dir)
-                # Check if the file is a compressed archive to extract files and add them to the DataFrame list
                 extracted_files = []
                 extracted_extensions.add(filepath.split(".")[-1])
                 if any(filepath.endswith(ext) for ext in self.compressed_ext):
                     logging.info(f"Extracting files from compressed archive: {filepath}")
                     extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                     for extracted_file in extracted_files:
-                        self.dataframes.append(pd.read_csv(extracted_file))
+                        self.dataframes.append(pd.read_csv(extracted_file, encoding=self.encoding))
                     os.remove(filepath)
                     logging.info(f"Removed compressed file after extraction: {filepath}")
                 else:
-                    self.dataframes.append(pd.read_csv(filepath))
+                    self.dataframes.append(pd.read_csv(filepath, encoding=self.encoding))
                     logging.info(f"Downloaded file: {filename}")
 
         else:
-            # Handle case where no links were found
             try:
                 filename = self.url.split("/")[-1]
                 if len(filename.split(".")) == 1:
@@ -119,7 +112,7 @@ class Extractor():
                     logging.info(f"{filename} contains compressed files, extracting...")
                     extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                     for extracted_file in extracted_files:
-                        self.dataframes.append(pd.read_csv(extracted_file))
+                        self.dataframes.append(pd.read_csv(extracted_file, encoding=self.encoding))
                     try:
                         os.remove(filepath)
                         logging.info(f"Removed compressed file: {filepath}")
@@ -139,11 +132,9 @@ class Extractor():
 
     def _extract_local_mode(self):
         logging.info("Extracting data in local mode...")
-        # Set variables to create DataFrame list
         files_list = []
         compressed_list = []
 
-        # Order extensions to process
         compressed_inter = set(self.compressed_ext) & set(self.down_ext)
         iter_ext = list(compressed_inter) + list(set(self.down_ext) - compressed_inter)
 
@@ -160,10 +151,9 @@ class Extractor():
             else:
                 files_list.extend(glob.glob(full_pattern))
 
-        # Create DataFrames
         for filename in tqdm(files_list):
             try:
-                self.dataframes.append(pd.read_csv(filename))
+                self.dataframes.append(pd.read_csv(filename, encoding=self.encoding))
             except Exception as e:
                 logging.error(f"Error creating DataFrame for {filename}: {e}")
                 raise ValueError(f"Error: {e}")

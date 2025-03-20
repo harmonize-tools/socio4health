@@ -1,8 +1,6 @@
 import logging
 import pandas as pd
 import os
-from pandas import DataFrame
-import pyreadstat
 from socio4health.dict.translator import Translator
 
 class Transformer:

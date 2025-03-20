@@ -1,9 +1,9 @@
 import os
 import json
-from ..dto.data_info import DataInfo
+import pandas as pd
 from tqdm import tqdm
 import glob
-from ..utils.extractor_utils import run_standard_spider, compressed2files, download_request
+from socio4health.utils.extractor_utils import run_standard_spider, compressed2files, download_request
 from itertools import islice
 import logging
 
@@ -22,7 +22,7 @@ class Extractor():
         self.key_words = key_words
         self.path = path
         self.mode = -1
-        self.datainfo_list = []
+        self.dataframes = []
 
         if path and url:
             logging.error('Both path and URL cannot be specified. Please choose one.')
@@ -50,7 +50,7 @@ class Extractor():
             logging.error(f"Exception while extracting data: {e}")
             raise ValueError(f"Extraction failed: {str(e)}")
 
-        return self.datainfo_list
+        return self.dataframes
 
     def _extract_online_mode(self):
         logging.info("Extracting data in online mode...")
@@ -92,18 +92,18 @@ class Extractor():
             for filename, url in tqdm(links.items()):
                 # Request file download
                 filepath = download_request(url, filename, self.download_dir)
-                # Check if the file is a compressed archive to extract files and add them to the DataInfo dictionary
+                # Check if the file is a compressed archive to extract files and add them to the DataFrame list
                 extracted_files = []
                 extracted_extensions.add(filepath.split(".")[-1])
                 if any(filepath.endswith(ext) for ext in self.compressed_ext):
                     logging.info(f"Extracting files from compressed archive: {filepath}")
                     extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                     for extracted_file in extracted_files:
-                        self.datainfo_list.append(DataInfo(file_path=extracted_file, url=url))
+                        self.dataframes.append(pd.read_csv(extracted_file))
                     os.remove(filepath)
                     logging.info(f"Removed compressed file after extraction: {filepath}")
                 else:
-                    self.datainfo_list.append(DataInfo(file_path=filepath, url=url))
+                    self.dataframes.append(pd.read_csv(filepath))
                     logging.info(f"Downloaded file: {filename}")
 
         else:
@@ -119,7 +119,7 @@ class Extractor():
                     logging.info(f"{filename} contains compressed files, extracting...")
                     extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                     for extracted_file in extracted_files:
-                        self.datainfo_list.append(DataInfo(file_path=extracted_file, url=self.url))
+                        self.dataframes.append(pd.read_csv(extracted_file))
                     try:
                         os.remove(filepath)
                         logging.info(f"Removed compressed file: {filepath}")
@@ -132,14 +132,14 @@ class Extractor():
                     f"No files were found at the specified link. Please verify the URL, search depth, and file extensions.")
 
         os.remove("Output_scrap.json")
-        assert self.datainfo_list, (
+        assert self.dataframes, (
             f"\nSuccessfully downloaded files with the following extensions: {extracted_extensions}. "
             "However, it appears there are no files matching your requested extensions: {self.down_ext} within any compressed files. "
             "Please ensure the requested file extensions are correct and present within the compressed files.")
 
     def _extract_local_mode(self):
         logging.info("Extracting data in local mode...")
-        # Set variables to create DataInfo dictionary
+        # Set variables to create DataFrame list
         files_list = []
         compressed_list = []
 
@@ -160,18 +160,13 @@ class Extractor():
             else:
                 files_list.extend(glob.glob(full_pattern))
 
-        # Create DataInfos
+        # Create DataFrames
         for filename in tqdm(files_list):
             try:
-                self.datainfo_list.append(DataInfo(file_path=filename, url="local"))
+                self.dataframes.append(pd.read_csv(filename))
             except Exception as e:
-                logging.error(f"Error creating DataInfo for {filename}: {e}")
+                logging.error(f"Error creating DataFrame for {filename}: {e}")
                 raise ValueError(f"Error: {e}")
 
-        if not self.datainfo_list:
-            self.datainfo_list.append(DataInfo(file_path=self.path, url="local"))
-
-
-if __name__ == "__main__":
-    extractor = Extractor()
-    extractor.extract()
+        if not self.dataframes:
+            raise ValueError("No files found matching the specified extensions.")

@@ -1,5 +1,4 @@
 from .harmonizer import Harmonizer
-from .dto.data_info import DataInfo
-from .etl.extractor import Extractor
-from .etl.transformer import Transformer
+from socio4health.extractor import Extractor
+from socio4health.transformer import Transformer
 #from .bird_agent import BirdAgent

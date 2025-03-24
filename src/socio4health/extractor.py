@@ -158,5 +158,12 @@ class Extractor:
                 logging.error(f"Error creating DataFrame for {filename}: {e}")
                 raise ValueError(f"Error: {e}")
 
+        for extracted_file in tqdm(extracted_files):
+            try:
+                self.dataframes.append(pd.read_csv(extracted_file, encoding=self.encoding))
+            except Exception as e:
+                logging.error(f"Error creating DataFrame for {extracted_file}: {e}")
+                raise ValueError(f"Error: {e}")
+
         if not self.dataframes:
-            raise ValueError("No files found matching the specified extensions.")
+            logging.warning("No files found matching the specified extensions.")

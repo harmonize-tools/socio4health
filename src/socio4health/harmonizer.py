@@ -1,20 +1,25 @@
 import os
+import shutil
+from importlib.metadata import files
 from typing import List
 import pandas as pd
 from tqdm import tqdm
+import logging
 from socio4health.extractor import Extractor
 from socio4health.transformer import Transformer
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Harmonizer:
 
-    def __init__(self, dataframes: List[pd.DataFrame] = None, extractor: Extractor = None, transformer: Transformer = None,
+    def __init__(self, dataframe: pd.DataFrame = None, extractor: Extractor = None, transformer: Transformer = None,
                  input_folder="data/input", output_folder="data/output", name=None, url=None, country=None, year=None,
                  data_source_type=None, is_aggregated=False):
         """
         Initialize the Harmonizer with a list of DataFrames.
         Args:
-            dataframes (List[pd.DataFrame]): List of DataFrames.
+            dataframe (pd.DataFrame): DataFrame.
             extractor (Extractor): Extractor instance.
             transformer (Transformer): Transformer instance.
             input_folder (str): Input folder path.
@@ -26,7 +31,7 @@ class Harmonizer:
             data_source_type (str): Type of the data source.
             is_aggregated (bool): Flag indicating if the data is aggregated.
         """
-        self.dataframes = dataframes if dataframes is not None else []
+        self.dataframes = dataframe
         self.extractor = extractor
         self.transformer = transformer
         self.input_folder = input_folder
@@ -57,7 +62,8 @@ class Harmonizer:
         self.transformer = transformer
 
     def extract(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
-                download_dir="data/input", key_words=[], encoding='latin1') -> List[pd.DataFrame]:
+                download_dir="data/input", key_words=[], encoding='latin1', delete_files=False,
+                delete_data_dir=False) -> List[pd.DataFrame]:
         """
         Extract data based on the provided configuration.
 
@@ -69,22 +75,29 @@ class Harmonizer:
             download_dir (str): Directory to save downloaded files.
             key_words (list): Keywords to filter the files.
             encoding (str): Encoding of the files.
+            delete_files (bool): Whether to delete the original files after extraction.
+            delete_data_dir (bool): Whether to delete the data directory after extraction.
 
         Returns:
             List[pd.DataFrame]: A list of extracted data as DataFrames.
         """
-        print("----------------------")
-        print("Extracting data...")
+        logging.info("----------------------")
+        logging.info("Extracting data...")
 
         if self.extractor is None:
             self.extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir,
                                        key_words=key_words, encoding=encoding)
         try:
             self.dataframes = self.extractor.extract()
-            print("Extraction completed")
+            logging.info("Extraction completed")
+
+            if delete_data_dir and os.path.exists(download_dir):
+                shutil.rmtree(download_dir)
+                logging.info(f"Deleted data directory: {download_dir}")
+
             return self.dataframes
         except Exception as e:
-            print(f"Exception while extracting data: {e}")
+            logging.error(f"Exception while extracting data: {e}")
             raise ValueError(f"Extraction failed: {str(e)}")
 
     def select_columns(self, dataframe: pd.DataFrame) -> List[str]:

@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from scrapy.crawler import CrawlerProcess
 from .standard_spider import StandardSpider
 import zipfile
@@ -48,7 +50,7 @@ def download_request(url, filename, download_dir):
         return None
 
 
-def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=4, found_files=set()):
+def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=5, found_files=set()):
     """Extract files from a compressed archive and return the paths of the extracted files."""
     if current_depth > max_depth:
         logging.warning(f"Reached max depth of {max_depth}. Stopping further extraction.")
@@ -69,6 +71,11 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
             logging.error(f"Unsupported archive format: {input_archive}")
             return None
 
+        # Ensure the target directory exists
+        if not os.path.exists(target_directory):
+            os.makedirs(target_directory)
+            logging.info(f"Created target directory: {target_directory}")
+
         # Process the extracted contents
         for root, dirs, files in os.walk(temp_dir):
             for file in files:
@@ -80,9 +87,15 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
                             compressed2files(file_path, target_directory, down_ext, current_depth + 1, max_depth,
                                              found_files))
                 elif f".{file.split('.')[-1].lower()}" in down_ext:
-                    destination_path = os.path.join(target_directory, os.path.basename(file_path))
+                    # Generate a unique filename
+                    base_name, ext = os.path.splitext(file)
+                    unique_name = f"{base_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}{ext}"
+                    destination_path = os.path.join(target_directory, unique_name)
                     shutil.move(file_path, destination_path)
                     found_files.add(destination_path)
                     logging.info(f"Extracted file: {destination_path}")
+
+    if not found_files:
+        logging.warning("No files found matching the specified extensions.")
 
     return found_files

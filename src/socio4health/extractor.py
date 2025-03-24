@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 class Extractor:
-    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list, encoding: str = 'latin1'):
+    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list, encoding: str = 'latin1', is_fwf: bool = False, colnames: list = None, colspecs: list = None, sep: str = ','):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.url = url
         self.depth = depth
@@ -23,6 +23,10 @@ class Extractor:
         self.mode = -1
         self.dataframes = []
         self.encoding = encoding
+        self.is_fwf = is_fwf
+        self.colnames = colnames
+        self.colspecs = colspecs
+        self.sep = sep
 
         if path and url:
             logging.error('Both path and URL cannot be specified. Please choose one.')
@@ -93,11 +97,11 @@ class Extractor:
                     logging.info(f"Extracting files from compressed archive: {filepath}")
                     extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                     for extracted_file in extracted_files:
-                        self.dataframes.append(pd.read_csv(extracted_file, encoding=self.encoding))
+                        self._read_file(extracted_file)
                     os.remove(filepath)
                     logging.info(f"Removed compressed file after extraction: {filepath}")
                 else:
-                    self.dataframes.append(pd.read_csv(filepath, encoding=self.encoding))
+                    self._read_file(filepath)
                     logging.info(f"Downloaded file: {filename}")
 
         else:
@@ -112,7 +116,7 @@ class Extractor:
                     logging.info(f"{filename} contains compressed files, extracting...")
                     extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
                     for extracted_file in extracted_files:
-                        self.dataframes.append(pd.read_csv(extracted_file, encoding=self.encoding))
+                        self._read_file(extracted_file)
                     try:
                         os.remove(filepath)
                         logging.info(f"Removed compressed file: {filepath}")
@@ -152,18 +156,23 @@ class Extractor:
                 files_list.extend(glob.glob(full_pattern))
 
         for filename in tqdm(files_list):
-            try:
-                self.dataframes.append(pd.read_csv(filename, encoding=self.encoding))
-            except Exception as e:
-                logging.error(f"Error creating DataFrame for {filename}: {e}")
-                raise ValueError(f"Error: {e}")
+            self._read_file(filename)
 
         for extracted_file in tqdm(extracted_files):
-            try:
-                self.dataframes.append(pd.read_csv(extracted_file, encoding=self.encoding))
-            except Exception as e:
-                logging.error(f"Error creating DataFrame for {extracted_file}: {e}")
-                raise ValueError(f"Error: {e}")
+            self._read_file(extracted_file)
 
         if not self.dataframes:
             logging.warning("No files found matching the specified extensions.")
+
+    def _read_file(self, filepath):
+        try:
+            if self.is_fwf:
+                if not self.colnames or not self.colspecs:
+                    logging.error("Column names and column specifications must be provided for fixed-width files.")
+                    raise ValueError("Column names and column specifications must be provided for fixed-width files.")
+                self.dataframes.append(pd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding))
+            else:
+                self.dataframes.append(pd.read_csv(filepath, encoding=self.encoding, sep=self.sep))
+        except Exception as e:
+            logging.error(f"Error creating DataFrame for {filepath}: {e}")
+            raise ValueError(f"Error: {e}")

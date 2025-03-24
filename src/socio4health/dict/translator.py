@@ -1,6 +1,7 @@
 import pandas as pd
 from socio4health.enums.data_info_enum import CountryEnum, DataSourceTypeEnum
 
+
 def read_csv_dict(file_path: str) -> pd.DataFrame:
     """
     Reads a CSV file and returns a DataFrame.

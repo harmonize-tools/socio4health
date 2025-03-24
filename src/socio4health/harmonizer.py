@@ -62,8 +62,8 @@ class Harmonizer:
         self.transformer = transformer
 
     def extract(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
-                download_dir="data/input", key_words=[], encoding='latin1', delete_files=False,
-                delete_data_dir=False) -> List[pd.DataFrame]:
+                download_dir="data/input", key_words=[], encoding='latin1', is_fwf=False, colnames=None, colspecs=None,
+                delete_data_dir=False, sep=',') -> List[pd.DataFrame]:
         """
         Extract data based on the provided configuration.
 
@@ -75,7 +75,9 @@ class Harmonizer:
             download_dir (str): Directory to save downloaded files.
             key_words (list): Keywords to filter the files.
             encoding (str): Encoding of the files.
-            delete_files (bool): Whether to delete the original files after extraction.
+            is_fwf (bool): Whether the file is fixed-width formatted.
+            colnames (list): Column names for fixed-width files.
+            colspecs (list): Column specifications for fixed-width files.
             delete_data_dir (bool): Whether to delete the data directory after extraction.
 
         Returns:
@@ -86,7 +88,7 @@ class Harmonizer:
 
         if self.extractor is None:
             self.extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir,
-                                       key_words=key_words, encoding=encoding)
+                                       key_words=key_words, encoding=encoding, is_fwf=is_fwf, colnames=colnames, colspecs=colspecs, sep=sep)
         try:
             self.dataframes = self.extractor.extract()
             logging.info("Extraction completed")

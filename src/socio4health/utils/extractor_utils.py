@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+import re
 
 from scrapy.crawler import CrawlerProcess
 from .standard_spider import StandardSpider
@@ -99,3 +100,25 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
         logging.warning("No files found matching the specified extensions.")
 
     return found_files
+
+
+def parse_pnadc_sas_script(file_path):
+    with open(file_path, 'r', encoding='latin-1') as file:
+        content = file.read()
+
+    # Extract column names
+    colnames = re.findall(r'@\d+\s+(\w+)\s+', content)
+
+    # Extract column specifications (start and end positions)
+    colspecs = []
+    for match in re.finditer(r'@(\d+)\s+\w+\s+[\$\.\d]+', content):
+        start = int(match.group(1)) - 1  # Convert to 0-based index
+        next_match = re.search(r'@(\d+)\s+\w+\s+[\$\.\d]+', content[match.end():])
+        if next_match:
+            end = int(next_match.group(1)) - 1
+        else:
+            # If no next match, assume the column ends at the end of the line
+            end = start + 1  # Default to 1 character width
+        colspecs.append((start, end))
+
+    return colnames, colspecs

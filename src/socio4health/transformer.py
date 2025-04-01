@@ -6,12 +6,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 class Transformer:
 
     def __init__(self, dictionary: pd.DataFrame = None, raw_dataframes: list | pd.DataFrame = None,
-                 key_column: str = None, merge: bool = False, translated_dataframes: list = None,
+                 key_column: str = None, translated_dataframes: list = None,
                  selected_columns: list = None):
         self._dictionary = dictionary
         self._raw_dataframes = raw_dataframes if isinstance(raw_dataframes, list) else [raw_dataframes]
         self._key_column = key_column
-        self._merge = merge
         self._selected_columns = selected_columns
         self._translated_dataframes = translated_dataframes if isinstance(translated_dataframes, list) else [translated_dataframes]
 
@@ -74,9 +73,7 @@ class Transformer:
             if self.key_column is None:
                 logging.error("No key column was provided for translation.")
                 raise ValueError("No key column was provided for translation.")
-            if self.merge:
-                self._merge_dataframes()
-            self._translate_dataframes()
+            #translate body
             logging.info("Translation completed successfully.")
         except Exception as e:
             logging.error(f"Exception while translating data: {e}")

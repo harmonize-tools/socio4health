@@ -1,119 +1,84 @@
 import logging
 import pandas as pd
-import os
-from socio4health.dict.translator import Translator
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Transformer:
-    """
-    A class used to transform data into a Parquet file, with column and dtype options.
 
-    Attributes:
-        output_path (str): The path to save the output Parquet file.
-        dataframe (pd.DataFrame): DataFrame to be transformed.
-        selected_columns (list): A list of columns to select.
-    """
-
-    def __init__(self, dataframe: pd.DataFrame, output_path: str):
-        self.output_path = output_path
-        self.dataframe = dataframe
-        self.original_columns = dataframe.columns.tolist()
-        self.selected_columns = []
+    def __init__(self, dictionary: pd.DataFrame = None, raw_dataframes: list | pd.DataFrame = None,
+                 key_column: str = None, merge: bool = False, translated_dataframes: list = None,
+                 selected_columns: list = None):
+        self._dictionary = dictionary
+        self._raw_dataframes = raw_dataframes if isinstance(raw_dataframes, list) else [raw_dataframes]
+        self._key_column = key_column
+        self._merge = merge
+        self._selected_columns = selected_columns
+        self._translated_dataframes = translated_dataframes if isinstance(translated_dataframes, list) else [translated_dataframes]
 
     @property
-    def selected_columns(self):
-        return self._selected_columns
+    def dictionary(self):
+        return self._dictionary
 
-    @selected_columns.setter
-    def selected_columns(self, selected_columns):
-        if not isinstance(selected_columns, list):
-            raise ValueError("Columns must be a list")
-        self._selected_columns = selected_columns
+    @dictionary.setter
+    def dictionary(self, dictionary: pd.DataFrame):
+        self._dictionary = dictionary
 
-    def set_columns(self, selected_columns, harmonized=True, mapping_path=None):
-        """
-        Sets the selected columns by harmonizing them using the Translator.
-        """
-        if not isinstance(selected_columns, list):
-            raise ValueError("Columns must be a list")
-        if not harmonized:
-            self.selected_columns = selected_columns
-        else:
-            translator = Translator(mapping_path)
-            translated_columns = [translator.mapped_to_variable(col) for col in selected_columns]
-            translated_columns = [col for col in translated_columns if col is not None]
-            print(f"Selected columns: {selected_columns}")
-            print(f"Translated columns: {translated_columns}")
-            self.selected_columns = translated_columns
+    @property
+    def raw_dataframes(self):
+        return self._raw_dataframes
 
-    def available_columns(self, harmonized=True, mapping_path=None) -> dict:
-        """
-        Fetches the available columns in the DataFrame, returning a mapping of translated columns to their original names.
+    @raw_dataframes.setter
+    def raw_dataframes(self, raw_dataframes: list | pd.DataFrame):
+        self._raw_dataframes = raw_dataframes if isinstance(raw_dataframes, list) else [raw_dataframes]
 
-        Args:
-            harmonized (bool): Whether to return harmonized (translated) column names.
-            mapping_path (str): Path to the mapping file for translation.
+    @property
+    def key_column(self):
+        return self._key_column
 
-        Returns:
-            dict: A dictionary mapping translated column names to their original names.
-        """
-        available_columns = self.dataframe.columns.tolist()
-        column_mapping = {}
+    @key_column.setter
+    def key_column(self, key_column: str):
+        self._key_column = key_column
 
-        if harmonized:
-            translator = Translator(mapping_path)
-            for col in available_columns:
-                translated_col = translator.variable_to_mapped(col)
-                if translated_col is not None:
-                    column_mapping[translated_col] = col
-        else:
-            column_mapping = {col: col for col in available_columns}
+    @property
+    def merge(self):
+        return self._merge
 
-        return column_mapping
+    @merge.setter
+    def merge(self, merge: bool):
+        self._merge = merge
 
-    def selected_columns_CLI(self) -> None:
-        """
-        Prompts the user to select columns from the available columns in the DataFrame.
+    @property
+    def translated_dataframes(self):
+        return self._translated_dataframes
 
-        Returns:
-            None: Updates the self.columns with user-selected columns or defaults to all columns.
-        """
-        available_columns = self.available_columns()
-        print(f"Available columns: {available_columns}")
-        selected = input("Enter columns to select, separated by commas (or press Enter to select all): ").strip()
-        if selected:
-            selected_columns = [col.strip() for col in selected.split(',')]
-            invalid_columns = [col for col in selected_columns if col not in available_columns]
-            if invalid_columns:
-                raise ValueError(f"Invalid columns selected: {invalid_columns}")
-            self.selected_columns = selected_columns
-        else:
-            self.selected_columns = available_columns
+    @translated_dataframes.setter
+    def translated_dataframes(self, translated_dataframes: list | pd.DataFrame):
+        self._translated_dataframes = translated_dataframes if isinstance(translated_dataframes, list) else [translated_dataframes]
 
-    def transform_and_save(self, delete_files=False) -> None:
-        """
-        Transforms the DataFrame and saves it to a Parquet file.
+    def get_columns(self, dataframes: list[pd.DataFrame]) -> list[str]:
+        unique_columns = set()
+        for df in dataframes:
+            unique_columns.update(df.columns)
+        return list(unique_columns)
 
-        If delete_files is True, deletes the input file after transformation.
-
-        Returns:
-            None
-        """
+    def translate(self):
         logging.info("----------------------")
-        logging.info("Transforming data...")
-
-        if not self.selected_columns:
-            self.selected_columns = self.available_columns(harmonized=False)
-
-        if self.output_path and not os.path.exists(self.output_path):
-            os.makedirs(self.output_path, exist_ok=True)
-            logging.info(f"Created output directory: {self.output_path}")
-
-        parquet_file = os.path.join(self.output_path, "transformed_data.parquet")
-        self.dataframe[self.selected_columns].to_parquet(parquet_file, index=False)
-
-        if delete_files:
-            try:
-                os.remove(self.dataframe.file_path)
-                print(f"Deleted source file: {self.dataframe.file_path}")
-            except OSError as e:
-                print(f"Error deleting file {self.dataframe.file_path}: {e}")
+        logging.info("Starting data translation...")
+        try:
+            if self.dictionary is None:
+                logging.error("No dictionary was provided for translation.")
+                raise ValueError("No dictionary was provided for translation.")
+            if self.raw_dataframes is None:
+                logging.error("No raw dataframes were provided for translation.")
+                raise ValueError("No raw dataframes were provided for translation.")
+            if self.key_column is None:
+                logging.error("No key column was provided for translation.")
+                raise ValueError("No key column was provided for translation.")
+            if self.merge:
+                self._merge_dataframes()
+            self._translate_dataframes()
+            logging.info("Translation completed successfully.")
+        except Exception as e:
+            logging.error(f"Exception while translating data: {e}")
+            raise ValueError(f"Translation failed: {str(e)}")
+        return self.translated_dataframes

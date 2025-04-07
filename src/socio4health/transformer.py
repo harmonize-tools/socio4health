@@ -1,92 +1,109 @@
 import logging
-
 import numpy as np
 import pandas as pd
+from typing import List, Union, Optional
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 class Transformer:
-
-    def __init__(self, dictionary: pd.DataFrame = None, dataframes: list | pd.DataFrame = None,
-                translated_dataframes: list = None, selected_columns: list = None):
+    def __init__(self, dictionary: pd.DataFrame = None,
+                 dataframes: Optional[Union[List[pd.DataFrame], pd.DataFrame]] = None,
+                 chunk_size: int = 50000):
         self._dictionary = dictionary
-        self._dataframes = dataframes if isinstance(dataframes, list) else [dataframes]
-        self._selected_columns = selected_columns
-        self._translated_dataframes = translated_dataframes if isinstance(translated_dataframes, list) else [translated_dataframes]
+        self._dataframes = self._ensure_list(dataframes)
+        self._chunk_size = chunk_size
+        self._translated_dataframes = None
 
-    @property
-    def dictionary(self):
-        return self._dictionary
+    def _ensure_list(self, dataframes) -> List[pd.DataFrame]:
+        """Ensure input is always a list of DataFrames"""
+        if dataframes is None:
+            return []
+        return dataframes if isinstance(dataframes, list) else [dataframes]
 
-    @dictionary.setter
-    def dictionary(self, dictionary: pd.DataFrame):
-        self._dictionary = dictionary
+    def _optimize_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Reduce memory usage by optimizing data types"""
+        for col in df.columns:
+            col_type = str(df[col].dtype)
+            if col_type == 'object':
+                df[col] = df[col].astype('category')
+            elif col_type == 'int64':
+                df[col] = pd.to_numeric(df[col], downcast='integer')
+            elif col_type == 'float64':
+                df[col] = pd.to_numeric(df[col], downcast='float')
+        return df
 
-    @property
-    def dataframes(self):
-        return self._dataframes
-
-    @dataframes.setter
-    def dataframes(self, dataframes: list | pd.DataFrame):
-        self._dataframes = dataframes if isinstance(dataframes, list) else [dataframes]
-
-    @property
-    def translated_dataframes(self):
-        return self._translated_dataframes
-
-    @translated_dataframes.setter
-    def translated_dataframes(self, translated_dataframes: list | pd.DataFrame):
-        self._translated_dataframes = translated_dataframes if isinstance(translated_dataframes, list) else [translated_dataframes]
-
-    def get_dfs_names(self, dataframes: list[pd.DataFrame]) -> list[str]:
-        return [f"df_{i}" for i in range(len(dataframes))]
-
-    def get_columns(self, dataframes: list[pd.DataFrame]) -> list[str]:
-        unique_columns = set()
-        for df in dataframes:
-            unique_columns.update(df.columns)
-        return list(unique_columns)
-
-    def translate(self):
-        logging.info("----------------------")
-        logging.info("Starting data translation...")
-        try:
-            if self.dictionary is None:
-                logging.error("No dictionary was provided for translation.")
-                raise ValueError("No dictionary was provided for translation.")
-            if self.raw_dataframes is None:
-                logging.error("No raw dataframes were provided for translation.")
-                raise ValueError("No raw dataframes were provided for translation.")
-            #translate body
-            logging.info("Translation completed successfully.")
-        except Exception as e:
-            logging.error(f"Exception while translating data: {e}")
-            raise ValueError(f"Translation failed: {str(e)}")
-        return self.translated_dataframes
-
-    def vertical_merge(self, fill_value=None, sort_columns=False, similarity_threshold=1, nan_threshold=1, drop_empty_rows=True, fill_method=None):
-        """
-        Vertically merge DataFrames by first clustering similar ones together.
-
-        Parameters:
-        - fill_value: Value for missing columns (default None)
-        - sort_columns: Whether to sort columns alphabetically (default False)
-        - similarity_threshold: Minimum column similarity score (0-1) to cluster DataFrames
-        - nan_threshold: Percentage threshold (0-1) for column removal (default 0.7)
-        - drop_empty_rows: Whether to drop rows that become empty after column cleaning (default True)
-        - fill_method: Strategy to fill remaining NaNs ('ffill', 'bfill', None) (default None)
-
-        Returns:
-        - List of merged DataFrames (clusters)
-        """
-        dataframes_list = self._dataframes if isinstance(self._dataframes, list) else [self._dataframes]
-
-        if not dataframes_list:
+    def _safe_concat(self, dfs: List[pd.DataFrame]) -> pd.DataFrame:
+        """Memory-safe concatenation of DataFrames"""
+        if not dfs:
             return pd.DataFrame()
 
-        # Step 1: Cluster DataFrames by column similarity
+        # Exclude empty or all-NA DataFrames
+        dfs = [df for df in dfs if not df.empty and not df.isna().all().all()]
+
+        if not dfs:
+            return pd.DataFrame()
+
+        result = dfs[0]
+        for df in dfs[1:]:
+            if not df.empty and not df.isna().all().all():
+                result = pd.concat([result, df], ignore_index=True)
+                # Explicit memory management
+                if len(result) > self._chunk_size:
+                    result = self._optimize_dataframe(result)
+        return result
+
+    def _safe_dropna(self, df: pd.DataFrame, how: str = 'all') -> pd.DataFrame:
+        """Process dropna in chunks"""
+        if len(df) <= self._chunk_size:
+            return df.dropna(how=how)
+
+        chunks = []
+        for i in range(0, len(df), self._chunk_size):
+            chunk = df.iloc[i:i + self._chunk_size].copy()
+            chunk = chunk.dropna(how=how)
+            chunks.append(chunk)
+        return self._safe_concat(chunks)
+
+    def clean_nan_columns(self, df: pd.DataFrame, nan_threshold: float = 0.9,
+                          drop_empty_rows: bool = False) -> pd.DataFrame:
+        """Memory-optimized column cleaning"""
+        try:
+            # First optimize the input DataFrame
+            df = self._optimize_dataframe(df)
+
+            # Remove high-NaN columns
+            nan_percent = df.isna().mean()
+            cols_to_drop = nan_percent[nan_percent >= nan_threshold].index.tolist()
+            cleaned_df = df.drop(columns=cols_to_drop)
+
+            if drop_empty_rows:
+                cleaned_df = self._safe_dropna(cleaned_df, how='all')
+
+            return cleaned_df
+
+        except MemoryError:
+            # If we run out of memory, try with smaller chunks
+            if self._chunk_size > 1000:
+                logging.warning(f"Reducing chunk size from {self._chunk_size} to {self._chunk_size // 2}")
+                original_size = self._chunk_size
+                self._chunk_size = self._chunk_size // 2
+                result = self.clean_nan_columns(df, nan_threshold, drop_empty_rows)
+                self._chunk_size = original_size
+                return result
+            raise
+
+    def vertical_merge(self, fill_value=None, sort_columns=False,
+                       similarity_threshold=0.9, nan_threshold=0.9,
+                       drop_empty_rows=True, fill_method=None) -> List[pd.DataFrame]:
+        """Memory-safe vertical merge with clustering"""
+        dataframes_list = [self._optimize_dataframe(df) for df in self._dataframes]
+
+        if not dataframes_list:
+            return []
+
+        # Cluster DataFrames by column similarity
         def column_similarity(df1, df2):
-            """Calculate Jaccard similarity between DataFrame columns"""
             cols1 = set(df1.columns)
             cols2 = set(df2.columns)
             intersection = cols1.intersection(cols2)
@@ -107,14 +124,11 @@ class Transformer:
         remaining_indices = set(range(n))
 
         while remaining_indices:
-            # Start with the DataFrame that has highest average similarity
             seed_idx = max(remaining_indices,
                            key=lambda x: np.mean(similarity_matrix[x, list(remaining_indices)]))
-
             cluster = {seed_idx}
             remaining_indices.remove(seed_idx)
 
-            # Find all similar DataFrames
             added = True
             while added:
                 added = False
@@ -123,74 +137,45 @@ class Transformer:
                         cluster.add(idx)
                         remaining_indices.remove(idx)
                         added = True
-
             clusters.append(cluster)
 
-        # Step 2: Merge DataFrames within each cluster
+        # Process each cluster
         merged_dfs = []
         for cluster in clusters:
             cluster_dfs = [dataframes_list[i] for i in cluster]
 
-            # Get all unique columns in this cluster
-            cluster_columns = set()
+            # Get all unique columns
+            cluster_columns = set().union(*[df.columns for df in cluster_dfs])
+            if sort_columns:
+                cluster_columns = sorted(cluster_columns)
+
+            # Process each DataFrame in chunks
+            reindexed_chunks = []
             for df in cluster_dfs:
-                cluster_columns.update(df.columns)
+                if len(df) > self._chunk_size:
+                    chunks = []
+                    for i in range(0, len(df), self._chunk_size):
+                        chunk = df.iloc[i:i + self._chunk_size]
+                        chunk = chunk.reindex(columns=cluster_columns, fill_value=fill_value)
+                        chunks.append(chunk)
+                    reindexed_df = self._safe_concat(chunks)
+                else:
+                    reindexed_df = df.reindex(columns=cluster_columns, fill_value=fill_value)
+                reindexed_chunks.append(reindexed_df)
 
-            cluster_columns = sorted(cluster_columns) if sort_columns else list(cluster_columns)
+            # Merge with memory safety
+            merged_df = self._safe_concat(reindexed_chunks)
+            merged_df = self.clean_nan_columns(
+                merged_df,
+                nan_threshold=nan_threshold,
+                drop_empty_rows=drop_empty_rows
+            )
 
-            # Reindex and merge
-            reindexed_dfs = []
-            for df in cluster_dfs:
-                reindexed_df = df.reindex(columns=cluster_columns, fill_value=fill_value)
-                reindexed_dfs.append(reindexed_df)
+            if fill_method in ['ffill', 'bfill']:
+                merged_df = merged_df.fillna(method=fill_method)
+            elif fill_value is not None:
+                merged_df = merged_df.fillna(fill_value)
 
-            merged_df = pd.concat(reindexed_dfs, axis=0, ignore_index=True)
-            merged_df = clean_nan_columns(merged_df, nan_threshold=nan_threshold, drop_empty_rows=drop_empty_rows,
-                                          fill_value=fill_value, fill_method=fill_method)
             merged_dfs.append(merged_df)
 
-        # If only one cluster, return the single DataFrame directly
-        if len(merged_dfs) == 1:
-            return merged_dfs[0]
-
         return merged_dfs
-
-def clean_nan_columns(df,
-                      nan_threshold=1.0,
-                      drop_empty_rows=False,
-                      fill_method=None,
-                      fill_value=None):
-    """
-    Clean DataFrame by removing columns with high NaN percentages.
-
-    Parameters:
-    - df: Input pandas DataFrame
-    - nan_threshold: Percentage threshold (0-1) for column removal (default 0.7)
-    - drop_empty_rows: Whether to drop rows that become empty after column cleaning (default False)
-    - fill_method: Strategy to fill remaining NaNs ('ffill', 'bfill', None) (default None)
-    - fill_value: Value to use for filling NaNs when fill_method is None (default None)
-
-    Returns:
-    - Cleaned pandas DataFrame
-    """
-
-    if not isinstance(df, pd.DataFrame):
-        raise ValueError("Input must be a pandas DataFrame")
-
-    nan_percent = df.isna().mean()
-    cols_to_drop = nan_percent[nan_percent >= nan_threshold].index.tolist()
-    cleaned_df = df.drop(columns=cols_to_drop)
-    if drop_empty_rows:
-        cleaned_df = cleaned_df.dropna(how='all')
-    if fill_method in ['ffill', 'bfill']:
-        cleaned_df = cleaned_df.fillna(method=fill_method)
-    elif fill_value is not None:
-        cleaned_df = cleaned_df.fillna(fill_value)
-
-    if cols_to_drop:
-        logging.info(f"Removed {len(cols_to_drop)} columns with ≥{nan_threshold * 100:.0f}% NaN values:")
-        logging.info(cols_to_drop)
-    else:
-        logging.info("No columns met the NaN threshold for removal")
-
-    return cleaned_df

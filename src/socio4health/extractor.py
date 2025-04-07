@@ -167,18 +167,15 @@ class Extractor:
 
     def _read_file(self, filepath):
         try:
-            # Extract just the filename without path or extension
-            #filename = os.path.splitext(os.path.basename(filepath))[0]
-
             if self.is_fwf:
                 if not self.colnames or not self.colspecs:
                     logging.error("Column names and column specifications must be provided for fixed-width files.")
                     raise ValueError("Column names and column specifications must be provided for fixed-width files.")
                 df = pd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding)
             else:
-                df = pd.read_csv(filepath, encoding=self.encoding, sep=self.sep)
+                df = pd.read_csv(filepath, encoding=self.encoding, sep=self.sep, low_memory=False)
                 if len(df.columns) == 1:
-                    df = pd.read_csv(filepath, encoding=self.encoding, sep=',')
+                    df = pd.read_csv(filepath, encoding=self.encoding, sep=',', low_memory=False)
 
             self.dataframes.append(df)
 

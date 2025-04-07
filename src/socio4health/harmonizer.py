@@ -88,7 +88,8 @@ class Harmonizer:
 
         if self.extractor is None:
             self.extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir,
-                                       key_words=key_words, encoding=encoding, is_fwf=is_fwf, colnames=colnames, colspecs=colspecs, sep=sep)
+                                       key_words=key_words, encoding=encoding, is_fwf=is_fwf, colnames=colnames, colspecs=colspecs,
+                                       sep=sep)
         try:
             self.dataframes = self.extractor.extract()
             logging.info("Extraction completed")

@@ -1,10 +1,9 @@
 import os
-import json
+
 import pandas as pd
 from tqdm import tqdm
 import glob
-from socio4health.utils.extractor_utils import run_standard_spider, compressed2files, download_request
-from itertools import islice
+from socio4health.utils.extractor_utils import run_standard_spider, compressed2files
 import logging
 
 # Configure logging
@@ -12,7 +11,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 class Extractor:
-    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list, encoding: str = 'latin1', is_fwf: bool = False, colnames: list = None, colspecs: list = None, sep: str = ','):
+    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list,
+                 encoding: str = 'latin1', is_fwf: bool = False, colnames: list = None, colspecs: list = None,
+                 sep: str = None):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.url = url
         self.depth = depth
@@ -55,7 +56,7 @@ class Extractor:
             raise ValueError(f"Extraction failed: {str(e)}")
 
         return self.dataframes
-
+    '''
     def _extract_online_mode(self):
         logging.info("Extracting data in online mode...")
         extracted_extensions = set()
@@ -133,7 +134,7 @@ class Extractor:
             f"\nSuccessfully downloaded files with the following extensions: {extracted_extensions}. "
             "However, it appears there are no files matching your requested extensions: {self.down_ext} within any compressed files. "
             "Please ensure the requested file extensions are correct and present within the compressed files.")
-
+    '''
     def _extract_local_mode(self):
         logging.info("Extracting data in local mode...")
         files_list = []
@@ -166,13 +167,21 @@ class Extractor:
 
     def _read_file(self, filepath):
         try:
+            # Extract just the filename without path or extension
+            #filename = os.path.splitext(os.path.basename(filepath))[0]
+
             if self.is_fwf:
                 if not self.colnames or not self.colspecs:
                     logging.error("Column names and column specifications must be provided for fixed-width files.")
                     raise ValueError("Column names and column specifications must be provided for fixed-width files.")
-                self.dataframes.append(pd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding))
+                df = pd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding)
             else:
-                self.dataframes.append(pd.read_csv(filepath, encoding=self.encoding, sep=self.sep))
+                df = pd.read_csv(filepath, encoding=self.encoding, sep=self.sep)
+                if len(df.columns) == 1:
+                    df = pd.read_csv(filepath, encoding=self.encoding, sep=',')
+
+            self.dataframes.append(df)
+
         except Exception as e:
             logging.error(f"Error creating DataFrame for {filepath}: {e}")
             raise ValueError(f"Error: {e}")

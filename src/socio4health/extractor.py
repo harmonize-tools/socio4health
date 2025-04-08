@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+import dask.dataframe as dd
 from tqdm import tqdm
 import glob
 from socio4health.utils.extractor_utils import run_standard_spider, compressed2files
@@ -171,11 +172,11 @@ class Extractor:
                 if not self.colnames or not self.colspecs:
                     logging.error("Column names and column specifications must be provided for fixed-width files.")
                     raise ValueError("Column names and column specifications must be provided for fixed-width files.")
-                df = pd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding)
+                df = dd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding)
             else:
-                df = pd.read_csv(filepath, encoding=self.encoding, sep=self.sep, low_memory=False)
+                df = dd.read_csv(filepath, encoding=self.encoding, sep=self.sep, dtype='object')
                 if len(df.columns) == 1:
-                    df = pd.read_csv(filepath, encoding=self.encoding, sep=',', low_memory=False)
+                    df = dd.read_csv(filepath, encoding=self.encoding, sep=',', dtype='object')
 
             self.dataframes.append(df)
 

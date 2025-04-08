@@ -3,6 +3,7 @@ import shutil
 from importlib.metadata import files
 from typing import List
 import pandas as pd
+import dask.dataframe as dd
 from tqdm import tqdm
 import logging
 from socio4health.extractor import Extractor
@@ -13,13 +14,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 class Harmonizer:
 
-    def __init__(self, dataframe: pd.DataFrame = None, extractor: Extractor = None, transformer: Transformer = None,
+    def __init__(self, dataframe: dd.DataFrame = None, extractor: Extractor = None, transformer: Transformer = None,
                  input_folder="data/input", output_folder="data/output", name=None, url=None, country=None, year=None,
                  data_source_type=None, is_aggregated=False):
         """
         Initialize the Harmonizer with a list of DataFrames.
         Args:
-            dataframe (pd.DataFrame): DataFrame.
+            dataframe (dd.DataFrame): Dask DataFrame.
             extractor (Extractor): Extractor instance.
             transformer (Transformer): Transformer instance.
             input_folder (str): Input folder path.
@@ -63,7 +64,7 @@ class Harmonizer:
 
     def extract(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
                 download_dir="data/input", key_words=[], encoding='latin1', is_fwf=False, colnames=None, colspecs=None,
-                delete_data_dir=False, sep=',') -> List[pd.DataFrame]:
+                delete_data_dir=False, sep=',') -> List[dd.DataFrame]:
         """
         Extract data based on the provided configuration.
 
@@ -81,7 +82,7 @@ class Harmonizer:
             delete_data_dir (bool): Whether to delete the data directory after extraction.
 
         Returns:
-            List[pd.DataFrame]: A list of extracted data as DataFrames.
+            List[dd.DataFrame]: A list of extracted data as Dask DataFrames.
         """
         logging.info("----------------------")
         logging.info("Extracting data...")
@@ -91,6 +92,7 @@ class Harmonizer:
                                        key_words=key_words, encoding=encoding, is_fwf=is_fwf, colnames=colnames, colspecs=colspecs,
                                        sep=sep)
         try:
+            # Get pandas DataFrames from extractor
             self.dataframes = self.extractor.extract()
             logging.info("Extraction completed")
 
@@ -103,12 +105,12 @@ class Harmonizer:
             logging.error(f"Exception while extracting data: {e}")
             raise ValueError(f"Extraction failed: {str(e)}")
 
-    def select_columns(self, dataframe: pd.DataFrame) -> List[str]:
+    def select_columns(self, dataframe: dd.DataFrame) -> List[str]:
         """
         Allows the user to select columns from the extracted data.
 
         Args:
-            dataframe (pd.DataFrame): DataFrame to select columns from.
+            dataframe (dd.DataFrame): Dask DataFrame to select columns from.
 
         Returns:
             List[str]: A list of selected columns.
@@ -116,6 +118,7 @@ class Harmonizer:
         print("----------------------")
         print("Selecting columns...")
 
+        # Compute to get the columns (this brings data into memory)
         available_columns = dataframe.columns.tolist()
 
         print("Available columns:")
@@ -127,15 +130,15 @@ class Harmonizer:
         else:
             return [col.strip() for col in selected_columns.split(',')]
 
-    def transform(self, delete_files=False) -> List[pd.DataFrame]:
+    def transform(self, delete_files=False) -> List[dd.DataFrame]:
         """
-        Transforms extracted data into Parquet files.
+        Transforms extracted data into Parquet files using Dask.
 
         Args:
             delete_files (bool): Whether to delete the original files after transformation.
 
         Returns:
-            List[pd.DataFrame]: Transformed data as DataFrames.
+            List[dd.DataFrame]: Transformed data as Dask DataFrames.
         """
         print("----------------------")
         print("Transforming data...")
@@ -154,12 +157,14 @@ class Harmonizer:
                     if self.transformer is None:
                         self.transformer = Transformer(dataframe, output_file_path, columns=selected_columns)
 
+                    # For Dask, we might need to adjust the auto_detect_dtypes method
                     detected_dtypes = self.transformer.auto_detect_dtypes()
                     print(f"Detected dtypes: {detected_dtypes}")
 
                     self.transformer.dTypes = detected_dtypes
 
-                    self.transformer.transform_and_save()
+                    # Save as parquet using Dask
+                    dataframe[selected_columns].to_parquet(output_file_path)
 
                     if delete_files:
                         os.remove(dataframe.file_path)
@@ -174,19 +179,20 @@ class Harmonizer:
         print("Successful transformation")
         return self.dataframes
 
-    def export(self, df: pd.DataFrame, file_name: str):
+    def export(self, df: dd.DataFrame, file_name: str):
         """
-        Exports a DataFrame to a CSV file.
+        Exports a Dask DataFrame to a CSV file.
 
         Args:
-            df (pd.DataFrame): The DataFrame to export.
+            df (dd.DataFrame): The Dask DataFrame to export.
             file_name (str): The name of the file (without extension).
         """
         file_name = file_name.replace(" ", "_")
         output_file = f"data/output/{file_name}.csv"
 
         try:
-            df.to_csv(output_file, index=False)
+            # Dask's to_csv creates multiple files, so we might want to handle that
+            df.to_csv(output_file, index=False, single_file=True)
             print(f"Exported DataFrame to {output_file}")
         except Exception as e:
             print(f"Error exporting DataFrame: {e}")

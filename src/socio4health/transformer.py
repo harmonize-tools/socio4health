@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 class Transformer:
     def __init__(self, dictionary: pd.DataFrame = None,
                  dataframes: Optional[Union[List[pd.DataFrame], pd.DataFrame]] = None,
-                 chunk_size: int = 50000):
+                 chunk_size: int = 9000):
         self._dictionary = dictionary
         self._dataframes = self._ensure_list(dataframes)
         self._chunk_size = chunk_size
@@ -22,15 +22,40 @@ class Transformer:
         return dataframes if isinstance(dataframes, list) else [dataframes]
 
     def _optimize_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Reduce memory usage by optimizing data types"""
+        """Reduce memory usage by optimizing data types with chunked processing"""
         for col in df.columns:
             col_type = str(df[col].dtype)
-            if col_type == 'object':
-                df[col] = df[col].astype('category')
-            elif col_type == 'int64':
-                df[col] = pd.to_numeric(df[col], downcast='integer')
-            elif col_type == 'float64':
-                df[col] = pd.to_numeric(df[col], downcast='float')
+
+            try:
+                if col_type == 'object':
+                    # Try converting to category first, then to string if it fails
+                    try:
+                        df[col] = df[col].astype('category')
+                    except (ValueError, TypeError):
+                        df[col] = df[col].astype('string')
+
+                elif col_type in ['int64', 'float64']:
+                    # Process numeric columns in chunks
+                    if len(df) > self._chunk_size:
+                        chunks = []
+                        for i in range(0, len(df), self._chunk_size):
+                            chunk = df[col].iloc[i:i + self._chunk_size]
+                            if col_type == 'int64':
+                                chunk = pd.to_numeric(chunk, downcast='integer')
+                            else:
+                                chunk = pd.to_numeric(chunk, downcast='float')
+                            chunks.append(chunk)
+                        df[col] = pd.concat(chunks)
+                    else:
+                        if col_type == 'int64':
+                            df[col] = pd.to_numeric(df[col], downcast='integer')
+                        else:
+                            df[col] = pd.to_numeric(df[col], downcast='float')
+
+            except MemoryError:
+                logging.warning(f"Memory error optimizing column {col}. Keeping original dtype.")
+                continue
+
         return df
 
     def _safe_concat(self, dfs: List[pd.DataFrame]) -> pd.DataFrame:

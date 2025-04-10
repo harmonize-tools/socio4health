@@ -1,27 +1,26 @@
-from socio4health import Transformer
+from dask.diagnostics import ProgressBar
+
+from socio4health import Extractor
 from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
-from socio4health.harmonizer import Harmonizer
+from socio4health.harmonizer import Harmonizer, vertical_merge, drop_nan_columns
 
-dfs_col = Harmonizer().extract(path="../../input/GEIH_2022/Original",down_ext=['.CSV','.csv','.zip'],sep=';')
-transformer = Transformer(dataframes=dfs_col)
-dfs_col = transformer.vertical_merge(similarity_threshold=0.9, nan_threshold=0.9)
-for df in dfs_col:
-    print(df.head())
+col_extractor = Extractor(path="../../input/GEIH_2022/Original",down_ext=['.CSV','.csv','.zip'],sep=';')
+per_extractor = Extractor(path="../../input/ENAHO_2022/Original",down_ext=['.csv','.zip'])
+rd_extractor = Extractor(path="../../input/ENHOGAR_2022/Original",down_ext=['.csv','.zip'])
+bra_extractor = Extractor(path="../../input/PNADC_2022/Test",down_ext=['.txt','.zip'],is_fwf=True,colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value)
 
-'''
-dfs_per = Harmonizer().extract(path="../../input/ENAHO_2022/Original",down_ext=['.csv','.zip'])
-for df in dfs_per:
-    print(df)
-'''
-'''
-dfs_rd = Harmonizer().extract(path="../../input/ENHOGAR_2022/Original",down_ext=['.csv','.zip'])
-for df in dfs_rd:
-    print(df)
-'''
-'''
-dfs_bra = Harmonizer().extract(path="../../input/PNADC_2022/Original",down_ext=['.txt','.zip'],is_fwf=True,colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, delete_data_dir=False)
-transformer = Transformer(dataframes=dfs_bra, chunk_size=9000)
-dfs_bra = transformer.vertical_merge(similarity_threshold=0.9, nan_threshold=0.9)
-for df in dfs_bra:
-    print(df)
-'''
+def test(extractor):
+    dfs = extractor.extract()
+    dfs = vertical_merge(ddfs=dfs, similarity_threshold=0.9)
+    for df in dfs:
+        drop_nan_columns(ddf=df, nan_threshold=0.8)
+        available_columns = df.columns.tolist()
+        print("Available columns:")
+        print(available_columns)
+        with ProgressBar():
+            print(df.head())
+        # df.to_csv("data/output", index=False, single_file=True)
+        extractor.delete_download_folder()
+
+if __name__ == "__main__":
+    test(bra_extractor)

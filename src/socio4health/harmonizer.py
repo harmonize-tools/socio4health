@@ -1,199 +1,236 @@
 import os
 import shutil
-from importlib.metadata import files
+from typing import Optional, Tuple
 from typing import List
-import pandas as pd
 import dask.dataframe as dd
+from dask.diagnostics import ProgressBar
 from tqdm import tqdm
 import logging
 from socio4health.extractor import Extractor
-from socio4health.transformer import Transformer
+from socio4health.enums.data_info_enum import NameEnum
 
-# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def vertical_merge(ddfs: List[dd.DataFrame], min_common_columns=1, similarity_threshold=0.8):
+    """
+    Merge a list of Dask DataFrames vertically.
+
+    Parameters:
+    - ddfs: List of Dask DataFrames to merge
+    - min_common_columns: Minimum common columns required (default: 1)
+    - similarity_threshold: Column similarity threshold (default: 0.8)
+
+    Returns:
+    - List of merged Dask DataFrames
+    """
+    if not ddfs:
+        return []
+
+    groups = []
+    used_indices = set()
+
+    for i, df1 in enumerate(tqdm(ddfs, desc="Grouping DataFrames")):
+        if i in used_indices:
+            continue
+
+        cols1 = set(df1.columns)
+        dtypes1 = {col: str(df1[col].dtype) for col in df1.columns}
+        current_group = [i]
+        used_indices.add(i)
+
+        for j, df2 in enumerate(ddfs[i + 1:]):
+            j_actual = i + 1 + j  # Adjust index for the full list
+            if j_actual in used_indices:
+                continue
+
+            cols2 = set(df2.columns)
+            common_cols = cols1 & cols2
+            similarity = len(common_cols) / max(len(cols1), len(cols2))
+
+            if (len(common_cols) >= min_common_columns and
+                    similarity >= similarity_threshold):
+
+                compatible = True
+                for col in common_cols:
+                    if col in dtypes1 and col in df2.columns:
+                        if str(df2[col].dtype) != dtypes1[col]:
+                            compatible = False
+                            break
+
+                if compatible:
+                    current_group.append(j_actual)
+                    used_indices.add(j_actual)
+                    cols1.update(cols2)
+                    for col in cols2 - cols1:
+                        dtypes1[col] = str(df2[col].dtype)
+
+        groups.append(current_group)
+
+    merged_dfs = []
+    for group_indices in tqdm(groups, desc="Merging groups"):
+        if len(group_indices) == 1:
+            merged_dfs.append(ddfs[group_indices[0]])
+        else:
+            group_dfs = [ddfs[i] for i in group_indices]
+            common_cols = set(group_dfs[0].columns)
+            for df in group_dfs[1:]:
+                common_cols.intersection_update(df.columns)
+
+            aligned_dfs = []
+            for df in group_dfs:
+                common_cols_ordered = [col for col in df.columns if col in common_cols]
+                other_cols = [col for col in df.columns if col not in common_cols]
+                aligned_dfs.append(df[common_cols_ordered + other_cols])
+
+            merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
+            merged_dfs.append(merged_df)
+
+    return merged_dfs
+
+
+def drop_nan_columns(ddf, nan_threshold=1.0):
+    """
+    Drop columns with NaN percentage > threshold, with optimized computation and logging.
+
+    Parameters:
+    - ddf: Dask DataFrame
+    - nan_threshold: NaN percentage threshold (default: 0.5, range: 0-1)
+
+    Returns:
+    - Filtered Dask DataFrame with columns below NaN threshold
+    """
+    # Validate threshold
+    if not 0 <= nan_threshold <= 1:
+        raise ValueError("nan_threshold must be between 0 and 1")
+
+    # Early return if empty DataFrame
+    if len(ddf.columns) == 0:
+        logging.warning("Empty DataFrame - no columns to process")
+        return ddf
+
+    logging.info("Calculating NaN percentages...")
+
+    # Optimized computation: only calculate mean for columns that might be dropped
+    with ProgressBar(minimum=1):
+        nan_percentages = ddf.isna().mean().compute()
+
+    mask = nan_percentages <= nan_threshold
+    columns_to_keep = nan_percentages[mask].index.tolist()
+
+    # Logging optimizations
+    if len(columns_to_keep) < len(ddf.columns):
+        dropped_count = len(ddf.columns) - len(columns_to_keep)
+        dropped_columns = set(ddf.columns) - set(columns_to_keep)
+        logging.info(
+            f"Dropped {dropped_count} columns ({dropped_count / len(ddf.columns):.1%}) "
+            f"with > {nan_threshold:.0%} NaN values. "
+            f"Sample dropped columns: {sorted(dropped_columns)[:5]}{'...' if len(dropped_columns) > 5 else ''}"
+        )
+    else:
+        logging.info(f"No columns exceeded {nan_threshold:.0%} NaN threshold")
+
+    if len(columns_to_keep) == len(ddf.columns):
+        return ddf
+
+    return ddf[columns_to_keep]
+
 
 class Harmonizer:
 
-    def __init__(self, dataframe: dd.DataFrame = None, extractor: Extractor = None, transformer: Transformer = None,
-                 input_folder="data/input", output_folder="data/output", name=None, url=None, country=None, year=None,
-                 data_source_type=None, is_aggregated=False):
+    def __init__(self,
+                 extractor: Optional[Extractor] = None,
+                 input_folder: str = "data/input",
+                 name: str = None,
+                 url: Optional[str] = None,
+                 country: Optional[str] = None,
+                 year: Optional[int] = None,
+                 selected_columns: Optional[List[str]] = None):
         """
         Initialize the Harmonizer with a list of DataFrames.
         Args:
-            dataframe (dd.DataFrame): Dask DataFrame.
             extractor (Extractor): Extractor instance.
-            transformer (Transformer): Transformer instance.
             input_folder (str): Input folder path.
-            output_folder (str): Output folder path.
             name (str): Name of the dataset.
             url (str): URL of the dataset.
             country (str): Country of the dataset.
             year (int): Year of the dataset.
-            data_source_type (str): Type of the data source.
-            is_aggregated (bool): Flag indicating if the data is aggregated.
+            selected_columns (list): List of selected columns.
         """
-        self.dataframes = dataframe
         self.extractor = extractor
-        self.transformer = transformer
         self.input_folder = input_folder
-        self.output_folder = output_folder
         self.name = name
         self.url = url
         self.country = country
         self.year = year
-        self.data_source_type = data_source_type
-        self.is_aggregated = is_aggregated
+        self.selected_columns = selected_columns
 
-    def set_extractor(self, extractor: Extractor):
-        """
-        Sets the extractor for the Harmonizer.
+    @property
+    def extractor(self) -> Extractor:
+        """Get the Extractor instance."""
+        return self._extractor
+    @extractor.setter
+    def extractor(self, value: Extractor):
+        if not isinstance(value, (Extractor, type(None))):
+            raise TypeError("extractor must be an Extractor instance or None")
+        self._extractor = value
 
-        Args:
-            extractor (Extractor): The extractor to set.
-        """
-        self.extractor = extractor
+    @property
+    def input_folder(self) -> str:
+        """Get the input folder path."""
+        return self._input_folder
+    @input_folder.setter
+    def input_folder(self, value: str):
+        if not isinstance(value, str):
+            raise TypeError("input_folder must be a string")
+        self._input_folder = value
 
-    def set_transformer(self, transformer: Transformer):
-        """
-        Sets the transformer for the Harmonizer.
+    @property
+    def name(self) -> Optional[str]:
+        """Get the dataset name."""
+        return self._name
+    @name.setter
+    def name(self, value: str):
+        if not isinstance(value, (str, type(None))):
+            raise TypeError("name must be a string or None")
+        self._name = value
 
-        Args:
-            transformer (Transformer): The transformer to set.
-        """
-        self.transformer = transformer
+    @property
+    def url(self) -> str:
+        """Get the dataset URL."""
+        return self._url
+    @url.setter
+    def url(self, value: str):
+        if not isinstance(value, (str, type(None))):
+            raise TypeError("url must be a string or None")
+        self._url = value
 
-    def extract(self, path=None, url=None, depth=0, down_ext=['.csv', '.xls', '.xlsx', ".txt", ".sav", ".zip"],
-                download_dir="data/input", key_words=[], encoding='latin1', is_fwf=False, colnames=None, colspecs=None,
-                delete_data_dir=False, sep=',') -> List[dd.DataFrame]:
-        """
-        Extract data based on the provided configuration.
+    @property
+    def country(self) -> str:
+        """Get the country of the dataset."""
+        return self._country
+    @country.setter
+    def country(self, value: str):
+        if not isinstance(value, (str, type(None))):
+            raise TypeError("country must be a string or None")
+        self._country = value
 
-        Args:
-            path (str): Local path to extract files from.
-            url (str): URL to download data from.
-            depth (int): Depth for recursive directory search.
-            down_ext (list): List of file extensions to download.
-            download_dir (str): Directory to save downloaded files.
-            key_words (list): Keywords to filter the files.
-            encoding (str): Encoding of the files.
-            is_fwf (bool): Whether the file is fixed-width formatted.
-            colnames (list): Column names for fixed-width files.
-            colspecs (list): Column specifications for fixed-width files.
-            delete_data_dir (bool): Whether to delete the data directory after extraction.
+    @property
+    def year(self) -> int:
+        """Get the year of the dataset."""
+        return self._year
+    @year.setter
+    def year(self, value: int):
+        if not isinstance(value, (int, type(None))):
+            raise TypeError("year must be an integer or None")
+        self._year = value
 
-        Returns:
-            List[dd.DataFrame]: A list of extracted data as Dask DataFrames.
-        """
-        logging.info("----------------------")
-        logging.info("Extracting data...")
-
-        if self.extractor is None:
-            self.extractor = Extractor(path=path, url=url, depth=depth, down_ext=down_ext, download_dir=download_dir,
-                                       key_words=key_words, encoding=encoding, is_fwf=is_fwf, colnames=colnames, colspecs=colspecs,
-                                       sep=sep)
-        try:
-            # Get pandas DataFrames from extractor
-            self.dataframes = self.extractor.extract()
-            logging.info("Extraction completed")
-
-            if delete_data_dir and os.path.exists(download_dir):
-                shutil.rmtree(download_dir)
-                logging.info(f"Deleted data directory: {download_dir}")
-
-            return self.dataframes
-        except Exception as e:
-            logging.error(f"Exception while extracting data: {e}")
-            raise ValueError(f"Extraction failed: {str(e)}")
-
-    def select_columns(self, dataframe: dd.DataFrame) -> List[str]:
-        """
-        Allows the user to select columns from the extracted data.
-
-        Args:
-            dataframe (dd.DataFrame): Dask DataFrame to select columns from.
-
-        Returns:
-            List[str]: A list of selected columns.
-        """
-        print("----------------------")
-        print("Selecting columns...")
-
-        # Compute to get the columns (this brings data into memory)
-        available_columns = dataframe.columns.tolist()
-
-        print("Available columns:")
-        print(available_columns)
-
-        selected_columns = input("Enter the columns you want to select, separated by commas (leave blank for all): ")
-        if not selected_columns.strip():
-            return available_columns
-        else:
-            return [col.strip() for col in selected_columns.split(',')]
-
-    def transform(self, delete_files=False) -> List[dd.DataFrame]:
-        """
-        Transforms extracted data into Parquet files using Dask.
-
-        Args:
-            delete_files (bool): Whether to delete the original files after transformation.
-
-        Returns:
-            List[dd.DataFrame]: Transformed data as Dask DataFrames.
-        """
-        print("----------------------")
-        print("Transforming data...")
-
-        if not isinstance(self.dataframes, list) or not self.dataframes:
-            print("Error: DataFrame list is either not a list or is empty.")
-            raise ValueError("Empty DataFrame list. Check extraction process.")
-
-        for dataframe in tqdm(self.dataframes, desc="Transforming files"):
-            if dataframe is not None:
-                try:
-                    selected_columns = self.select_columns(dataframe)
-
-                    output_file_path = os.path.join("data/output", f"{dataframe.name}.parquet")
-
-                    if self.transformer is None:
-                        self.transformer = Transformer(dataframe, output_file_path, columns=selected_columns)
-
-                    # For Dask, we might need to adjust the auto_detect_dtypes method
-                    detected_dtypes = self.transformer.auto_detect_dtypes()
-                    print(f"Detected dtypes: {detected_dtypes}")
-
-                    self.transformer.dTypes = detected_dtypes
-
-                    # Save as parquet using Dask
-                    dataframe[selected_columns].to_parquet(output_file_path)
-
-                    if delete_files:
-                        os.remove(dataframe.file_path)
-                        print(f"Deleted original file: {dataframe.file_path}")
-
-                except Exception as e:
-                    print(f"Exception while transforming data: {e}")
-                    raise ValueError(f"Transformation failed: {str(e)}")
-            else:
-                print("Warning: DataFrame is None, skipping...")
-
-        print("Successful transformation")
-        return self.dataframes
-
-    def export(self, df: dd.DataFrame, file_name: str):
-        """
-        Exports a Dask DataFrame to a CSV file.
-
-        Args:
-            df (dd.DataFrame): The Dask DataFrame to export.
-            file_name (str): The name of the file (without extension).
-        """
-        file_name = file_name.replace(" ", "_")
-        output_file = f"data/output/{file_name}.csv"
-
-        try:
-            # Dask's to_csv creates multiple files, so we might want to handle that
-            df.to_csv(output_file, index=False, single_file=True)
-            print(f"Exported DataFrame to {output_file}")
-        except Exception as e:
-            print(f"Error exporting DataFrame: {e}")
-            raise ValueError(f"Error exporting DataFrame: {str(e)}")
+    @property
+    def selected_columns(self) -> Optional[List[str]]:
+        """Get the selected columns."""
+        return self._selected_columns
+    @selected_columns.setter
+    def selected_columns(self, value: List[str]):
+        if not isinstance(value, (list, type(None))):
+            raise TypeError("selected_columns must be a list or None")
+        self._selected_columns = value

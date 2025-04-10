@@ -1,26 +1,48 @@
+import json
 import os
+import shutil
+from itertools import islice
 
-import pandas as pd
+from pathlib import Path
+from typing import Optional
+
+import appdirs
+import os
 import dask.dataframe as dd
 from tqdm import tqdm
 import glob
-from socio4health.utils.extractor_utils import run_standard_spider, compressed2files
+from socio4health.utils.extractor_utils import run_standard_spider, compressed2files, download_request
 import logging
 
-# Configure logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def get_default_data_dir():
+    """Return platform-appropriate default data directory"""
+    path = Path(appdirs.user_data_dir("socio4health"))
+    logging.info(f"Default data directory: {path}")
+    return path
 
 class Extractor:
-    def __init__(self, path: str, url: str, depth: int, down_ext: list, download_dir: str, key_words: list,
-                 encoding: str = 'latin1', is_fwf: bool = False, colnames: list = None, colspecs: list = None,
-                 sep: str = None):
+    def __init__(
+            self,
+            path: str = None,
+            url: str = None,
+            depth: int = None,
+            down_ext: list = None,
+            download_dir: str = None,
+            key_words: list = None,
+            encoding: str = 'latin1',
+            is_fwf: bool = False,
+            colnames: list = None,
+            colspecs: list = None,
+            sep: str = None,
+    ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.url = url
         self.depth = depth
-        self.down_ext = down_ext
-        self.download_dir = download_dir
-        self.key_words = key_words
+        self.down_ext = down_ext if down_ext is not None else []
+        self.key_words = key_words if key_words is not None else []
         self.path = path
         self.mode = -1
         self.dataframes = []
@@ -29,19 +51,31 @@ class Extractor:
         self.colnames = colnames
         self.colspecs = colspecs
         self.sep = sep
+        self.download_dir = download_dir or str(get_default_data_dir())
+        os.makedirs(self.download_dir, exist_ok=True)
 
         if path and url:
-            logging.error('Both path and URL cannot be specified. Please choose one.')
             raise ValueError(
-                'Please use either path or URL mode, but not both simultaneously. '
-                'If both are needed, create two separate data instances and then merge them for processing.')
-        elif not (path or url):
-            logging.error('Neither path nor URL was specified.')
-            raise ValueError('You must specify at least one of the following: a path or an URL.')
-        elif url:
+                "Both 'path' and 'url' cannot be specified. "
+                "Choose either local mode (path) or online mode (url)."
+            )
+        elif not path and not url:
+            raise ValueError(
+                "Either 'path' (for local files) or 'url' (for web scraping) must be provided."
+            )
+
+        if url:
             self.mode = 0
+            if depth is None:
+                raise ValueError("'depth' must be specified in online mode.")
+            if self.download_dir is None:
+                raise ValueError("'download_dir' must be specified in online mode.")
+            if not self.down_ext:
+                raise ValueError("'down_ext' (download extensions) must be specified in online mode.")
         elif path:
             self.mode = 1
+            if not self.down_ext:
+                raise ValueError("'down_ext' (file extensions) must be specified in local mode.")
 
     def extract(self):
         logging.info("----------------------")
@@ -57,7 +91,7 @@ class Extractor:
             raise ValueError(f"Extraction failed: {str(e)}")
 
         return self.dataframes
-    '''
+
     def _extract_online_mode(self):
         logging.info("Extracting data in online mode...")
         extracted_extensions = set()
@@ -90,52 +124,56 @@ class Extractor:
             os.makedirs(self.download_dir)
             logging.info(f"Created download directory: {self.download_dir}")
 
+        downloaded_files = []
+
         if links:
             for filename, url in tqdm(links.items()):
                 filepath = download_request(url, filename, self.download_dir)
-                extracted_files = []
+                downloaded_files.append(filepath)
                 extracted_extensions.add(filepath.split(".")[-1])
-                if any(filepath.endswith(ext) for ext in self.compressed_ext):
-                    logging.info(f"Extracting files from compressed archive: {filepath}")
-                    extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
-                    for extracted_file in extracted_files:
-                        self._read_file(extracted_file)
-                    os.remove(filepath)
-                    logging.info(f"Removed compressed file after extraction: {filepath}")
-                else:
-                    self._read_file(filepath)
-                    logging.info(f"Downloaded file: {filename}")
-
         else:
             try:
                 filename = self.url.split("/")[-1]
                 if len(filename.split(".")) == 1:
                     filename += ".zip"
                 filepath = download_request(self.url, filename, self.download_dir)
+                downloaded_files.append(filepath)
                 logging.info(f"Successfully downloaded {filename} file.")
-
-                if any(filepath.endswith(ext) for ext in self.compressed_ext):
-                    logging.info(f"{filename} contains compressed files, extracting...")
-                    extracted_files = list(compressed2files(filepath, self.download_dir, self.down_ext))
-                    for extracted_file in extracted_files:
-                        self._read_file(extracted_file)
-                    try:
-                        os.remove(filepath)
-                        logging.info(f"Removed compressed file: {filepath}")
-                    except:
-                        logging.warning(f"Could not remove compressed file: {filepath}")
-
             except Exception as e:
                 logging.error(f"Error downloading: {e}")
                 raise ValueError(
                     f"No files were found at the specified link. Please verify the URL, search depth, and file extensions.")
 
+        # Process downloaded files using local mode logic
+        files_list = []
+        compressed_list = []
+        extracted_files = []
+
+        for filepath in downloaded_files:
+            if any(filepath.endswith(ext) for ext in self.compressed_ext):
+                compressed_list.append(filepath)
+                extracted_files.extend(
+                    compressed2files(input_archive=filepath, target_directory=self.download_dir,
+                                     down_ext=self.down_ext))
+            else:
+                files_list.append(filepath)
+
+        for filename in tqdm(files_list):
+            self._read_file(filename)
+
+        for extracted_file in tqdm(extracted_files):
+            self._read_file(extracted_file)
+
+        # Clean up
         os.remove("Output_scrap.json")
-        assert self.dataframes, (
-            f"\nSuccessfully downloaded files with the following extensions: {extracted_extensions}. "
-            "However, it appears there are no files matching your requested extensions: {self.down_ext} within any compressed files. "
-            "Please ensure the requested file extensions are correct and present within the compressed files.")
-    '''
+
+        if not self.dataframes:
+            logging.warning(
+                f"\nSuccessfully downloaded files with the following extensions: {extracted_extensions}. "
+                "However, it appears there are no files matching your requested extensions: {self.down_ext} within any compressed files. "
+                "Please ensure the requested file extensions are correct and present within the compressed files.")
+            raise ValueError("No valid data files found after extraction.")
+
     def _extract_local_mode(self):
         logging.info("Extracting data in local mode...")
         files_list = []
@@ -151,9 +189,15 @@ class Extractor:
             if ext in self.compressed_ext:
                 compressed_list.extend(glob.glob(full_pattern))
                 for filepath in compressed_list:
+                    # Use same directory as source if download_dir not specified
+                    target_dir = self.download_dir if self.download_dir else os.path.dirname(filepath)
                     extracted_files.extend(
-                        compressed2files(input_archive=filepath, target_directory=self.download_dir,
-                                         down_ext=self.down_ext))
+                        compressed2files(
+                            input_archive=filepath,
+                            target_directory=target_dir,
+                            down_ext=self.down_ext
+                        )
+                    )
             else:
                 files_list.extend(glob.glob(full_pattern))
 
@@ -172,14 +216,60 @@ class Extractor:
                 if not self.colnames or not self.colspecs:
                     logging.error("Column names and column specifications must be provided for fixed-width files.")
                     raise ValueError("Column names and column specifications must be provided for fixed-width files.")
-                df = dd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding)
+                df = dd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding, assume_missing=True)
             else:
-                df = dd.read_csv(filepath, encoding=self.encoding, sep=self.sep, dtype='object')
+                df = dd.read_csv(filepath, encoding=self.encoding, sep=self.sep)
                 if len(df.columns) == 1:
-                    df = dd.read_csv(filepath, encoding=self.encoding, sep=',', dtype='object')
+                    df = dd.read_csv(filepath, encoding=self.encoding, sep=',')
 
             self.dataframes.append(df)
 
         except Exception as e:
             logging.error(f"Error creating DataFrame for {filepath}: {e}")
             raise ValueError(f"Error: {e}")
+
+    def delete_download_folder(self, folder_path: Optional[str] = None) -> bool:
+        """
+        Safely delete the download folder and all its contents.
+
+        Args:
+            folder_path: Optional path to delete (defaults to the download_dir used in extraction)
+
+        Returns:
+            bool: True if deletion was successful, False otherwise
+
+        Raises:
+            ValueError: If no folder path is provided and no download_dir exists
+            OSError: If folder deletion fails
+        """
+        # Determine which folder to delete
+        target_path = Path(folder_path) if folder_path else Path(self.download_dir)
+
+        # Safety checks
+        if not target_path.exists():
+            logging.warning(f"Folder {target_path} does not exist - nothing to delete")
+            return False
+
+        if not target_path.is_dir():
+            raise ValueError(f"Path {target_path} is not a directory")
+
+        # Prevent accidental deletion of important directories
+        protected_paths = [
+            Path.home(),
+            Path("/"),
+            Path.cwd(),
+            Path(appdirs.user_data_dir())  # If using appdirs
+        ]
+
+        if any(target_path == p or target_path in p.parents for p in protected_paths):
+            raise ValueError(f"Cannot delete protected directory: {target_path}")
+
+        try:
+            logging.info(f"Deleting folder: {target_path}")
+            shutil.rmtree(target_path)
+            logging.info("Folder deleted successfully")
+            return True
+
+        except Exception as e:
+            logging.error(f"Failed to delete folder {target_path}: {str(e)}")
+            raise OSError(f"Folder deletion failed: {str(e)}")

@@ -7,9 +7,12 @@ class CountryEnum(Enum):
     BRAZIL = 'BRA'
     DOMINICAN_REPUBLIC = 'DOM'
 
-class DataSourceTypeEnum(Enum):
-    CENSUS = 'CENSUS'
-    SURVEY = 'SURVEY'
+class NameEnum(Enum):
+    PNAD = 'PNAD'
+    PNADC = 'PNADC'
+    ENAHO = 'ENAHO'
+    GEIH = 'GEIH'
+    ENHOGAR = 'ENHOGAR'
 
 class BraColnamesEnum(Enum):
     PNADC = [

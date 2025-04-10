@@ -214,19 +214,47 @@ class Extractor:
         try:
             if self.is_fwf:
                 if not self.colnames or not self.colspecs:
-                    logging.error("Column names and column specifications must be provided for fixed-width files.")
-                    raise ValueError("Column names and column specifications must be provided for fixed-width files.")
-                df = dd.read_fwf(filepath, colspecs=self.colspecs, names=self.colnames, encoding=self.encoding, assume_missing=True)
+                    logging.error("Column specs required for fixed-width files")
+                    raise ValueError("Column specs required for fixed-width files")
+                df = dd.read_fwf(
+                    filepath,
+                    colspecs=self.colspecs,
+                    names=self.colnames,
+                    encoding=self.encoding,
+                    dtype='object'  # Read everything as text initially
+                )
             else:
-                df = dd.read_csv(filepath, encoding=self.encoding, sep=self.sep)
+                # Read everything as text first to avoid dtype issues
+                df = dd.read_csv(
+                    filepath,
+                    encoding=self.encoding,
+                    sep=self.sep if self.sep else ',',
+                    dtype='object',
+                    assume_missing=True
+                )
                 if len(df.columns) == 1:
-                    df = dd.read_csv(filepath, encoding=self.encoding, sep=',')
+                    # Try different separator if we only got one column
+                    df = dd.read_csv(
+                        filepath,
+                        encoding=self.encoding,
+                        sep=',' if self.sep != ',' else ';',
+                        dtype='object',
+                        assume_missing=True
+                    )
+
+            # Convert numeric columns where possible
+            for col in df.columns:
+                try:
+                    df[col] = dd.to_numeric(df[col], errors='raise')
+                except (ValueError, TypeError):
+                    # Keep as string if conversion fails
+                    pass
 
             self.dataframes.append(df)
 
         except Exception as e:
-            logging.error(f"Error creating DataFrame for {filepath}: {e}")
-            raise ValueError(f"Error: {e}")
+            logging.error(f"Error reading {filepath}: {e}")
+            raise ValueError(f"Error reading file: {e}")
 
     def delete_download_folder(self, folder_path: Optional[str] = None) -> bool:
         """

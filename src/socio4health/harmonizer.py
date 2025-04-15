@@ -3,6 +3,8 @@ import shutil
 from typing import Optional, Tuple
 from typing import List
 import dask.dataframe as dd
+import numpy as np
+import pandas as pd
 from dask.diagnostics import ProgressBar
 from tqdm import tqdm
 import logging
@@ -89,73 +91,45 @@ def vertical_merge(ddfs: List[dd.DataFrame], min_common_columns=1, similarity_th
     return merged_dfs
 
 
-def drop_nan_columns(ddf, nan_threshold=1.0):
+def drop_nan_columns(ddf, threshold=1.0, sample_frac=None):
     """
-    Drop columns with NaN percentage > threshold, with robust handling of mixed dtypes.
+    Drop columns where the majority of values are NaN.
 
     Parameters:
-    - ddf: Dask DataFrame
-    - nan_threshold: NaN percentage threshold (default: 1.0, range: 0-1)
+    -----------
+    ddf : dask.dataframe.DataFrame
+        Input Dask DataFrame
+    threshold : float, optional (default=0.5)
+        Drop columns with NaN percentage above this threshold (0.0 to 1.0)
+    sample_frac : float or None, optional (default=None)
+        If specified, uses sampling to estimate NaN percentages (faster for large DataFrames)
 
     Returns:
-    - Filtered Dask DataFrame with columns below NaN threshold
+    --------
+    dask.dataframe.DataFrame
+        DataFrame with columns dropped
     """
-    # Validate threshold
-    if not 0 <= nan_threshold <= 1:
-        raise ValueError("nan_threshold must be between 0 and 1")
+    logging.info("Dropping columns with majority NaN values...")
 
-    if len(ddf.columns) == 0:
-        logging.warning("Empty DataFrame - no columns to process")
+    if not 0 <= threshold <= 1:
+        raise ValueError("Threshold must be between 0 and 1")
+
+    if sample_frac is not None:
+        if not 0 < sample_frac <= 1:
+            raise ValueError("sample_frac must be between 0 and 1")
+        sample = ddf.sample(frac=sample_frac).compute()
+        nan_percentages = sample.isna().mean()
+    else:
+        nan_percentages = ddf.isna().mean().compute()
+
+    columns_to_drop = nan_percentages[nan_percentages > threshold].index.tolist()
+
+    if columns_to_drop:
+        logging.info(f"Dropping columns with >{threshold * 100:.0f}% NaN values: {columns_to_drop}")
+        return ddf.drop(columns=columns_to_drop)
+    else:
+        logging.info("No columns with majority NaN values found")
         return ddf
-
-    logging.info("Calculating NaN percentages...")
-
-    def safe_isna_mean(series):
-        """Helper function to safely calculate NA percentage for a series"""
-        try:
-            # First try standard numeric approach
-            return series.isna().mean()
-        except (TypeError, ValueError):
-            # For object/string columns, count empty strings as NA
-            return (series.isna() | (series == '')).mean()
-
-    try:
-        # Calculate NA percentages column by column
-        with ProgressBar(minimum=1):
-            nan_percentages = {}
-            for col in tqdm(ddf.columns, desc="Calculating NA percentages"):
-                try:
-                    # Try to compute directly
-                    nan_percentages[col] = ddf[col].isna().mean().compute()
-                except (TypeError, ValueError):
-                    # Fall back to safe method for problematic columns
-                    nan_percentages[col] = ddf[col].map_partitions(
-                        lambda s: safe_isna_mean(s)
-                    ).compute()
-
-        # Filter columns
-        columns_to_keep = [
-            col for col, na_pct in nan_percentages.items()
-            if na_pct <= nan_threshold
-        ]
-
-        # Log results
-        dropped_count = len(ddf.columns) - len(columns_to_keep)
-        if dropped_count > 0:
-            dropped_columns = set(ddf.columns) - set(columns_to_keep)
-            logging.info(
-                f"Dropped {dropped_count} columns ({dropped_count / len(ddf.columns):.1%}) "
-                f"with > {nan_threshold:.0%} NaN values. "
-                f"Sample dropped columns: {sorted(dropped_columns)[:5]}{'...' if len(dropped_columns) > 5 else ''}"
-            )
-        else:
-            logging.info(f"No columns exceeded {nan_threshold:.0%} NaN threshold")
-
-        return ddf[columns_to_keep] if columns_to_keep else ddf
-
-    except Exception as e:
-        logging.error(f"Failed to calculate NaN percentages: {e}")
-        raise ValueError(f"Could not process DataFrame columns: {str(e)}")
 
 
 class Harmonizer:

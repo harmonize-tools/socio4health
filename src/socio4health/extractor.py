@@ -4,7 +4,7 @@ import shutil
 from itertools import islice
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union, Dict
 
 import appdirs
 import os
@@ -37,6 +37,7 @@ class Extractor:
             colnames: list = None,
             colspecs: list = None,
             sep: str = None,
+            dtype: Union[str, Dict] = 'object'
     ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.url = url
@@ -53,6 +54,7 @@ class Extractor:
         self.sep = sep
         self.download_dir = download_dir or str(get_default_data_dir())
         os.makedirs(self.download_dir, exist_ok=True)
+        self.dtype = dtype
 
         if path and url:
             raise ValueError(
@@ -221,7 +223,9 @@ class Extractor:
                     colspecs=self.colspecs,
                     names=self.colnames,
                     encoding=self.encoding,
-                    dtype='object'  # Read everything as text initially
+                    dtype=self.dtype,
+                    assume_missing=True,
+                    on_bad_lines='warn'
                 )
             else:
                 # Read everything as text first to avoid dtype issues
@@ -229,8 +233,9 @@ class Extractor:
                     filepath,
                     encoding=self.encoding,
                     sep=self.sep if self.sep else ',',
-                    dtype='object',
-                    assume_missing=True
+                    dtype=self.dtype,
+                    assume_missing = True,
+                    on_bad_lines='warn'
                 )
                 if len(df.columns) == 1:
                     # Try different separator if we only got one column
@@ -238,17 +243,10 @@ class Extractor:
                         filepath,
                         encoding=self.encoding,
                         sep=',' if self.sep != ',' else ';',
-                        dtype='object',
-                        assume_missing=True
+                        dtype=self.dtype,
+                        assume_missing=True,
+                        on_bad_lines='warn'
                     )
-
-            # Convert numeric columns where possible
-            for col in df.columns:
-                try:
-                    df[col] = dd.to_numeric(df[col], errors='raise')
-                except (ValueError, TypeError):
-                    # Keep as string if conversion fails
-                    pass
 
             self.dataframes.append(df)
 

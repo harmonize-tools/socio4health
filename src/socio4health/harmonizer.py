@@ -1,6 +1,9 @@
+import json
 import os
 import shutil
-from typing import Optional, Tuple
+from enum import Enum
+from pathlib import Path
+from typing import Optional, Tuple, Dict, Union, Type
 from typing import List
 import dask.dataframe as dd
 import numpy as np
@@ -90,46 +93,192 @@ def vertical_merge(ddfs: List[dd.DataFrame], min_common_columns=1, similarity_th
 
     return merged_dfs
 
-
-def drop_nan_columns(ddf, threshold=1.0, sample_frac=None):
+def drop_nan_columns(ddf_or_ddfs, threshold=1.0, sample_frac=None):
     """
     Drop columns where the majority of values are NaN.
 
     Parameters:
     -----------
-    ddf : dask.dataframe.DataFrame
-        Input Dask DataFrame
-    threshold : float, optional (default=0.5)
+    ddf_or_ddfs : dask.dataframe.DataFrame or list of dask.dataframe.DataFrame
+        Input Dask DataFrame or list of Dask DataFrames
+    threshold : float, optional (default=1.0)
         Drop columns with NaN percentage above this threshold (0.0 to 1.0)
     sample_frac : float or None, optional (default=None)
         If specified, uses sampling to estimate NaN percentages (faster for large DataFrames)
 
     Returns:
     --------
-    dask.dataframe.DataFrame
-        DataFrame with columns dropped
+    dask.dataframe.DataFrame or list of dask.dataframe.DataFrame
+        DataFrame(s) with columns dropped
     """
     logging.info("Dropping columns with majority NaN values...")
 
     if not 0 <= threshold <= 1:
         raise ValueError("Threshold must be between 0 and 1")
 
-    if sample_frac is not None:
-        if not 0 < sample_frac <= 1:
-            raise ValueError("sample_frac must be between 0 and 1")
-        sample = ddf.sample(frac=sample_frac).compute()
-        nan_percentages = sample.isna().mean()
-    else:
-        nan_percentages = ddf.isna().mean().compute()
+    def process_ddf(ddf):
+        if sample_frac is not None:
+            if not 0 < sample_frac <= 1:
+                raise ValueError("sample_frac must be between 0 and 1")
+            sample = ddf.sample(frac=sample_frac).compute()
+            nan_percentages = sample.isna().mean()
+        else:
+            nan_percentages = ddf.isna().mean().compute()
 
-    columns_to_drop = nan_percentages[nan_percentages > threshold].index.tolist()
+        columns_to_drop = nan_percentages[nan_percentages > threshold].index.tolist()
 
-    if columns_to_drop:
-        logging.info(f"Dropping columns with >{threshold * 100:.0f}% NaN values: {columns_to_drop}")
-        return ddf.drop(columns=columns_to_drop)
+        if columns_to_drop:
+            logging.info(f"Dropping columns with >{threshold * 100:.0f}% NaN values: {columns_to_drop}")
+            return ddf.drop(columns=columns_to_drop)
+        else:
+            logging.info("No columns with majority NaN values found")
+            return ddf
+
+    if isinstance(ddf_or_ddfs, list):
+        return [process_ddf(ddf) for ddf in ddf_or_ddfs]
     else:
-        logging.info("No columns with majority NaN values found")
-        return ddf
+        return process_ddf(ddf_or_ddfs)
+
+def get_available_columns(ddfs, translate=False, dictionary=None):
+    """
+    Get a list of unique column names from a list of Dask DataFrames.
+
+    Parameters:
+    -----------
+    ddfs : list of dask.dataframe.DataFrame
+        List of Dask DataFrames.
+
+    Returns:
+    --------
+    list
+        Sorted list of unique column names.
+    """
+    if not isinstance(ddfs, list):
+        raise TypeError("Input must be a list of Dask DataFrames")
+
+    unique_columns = set()
+    for ddf in ddfs:
+        if not isinstance(ddf, dd.DataFrame):
+            raise TypeError("All elements in the list must be Dask DataFrames")
+        unique_columns.update(ddf.columns)
+
+    return sorted(unique_columns)
+
+
+def harmonize_dataframes(
+        country_dfs: Dict[str, List[dd.DataFrame]],
+        column_mapping: Union[Type[Enum], Dict[str, Dict[str, str]], str, Path],
+        value_mappings: Union[Type[Enum], Dict[str, Dict[str, Dict[str, str]]], str, Path],
+        theme_info: Optional[Union[Dict[str, List[str]], str, Path]] = None,
+        default_country: Optional[str] = None,
+        strict_mapping: bool = False
+) -> Dict[str, List[dd.DataFrame]]:
+    """
+    Harmonizes Dask DataFrames using either Enum classes or JSON mappings.
+
+    Parameters:
+    -----------
+    country_dfs : Dict[str, List[dd.DataFrame]]
+        Dictionary of country codes to lists of Dask DataFrames
+
+    column_mapping : Union[Type[Enum], Dict, str, Path]
+        Either:
+        - An Enum class with country mappings
+        - A dictionary {country: {orig_col: harmonized_col}}
+        - Path to JSON file with mappings
+        - JSON string with mappings
+
+    value_mappings : Union[Type[Enum], Dict, str, Path]
+        Either:
+        - An Enum class with value mappings
+        - A dictionary {country: {col: {orig_val: harmonized_val}}}
+        - Path to JSON file
+        - JSON string
+
+    theme_info : Optional[Union[Dict, str, Path]]
+        Optional theme information in same format options
+
+    default_country : Optional[str]
+        Fallback country if mapping not found
+
+    strict_mapping : bool
+        If True, raises error when columns/values aren't mapped
+
+    Returns:
+    --------
+    Dict[str, List[dd.DataFrame]]
+        Harmonized DataFrames with same structure as input
+    """
+
+    def load_mapping(mapping_input):
+        """Helper to load mappings from different input types"""
+        if isinstance(mapping_input, (str, Path)):
+            if Path(mapping_input).exists():
+                with open(mapping_input) as f:
+                    return json.load(f)
+            try:
+                return json.loads(mapping_input)
+            except json.JSONDecodeError:
+                raise ValueError("Invalid JSON string or file path")
+        return mapping_input
+
+    def get_country_mapping(mapping_obj, country):
+        """Get mapping for a country from either Enum or dict"""
+        if isinstance(mapping_obj, type) and issubclass(mapping_obj, Enum):
+            try:
+                return mapping_obj[country].value
+            except KeyError:
+                if default_country:
+                    return mapping_obj[default_country].value
+                return {}
+        elif isinstance(mapping_obj, dict):
+            return mapping_obj.get(country,
+                                   mapping_obj.get(default_country, {}))
+        return {}
+
+    # Load mappings if they're JSON
+    column_mapping = load_mapping(column_mapping)
+    value_mappings = load_mapping(value_mappings)
+    theme_info = load_mapping(theme_info) if theme_info else None
+
+    def process_dataframe(df: dd.DataFrame, country: str) -> dd.DataFrame:
+        """Process a single dataframe"""
+        # Get mappings for this country
+        col_map = get_country_mapping(column_mapping, country)
+        val_maps = get_country_mapping(value_mappings, country)
+
+        # Validate mappings if in strict mode
+        if strict_mapping:
+            missing_cols = [c for c in df.columns if c not in col_map]
+            if missing_cols:
+                raise ValueError(f"Unmapped columns in {country}: {missing_cols}")
+
+        # 1. Harmonize column names
+        df = df.rename(columns=col_map)
+
+        # 2. Harmonize categorical values
+        for col, val_map in val_maps.items():
+            if col in df.columns:
+                # Convert to string first to handle mixed types
+                df[col] = df[col].astype('str')
+
+                # Map values with validation in strict mode
+                if strict_mapping:
+                    unique_vals = df[col].drop_duplicates().compute()
+                    unmapped = set(unique_vals) - set(val_map.keys())
+                    if unmapped:
+                        raise ValueError(
+                            f"Unmapped values in {country}.{col}: {unmapped}"
+                        )
+
+                df[col] = df[col].map(val_map).astype('category')
+
+        return df
+
+    return {
+        country: [process_dataframe(df, country) for df in dfs]
+        for country, dfs in country_dfs.items()
+    }
 
 
 class Harmonizer:

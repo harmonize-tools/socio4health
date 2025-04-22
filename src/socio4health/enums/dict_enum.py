@@ -1,14 +1,25 @@
 from enum import Enum
 
+class ColumnMappingEnum(Enum):
+    GEIH = {
+        'P3271': 'sex',
+        'P6050': 'relationship',
+        'P6070': 'marital'
+    }
 
-class MappingHeaderEnum(Enum):
-    VARIABLE = 'variable'
-    CODE = 'code'
-    HARMONIZED_VARIABLE = 'har_variable'
-    HARMONIZED_CODE = 'har_code'
-    HARMONIZED_LABEL = 'har_label'
-    DETAILED_CODE = 'd_code'
-    DETAILED_LABEL = 'd_label'
-    VARIABLE_TYPE = 'variable_type'
-    RANGE = 'range'
-    NULL_VALUE = 'null_val'
+class ValueMappingEnum(Enum):
+    GEIH = {
+        'sex': {'1': 'male', '2': 'female'},
+        'relationship': {
+            '1': 'head',
+            '2': 'partner',
+            '3': 'child',
+            '4': 'grandchild',
+            '5': 'other relative',
+            '6': 'employee',
+            '7': 'Retiree',
+            '8': 'worker',
+            '9': 'other non-relative'
+        },
+
+    }

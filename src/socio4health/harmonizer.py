@@ -280,6 +280,93 @@ def harmonize_dataframes(
         for country, dfs in country_dfs.items()
     }
 
+def standarize_dicc(raw_dicc):
+    """
+    Cleans and structures a dictionary-like DataFrame of variables, grouping
+    possible answers and translating texts into English.
+
+    Parameters:
+    -----------
+    raw_dicc : pd.DataFrame
+        DataFrame with the minimum necessary columns established in the
+        template: 'question', 'variable_name', 'description', 'value', and
+        optionally 'subquestion'.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A new DataFrame grouped by 'question' and 'variable_name', with clean
+        columns, and concatenated 'possible_answers'.
+    """
+
+    df = raw_dicc.copy()
+
+    df['question'] = df['question'].replace(
+        r'^\s*$',
+        np.nan,
+        regex=True
+        ).str.lower()
+    df['question'] = df['question'].fillna(method='ffill')
+    df['question'] = df['question'].str.replace(r'\.\.\.', '', regex=True)
+
+    df['variable_name'] = df['variable_name'].replace(
+        r'^\s*$',
+        np.nan,
+        regex=True
+        )
+    df['variable_name'] = df['variable_name'].fillna(method='ffill')
+    df['variable_name'] = df['variable_name'].str.replace(
+        r'\.\.\.',
+        '',
+        regex=True
+        )
+
+    if "subquestion" in df.columns:
+        df['subquestion'] = df['subquestion'].replace(
+            r'^\s*$',
+            np.nan,
+            regex=True
+            ).str.lower()
+        df['subquestion'] = df['subquestion'].str.replace(
+            r'\.\.\.',
+            '',
+            regex=True
+            )
+        df['question'] = df['question'] + df['subquestion'].fillna('')
+        df.drop(columns='subquestion', inplace=True)
+
+    df['description'] = df['description'].replace(
+        r'^\s*$',
+        np.nan,
+        regex=True
+        ).str.lower()
+    df['description'] = df['description'].fillna(df['question'])
+    df['description'] = df['description'].str.replace(r'\.\.\.', '', regex=True)
+
+    df.drop_duplicates(inplace=True)
+
+    df_agrupado = df.groupby(['question', 'variable_name'],
+                             as_index=False).apply(
+                                 procesar_grupo
+                                 ).reset_index(drop=True)    
+
+    return df_agrupado
+
+def procesar_grupo(grupo):
+    fila_base = grupo[grupo['value'].isna()].copy()
+    respuestas = grupo[grupo['value'].notna()]
+    
+    if not fila_base.empty:
+        fila_base = fila_base.iloc[0]
+        fila_base['possible_answers'] = ';'.join(respuestas['description'].astype(str))
+        fila_base['value'] = ';'.join(respuestas['value'].astype(str))
+        return fila_base
+    else:
+        nueva_fila = grupo.iloc[0].copy()
+        nueva_fila['description'] = np.nan
+        nueva_fila['value'] = np.nan
+        nueva_fila['possible_answers'] = ';'.join(respuestas['description'].astype(str))
+        return nueva_fila
 
 class Harmonizer:
 

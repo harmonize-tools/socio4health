@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from dask.diagnostics import ProgressBar
 from tqdm import tqdm
+from deep_translator import GoogleTranslator
 import logging
 from socio4health.extractor import Extractor
 from socio4health.enums.data_info_enum import NameEnum
@@ -351,6 +352,32 @@ def standarize_dicc(raw_dicc):
                                  ).reset_index(drop=True)    
 
     return df_agrupado
+
+def translate_column (data, columns, language = 'en'):
+    """
+    Translates the selected columns into the required language.
+
+    Parameters:
+    -----------
+    data : pd.DataFrame
+        DataFrame with the columns to be translated.
+
+    columns : list
+        A list with the names of the columns to be translated.
+
+    language : string
+        String with the indicative of the language to be translated into.
+    Returns:
+    --------
+    pd.DataFrame
+        DataFrame with the new translated columns.
+    """
+    for c in columns:
+        data[c + '_' + language] = data[c].apply(
+        lambda x: GoogleTranslator(source='auto',
+                                   target=language).translate(x) if pd.notna(x) else x
+    )
+    return data
 
 def procesar_grupo(grupo):
     fila_base = grupo[grupo['value'].isna()].copy()

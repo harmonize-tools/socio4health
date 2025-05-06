@@ -302,8 +302,9 @@ def standardize_dict(raw_dict):
     def clean_column(column):
         return (
             column.replace(r'^\s*$', np.nan, regex=True)
-                  .str.lower()
-                  .str.replace(r'\.\.\.', '', regex=True)
+            .astype(str).str.strip()
+            .str.lower()
+            .str.replace(r'\.\.\.', '', regex=True)
         )
 
     df = raw_dict.copy()

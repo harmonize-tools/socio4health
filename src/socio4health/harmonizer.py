@@ -281,33 +281,32 @@ def harmonize_dataframes(
         for country, dfs in country_dfs.items()
     }
 
-def standardize_dicc(raw_dicc):
+def standardize_dict(raw_dict):
     """
-    Cleans and structures a dictionary-like DataFrame of variables, grouping
-    possible answers and translating texts into English.
+    Cleans and structures a dictionary-like DataFrame of variables by standardizing
+    text fields, grouping possible answers, and removing duplicates.
 
-    Parameters:
-    -----------
-    raw_dicc : pd.DataFrame
-        DataFrame with the minimum necessary columns established in the
-        template: 'question', 'variable_name', 'description', 'value', and
-        optionally 'subquestion'.
+    Parameters
+    ----------
+    raw_dict : pd.DataFrame
+        DataFrame containing the required columns: 'question', 'variable_name',
+        'description', 'value', and optionally 'subquestion'.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.DataFrame
-        A new DataFrame grouped by 'question' and 'variable_name', with clean
-        columns, and concatenated 'possible_answers'.
+        A cleaned and grouped DataFrame by 'question' and 'variable_name',
+        with an additional column 'possible_answers' containing concatenated descriptions.
     """
 
-    def clean_column(col):
+    def clean_column(column):
         return (
-            col.replace(r'^\s*$', np.nan, regex=True)
-               .str.lower()
-               .str.replace(r'\.\.\.', '', regex=True)
+            column.replace(r'^\s*$', np.nan, regex=True)
+                  .str.lower()
+                  .str.replace(r'\.\.\.', '', regex=True)
         )
 
-    df = raw_dicc.copy()
+    df = raw_dict.copy()
 
     df['question'] = clean_column(df['question']).fillna(method='ffill')
     df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
@@ -322,11 +321,11 @@ def standardize_dicc(raw_dicc):
 
     df.drop_duplicates(inplace=True)
 
-    df_agrupado = df.groupby(['question', 'variable_name'], as_index=False)\
-                    .apply(procesar_grupo)\
-                    .reset_index(drop=True)    
+    grouped_df = df.groupby(['question', 'variable_name'], as_index=False)\
+                   .apply(process_group)\
+                   .reset_index(drop=True)
 
-    return df_agrupado
+    return grouped_df
 
 def translate_column (data, columns, language = 'en'):
     """
@@ -360,39 +359,42 @@ def translate_column (data, columns, language = 'en'):
         )
     return data
 
-def procesar_grupo(grupo):
+def process_group(group):
     """
-    Groups a subset of the DataFrame by 'question' and 'variable_name', combining multiple answers and values.
+    Processes a group of rows by combining multiple answer descriptions and values
+    for each 'question' and 'variable_name' pair.
 
     Parameters
     ----------
-    grupo : pd.DataFrame
-        Subgroup of the grouped DataFrame.
+    group : pd.DataFrame
+        A subgroup of the original DataFrame, grouped by 'question' and 'variable_name'.
 
     Returns
     -------
     pd.Series
-        Summary row with 'possible_answers' and concatenated 'values'.
+        A single summary row with the base description (if available),
+        concatenated 'possible_answers', and joined 'values'.
     """
-    if grupo.empty:
+    if group.empty:
         return None
 
-    fila_base = grupo[grupo['value'].isna()].copy()
-    respuestas = grupo[grupo['value'].notna()]
+    base_row = group[group['value'].isna()].copy()
+    answers = group[group['value'].notna()]
 
-    possible_answers = ';'.join(respuestas['description'].astype(str))
-    values_concat = ';'.join(respuestas['value'].astype(str))
+    possible_answers = ';'.join(answers['description'].astype(str))
+    values_concat = ';'.join(answers['value'].astype(str))
 
-    if not fila_base.empty:
-        fila = fila_base.iloc[0]
-        fila['possible_answers'] = possible_answers
-        fila['value'] = values_concat
+    if not base_row.empty:
+        row = base_row.iloc[0]
+        row['possible_answers'] = possible_answers
+        row['value'] = values_concat
     else:
-        fila = grupo.iloc[0].copy()
-        fila['description'] = np.nan
-        fila['value'] = np.nan
-        fila['possible_answers'] = possible_answers
-    return fila
+        row = group.iloc[0].copy()
+        row['description'] = np.nan
+        row['value'] = np.nan
+        row['possible_answers'] = possible_answers
+
+    return row
 
 class Harmonizer:
 

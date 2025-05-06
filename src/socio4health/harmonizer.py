@@ -300,100 +300,99 @@ def standardize_dicc(raw_dicc):
         columns, and concatenated 'possible_answers'.
     """
 
+    def clean_column(col):
+        return (
+            col.replace(r'^\s*$', np.nan, regex=True)
+               .str.lower()
+               .str.replace(r'\.\.\.', '', regex=True)
+        )
+
     df = raw_dicc.copy()
 
-    df['question'] = df['question'].replace(
-        r'^\s*$',
-        np.nan,
-        regex=True
-        ).str.lower()
-    df['question'] = df['question'].fillna(method='ffill')
-    df['question'] = df['question'].str.replace(r'\.\.\.', '', regex=True)
-
-    df['variable_name'] = df['variable_name'].replace(
-        r'^\s*$',
-        np.nan,
-        regex=True
-        )
-    df['variable_name'] = df['variable_name'].fillna(method='ffill')
-    df['variable_name'] = df['variable_name'].str.replace(
-        r'\.\.\.',
-        '',
-        regex=True
-        )
+    df['question'] = clean_column(df['question']).fillna(method='ffill')
+    df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
 
     if "subquestion" in df.columns:
-        df['subquestion'] = df['subquestion'].replace(
-            r'^\s*$',
-            np.nan,
-            regex=True
-            ).str.lower()
-        df['subquestion'] = df['subquestion'].str.replace(
-            r'\.\.\.',
-            '',
-            regex=True
-            )
+        df['subquestion'] = clean_column(df['subquestion'])
         df['question'] = df['question'] + df['subquestion'].fillna('')
         df.drop(columns='subquestion', inplace=True)
 
-    df['description'] = df['description'].replace(
-        r'^\s*$',
-        np.nan,
-        regex=True
-        ).str.lower()
+    df['description'] = clean_column(df['description'])
     df['description'] = df['description'].fillna(df['question'])
-    df['description'] = df['description'].str.replace(r'\.\.\.', '', regex=True)
 
     df.drop_duplicates(inplace=True)
 
-    df_agrupado = df.groupby(['question', 'variable_name'],
-                             as_index=False).apply(
-                                 procesar_grupo
-                                 ).reset_index(drop=True)    
+    df_agrupado = df.groupby(['question', 'variable_name'], as_index=False)\
+                    .apply(procesar_grupo)\
+                    .reset_index(drop=True)    
 
     return df_agrupado
 
 def translate_column (data, columns, language = 'en'):
     """
-    Translates the selected columns into the required language.
+    Translates the content of selected columns in a DataFrame using Google Translate.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     data : pd.DataFrame
-        DataFrame with the columns to be translated.
+        The DataFrame containing the text columns.
 
-    columns : list
-        A list with the names of the columns to be translated.
+    columns : list of str
+        Names of the columns to translate.
 
-    language : string
-        String with the indicative of the language to be translated into.
-    Returns:
-    --------
+    language : str
+        Target language code (default is 'en').
+
+    Returns
+    -------
     pd.DataFrame
-        DataFrame with the new translated columns.
+        Original DataFrame with new columns appended for each translation.
     """
-    for c in columns:
-        data[c + '_' + language] = data[c].apply(
-        lambda x: GoogleTranslator(source='auto',
-                                   target=language).translate(x) if pd.notna(x) else x
-    )
+    data = data.copy()
+
+    for col in columns:
+        if col not in data.columns:
+            raise ValueError(f"Column '{col}' not found in DataFrame.")
+
+        new_col = f"{col}_{language}"
+        data[new_col] = data[col].apply(
+            lambda x: GoogleTranslator(source='auto', target=language).translate(x) if pd.notna(x) else x
+        )
     return data
 
 def procesar_grupo(grupo):
+    """
+    Groups a subset of the DataFrame by 'question' and 'variable_name', combining multiple answers and values.
+
+    Parameters
+    ----------
+    grupo : pd.DataFrame
+        Subgroup of the grouped DataFrame.
+
+    Returns
+    -------
+    pd.Series
+        Summary row with 'possible_answers' and concatenated 'values'.
+    """
+    if grupo.empty:
+        return None
+
     fila_base = grupo[grupo['value'].isna()].copy()
     respuestas = grupo[grupo['value'].notna()]
-    
+
+    possible_answers = ';'.join(respuestas['description'].astype(str))
+    values_concat = ';'.join(respuestas['value'].astype(str))
+
     if not fila_base.empty:
-        fila_base = fila_base.iloc[0]
-        fila_base['possible_answers'] = ';'.join(respuestas['description'].astype(str))
-        fila_base['value'] = ';'.join(respuestas['value'].astype(str))
-        return fila_base
+        fila = fila_base.iloc[0]
+        fila['possible_answers'] = possible_answers
+        fila['value'] = values_concat
     else:
-        nueva_fila = grupo.iloc[0].copy()
-        nueva_fila['description'] = np.nan
-        nueva_fila['value'] = np.nan
-        nueva_fila['possible_answers'] = ';'.join(respuestas['description'].astype(str))
-        return nueva_fila
+        fila = grupo.iloc[0].copy()
+        fila['description'] = np.nan
+        fila['value'] = np.nan
+        fila['possible_answers'] = possible_answers
+    return fila
 
 class Harmonizer:
 

@@ -281,7 +281,7 @@ def harmonize_dataframes(
         for country, dfs in country_dfs.items()
     }
 
-def standarize_dicc(raw_dicc):
+def standardize_dicc(raw_dicc):
     """
     Cleans and structures a dictionary-like DataFrame of variables, grouping
     possible answers and translating texts into English.

@@ -395,6 +395,83 @@ def process_group(group):
 
     return row
 
+_generator = None
+
+def get_generator():
+    """
+    Load the text-generation model only once and return it.
+
+    Returns:
+    --------
+    transformers.pipelines.text_generation.TextGenerationPipeline
+        The loaded text generation pipeline (e.g., T5 model).
+    """
+    global _generator
+    if _generator is None:
+        _generator = pipeline("text2text-generation", model="google/flan-t5-base")
+    return _generator
+
+def classify_rows(data, col1, col2, col3, user_categories,
+                 new_column_name = "category"):
+    """
+    Classify each row of a DataFrame into one of the provided user categories
+    using the content of three specified columns and a text generation model.
+
+    Parameters:
+    -----------
+    df : pd.DataFrame
+        The input DataFrame.
+    col1_name : str
+        Name of the first column containing survey-related text.
+    col2_name : str
+        Name of the second column containing survey-related text.
+    col3_name : str
+        Name of the third column containing survey-related text.
+    user_categories : list of str
+        List of possible categories to classify each row into.
+    new_column_name : str, optional
+        Name of the new column to store the predicted categories.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A copy of the original DataFrame with an additional column of predicted categories.
+    """
+    
+    generator = get_generator()
+    categories_str = ", ".join(user_categories)
+
+    def classify_row(row):
+        valid_parts = [
+            str(x).strip()
+            for x in [row[col1], row[col2], row[col3]]
+            if isinstance(x, str) and x.strip() and x.strip().lower() != "not applicable"
+        ]
+
+        if not valid_parts:
+            return ""
+
+        combined_text = " ".join(valid_parts)
+
+        prompt = f"""
+        Given the following information extracted from a survey:
+        "{combined_text}"
+
+        Classify this entry only in one of the following categories:
+        {categories_str}
+
+        Only return the most appropriate category, nothing else.
+        """
+
+        output = generator(prompt, max_length=30, do_sample=False)[0]['generated_text'].strip()
+        return output
+
+    # Apply row-wise classification
+    df = data.copy()
+    df[new_column_name] = df.apply(classify_row, axis=1)
+
+    return df
+
 class Harmonizer:
 
     def __init__(self,

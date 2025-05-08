@@ -302,9 +302,7 @@ def standardize_dict(raw_dict):
     def clean_column(column):
         return (
             column.replace(r'^\s*$', np.nan, regex=True)
-            .astype(str).str.strip()
-            .str.lower()
-            .str.replace(r'\.\.\.', '', regex=True)
+                .apply(lambda x: re.sub(r'(\s*\.\s*){2,}', '', str(x).strip().lower()) if pd.notna(x) else np.nan)
         )
 
     df = raw_dict.copy()
@@ -328,7 +326,7 @@ def standardize_dict(raw_dict):
 
     return grouped_df
 
-def translate_column (data, columns, language = 'en'):
+def translate_column (data, column, language = 'en'):
     """
     Translates the content of selected columns in a DataFrame using Google Translate.
 
@@ -337,8 +335,8 @@ def translate_column (data, columns, language = 'en'):
     data : pd.DataFrame
         The DataFrame containing the text columns.
 
-    columns : list of str
-        Names of the columns to translate.
+    column : str
+        Name of the column to translate.
 
     language : str
         Target language code (default is 'en').
@@ -346,18 +344,18 @@ def translate_column (data, columns, language = 'en'):
     Returns
     -------
     pd.DataFrame
-        Original DataFrame with new columns appended for each translation.
+        Original DataFrame with new column translated.
     """
     data = data.copy()
+    if column not in data.columns:
+        raise ValueError(f"Column '{column}' not found in DataFrame.")
 
-    for col in columns:
-        if col not in data.columns:
-            raise ValueError(f"Column '{col}' not found in DataFrame.")
+    new_col = f"{column}_{language}"
+    data[new_col] = data[column].apply(
+        lambda x: GoogleTranslator(source='auto', target=language).translate(x) if pd.notna(x) else x
+    )
+    print(f"{column} translated")
 
-        new_col = f"{col}_{language}"
-        data[new_col] = data[col].apply(
-            lambda x: GoogleTranslator(source='auto', target=language).translate(x) if pd.notna(x) else x
-        )
     return data
 
 def process_group(group):
@@ -382,8 +380,8 @@ def process_group(group):
     base_row = group[group['value'].isna()].copy()
     answers = group[group['value'].notna()]
 
-    possible_answers = ';'.join(answers['description'].astype(str))
-    values_concat = ';'.join(answers['value'].astype(str))
+    possible_answers = '; '.join(answers['description'].astype(str))
+    values_concat = '; '.join(answers['value'].astype(str))
 
     if not base_row.empty:
         row = base_row.iloc[0]

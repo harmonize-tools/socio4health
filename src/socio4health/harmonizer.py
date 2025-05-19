@@ -317,21 +317,29 @@ def standardize_dict(raw_dict):
     df = raw_dict.copy()
 
     df['question'] = clean_column(df['question']).fillna(method='ffill')
+    cols_to_check = df.columns.difference(['question'])
+    df = df[~df[cols_to_check].isna().all(axis=1)]
+    mask = df['variable_name'].isna() & df['subquestion'].notna()
+    df.loc[mask, 'description'] = df.loc[mask, 'subquestion']
+    df.loc[mask, 'subquestion'] = np.nan
     df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
+    df['subquestion'] = (
+        df.groupby('variable_name', group_keys=False)['subquestion']
+        .apply(lambda group: clean_column(group).fillna(method='ffill'))
+    )
 
     if "subquestion" in df.columns:
         df['subquestion'] = clean_column(df['subquestion'])
-        df['question'] = df['question'] + df['subquestion'].fillna('')
+        df['question'] = df['question'] + ' ' + df['subquestion'].fillna('')
         df.drop(columns='subquestion', inplace=True)
 
     df['description'] = clean_column(df['description'])
-    df['description'] = df['description'].fillna(df['question'])
 
     df.drop_duplicates(inplace=True)
-
+    
     grouped_df = df.groupby(['question', 'variable_name'], as_index=False)\
-                   .apply(process_group)\
-                   .reset_index(drop=True)
+                    .apply(process_group)\
+                    .reset_index(drop=True)
 
     return grouped_df
 

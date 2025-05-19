@@ -12,6 +12,7 @@ from dask.diagnostics import ProgressBar
 from tqdm import tqdm
 from deep_translator import GoogleTranslator
 import logging
+import re
 from socio4health.extractor import Extractor
 from socio4health.enums.data_info_enum import NameEnum
 
@@ -303,10 +304,13 @@ def standardize_dict(raw_dict):
         return (
             column.replace(r'^\s*$', np.nan, regex=True)
                 .apply(lambda x: (
-                    re.sub(r'\s{2,}', ' ',                          # Quitar espacios múltiples
-                    re.sub(r'(\s*\.\s*){2,}', '',                   # Eliminar múltiples puntos
-                    re.sub(r'[\n\t\r]', ' ',                        # Eliminar saltos de línea y tabulaciones
-                    str(x).strip().lower())))                       # Minúsculas y quitar espacios extremos
+                    re.sub(r'\s{2,}', ' ',
+                    re.sub(r'(\s*\.\s*){2,}', ' ',
+                    re.sub(r'[\n\t\r]', ' ',
+                    re.sub(r'([¿¡])\s+', r'\1',
+                    re.sub(r'\s+([?!:;,\.])', r'\1',
+                    re.sub(r'([?!:;,\.])\s+', r'\1 ',
+                    str(x).replace('…', ' ').strip().lower()))))))
                 ) if pd.notna(x) else np.nan)
         )
 

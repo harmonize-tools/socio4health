@@ -15,6 +15,8 @@ import logging
 import re
 from socio4health.extractor import Extractor
 from socio4health.enums.data_info_enum import NameEnum
+from transformers import pipeline
+from transformers import AutoTokenizer
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -336,7 +338,7 @@ def standardize_dict(raw_dict):
     df['description'] = clean_column(df['description'])
 
     df.drop_duplicates(inplace=True)
-    
+
     grouped_df = df.groupby(['question', 'variable_name'], as_index=False)\
                     .apply(process_group)\
                     .reset_index(drop=True)

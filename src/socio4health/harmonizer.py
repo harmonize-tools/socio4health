@@ -302,7 +302,12 @@ def standardize_dict(raw_dict):
     def clean_column(column):
         return (
             column.replace(r'^\s*$', np.nan, regex=True)
-                .apply(lambda x: re.sub(r'(\s*\.\s*){2,}', '', str(x).strip().lower()) if pd.notna(x) else np.nan)
+                .apply(lambda x: (
+                    re.sub(r'\s{2,}', ' ',                          # Quitar espacios múltiples
+                    re.sub(r'(\s*\.\s*){2,}', '',                   # Eliminar múltiples puntos
+                    re.sub(r'[\n\t\r]', ' ',                        # Eliminar saltos de línea y tabulaciones
+                    str(x).strip().lower())))                       # Minúsculas y quitar espacios extremos
+                ) if pd.notna(x) else np.nan)
         )
 
     df = raw_dict.copy()

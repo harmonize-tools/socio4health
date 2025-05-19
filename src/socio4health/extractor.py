@@ -95,86 +95,154 @@ class Extractor:
         return self.dataframes
 
     def _extract_online_mode(self):
+        """Optimized online data extraction with better error handling and progress tracking"""
         logging.info("Extracting data in online mode...")
-        extracted_extensions = set()
 
-        run_standard_spider(self.url, self.depth, self.down_ext, self.key_words)
+        # For direct file downloads (like your zip case), skip scraping
+        if self.url.lower().endswith(tuple(self.down_ext + self.compressed_ext)):
+            logging.info("Detected direct file download URL - skipping scraping")
+            try:
+                filename = self.url.split("/")[-1]
+                if not any(filename.endswith(ext) for ext in self.down_ext + self.compressed_ext):
+                    filename += ".zip"  # Add extension if missing
 
+                # Create download directory if needed
+                os.makedirs(self.download_dir, exist_ok=True)
+                filepath = os.path.join(self.download_dir, filename)
+
+                # Download with progress bar for large files
+                logging.info(f"Downloading large file ({filename})...")
+                with tqdm(unit='B', unit_scale=True, unit_divisor=1024, miniters=1) as pbar:
+                    filepath = download_request(
+                        self.url,
+                        filename,
+                        self.download_dir
+                    )
+
+                # Process the downloaded file
+                if any(filepath.endswith(ext) for ext in self.compressed_ext):
+                    extracted_files = compressed2files(
+                        input_archive=filepath,
+                        target_directory=self.download_dir,
+                        down_ext=self.down_ext
+                    )
+                    self._process_file_list(extracted_files)
+                else:
+                    self._process_file_list([filepath])
+
+                return  # Skip the rest of the online mode processing
+
+            except Exception as e:
+                logging.error(f"Direct download failed: {e}")
+                raise ValueError(f"Failed to download {self.url}: {str(e)}")
+
+        # Step 1: Scrape for downloadable files
         try:
+            logging.info(f"Scraping URL: {self.url} with depth {self.depth}")
+            run_standard_spider(self.url, self.depth, self.down_ext, self.key_words)
+
+            # Read scraped links
             with open("Output_scrap.json", 'r', encoding='utf-8') as file:
                 links = json.load(file)
         except Exception as e:
-            logging.error(f"Failed to read links from Output_scrap.json: {e}")
-            raise
+            logging.error(f"Failed during web scraping: {e}")
+            raise ValueError(f"Web scraping failed: {str(e)}")
 
-        tarea = False
-        while not tarea:
-            if len(links) > 30:
-                all = input(
-                    f"The provided link contains {len(links)} files. Would you like to download all of them? [Y/N]: ").strip().lower()
-                if all == "y":
-                    tarea = True
-                elif all == "n":
-                    tarea = True
-                    files2download = int(input("Please enter the number of files you wish to download [Integer]: "))
-                    assert files2download > 0, "The number of files to download must be greater than 0."
-                    links = dict(islice(links.items(), files2download))
-            else:
-                tarea = True
+        # Step 2: Filter and confirm files to download
+        if not links:
+            logging.error("No downloadable files found matching criteria")
+            raise ValueError("No files found matching the specified extensions and keywords")
 
-        if not os.path.exists(self.download_dir):
-            os.makedirs(self.download_dir)
-            logging.info(f"Created download directory: {self.download_dir}")
+        # Handle large number of files with user confirmation
+        if len(links) > 30:
+            user_input = input(
+                f"Found {len(links)} files. Download all? [Y/N] (N will prompt for count): ").strip().lower()
+            if user_input != 'y':
+                try:
+                    files2download = int(input("Enter number of files to download: "))
+                    links = dict(islice(links.items(), max(1, files2download)))
+                except ValueError:
+                    logging.warning("Invalid input, proceeding with first 30 files")
+                    links = dict(islice(links.items(), 30))
 
+        # Step 3: Download files with progress tracking
         downloaded_files = []
+        failed_downloads = []
 
-        if links:
-            for filename, url in tqdm(links.items()):
+        os.makedirs(self.download_dir, exist_ok=True)
+        logging.info(f"Downloading files to: {self.download_dir}")
+
+        for filename, url in tqdm(links.items(), desc="Downloading files"):
+            try:
                 filepath = download_request(url, filename, self.download_dir)
                 downloaded_files.append(filepath)
-                extracted_extensions.add(filepath.split(".")[-1])
-        else:
-            try:
-                filename = self.url.split("/")[-1]
-                if len(filename.split(".")) == 1:
-                    filename += ".zip"
-                filepath = download_request(self.url, filename, self.download_dir)
-                downloaded_files.append(filepath)
-                logging.info(f"Successfully downloaded {filename} file.")
             except Exception as e:
-                logging.error(f"Error downloading: {e}")
-                raise ValueError(
-                    f"No files were found at the specified link. Please verify the URL, search depth, and file extensions.")
+                logging.warning(f"Failed to download {filename}: {e}")
+                failed_downloads.append((filename, str(e)))
 
-        # Process downloaded files using local mode logic
+        if not downloaded_files:
+            logging.error("No files were successfully downloaded")
+            raise ValueError("All download attempts failed")
+
+        if failed_downloads:
+            logging.warning(f"Failed to download {len(failed_downloads)} files")
+
+        # Step 4: Process downloaded files (similar to local mode)
         files_list = []
         compressed_list = []
         extracted_files = []
 
+        # Classify downloaded files
         for filepath in downloaded_files:
             if any(filepath.endswith(ext) for ext in self.compressed_ext):
                 compressed_list.append(filepath)
-                extracted_files.extend(
-                    compressed2files(input_archive=filepath, target_directory=self.download_dir,
-                                     down_ext=self.down_ext))
             else:
                 files_list.append(filepath)
 
-        for filename in tqdm(files_list):
-            self._read_file(filename)
+        # Extract compressed files
+        if compressed_list:
+            logging.info(f"Extracting {len(compressed_list)} compressed files")
+            for filepath in tqdm(compressed_list, desc="Extracting archives"):
+                try:
+                    extracted = compressed2files(
+                        input_archive=filepath,
+                        target_directory=self.download_dir,
+                        down_ext=self.down_ext
+                    )
+                    extracted_files.extend(extracted)
+                except Exception as e:
+                    logging.warning(f"Failed to extract {filepath}: {e}")
 
-        for extracted_file in tqdm(extracted_files):
-            self._read_file(extracted_file)
+        # Read all files (both direct and extracted)
+        self._process_file_list(files_list + extracted_files)
 
-        # Clean up
-        os.remove("Output_scrap.json")
+        # Cleanup
+        try:
+            os.remove("Output_scrap.json")
+        except Exception as e:
+            logging.warning(f"Could not remove scrap file: {e}")
 
         if not self.dataframes:
-            logging.warning(
-                f"\nSuccessfully downloaded files with the following extensions: {extracted_extensions}. "
-                "However, it appears there are no files matching your requested extensions: {self.down_ext} within any compressed files. "
-                "Please ensure the requested file extensions are correct and present within the compressed files.")
-            raise ValueError("No valid data files found after extraction.")
+            logging.error("No valid data files found after processing")
+            raise ValueError("No data could be extracted from downloaded files")
+
+    def _process_file_list(self, file_list):
+        """Helper method to process a list of files"""
+        valid_files = 0
+
+        for filepath in tqdm(file_list, desc="Processing files"):
+            try:
+                if os.path.getsize(filepath) == 0:
+                    logging.warning(f"Skipping empty file: {filepath}")
+                    continue
+
+                self._read_file(filepath)
+                valid_files += 1
+            except Exception as e:
+                logging.warning(f"Error processing {filepath}: {e}")
+
+        logging.info(f"Successfully processed {valid_files}/{len(file_list)} files")
+
 
     def _extract_local_mode(self):
         logging.info("Extracting data in local mode...")

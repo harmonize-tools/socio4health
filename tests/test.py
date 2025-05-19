@@ -11,6 +11,10 @@ per_extractor = Extractor(path="../../input/ENAHO_2022/Original",down_ext=['.csv
 rd_extractor = Extractor(path="../../input/ENHOGAR_2022/Original",down_ext=['.csv','.zip'], download_dir="data")
 bra_extractor = Extractor(path="../../input/PNADC_2022/Original",down_ext=['.txt','.zip'],is_fwf=True,colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, download_dir="data")
 
+col_online_extractor = Extractor(url="https://microdatos.dane.gov.co/index.php/catalog/771/get-microdata",down_ext=['.CSV','.csv','.zip'],sep=';', download_dir="data", depth=0)
+per_online_extractor = Extractor(url="https://www.inei.gob.pe/media/DATOS_ABIERTOS/ENAHO/DATA/2022.zip",down_ext=['.csv','.zip'], download_dir="data", depth=0)
+rd_online_extractor = Extractor(url="https://www.one.gob.do/datos-y-estadisticas/",down_ext=['.csv'], download_dir="data", depth=0, key_words=["2022"])
+
 def test(extractor):
     dfs = extractor.extract()
     dfs = vertical_merge(ddfs=dfs, similarity_threshold=0.9)
@@ -29,4 +33,4 @@ def test(extractor):
     extractor.delete_download_folder()
 
 if __name__ == "__main__":
-    test(rd_extractor)
+    test(rd_online_extractor)

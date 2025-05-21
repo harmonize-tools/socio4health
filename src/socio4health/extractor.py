@@ -1,5 +1,4 @@
 import json
-import os
 import shutil
 from itertools import islice
 
@@ -26,11 +25,10 @@ def get_default_data_dir():
 class Extractor:
     def __init__(
             self,
-            path: str = None,
-            url: str = None,
+            input_path: str = None,
             depth: int = None,
             down_ext: list = None,
-            download_dir: str = None,
+            output_path: str = None,
             key_words: list = None,
             encoding: str = 'latin1',
             is_fwf: bool = False,
@@ -40,11 +38,10 @@ class Extractor:
             dtype: Union[str, Dict] = 'object'
     ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
-        self.url = url
         self.depth = depth
         self.down_ext = down_ext if down_ext is not None else []
         self.key_words = key_words if key_words is not None else []
-        self.path = path
+        self.input_path = input_path
         self.mode = -1
         self.dataframes = []
         self.encoding = encoding
@@ -52,32 +49,13 @@ class Extractor:
         self.colnames = colnames
         self.colspecs = colspecs
         self.sep = sep
-        self.download_dir = download_dir or str(get_default_data_dir())
-        os.makedirs(self.download_dir, exist_ok=True)
+        self.output_path = output_path or str(get_default_data_dir())
+        os.makedirs(self.output_path, exist_ok=True)
         self.dtype = dtype
 
-        if path and url:
-            raise ValueError(
-                "Both 'path' and 'url' cannot be specified. "
-                "Choose either local mode (path) or online mode (url)."
-            )
-        elif not path and not url:
-            raise ValueError(
-                "Either 'path' (for local files) or 'url' (for web scraping) must be provided."
-            )
-
-        if url:
+        #check if input_path is a local path or a URL
+        if input_path and input_path.startswith("http"):
             self.mode = 0
-            if depth is None:
-                raise ValueError("'depth' must be specified in online mode.")
-            if self.download_dir is None:
-                raise ValueError("'download_dir' must be specified in online mode.")
-            if not self.down_ext:
-                raise ValueError("'down_ext' (download extensions) must be specified in online mode.")
-        elif path:
-            self.mode = 1
-            if not self.down_ext:
-                raise ValueError("'down_ext' (file extensions) must be specified in local mode.")
 
     def extract(self):
         logging.info("----------------------")
@@ -99,47 +77,49 @@ class Extractor:
         logging.info("Extracting data in online mode...")
 
         # For direct file downloads (like your zip case), skip scraping
-        if self.url.lower().endswith(tuple(self.down_ext + self.compressed_ext)):
+        if self.input_path.lower().endswith(tuple(self.down_ext + self.compressed_ext)):
             logging.info("Detected direct file download URL - skipping scraping")
             try:
-                filename = self.url.split("/")[-1]
+                filename = self.input_path.split("/")[-1]
                 if not any(filename.endswith(ext) for ext in self.down_ext + self.compressed_ext):
                     filename += ".zip"  # Add extension if missing
 
                 # Create download directory if needed
-                os.makedirs(self.download_dir, exist_ok=True)
-                filepath = os.path.join(self.download_dir, filename)
+                os.makedirs(self.output_path, exist_ok=True)
+                filepath = os.path.join(self.output_path, filename)
 
                 # Download with progress bar for large files
                 logging.info(f"Downloading large file ({filename})...")
                 with tqdm(unit='B', unit_scale=True, unit_divisor=1024, miniters=1) as pbar:
                     filepath = download_request(
-                        self.url,
+                        self.input_path,
                         filename,
-                        self.download_dir
+                        self.output_path
                     )
 
-                # Process the downloaded file
+                # Process the downloaded file(s) using local mode logic
+                files_to_process = []
                 if any(filepath.endswith(ext) for ext in self.compressed_ext):
                     extracted_files = compressed2files(
                         input_archive=filepath,
-                        target_directory=self.download_dir,
+                        target_directory=self.output_path,
                         down_ext=self.down_ext
                     )
-                    self._process_file_list(extracted_files)
+                    files_to_process.extend(extracted_files)
                 else:
-                    self._process_file_list([filepath])
+                    files_to_process.append(filepath)
 
-                return  # Skip the rest of the online mode processing
+                self._process_files_locally(files_to_process)
+                return
 
             except Exception as e:
                 logging.error(f"Direct download failed: {e}")
-                raise ValueError(f"Failed to download {self.url}: {str(e)}")
+                raise ValueError(f"Failed to download {self.input_path}: {str(e)}")
 
         # Step 1: Scrape for downloadable files
         try:
-            logging.info(f"Scraping URL: {self.url} with depth {self.depth}")
-            run_standard_spider(self.url, self.depth, self.down_ext, self.key_words)
+            logging.info(f"Scraping URL: {self.input_path} with depth {self.depth}")
+            run_standard_spider(self.input_path, self.depth, self.down_ext, self.key_words)
 
             # Read scraped links
             with open("Output_scrap.json", 'r', encoding='utf-8') as file:
@@ -169,12 +149,12 @@ class Extractor:
         downloaded_files = []
         failed_downloads = []
 
-        os.makedirs(self.download_dir, exist_ok=True)
-        logging.info(f"Downloading files to: {self.download_dir}")
+        os.makedirs(self.output_path, exist_ok=True)
+        logging.info(f"Downloading files to: {self.output_path}")
 
         for filename, url in tqdm(links.items(), desc="Downloading files"):
             try:
-                filepath = download_request(url, filename, self.download_dir)
+                filepath = download_request(url, filename, self.output_path)
                 downloaded_files.append(filepath)
             except Exception as e:
                 logging.warning(f"Failed to download {filename}: {e}")
@@ -187,34 +167,8 @@ class Extractor:
         if failed_downloads:
             logging.warning(f"Failed to download {len(failed_downloads)} files")
 
-        # Step 4: Process downloaded files (similar to local mode)
-        files_list = []
-        compressed_list = []
-        extracted_files = []
-
-        # Classify downloaded files
-        for filepath in downloaded_files:
-            if any(filepath.endswith(ext) for ext in self.compressed_ext):
-                compressed_list.append(filepath)
-            else:
-                files_list.append(filepath)
-
-        # Extract compressed files
-        if compressed_list:
-            logging.info(f"Extracting {len(compressed_list)} compressed files")
-            for filepath in tqdm(compressed_list, desc="Extracting archives"):
-                try:
-                    extracted = compressed2files(
-                        input_archive=filepath,
-                        target_directory=self.download_dir,
-                        down_ext=self.down_ext
-                    )
-                    extracted_files.extend(extracted)
-                except Exception as e:
-                    logging.warning(f"Failed to extract {filepath}: {e}")
-
-        # Read all files (both direct and extracted)
-        self._process_file_list(files_list + extracted_files)
+        # Step 4: Process downloaded files using the local mode logic
+        self._process_downloaded_files(downloaded_files)
 
         # Cleanup
         try:
@@ -226,11 +180,30 @@ class Extractor:
             logging.error("No valid data files found after processing")
             raise ValueError("No data could be extracted from downloaded files")
 
-    def _process_file_list(self, file_list):
-        """Helper method to process a list of files"""
+    def _process_downloaded_files(self, downloaded_files):
+        """Process downloaded files using local mode logic"""
+        files_to_process = []
+
+        # Classify and extract compressed files
+        for filepath in downloaded_files:
+            if any(filepath.endswith(ext) for ext in self.compressed_ext):
+                extracted = compressed2files(
+                    input_archive=filepath,
+                    target_directory=self.output_path,
+                    down_ext=self.down_ext
+                )
+                files_to_process.extend(extracted)
+            else:
+                files_to_process.append(filepath)
+
+        # Process all files (both direct downloads and extracted files)
+        self._process_files_locally(files_to_process)
+
+    def _process_files_locally(self, files):
+        """Shared local processing logic used by both modes"""
         valid_files = 0
 
-        for filepath in tqdm(file_list, desc="Processing files"):
+        for filepath in tqdm(files, desc="Processing files"):
             try:
                 if os.path.getsize(filepath) == 0:
                     logging.warning(f"Skipping empty file: {filepath}")
@@ -241,10 +214,10 @@ class Extractor:
             except Exception as e:
                 logging.warning(f"Error processing {filepath}: {e}")
 
-        logging.info(f"Successfully processed {valid_files}/{len(file_list)} files")
-
+        logging.info(f"Successfully processed {valid_files}/{len(files)} files")
 
     def _extract_local_mode(self):
+        """Local mode extraction that now uses the shared processing logic"""
         logging.info("Extracting data in local mode...")
         files_list = []
         compressed_list = []
@@ -255,12 +228,12 @@ class Extractor:
         extracted_files = []
 
         for ext in iter_ext:
-            full_pattern = os.path.join(self.path, f"*{ext}")
+            full_pattern = os.path.join(self.input_path, f"*{ext}")
             if ext in self.compressed_ext:
                 compressed_list.extend(glob.glob(full_pattern))
                 for filepath in compressed_list:
                     # Use same directory as source if download_dir not specified
-                    target_dir = self.download_dir if self.download_dir else os.path.dirname(filepath)
+                    target_dir = self.output_path if self.output_path else os.path.dirname(filepath)
                     extracted_files.extend(
                         compressed2files(
                             input_archive=filepath,
@@ -271,11 +244,8 @@ class Extractor:
             else:
                 files_list.extend(glob.glob(full_pattern))
 
-        for filename in tqdm(files_list):
-            self._read_file(filename)
-
-        for extracted_file in tqdm(extracted_files):
-            self._read_file(extracted_file)
+        # Process all files using the shared method
+        self._process_files_locally(files_list + extracted_files)
 
         if not self.dataframes:
             logging.warning("No files found matching the specified extensions.")
@@ -337,7 +307,7 @@ class Extractor:
             OSError: If folder deletion fails
         """
         # Determine which folder to delete
-        target_path = Path(folder_path) if folder_path else Path(self.download_dir)
+        target_path = Path(folder_path) if folder_path else Path(self.output_path)
 
         # Safety checks
         if not target_path.exists():

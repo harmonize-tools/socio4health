@@ -321,29 +321,68 @@ def standardize_dict(raw_dict):
     df['question'] = clean_column(df['question']).fillna(method='ffill')
     cols_to_check = df.columns.difference(['question'])
     df = df[~df[cols_to_check].isna().all(axis=1)]
-    mask = df['variable_name'].isna() & df['subquestion'].notna()
-    df.loc[mask, 'description'] = df.loc[mask, 'subquestion']
-    df.loc[mask, 'subquestion'] = np.nan
-    df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
-    df['subquestion'] = (
-        df.groupby('variable_name', group_keys=False)['subquestion']
-        .apply(lambda group: clean_column(group).fillna(method='ffill'))
-    )
 
     if "subquestion" in df.columns:
+        mask = df['variable_name'].isna() & df['subquestion'].notna()
+        df.loc[mask, 'description'] = df.loc[mask, 'subquestion']
+        df.loc[mask, 'subquestion'] = np.nan
+        df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
+        df['subquestion'] = (
+            df.groupby('variable_name', group_keys=False)['subquestion']
+            .apply(lambda group: clean_column(group).fillna(method='ffill'))
+        )
         df['subquestion'] = clean_column(df['subquestion'])
         df['question'] = df['question'] + ' ' + df['subquestion'].fillna('')
         df.drop(columns='subquestion', inplace=True)
+    else:
+        df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
 
     df['description'] = clean_column(df['description'])
-
     df.drop_duplicates(inplace=True)
-
     grouped_df = df.groupby(['question', 'variable_name'], as_index=False)\
                     .apply(process_group)\
                     .reset_index(drop=True)
 
     return grouped_df
+
+def process_group(group):
+    """
+    Processes a group of rows by combining multiple answer descriptions and values
+    for each 'question' and 'variable_name' pair.
+
+    Parameters
+    ----------
+    group : pd.DataFrame
+        A subgroup of the original DataFrame, grouped by 'question' and 'variable_name'.
+
+    Returns
+    -------
+    pd.Series
+        A single summary row with the base description (if available),
+        concatenated 'possible_answers', and joined 'values'.
+    """
+    if group.empty:
+        return None
+
+    base_row = group[group['value'].isna()].copy()
+    answers = group[group['value'].notna()]
+
+    possible_answers = '; '.join(answers['description'].astype(str))
+    values_concat = '; '.join(answers['value'].astype(str))
+    possible_answers = possible_answers if possible_answers else np.nan
+    values_concat = values_concat if values_concat else np.nan
+
+    if not base_row.empty:
+        row = base_row.iloc[0]
+        row['possible_answers'] = possible_answers
+        row['value'] = values_concat
+    else:
+        row = group.iloc[0].copy()
+        row['description'] = np.nan
+        row['value'] = values_concat
+        row['possible_answers'] = possible_answers
+
+    return row
 
 def translate_column (data, column, language = 'en'):
     """
@@ -376,43 +415,6 @@ def translate_column (data, column, language = 'en'):
     print(f"{column} translated")
 
     return data
-
-def process_group(group):
-    """
-    Processes a group of rows by combining multiple answer descriptions and values
-    for each 'question' and 'variable_name' pair.
-
-    Parameters
-    ----------
-    group : pd.DataFrame
-        A subgroup of the original DataFrame, grouped by 'question' and 'variable_name'.
-
-    Returns
-    -------
-    pd.Series
-        A single summary row with the base description (if available),
-        concatenated 'possible_answers', and joined 'values'.
-    """
-    if group.empty:
-        return None
-
-    base_row = group[group['value'].isna()].copy()
-    answers = group[group['value'].notna()]
-
-    possible_answers = '; '.join(answers['description'].astype(str))
-    values_concat = '; '.join(answers['value'].astype(str))
-
-    if not base_row.empty:
-        row = base_row.iloc[0]
-        row['possible_answers'] = possible_answers
-        row['value'] = values_concat
-    else:
-        row = group.iloc[0].copy()
-        row['description'] = np.nan
-        row['value'] = np.nan
-        row['possible_answers'] = possible_answers
-
-    return row
 
 _generator = None
 
@@ -476,11 +478,16 @@ def classify_rows(data, col1, col2, col3, user_categories,
         Given the following information extracted from a survey:
         "{combined_text}"
 
-        Classify this entry only in one of the following categories:
+        Classify this entry only in one of the following {len(user_categories)} categories:
         {categories_str}
 
         Only return the most appropriate category, nothing else.
         """
+        tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
+        num_tokens = len(tokenizer.encode(prompt))
+
+        if num_tokens > 512:
+            print(f"[EXCEDE LÍMITE] Index: {row.name} - Promt: {prompt}")
 
         output = generator(prompt, max_length=30, do_sample=False)[0]['generated_text'].strip()
         return output

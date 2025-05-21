@@ -432,8 +432,12 @@ def get_generator():
         _generator = pipeline("text2text-generation", model="google/flan-t5-base")
     return _generator
 
-def classify_rows(data, col1, col2, col3, user_categories,
-                 new_column_name = "category"):
+def classify_rows(data, col1, col2, col3,
+                  user_categories = ["Identification", "Housing", "Education",
+                                     "Social Security", "Business",
+                                     "Fertility", "Migration",
+                                     "Non-economic activities"],
+                  new_column_name = "category"):
     """
     Classify each row of a DataFrame into one of the provided user categories
     using the content of three specified columns and a text generation model.
@@ -448,10 +452,13 @@ def classify_rows(data, col1, col2, col3, user_categories,
         Name of the second column containing survey-related text.
     col3_name : str
         Name of the third column containing survey-related text.
-    user_categories : list of str
-        List of possible categories to classify each row into.
+    user_categories : list of str, optional
+        List of possible categories to classify each row into (default are
+        "Identification", "Housing", "Education", "Social Security", "Business",
+        "Fertility", "Migration", "Non-economic activities").
     new_column_name : str, optional
-        Name of the new column to store the predicted categories.
+        Name of the new column to store the predicted categories (default is
+        'category').
 
     Returns:
     --------

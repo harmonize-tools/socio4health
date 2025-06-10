@@ -340,12 +340,12 @@ def standardize_dict(raw_dict):
     df['description'] = clean_column(df['description'])
     df.drop_duplicates(inplace=True)
     grouped_df = df.groupby(['question', 'variable_name'], as_index=False)\
-                    .apply(process_group)\
+                    .apply(_process_group)\
                     .reset_index(drop=True)
 
     return grouped_df
 
-def process_group(group):
+def _process_group(group):
     """
     Processes a group of rows by combining multiple answer descriptions and values
     for each 'question' and 'variable_name' pair.

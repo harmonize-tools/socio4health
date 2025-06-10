@@ -9,3 +9,7 @@ matplotlib
 numpy
 dask
 appdirs
+pyarrow
+deep_translator
+transformers
+torch

@@ -11,12 +11,12 @@ import pandas as pd
 from dask.diagnostics import ProgressBar
 from tqdm import tqdm
 from deep_translator import GoogleTranslator
+import torch
 import logging
 import re
 from socio4health.extractor import Extractor
 from socio4health.enums.data_info_enum import NameEnum
 from transformers import pipeline
-from transformers import AutoTokenizer
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -416,58 +416,44 @@ def translate_column (data, column, language = 'en'):
 
     return data
 
-_generator = None
+_classifier = None
 
-def get_generator():
+def get_classifier(MODEL_PATH):
     """
-    Load the text-generation model only once and return it.
+    Load the BERT fine-tuned model for classification only once.
+    """
+    global _classifier
+    if _classifier is None:
+        device = 0 if torch.cuda.is_available() else -1
+        _classifier = pipeline("text-classification", model=MODEL_PATH, tokenizer=MODEL_PATH, device=device)
+    return _classifier
 
-    Returns:
-    --------
-    transformers.pipelines.text_generation.TextGenerationPipeline
-        The loaded text generation pipeline (e.g., T5 model).
+def classify_rows(data, col1, col2, col3, new_column_name="category",
+                  MODEL_PATH = "./bert_finetuned_classifier"):
     """
-    global _generator
-    if _generator is None:
-        _generator = pipeline("text2text-generation", model="google/flan-t5-base")
-    return _generator
-
-def classify_rows(data, col1, col2, col3,
-                  user_categories = ["Identification", "Housing", "Education",
-                                     "Social Security", "Business",
-                                     "Fertility", "Migration",
-                                     "Non-economic activities"],
-                  new_column_name = "category"):
-    """
-    Classify each row of a DataFrame into one of the provided user categories
-    using the content of three specified columns and a text generation model.
+    Classify each row using a fine-tuned multiclass classification BERT model.
 
     Parameters:
     -----------
-    df : pd.DataFrame
-        The input DataFrame.
+    data : pd.DataFrame
+        The DataFrame with text columns.
     col1_name : str
         Name of the first column containing survey-related text.
     col2_name : str
         Name of the second column containing survey-related text.
     col3_name : str
         Name of the third column containing survey-related text.
-    user_categories : list of str, optional
-        List of possible categories to classify each row into (default are
-        "Identification", "Housing", "Education", "Social Security", "Business",
-        "Fertility", "Migration", "Non-economic activities").
     new_column_name : str, optional
         Name of the new column to store the predicted categories (default is
         'category').
+    MODEL_PATH: str
+        Path to the model weights (default is './bert_finetuned_classifier')
 
     Returns:
     --------
-    pd.DataFrame
-        A copy of the original DataFrame with an additional column of predicted categories.
+    pd.DataFrame with a new prediction column.
     """
-    
-    generator = get_generator()
-    categories_str = ", ".join(user_categories)
+    classifier = get_classifier(MODEL_PATH)
 
     def classify_row(row):
         valid_parts = [
@@ -475,31 +461,13 @@ def classify_rows(data, col1, col2, col3,
             for x in [row[col1], row[col2], row[col3]]
             if isinstance(x, str) and x.strip() and x.strip().lower() != "not applicable"
         ]
-
         if not valid_parts:
             return ""
 
         combined_text = " ".join(valid_parts)
+        result = classifier(combined_text, truncation=True, max_length=128)[0]
+        return result["label"]
 
-        prompt = f"""
-        Given the following information extracted from a survey:
-        "{combined_text}"
-
-        Classify this entry only in one of the following {len(user_categories)} categories:
-        {categories_str}
-
-        Only return the most appropriate category, nothing else.
-        """
-        tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
-        num_tokens = len(tokenizer.encode(prompt))
-
-        if num_tokens > 512:
-            print(f"[EXCEDE LÍMITE] Index: {row.name} - Promt: {prompt}")
-
-        output = generator(prompt, max_length=30, do_sample=False)[0]['generated_text'].strip()
-        return output
-
-    # Apply row-wise classification
     df = data.copy()
     df[new_column_name] = df.apply(classify_row, axis=1)
 

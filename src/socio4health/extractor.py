@@ -52,18 +52,18 @@ class Extractor:
         self.output_path = output_path or str(get_default_data_dir())
         os.makedirs(self.output_path, exist_ok=True)
         self.dtype = dtype
-
-        #check if input_path is a local path or a URL
-        if input_path and input_path.startswith("http"):
-            self.mode = 0
+        if not input_path:
+            raise ValueError("input_path must be provided")
+        if is_fwf and (not colnames or not colspecs):
+            raise ValueError("colnames and colspecs required for fixed-width files")
 
     def extract(self):
         logging.info("----------------------")
         logging.info("Starting data extraction...")
         try:
-            if self.mode == 0:
+            if self.input_path and self.input_path.startswith("http"):
                 self._extract_online_mode()
-            elif self.mode == 1:
+            elif self.input_path and os.path.isdir(self.input_path):
                 self._extract_local_mode()
             logging.info("Extraction completed successfully.")
         except Exception as e:

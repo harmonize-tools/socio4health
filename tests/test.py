@@ -1,11 +1,10 @@
 
-from dask.diagnostics import ProgressBar
-from matplotlib.style.core import available
 
 from socio4health import Extractor
 from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
-from socio4health.harmonizer import Harmonizer, vertical_merge, drop_nan_columns, get_available_columns
-from socio4health.utils.extractor_utils import run_standard_spider
+from socio4health.harmonizer import vertical_merge, drop_nan_columns, get_available_columns
+
+col_extractor_test = Extractor(input_path="../../input/GEIH_2022/Test",down_ext=['.CSV'],sep=';', output_path="data")
 
 col_extractor = Extractor(input_path="../../input/GEIH_2022/Original",down_ext=['.CSV','.csv','.zip'],sep=';', output_path="data")
 per_extractor = Extractor(input_path="../../input/ENAHO_2022/Original",down_ext=['.csv','.zip'], output_path="data")
@@ -20,7 +19,7 @@ bra_online_extractor = Extractor(input_path="https://ftp.ibge.gov.br/Trabalho_e_
 def test(extractor):
     dfs = extractor.extract()
     dfs = vertical_merge(ddfs=dfs, similarity_threshold=0.9)
-    drop_nan_columns(dfs, threshold=0.8)
+    dfs = drop_nan_columns(dfs, threshold=0.8)
     '''
     for df in dfs:
     with ProgressBar():
@@ -35,4 +34,4 @@ def test(extractor):
     extractor.delete_download_folder()
 
 if __name__ == "__main__":
-    test(rd_online_extractor)
+    test(col_extractor_test)

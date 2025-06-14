@@ -34,4 +34,4 @@ def test(extractor):
     extractor.delete_download_folder()
 
 if __name__ == "__main__":
-    test(col_extractor_test)
+    test(col_online_extractor)

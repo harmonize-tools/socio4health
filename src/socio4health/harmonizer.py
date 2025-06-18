@@ -14,6 +14,8 @@ from deep_translator import GoogleTranslator
 import torch
 import logging
 import re
+
+from socio4health.enums.dict_enum import ColumnMappingEnum
 from socio4health.extractor import Extractor
 from socio4health.enums.data_info_enum import NameEnum
 from transformers import pipeline
@@ -472,6 +474,119 @@ def classify_rows(data, col1, col2, col3, new_column_name="category",
     df[new_column_name] = df.apply(classify_row, axis=1)
 
     return df
+
+
+def data_selector(
+        ddfs: List[dd.DataFrame],
+        dict_df: pd.DataFrame,
+        categories: List[str],
+        key_column: str,
+        key_values: List[Union[str, int, float]],
+) -> List[dd.DataFrame]:
+    """
+    Selects rows from a list of Dask DataFrames based on a dictionary of categories
+    and filters by key values from a key column. The key column will always appear
+    as the first column in the output DataFrames.
+
+    Parameters:
+    -----------
+    ddfs : List[dd.DataFrame]
+        List of input Dask DataFrames.
+    dict_df : pd.DataFrame
+        DataFrame mapping categories to lists of values. Must contain 'category'
+        and 'variable_name' columns.
+    categories : List[str]
+        List of categories to filter by.
+    key_column : str
+        Column name in the DataFrame to match against the dictionary values.
+    key_values : List[Union[str, int, float]]
+        List of values to match against the key_column.
+
+    Returns:
+    --------
+    List[dd.DataFrame]
+        List of filtered Dask DataFrames containing only the selected rows,
+        with the key column as the first column.
+
+    Raises:
+    -------
+    TypeError
+        If input types are incorrect.
+    KeyError
+        If required columns are missing.
+    ValueError
+        If input lists are empty.
+    """
+    # Input validation (unchanged from previous version)
+    if not isinstance(ddfs, list):
+        raise TypeError("ddfs must be a list")
+    if not ddfs:
+        raise ValueError("ddfs list cannot be empty")
+    if not all(isinstance(ddf, dd.DataFrame) for ddf in ddfs):
+        raise TypeError("All elements in ddfs must be Dask DataFrames")
+
+    if not isinstance(dict_df, pd.DataFrame):
+        raise TypeError("dict_df must be a pandas DataFrame")
+    if dict_df.empty:
+        raise ValueError("dict_df cannot be empty")
+    if not {'category', 'variable_name'}.issubset(dict_df.columns):
+        raise KeyError("dict_df must contain 'category' and 'variable_name' columns")
+
+    if not isinstance(categories, list):
+        raise TypeError("categories must be a list")
+    if not categories:
+        raise ValueError("categories list cannot be empty")
+
+    if not isinstance(key_column, str):
+        raise TypeError("key_column must be a string")
+    if not key_column:
+        raise ValueError("key_column cannot be empty")
+
+    if not isinstance(key_values, list):
+        raise TypeError("key_values must be a list")
+    if not key_values:
+        raise ValueError("key_values list cannot be empty")
+
+    # Prepare dictionary DataFrame
+    dict_df = dict_df.copy()
+    dict_df['variable_name'] = dict_df['variable_name'].str.upper()
+    key_column_upper = key_column.upper()
+
+    filtered_ddfs = []
+    for ddf in ddfs:
+        if key_column not in ddf.columns:
+            raise KeyError(f"Key column '{key_column}' not found in DataFrame")
+
+        filtered_ddf = ddf[ddf[key_column].isin(key_values)]
+        if len(filtered_ddf) == 0:
+            logging.warning(f"No rows found matching key values in DataFrame")
+
+        filtered_ddf.columns = filtered_ddf.columns.str.upper()
+
+        dict_df_filtered = dict_df[dict_df[ColumnMappingEnum.CATEGORY.value].isin(categories)]
+        columns_list = dict_df_filtered[ColumnMappingEnum.VARIABLE_NAME.value].dropna().unique().tolist()
+
+        if columns_list:
+            logging.debug(f"Filtering DataFrame for columns: {columns_list}")
+            logging.debug(f"Available columns: {filtered_ddf.columns.tolist()}")
+
+            existing_columns = [
+                col for col in columns_list
+                if col in filtered_ddf.columns and col != key_column_upper
+            ]
+
+            final_columns = [key_column_upper] + existing_columns
+
+            if len(final_columns) == 1:
+                logging.warning("Only key column found in the filtered DataFrame")
+            filtered_ddf = filtered_ddf[final_columns]
+        else:
+            logging.warning("No columns found matching the specified categories")
+            filtered_ddf = filtered_ddf[[key_column_upper]]
+
+        filtered_ddfs.append(filtered_ddf)
+
+    return filtered_ddfs
 
 class Harmonizer:
 

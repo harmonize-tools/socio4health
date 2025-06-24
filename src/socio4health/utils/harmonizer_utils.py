@@ -1,0 +1,196 @@
+import re
+import torch
+import numpy as np
+import pandas as pd
+from transformers import pipeline
+from deep_translator import GoogleTranslator
+
+
+def standardize_dict(raw_dict):
+    """
+    Cleans and structures a dictionary-like DataFrame of variables by standardizing
+    text fields, grouping possible answers, and removing duplicates.
+
+    Parameters
+    ----------
+    raw_dict : pd.DataFrame
+        DataFrame containing the required columns: 'question', 'variable_name',
+        'description', 'value', and optionally 'subquestion'.
+
+    Returns
+    -------
+    pd.DataFrame
+        A cleaned and grouped DataFrame by 'question' and 'variable_name',
+        with an additional column 'possible_answers' containing concatenated descriptions.
+    """
+
+    def clean_column(column):
+        return (
+            column.replace(r'^\s*$', np.nan, regex=True)
+                .apply(lambda x: (
+                    re.sub(r'\s{2,}', ' ',
+                    re.sub(r'(\s*\.\s*){2,}', ' ',
+                    re.sub(r'[\n\t\r]', ' ',
+                    re.sub(r'([¿¡])\s+', r'\1',
+                    re.sub(r'\s+([?!:;,\.])', r'\1',
+                    re.sub(r'([?!:;,\.])\s+', r'\1 ',
+                    str(x).replace('…', ' ').strip().lower()))))))
+                ) if pd.notna(x) else np.nan)
+        )
+
+    df = raw_dict.copy()
+
+    df['question'] = clean_column(df['question']).fillna(method='ffill')
+    cols_to_check = df.columns.difference(['question'])
+    df = df[~df[cols_to_check].isna().all(axis=1)]
+
+    if "subquestion" in df.columns:
+        mask = df['variable_name'].isna() & df['subquestion'].notna()
+        df.loc[mask, 'description'] = df.loc[mask, 'subquestion']
+        df.loc[mask, 'subquestion'] = np.nan
+        df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
+        df['subquestion'] = (
+            df.groupby('variable_name', group_keys=False)['subquestion']
+            .apply(lambda group: clean_column(group).fillna(method='ffill'))
+        )
+        df['subquestion'] = clean_column(df['subquestion'])
+        df['question'] = df['question'] + ' ' + df['subquestion'].fillna('')
+        df.drop(columns='subquestion', inplace=True)
+    else:
+        df['variable_name'] = clean_column(df['variable_name']).fillna(method='ffill')
+
+    df['description'] = clean_column(df['description'])
+    df.drop_duplicates(inplace=True)
+    grouped_df = df.groupby(['question', 'variable_name'], as_index=False)\
+                    .apply(_process_group)\
+                    .reset_index(drop=True)
+
+    return grouped_df
+
+def _process_group(group):
+    """
+    Processes a group of rows by combining multiple answer descriptions and values
+    for each 'question' and 'variable_name' pair.
+
+    Parameters
+    ----------
+    group : pd.DataFrame
+        A subgroup of the original DataFrame, grouped by 'question' and 'variable_name'.
+
+    Returns
+    -------
+    pd.Series
+        A single summary row with the base description (if available),
+        concatenated 'possible_answers', and joined 'values'.
+    """
+    if group.empty:
+        return None
+
+    base_row = group[group['value'].isna()].copy()
+    answers = group[group['value'].notna()]
+
+    possible_answers = '; '.join(answers['description'].astype(str))
+    values_concat = '; '.join(answers['value'].astype(str))
+    possible_answers = possible_answers if possible_answers else np.nan
+    values_concat = values_concat if values_concat else np.nan
+
+    if not base_row.empty:
+        row = base_row.iloc[0]
+        row['possible_answers'] = possible_answers
+        row['value'] = values_concat
+    else:
+        row = group.iloc[0].copy()
+        row['description'] = np.nan
+        row['value'] = values_concat
+        row['possible_answers'] = possible_answers
+
+    return row
+
+def translate_column (data, column, language = 'en'):
+    """
+    Translates the content of selected columns in a DataFrame using Google Translate.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        The DataFrame containing the text columns.
+
+    column : str
+        Name of the column to translate.
+
+    language : str
+        Target language code (default is 'en').
+
+    Returns
+    -------
+    pd.DataFrame
+        Original DataFrame with new column translated.
+    """
+    data = data.copy()
+    if column not in data.columns:
+        raise ValueError(f"Column '{column}' not found in DataFrame.")
+
+    new_col = f"{column}_{language}"
+    data[new_col] = data[column].apply(
+        lambda x: GoogleTranslator(source='auto', target=language).translate(x) if pd.notna(x) else x
+    )
+    print(f"{column} translated")
+
+    return data
+
+_classifier = None
+
+def get_classifier(MODEL_PATH):
+    """
+    Load the BERT fine-tuned model for classification only once.
+    """
+    global _classifier
+    if _classifier is None:
+        device = 0 if torch.cuda.is_available() else -1
+        _classifier = pipeline("text-classification", model=MODEL_PATH, tokenizer=MODEL_PATH, device=device)
+    return _classifier
+
+def classify_rows(data, col1, col2, col3, new_column_name="category",
+                  MODEL_PATH = "./bert_finetuned_classifier"):
+    """
+    Classify each row using a fine-tuned multiclass classification BERT model.
+
+    Parameters:
+    -----------
+    data : pd.DataFrame
+        The DataFrame with text columns.
+    col1_name : str
+        Name of the first column containing survey-related text.
+    col2_name : str
+        Name of the second column containing survey-related text.
+    col3_name : str
+        Name of the third column containing survey-related text.
+    new_column_name : str, optional
+        Name of the new column to store the predicted categories (default is
+        'category').
+    MODEL_PATH: str
+        Path to the model weights (default is './bert_finetuned_classifier')
+
+    Returns:
+    --------
+    pd.DataFrame with a new prediction column.
+    """
+    classifier = get_classifier(MODEL_PATH)
+
+    def classify_row(row):
+        valid_parts = [
+            str(x).strip()
+            for x in [row[col1], row[col2], row[col3]]
+            if isinstance(x, str) and x.strip() and x.strip().lower() != "not applicable"
+        ]
+        if not valid_parts:
+            return ""
+
+        combined_text = " ".join(valid_parts)
+        result = classifier(combined_text, truncation=True, max_length=128)[0]
+        return result["label"]
+
+    df = data.copy()
+    df[new_column_name] = df.apply(classify_row, axis=1)
+
+    return df

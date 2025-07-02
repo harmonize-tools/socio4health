@@ -2,7 +2,7 @@ import pandas as pd
 
 from socio4health import Extractor
 from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
-from socio4health.harmonizer import vertical_merge, drop_nan_columns, get_available_columns, data_selector
+from socio4health.harmonizer import Harmonizer
 
 col_extractor_test = Extractor(input_path="../../input/GEIH_2022/Test",down_ext=['.CSV'],sep=';', output_path="data")
 
@@ -20,10 +20,17 @@ col_dict = pd.read_excel('../../input/GEIH_2022/DiccionarioFinal.xlsx')
 
 def test(extractor):
     dfs = extractor.extract()
-    dfs = vertical_merge(ddfs=dfs, similarity_threshold=0.9)
-    dfs = drop_nan_columns(dfs, threshold=0.8)
+    har = Harmonizer()
+    har.similarity_threshold = 0.9
+    har.nan_threshold = 1
+    dfs = har.vertical_merge(dfs)
+    dfs = har.drop_nan_columns(dfs)
 
-    filtered_ddfs = data_selector(dfs, col_dict, ["Business"], 'DPTO', ['05','25'])
+    har.dict_df = col_dict
+    har.categories = ["Business","Education"]
+    har.key_col = 'DPTO'
+    har.key_val = ['05','25']
+    filtered_ddfs = har.data_selector(dfs)
     for i, df in enumerate(filtered_ddfs):
         df.to_csv(f"data/output_{i}.csv", index=False)
     #extractor.delete_download_folder()

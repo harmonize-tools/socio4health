@@ -124,7 +124,7 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
 
     return row
 
-def translate_column (data, column, language = 'en'):
+def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> pd.DataFrame:
     """
     Translates the content of selected columns in a DataFrame using Google Translate.
 
@@ -144,9 +144,20 @@ def translate_column (data, column, language = 'en'):
     pd.DataFrame
         Original DataFrame with new column translated.
     """
-    data = data.copy()
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("data must be a pandas DataFrame.")
+    
+    if not isinstance(column, str):
+        raise TypeError("column must be a text string.")
+    
     if column not in data.columns:
-        raise ValueError(f"Column '{column}' not found in DataFrame.")
+        raise ValueError(f"The column '{column}' is not found in the DataFrame.")
+    
+    if not isinstance(language, str) or len(language) != 2:
+        raise ValueError("The 'language' parameter must be a 2-letter ISO 639-1 language code (e.g. 'en').")
+    
+    data = data.copy()
 
     new_col = f"{column}_{language}"
     data[new_col] = data[column].apply(

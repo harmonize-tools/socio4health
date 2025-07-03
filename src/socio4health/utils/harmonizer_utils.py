@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 from typing import Union
-from transformers import pipeline
+from transformers import pipeline, Pipeline
 from deep_translator import GoogleTranslator
 
 

@@ -25,16 +25,16 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     """
 
     if not isinstance(raw_dict, pd.DataFrame):
-        raise TypeError("raw_dict debe ser un DataFrame de pandas.")
+        raise TypeError("raw_dict must be a pandas DataFrame.")
 
     required_columns = {'question', 'variable_name', 'description', 'value'}
     missing_columns = required_columns - set(raw_dict.columns)
     if missing_columns:
-        raise ValueError(f"Faltan las siguientes columnas requeridas: {missing_columns}")
+        raise ValueError(f"The following required columns are missing: {missing_columns}")
 
     if "subquestion" in raw_dict.columns:
         if not pd.api.types.is_string_dtype(raw_dict['subquestion']):
-            raise TypeError("La columna 'subquestion' debe contener texto o NaN.")
+            raise TypeError("The column 'subquestion' must contain text or NaN.")
 
     def clean_column(column):
         return (
@@ -79,10 +79,10 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
 
     return grouped_df
 
-def _process_group(group):
+def _process_group(group: pd.DataFrame) -> pd.Series:
     """
-    Processes a group of rows by combining multiple answer descriptions and values
-    for each 'question' and 'variable_name' pair.
+    Processes a group of rows by combining multiple answer descriptions and
+    values for each 'question' and 'variable_name' pair.
 
     Parameters
     ----------
@@ -95,6 +95,12 @@ def _process_group(group):
         A single summary row with the base description (if available),
         concatenated 'possible_answers', and joined 'values'.
     """
+
+    required_columns = {'description', 'value'}
+    missing = required_columns - set(group.columns)
+    if missing:
+        raise ValueError(f"The following required columns are missing: {missing}")
+    
     if group.empty:
         return None
 

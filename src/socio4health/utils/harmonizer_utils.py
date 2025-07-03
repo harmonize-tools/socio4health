@@ -171,16 +171,12 @@ def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> p
 
 _classifier = None
 
-def get_classifier(MODEL_PATH):
+def get_classifier(MODEL_PATH: str) -> Pipeline:
     """
     Load the BERT fine-tuned model for classification only once.
     """
 
-    if not isinstance(MODEL_PATH, str):
-        raise TypeError("MODEL_PATH must be a text string.")
-
     if not os.path.exists(MODEL_PATH) and "/" not in MODEL_PATH:
-        # Si no es un path local y no tiene un nombre de modelo remoto (tipo "bert-base-uncased")
         raise ValueError("MODEL_PATH does not appear to be a valid path or HuggingFace model identifier.")
 
     global _classifier
@@ -189,8 +185,11 @@ def get_classifier(MODEL_PATH):
         _classifier = pipeline("text-classification", model=MODEL_PATH, tokenizer=MODEL_PATH, device=device)
     return _classifier
 
-def classify_rows(data, col1, col2, col3, new_column_name="category",
-                  MODEL_PATH = "./bert_finetuned_classifier"):
+def classify_rows(
+        data: pd.DataFrame, col1: str, col2: str, col3: str,
+        new_column_name: str = "category",
+        MODEL_PATH: str = "./bert_finetuned_classifier"
+) -> pd.DataFrame:
     """
     Classify each row using a fine-tuned multiclass classification BERT model.
 
@@ -214,6 +213,25 @@ def classify_rows(data, col1, col2, col3, new_column_name="category",
     --------
     pd.DataFrame with a new prediction column.
     """
+
+    if not isinstance(data, pd.DataFrame):
+        raise TypeError("data must be a pandas.DataFrame.")
+
+    for col in (col1, col2, col3):
+        if not isinstance(col, str):
+            raise TypeError("The parameters col1, col2 and col3 must be strings.")
+        if col not in data.columns:
+            raise ValueError(f"The column '{col}' is not found in the DataFrame.")
+
+    if not isinstance(new_column_name, str) or not new_column_name:
+        raise ValueError("new_column_name must be a non-empty string.")
+
+    if new_column_name in data.columns:
+        raise ValueError(f"The column '{new_column_name}' already exists in the DataFrame.")
+
+    if not isinstance(MODEL_PATH, str):
+        raise TypeError("MODEL_PATH must be a text string.")
+
     classifier = get_classifier(MODEL_PATH)
 
     def classify_row(row):

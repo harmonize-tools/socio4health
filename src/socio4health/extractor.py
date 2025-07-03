@@ -1,3 +1,9 @@
+"""
+Extractor class for downloading and processing data files from various sources.
+This class supports both online scraping and local file processing, handling compressed files, fixed-width files, and CSV formats.
+It includes methods for downloading files, extracting data, and cleaning up after processing.
+"""
+
 import json
 import shutil
 from itertools import islice
@@ -17,12 +23,67 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def get_default_data_dir():
-    """Return platform-appropriate default data directory"""
+    """
+    Returns the default data directory for storing downloaded files.
+
+    Returns
+    -------
+    Path
+        `pathlib.Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ object representing the default data directory.
+    This function ensures that the directory exists by creating it if necessary.
+    Examples
+    --------
+    >>> default_dir = get_default_data_dir()
+    >>> print(default_dir)
+    /home/user/.local/share/socio4health
+    >>> default_dir.exists()
+    True
+    """
     path = Path(appdirs.user_data_dir("socio4health"))
     logging.info(f"Default data directory: {path}")
     return path
 
 class Extractor:
+    """
+    A class for extracting data from various sources, including online scraping and local file processing.
+    This class supports downloading files, extracting data from compressed formats, and reading fixed-width or ``CSV`` files.
+    It handles both online and local modes of operation, allowing for flexible data extraction workflows.
+
+    Attributes
+    ----------
+    input_path : str
+        The path to the input data source, which can be a URL or a local directory.
+    depth : int
+        The depth of web scraping to perform when input_path is a ``URL``.
+    down_ext : list
+        A list of file extensions to look for when downloading files. Available options include compressed formats such as ``.zip``, ``.7z``, ``.tar``, ``.gz``, and ``.tgz``, as well as other file types like ``.csv``, ``.txt``, etc. This list can be customized based on the expected file types.
+    output_path : str
+        The directory where downloaded files will be saved. Defaults to the user's data directory.
+    key_words : list
+        A list of keywords to filter downloadable files during web scraping.
+    encoding : str
+        The character encoding to use when reading files. Defaults to ``'latin1'``.
+    is_fwf : bool
+        Whether the files to be processed are fixed-width files (FWF). Defaults to ``False``.
+    colnames : list
+        Column names to use when reading fixed-width files. Required if is_fwf is ``True``.
+    colspecs : list
+        Column specifications for fixed-width files, defining the widths of each column. Required if ``is_fwf`` is ``True``.
+    sep : str
+        The separator to use when reading CSV files. Defaults to ','.
+    dtype : Union[str, Dict]
+        The data type to use when reading files. Can be a single type or a dictionary mapping column names to types. Defaults to ``object``.
+
+    See Also
+    -------
+    Extractor.extract()
+        Extracts data from the specified input path, either by scraping online or processing local files.
+
+    Extractor.delete_download_folder(folder_path: Optional[str] = None) -> bool
+        Safely deletes the download folder and all its contents, with safety checks to prevent accidental deletion of important directories.
+
+
+    """
     def __init__(
             self,
             input_path: str = None,
@@ -58,6 +119,26 @@ class Extractor:
             raise ValueError("colnames and colspecs required for fixed-width files")
 
     def extract(self):
+        """
+        Extracts data from the specified input path, either by scraping online sources or processing local files.
+
+        This method determines the operation mode based on the input path:\n
+        - If the input path is a ``URL``, it performs online scraping to find downloadable files.\n
+        - If the input path is a local directory, it processes files directly from that directory.\n
+
+        Returns
+        -------
+        list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of `Dask <https://docs.dask.org>`_ DataFrames containing the extracted data.
+
+        Raises
+        ------
+        ValueError
+            If extraction fails due to an invalid input path, missing column specifications for fixed-width files,
+            or if no valid data files are found after processing.
+        """
+
+
         logging.info("----------------------")
         logging.info("Starting data extraction...")
         try:
@@ -297,10 +378,10 @@ class Extractor:
         Safely delete the download folder and all its contents.
 
         Args:
-            folder_path: Optional path to delete (defaults to the download_dir used in extraction)
+            `folder_path`: Optional path to delete (defaults to the download_dir used in extraction)
 
         Returns:
-            bool: True if deletion was successful, False otherwise
+            bool: ``True`` if deletion was successful, ``False`` otherwise
 
         Raises:
             ValueError: If no folder path is provided and no download_dir exists

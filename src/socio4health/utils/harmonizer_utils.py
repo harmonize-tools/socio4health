@@ -6,7 +6,7 @@ from transformers import pipeline
 from deep_translator import GoogleTranslator
 
 
-def standardize_dict(raw_dict):
+def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     """
     Cleans and structures a dictionary-like DataFrame of variables by standardizing
     text fields, grouping possible answers, and removing duplicates.
@@ -23,6 +23,18 @@ def standardize_dict(raw_dict):
         A cleaned and grouped DataFrame by 'question' and 'variable_name',
         with an additional column 'possible_answers' containing concatenated descriptions.
     """
+
+    if not isinstance(raw_dict, pd.DataFrame):
+        raise TypeError("raw_dict debe ser un DataFrame de pandas.")
+
+    required_columns = {'question', 'variable_name', 'description', 'value'}
+    missing_columns = required_columns - set(raw_dict.columns)
+    if missing_columns:
+        raise ValueError(f"Faltan las siguientes columnas requeridas: {missing_columns}")
+
+    if "subquestion" in raw_dict.columns:
+        if not pd.api.types.is_string_dtype(raw_dict['subquestion']):
+            raise TypeError("La columna 'subquestion' debe contener texto o NaN.")
 
     def clean_column(column):
         return (

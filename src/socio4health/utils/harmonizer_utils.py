@@ -1,7 +1,9 @@
 import re
+import os
 import torch
 import numpy as np
 import pandas as pd
+from typing import Union
 from transformers import pipeline
 from deep_translator import GoogleTranslator
 
@@ -173,6 +175,14 @@ def get_classifier(MODEL_PATH):
     """
     Load the BERT fine-tuned model for classification only once.
     """
+
+    if not isinstance(MODEL_PATH, str):
+        raise TypeError("MODEL_PATH must be a text string.")
+
+    if not os.path.exists(MODEL_PATH) and "/" not in MODEL_PATH:
+        # Si no es un path local y no tiene un nombre de modelo remoto (tipo "bert-base-uncased")
+        raise ValueError("MODEL_PATH does not appear to be a valid path or HuggingFace model identifier.")
+
     global _classifier
     if _classifier is None:
         device = 0 if torch.cuda.is_available() else -1

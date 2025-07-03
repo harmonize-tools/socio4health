@@ -34,8 +34,9 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     if missing_columns:
         raise ValueError(f"The following required columns are missing: {missing_columns}")
 
-    if not raw_dict['subquestion'].apply(lambda x: pd.isna(x) or isinstance(x, str)).all():
-        raise TypeError("The column 'subquestion' must contain only strings or NaN values.")
+    if "subquestion" in raw_dict.columns:
+        if not raw_dict['subquestion'].apply(lambda x: pd.isna(x) or isinstance(x, str)).all():
+            raise TypeError("The column 'subquestion' must contain only strings or NaN values.")
 
     def clean_column(column):
         return (
@@ -74,7 +75,9 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
 
     df['description'] = clean_column(df['description'])
     df.drop_duplicates(inplace=True)
-    grouped_df = df.groupby(['question', 'variable_name'], group_keys=False).apply(_process_group).reset_index(drop=True)
+    grouped_df = df.groupby(['question', 'variable_name'], group_keys=False)\
+               .apply(_process_group, include_groups=True)\
+               .reset_index(drop=True)
 
 
     return grouped_df

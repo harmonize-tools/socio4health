@@ -23,6 +23,7 @@ jobs:
           source .venv/bin/activate
           python -m pip install --upgrade pip
           pip install .
+          pip install myst-nb
           pip install sphinx
           pip install pydata_sphinx_theme
         shell: bash

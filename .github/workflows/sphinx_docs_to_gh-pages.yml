@@ -1,48 +1,26 @@
-name: Sphinx docs to gh-pages
+name: "Sphinx: Render docs"
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
-  sphinx_docs_to_gh-pages:
+  build:
     runs-on: ubuntu-latest
-    name: Sphinx docs to gh-pages
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.12
-      - name: Set up venv and install all dependencies
-        run: |
-          python -m venv .venv
-          source .venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install .
-          pip install myst-nb
-          pip install sphinx
-          pip install pydata_sphinx_theme
-        shell: bash
-      - name: Build HTML docs
-        run: |
-          source .venv/bin/activate
-          sphinx-build -b html docs docs/_build/html
-        shell: bash
-      - name: Copy README to built docs
-        run: |
-          if [ -f docs/README.md ]; then
-            cp docs/README.md docs/_build/html/README.md
-          fi
-        shell: bash
-      - name: Running the Sphinx to gh-pages Action
-        uses: uibcdf/action-sphinx-docs-to-gh-pages@v2.1.0
-        with:
-          branch: main
-          dir_docs: docs
-          sphinx-apidoc-opts: '--separate -o . ../'
-          sphinx-apidoc-exclude: '../*setup* ../*.ipynb'
-          sphinx-opts: ''
+    - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Build HTML
+      uses: ammaraskar/sphinx-action@master
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-docs
+        path: docs/build/html/
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/build/html

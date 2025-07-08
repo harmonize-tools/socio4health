@@ -23,6 +23,8 @@ jobs:
           source .venv/bin/activate
           python -m pip install --upgrade pip
           pip install .
+          pip install sphinx
+          pip install pydata_sphinx_theme
         shell: bash
       - name: Build HTML docs
         run: |

@@ -26,6 +26,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
+    'sphinx.ext.todo',
     'myst_nb'
     #'sphinx.ext.autosectionlabel'
 
@@ -45,7 +46,7 @@ html_theme = "pydata_sphinx_theme"
 html_static_path = ['_static']
 html_theme_options = {
     "logo": {
-        "image_light": "img/image.png",  # Asegúrate de que la imagen esté en docs/source/_static/
+        "image_light": "docs/source/_static/image.png",  # Asegúrate de que la imagen esté en docs/source/_static/
         "text": "socio4health"
     },
     "icon_links": [

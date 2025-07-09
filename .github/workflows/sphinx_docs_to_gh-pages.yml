@@ -2,18 +2,43 @@ name: Deploy Sphinx documentation to Pages
 
 on:
   push:
-    branches: main # branch to trigger deployment
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  pages:
+  docs:
     runs-on: ubuntu-latest
+
     steps:
-    - id: deployment
-      uses: sphinx-notes/pages@v3
-      with:
-        publish: false
-        src: docs/source
-    - uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{ steps.deployment.outputs.artifact }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: Build documentation
+        run: sphinx-build docs/source docs/build
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sphinx-docs
+          path: docs/build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build

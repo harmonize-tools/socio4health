@@ -34,7 +34,6 @@ extensions = [
 
 #autosectionlabel_prefix_document = True
 
-templates_path = ['_templates']
 exclude_patterns = []
 autosummary_generate = True
 
@@ -45,7 +44,7 @@ html_title = "socio4health"
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
     "logo": {
-        "image_light": "img/image.png",  # Asegúrate de que la imagen esté en docs/source/_static/
+        "image_light": "image.png",  # Asegúrate de que la imagen esté en docs/source/_static/
         "text": "socio4health"
     },
     "icon_links": [

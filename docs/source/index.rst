@@ -1,5 +1,6 @@
 socio4health
 ============
+
 .. |lifecycle| image:: https://img.shields.io/badge/lifecycle-experimental-orange.svg
    :target: https://lifecycle.r-lib.org/articles/stages.html#experimental
    :alt: Lifecycle: experimental

@@ -8,14 +8,30 @@ socio4health
 
 Welcome to the official documentation site for **socio4health**! This site serves as the central hub for all documentation, resources, and updates related to the library.
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents
+.. grid::
 
-   User Guide <user_guide>
-   Getting Started <getting_started>
-   API Reference<API_reference>
-   Examples <examples>
+    .. grid-item-card:: User Guide
+        :link: user_guide
+        :link-type: doc
+
+        User guide on installation and the basic concepts of socio4health.
+
+    .. grid-item-card:: Examples
+        :link: examples
+        :link-type: doc
+
+        Examples of socio4health usage.
+
+    .. grid-item-card:: API Reference
+        :link: API_reference
+        :link-type: doc
+
+        socio4health application programming interface (API) reference.
+    .. grid-item-card:: More Pastas
+        :link: .. grid-item-card:: More Pastas
+        :link: https://github.com/pastas/
+
+        Find out more useful resources developed of the Harmonized project on GitHub!
 
 ----
 
@@ -29,7 +45,7 @@ Features
 
 - **Extraction:**
   - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-  - Support for various data formats, including `.csv`, `.xlsx`, `.xls`, `.txt`, `.sav`, and compressed files.
+  - Support for various data formats, including ``.csv``, ``.xlsx``, ``.xls``, ``.txt``, ``.sav``, and compressed files.
 
 - **Transformation:**
   - Consolidate extracted data into pandas DataFrames.

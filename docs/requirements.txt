@@ -4,7 +4,7 @@ pygments
 myst_nb
 sphinx-autoapi
 pyarrow
-
+sphinx-design
 
 
 

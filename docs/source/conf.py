@@ -27,7 +27,8 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
-    'myst_nb'
+    'myst_nb',
+    'sphinx_design'
     #'sphinx.ext.autosectionlabel'
 
 ]

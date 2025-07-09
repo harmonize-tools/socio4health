@@ -28,19 +28,24 @@ jobs:
           pip install -e .
 
       - name: Build documentation
-        run: sphinx-build docs/source docs/build
+        run: sphinx-build -E -b html . _build/html
+        working-directory: docs/source
+
+      - name: Add .nojekyll file
+        run: touch _build/html/.nojekyll
+        working-directory: docs/source
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4
         with:
           name: sphinx-docs
-          path: docs/build
+          path: docs/source/_build/html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: docs/build
-            publish_branch: gh-pages
-            force_orphan: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/source/_build/html
+          publish_branch: gh-pages
+          force_orphan: true

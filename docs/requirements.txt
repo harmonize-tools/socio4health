@@ -3,6 +3,8 @@ pydata-sphinx-theme==0.16.1
 pygments
 myst_nb
 sphinx-autoapi
+pyarrow
+
 
 
 

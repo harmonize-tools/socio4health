@@ -92,9 +92,9 @@ socio4health is dedicated to fostering an inclusive community. We value the impo
 .. _Code of Conduct: https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md
 
 .. toctree::
-    :maxdepth: 0
-    :caption:
+    :maxdepth: 2
+    :hidden:
 
-    user_guide
-    API_reference
-    examples
+    User Guide <user_guide>
+    Examples <examples>
+    API Reference <Api_reference>

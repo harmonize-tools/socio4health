@@ -1,8 +1,3 @@
-.. socio4health master file, created by
-   sphinx-quickstart on Wed Jun 11 11:29:53 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 socio4health
 ============
 
@@ -27,11 +22,11 @@ Welcome to the official documentation site for **socio4health**! This site serve
         :link-type: doc
 
         socio4health application programming interface (API) reference.
-    .. grid-item-card:: More Pastas
-        :link: .. grid-item-card:: More Pastas
-        :link: https://github.com/pastas/
 
-        Find out more useful resources developed of the Harmonized project on GitHub!
+    .. grid-item-card:: More Harmonize
+        :link: https://github.com/harmonize-tools
+
+        Find out more useful resources developed by **Harmonize** project on GitHub!
 
 ----
 
@@ -95,3 +90,11 @@ socio4health is dedicated to fostering an inclusive community. We value the impo
 .. _README: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
 .. _GitHub repository: https://github.com/harmonize-tools/socio4health
 .. _Code of Conduct: https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md
+
+.. toctree::
+    :maxdepth: 0
+    :caption:
+
+    user_guide
+    API_reference
+    examples

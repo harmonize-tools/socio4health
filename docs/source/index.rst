@@ -1,5 +1,23 @@
 socio4health
 ============
+.. |lifecycle| image:: https://img.shields.io/badge/lifecycle-experimental-orange.svg
+   :target: https://lifecycle.r-lib.org/articles/stages.html#experimental
+   :alt: Lifecycle: experimental
+
+.. |license| image:: https://img.shields.io/badge/License-MIT-blue.svg
+   :target: https://github.com/harmonize-tools/socio4health/blob/main/LICENSE.md/
+   :alt: MIT license
+
+.. |contributors| image:: https://img.shields.io/github/contributors/harmonize-tools/socio4health
+   :target: https://github.com/harmonize-tools/socio4health/graphs/contributors
+   :alt: GitHub contributors
+
+.. |commits| image:: https://badgen.net/github/commits/harmonize-tools/socio4health/main
+   :alt: commits
+
+|lifecycle| |license| |contributors| |commits|
+
+
 
 Welcome to the official documentation site for **socio4health**! This site serves as the central hub for all documentation, resources, and updates related to the library.
 
@@ -96,5 +114,6 @@ socio4health is dedicated to fostering an inclusive community. We value the impo
     :hidden:
 
     User Guide <user_guide>
+    Getting Started <getting_started>
     Examples <examples>
-    API Reference <Api_reference>
+    API Reference <API_reference>

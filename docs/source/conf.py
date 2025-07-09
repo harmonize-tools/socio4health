@@ -71,3 +71,10 @@ intersphinx_mapping = {
     #'socio4health.utils.rst',
 #]
 
+def skip_property(app, what, name, obj, skip, options):
+    if isinstance(obj, property):
+        return True
+    return skip
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip_property)

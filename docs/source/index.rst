@@ -9,13 +9,13 @@ socio4health
 Welcome to the official documentation site for **socio4health**! This site serves as the central hub for all documentation, resources, and updates related to the library.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Contents
 
-   user_guide
-   getting_started
-   modules
-   examples
+   User Guide <user_guide>
+   Getting Started <getting_started>
+   API Reference<API_reference>
+   Examples <examples>
 
 ----
 
@@ -54,7 +54,7 @@ socio4health is ideal for data analysts, scientists, and researchers who frequen
 About the Project
 -----------------
 
-Developed by `Erick Lozano`_ and `Diego Irreño`_, © 2024
+Developed by `Erick Lozano`_ and `Diego Irreño`_, © 2025
 
 License
 -------

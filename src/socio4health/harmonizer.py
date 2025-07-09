@@ -12,6 +12,57 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 class Harmonizer:
+    """
+        Initialize the Harmonizer class for harmonizing and processing `Dask <https://docs.dask.org>`_ DataFrames in health data integration.
+
+        Parameters
+        ----------
+        min_common_columns : int, optional
+            Minimum number of common columns required for vertical merge (default is 1).
+        similarity_threshold : float, optional
+            Similarity threshold to consider for vertical merge (default is 0.8).
+        nan_threshold : float, optional
+            Percentage threshold of ``NaN`` values to drop columns (default is 1.0).
+        sample_frac : float or ``None``, optional
+            Sampling fraction for ``NaN`` detection (default is ``None``).
+        column_mapping : ``Enum``, dict, str or ``Path``, optional
+            Column mapping configuration (default is ``None``).
+        value_mappings : ``Enum``, dict, str or ``Path``, optional
+            Categorical value mapping configuration (default is ``None``).
+        theme_info : dict, str or ``Path``, optional
+            Theme/category information (default is ``None``).
+        default_country : str, optional
+            Default country for mapping (default is ``None``).
+        strict_mapping : bool, optional
+            Whether to enforce strict mapping of columns and values (default is ``False``).
+        dict_df : pandas.DataFrame, optional
+            DataFrame with variable dictionary (default is ``None``).
+        categories : list of str, optional
+            Categories for data selection (default is ``None``).
+        key_col : str, optional
+            Key column for data selection (default is ``None``).
+        key_val : list of str, int or float, optional
+            Key values for data selection (default is ``None``).
+        extra_cols : list of str, optional
+            Extra columns for data selection (default is ``None``).
+
+        Attributes
+        ----------
+        min_common_columns : int
+        similarity_threshold : float
+        nan_threshold : float
+        sample_frac : float or ``None``
+        column_mapping : ``Enum``, dict, str or ``Path``
+        value_mappings : ``Enum``, dict, str or ``Path``
+        theme_info : dict, str or ``Path``
+        default_country : str
+        strict_mapping : bool
+        dict_df : pandas.DataFrame
+        categories : list of str
+        key_col : str
+        key_val : list of str, int or float
+        extra_cols : list of str
+    """
     def __init__(self,
                  min_common_columns: int = 1,
                  similarity_threshold: float = 0.8,
@@ -44,6 +95,8 @@ class Harmonizer:
         self.key_col = key_col
         self.key_val = key_val or []
         self.extra_cols = extra_cols or []
+
+
 
     # Getters
     @property
@@ -209,7 +262,22 @@ class Harmonizer:
 
     def vertical_merge(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
         """
-        Merge a list of Dask DataFrames vertically using instance parameters.
+        Merge a list of `Dask <https://docs.dask.org>`_ DataFrames vertically using instance parameters.
+
+        Parameters
+        ----------
+        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of `Dask <https://docs.dask.org>`_ DataFrames to be merged.
+
+        Returns
+        -------
+        list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of merged Dask <https://docs.dask.org>`_ DataFrames, where each group contains DataFrames with sufficient column overlap and compatible data types.
+
+        Important
+        -----
+        - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column similarity is above ``similarity_threshold``.
+        - Only columns with matching data types are considered compatible for merging.
         """
         if not ddfs:
             return []
@@ -278,7 +346,24 @@ class Harmonizer:
     def drop_nan_columns(self, ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> Union[
         dd.DataFrame, List[dd.DataFrame]]:
         """
-        Drop columns where the majority of values are NaN using instance parameters.
+
+        Drop columns where the majority of values are ``NaN`` using instance parameters.
+
+
+        Parameters
+        ----------
+        ddf_or_ddfs : `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_ or list of dask.dataframe.DataFrame
+            The `Dask <https://docs.dask.org>`_ DataFrame or list of `Dask <https://docs.dask.org>`_ DataFrames to process.
+
+        Returns
+        -------
+        `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_ or list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            The DataFrame(s) with columns dropped where the proportion of ``NaN`` values is greater than nan_threshold.
+
+        Raises
+        ------
+        ValueError
+            If ``nan_threshold`` is not between 0 and 1, or if ``sample_frac`` is not ``None`` or a float between 0 and 1.
         """
         logging.info("Dropping columns with majority NaN values...")
 
@@ -329,7 +414,23 @@ class Harmonizer:
             country_dfs: Dict[str, List[dd.DataFrame]]
     ) -> Dict[str, List[dd.DataFrame]]:
         """
-        Harmonizes Dask DataFrames using instance parameters.
+        Harmonize `Dask <https://docs.dask.org>`_ DataFrames using the instance parameters.
+
+        Parameters
+        ----------
+        country_dfs : dict of str to list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            Dictionary mapping country names to lists of `Dask <https://docs.dask.org>`_ DataFrames to be harmonized.
+
+        Returns
+        -------
+        dict of str to list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            Dictionary mapping country names to lists of harmonized `Dask <https://docs.dask.org>`_ DataFrames.
+
+        Note
+        -----
+        - Column and value mappings are applied per country using the provided configuration.
+        - If ``strict_mapping`` is enabled, unmapped columns or values will raise a ValueError.
+        - Column renaming and categorical value harmonization are performed in-place.
         """
 
         def load_mapping(mapping_input):
@@ -404,7 +505,22 @@ class Harmonizer:
 
     def data_selector(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
         """
-        Selects rows from Dask DataFrames using instance parameters.
+        Select rows from `Dask <https://docs.dask.org>`_ DataFrames based on the instance parameters.
+
+        Parameters
+        ----------
+        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of Dask DataFrames to filter.
+
+        Returns
+        -------
+        list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of filtered Dask DataFrames according to the key column, key values, categories, and extra columns.
+
+        Raises
+        ------
+        KeyError
+            If the key column is not found in a DataFrame.
         """
 
         dict_df = self.dict_df.copy()

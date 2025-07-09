@@ -28,8 +28,10 @@ def get_default_data_dir():
 
     Returns
     -------
-    Path
+    ``Path``
         `pathlib.Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ object representing the default data directory.
+    Note
+    ------
     This function ensures that the directory exists by creating it if necessary.
     Examples
     --------
@@ -378,7 +380,7 @@ class Extractor:
         Safely delete the download folder and all its contents.
 
         Args:
-            `folder_path`: Optional path to delete (defaults to the download_dir used in extraction)
+            `folder_path`: Optional path to delete (defaults to the `download_dir` used in extraction)
 
         Returns:
             bool: ``True`` if deletion was successful, ``False`` otherwise

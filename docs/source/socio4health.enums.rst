@@ -20,11 +20,4 @@ socio4health.enums.dict\_enum
    :show-inheritance:
    :undoc-members:
 
-socio4health.enums.headers\_enum
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: socio4health.enums.headers_enum
-   :members:
-   :show-inheritance:
-   :undoc-members:
 

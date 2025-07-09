@@ -5,7 +5,7 @@ Main modules
    :maxdepth: 3
 
 
-socio4health.extractor module
+Extractor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: socio4health.extractor
@@ -14,7 +14,7 @@ socio4health.extractor module
    :undoc-members:
 
 
-socio4health.harmonizer module
+Harmonizer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: socio4health.harmonizer

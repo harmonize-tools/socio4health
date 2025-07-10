@@ -62,7 +62,7 @@ Features
   - Support for various data formats, including ``.csv``, ``.xlsx``, ``.xls``, ``.txt``, ``.sav``, and compressed files.
 
 - **Transformation:**
-  - Consolidate extracted data into pandas DataFrames.
+  - Consolidate extracted data into Dask DataFrames.
   - Optimize the transformation process for large files (parallel processing, efficient data structures).
   - Effectively manage data inconsistencies and discrepancies using anomaly detection algorithms.
 

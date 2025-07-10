@@ -5,7 +5,8 @@ myst_nb
 sphinx-autoapi
 pyarrow
 sphinx-design
-
+jupyter-sphinx
+ipykernel
 
 
 

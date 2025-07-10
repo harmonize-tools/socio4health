@@ -28,7 +28,8 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'myst_nb',
-    'sphinx_design'
+    'sphinx_design',
+    'nbsphinx'
     #'sphinx.ext.autosectionlabel'
 
 ]

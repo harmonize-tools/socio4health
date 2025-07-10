@@ -396,7 +396,22 @@ class Harmonizer:
     @staticmethod
     def get_available_columns(ddfs: List[dd.DataFrame]) -> List[str]:
         """
-        Get a list of unique column names from a list of Dask DataFrames.
+        Get a list of unique column names from a list of `Dask <https://docs.dask.org>`_ DataFrames.
+
+        Parameters
+        -----------
+        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of `Dask <https://docs.dask.org>`_ DataFrames to extract column names from.
+
+        Returns
+        --------
+        list of str
+            Sorted list of unique column names across all provided Dask DataFrames.
+        Raises
+        ------
+        TypeError
+            If the input is not a list of `Dask <https://docs.dask.org>`_ DataFrames or if any element is not a Dask DataFrame.
+
         """
         if not isinstance(ddfs, list):
             raise TypeError("Input must be a list of Dask DataFrames")

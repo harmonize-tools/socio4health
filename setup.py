@@ -132,8 +132,8 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'matplotlib', 'numpy',
-                      'openpyxl', 'dask', 'appdirs', 'pyarrow', 'deep_translator', 'transformers', 'torch'],  # Optional
+    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'matplotlib', 'numpy', 'openpyxl',
+                      'dask', 'appdirs', 'pyarrow', 'deep_translator', 'transformers', 'torch', 'pytest'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"

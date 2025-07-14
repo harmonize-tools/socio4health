@@ -13,3 +13,4 @@ pyarrow
 deep_translator
 transformers
 torch
+pytest

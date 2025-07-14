@@ -13,5 +13,3 @@ pyarrow
 deep_translator
 transformers
 torch
-pandasai
-tqdm

@@ -5,8 +5,7 @@ https://packaging.python.org/guides/distributing-packages-using-setuptools/
 https://github.com/pypa/sampleproject
 """
 
-# Always prefer setuptools over distutils
-from setuptools import setup, find_packages
+from setuptools import setup
 from os import path
 from glob import glob
 
@@ -29,7 +28,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.2',  # Required
+    version='0.1.3',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -66,7 +65,7 @@ setup(
 
     # This should be your name or the name of the organization which owns the
     # project.
-    author='Erick Lozano, Diego Irreño',  # Optional
+    author='Erick Lozano, Diego Irreño, Juan Montenegro, Ingrid Mora',  # Optional
 
     # This should be a valid email address corresponding to the author listed
     # above.
@@ -133,8 +132,8 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'matplotlib', 'numpy', 'openpyxl', 'dask', 'appdirs'
-                                                                                                                             ''],  # Optional
+    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'matplotlib', 'numpy',
+                      'openpyxl', 'dask', 'appdirs', 'pyarrow', 'deep_translator', 'transformers', 'torch'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
@@ -186,7 +185,7 @@ setup(
     # maintainers, and where to support the project financially. The key is
     # what's used to render the link text on PyPI.
     project_urls={  # Optional
-        'Bug Reports': 'https://github.com/Ersebreck/Nyctibius/issues',
-        'Source': 'https://github.com/Ersebreck/Nyctibius/',
+        'Bug Reports': 'https://github.com/harmonize-tools/socio4health/issues',
+        'Source': 'https://github.com/harmonize-tools/socio4health/',
     },
 )

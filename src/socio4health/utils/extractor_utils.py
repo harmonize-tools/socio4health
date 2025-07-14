@@ -17,7 +17,21 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 def run_standard_spider(url, depth, down_ext, key_words):
-    """Run the Scrapy spider to extract data from the given URL."""
+    """Run the Scrapy spider to extract data from the given URL.
+    Parameters
+    ----------
+    url : str
+        The URL to start crawling from.
+    depth : int
+        The depth of the crawl.
+    down_ext : list
+        List of file extensions to download.
+    key_words : list
+        List of keywords to filter the crawled data.
+    Returns
+    -------
+    None
+    """
     logging.getLogger('scrapy').propagate = False
     logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 
@@ -32,7 +46,21 @@ def run_standard_spider(url, depth, down_ext, key_words):
 
 
 def download_request(url, filename, download_dir):
-    """Download a file from the specified URL and save it to the given directory."""
+    """Download a file from the specified URL and save it to the given directory.
+    Parameters
+    ----------
+    url : str
+        The URL of the file to download.
+    filename : str
+        The name to save the downloaded file as.
+    download_dir : str
+        The directory where the file will be saved.
+    Returns
+    -------
+    str
+        The path to the downloaded file, or None if the download failed.
+
+    """
     try:
         # Request to download
         response = requests.get(url, stream=True)
@@ -52,7 +80,28 @@ def download_request(url, filename, download_dir):
 
 
 def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=5, found_files=set()):
-    """Extract files from a compressed archive and return the paths of the extracted files."""
+    """Extract files from a compressed archive and return the paths of the extracted files.
+    Parameters
+    ----------
+    input_archive : str
+    The path to the compressed archive file.
+    target_directory : str
+    The directory where the extracted files will be saved.
+    down_ext : list
+    A list of file extensions to filter the extracted files.
+    current_depth : int, optional
+    The current depth of extraction, used to limit recursion depth. Default is 0.
+    max_depth : int, optional
+    The maximum depth of extraction to prevent infinite recursion. Default is 5.
+    found_files : set, optional
+    A set to keep track of already found files, used to avoid duplicates. Default is an empty set.
+    Returns
+    -------
+    set
+    A set containing the paths of the extracted files that match the specified extensions.
+    """
+
+
     if current_depth > max_depth:
         logging.warning(f"Reached max depth of {max_depth}. Stopping further extraction.")
         return found_files
@@ -103,6 +152,18 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
 
 
 def parse_pnadc_sas_script(file_path):
+    """Parse a SAS script file to extract column names and specifications.
+    Parameters
+    ----------
+    file_path : str
+        The path to the SAS script file.
+    Returns
+    -------
+    tuple
+        A tuple containing:
+        - A list of column names.
+        - A list of tuples representing column specifications (start, end).
+    """
     with open(file_path, 'r', encoding='latin-1') as file:
         content = file.read()
 

@@ -174,6 +174,16 @@ _classifier = None
 def get_classifier(MODEL_PATH: str) -> Pipeline:
     """
     Load the BERT fine-tuned model for classification only once.
+
+    Parameters
+    ----------
+    MODEL_PATH : str
+
+    Returns
+    -------
+    Pipeline
+        A HuggingFace pipeline for text classification.
+
     """
 
     if not os.path.exists(MODEL_PATH) and "/" not in MODEL_PATH:

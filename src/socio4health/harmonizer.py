@@ -1,3 +1,8 @@
+"""
+Harmonizer class for harmonizing and processing Dask DataFrames in health data integration.
+
+"""
+
 import json
 from enum import Enum
 from pathlib import Path
@@ -15,53 +20,36 @@ class Harmonizer:
     """
         Initialize the Harmonizer class for harmonizing and processing `Dask <https://docs.dask.org>`_ DataFrames in health data integration.
 
-        Parameters
-        ----------
-        min_common_columns : int, optional
-            Minimum number of common columns required for vertical merge (default is 1).
-        similarity_threshold : float, optional
-            Similarity threshold to consider for vertical merge (default is 0.8).
-        nan_threshold : float, optional
-            Percentage threshold of ``NaN`` values to drop columns (default is 1.0).
-        sample_frac : float or ``None``, optional
-            Sampling fraction for ``NaN`` detection (default is ``None``).
-        column_mapping : ``Enum``, dict, str or ``Path``, optional
-            Column mapping configuration (default is ``None``).
-        value_mappings : ``Enum``, dict, str or ``Path``, optional
-            Categorical value mapping configuration (default is ``None``).
-        theme_info : dict, str or ``Path``, optional
-            Theme/category information (default is ``None``).
-        default_country : str, optional
-            Default country for mapping (default is ``None``).
-        strict_mapping : bool, optional
-            Whether to enforce strict mapping of columns and values (default is ``False``).
-        dict_df : pandas.DataFrame, optional
-            DataFrame with variable dictionary (default is ``None``).
-        categories : list of str, optional
-            Categories for data selection (default is ``None``).
-        key_col : str, optional
-            Key column for data selection (default is ``None``).
-        key_val : list of str, int or float, optional
-            Key values for data selection (default is ``None``).
-        extra_cols : list of str, optional
-            Extra columns for data selection (default is ``None``).
-
         Attributes
         ----------
         min_common_columns : int
+            Minimum number of common columns required for vertical merge (default is 1).
         similarity_threshold : float
+            Similarity threshold to consider for vertical merge (default is 0.8).
         nan_threshold : float
+            Percentage threshold of ``NaN`` values to drop columns (default is 1.0).
         sample_frac : float or ``None``
+            Fraction of rows to sample for NaN detection (default is ``None``).
         column_mapping : ``Enum``, dict, str or ``Path``
+            Column mapping configuration (default is ``None``).
         value_mappings : ``Enum``, dict, str or ``Path``
+            Categorical value mapping configuration (default is ``None``).
         theme_info : dict, str or ``Path``
+             Theme/category information (default is ``None``).
         default_country : str
+            Default country for mapping (default is ``None``).
         strict_mapping : bool
+            Whether to enforce strict mapping of columns and values (default is ``False``).
         dict_df : pandas.DataFrame
+            DataFrame with variable dictionary (default is ``None``).
         categories : list of str
+            Categories for data selection (default is an empty list).
         key_col : str
+            Key column for data selection (default is ``None``).
         key_val : list of str, int or float
+            Key values for data selection (default is an empty list).
         extra_cols : list of str
+            Extra columns for data selection (default is an empty list).
     """
     def __init__(self,
                  min_common_columns: int = 1,

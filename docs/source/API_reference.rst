@@ -4,8 +4,8 @@ API Reference
 .. toctree::
    :maxdepth: 2
 
-   main_modules
-   auxiliary_modules
+   Modules <main_modules>
+   Auxiliary Modules <auxiliary_modules>
 
 
 

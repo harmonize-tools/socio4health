@@ -33,15 +33,6 @@ To use the socio4health package, follow these steps:
       extractor = Extractor(input_path='path/to/input', down_ext=['.CSV'],sep=',', output_path='path/to/output')
       harmonizer = Harmonizer()
 
-The library has the following functionalities: ``extract``, ``vertical_merge``, ``drop_nan_columns``, ``get_available_columns`` and ``data_selector``. The ``extract`` method retrieves data from online or local sources, the ``vertical_merge`` consolidates a dataframe with the specifications given by the parameters, the ``get_available_columns`` retrieves the names of columns in the consolidated dataframe'.
+The library has the following functionalities: ``extract``, ``vertical_merge``, ``drop_nan_columns``, ``get_available_columns`` and ``data_selector``. The ``extract`` method retrieves data from online or local sources, the ``vertical_merge`` consolidates a dataframe following the specifications given by the parameters, the ``get_available_columns`` retrieves the names of columns in the dataframe.
 
-3. Extract data from online sources and create a list of data information:
-
-   .. code-block:: python
-
-      url = 'https://www.example.com'
-      depth = 0
-      ext = 'csv'
-      list_datainfo = harmonizer.extract(url=url, depth=depth, ext=ext)
-      harmonizer = Harmonizer(list_datainfo)
-
+To further learn how to use the library, refer to the <examples> provided in the documentation and visit the <API_reference> for detailed descriptions of the available methods and classes.

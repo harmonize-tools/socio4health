@@ -15,7 +15,7 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     Parameters
     ----------
     raw_dict : pd.DataFrame
-        DataFrame containing the required columns: 'question', 'variable_name',
+        DataFrame containing the required columns: ``question', 'variable_name',
         'description', 'value', and optionally 'subquestion'.
 
     Returns

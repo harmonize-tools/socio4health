@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 def run_standard_spider(url, depth, down_ext, key_words):
-    """Run the Scrapy spider to extract data from the given URL.
+    """Run the Scrapy spider to extract data from the given ``URL``.
 
     Parameters
     ----------

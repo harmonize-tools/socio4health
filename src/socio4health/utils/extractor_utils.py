@@ -22,13 +22,14 @@ def run_standard_spider(url, depth, down_ext, key_words):
     Parameters
     ----------
     url : str
-        The URL to start crawling from.
+        The ``URL`` to start crawling from.
     depth : int
         The depth of the crawl.
     down_ext : list
         List of file extensions to download.
     key_words : list
         List of keywords to filter the crawled data.
+    
     Returns
     -------
     None
@@ -47,19 +48,21 @@ def run_standard_spider(url, depth, down_ext, key_words):
 
 
 def download_request(url, filename, download_dir):
-    """Download a file from the specified URL and save it to the given directory.
+    """Download a file from the specified ``URL`` and save it to the given directory.
+    
     Parameters
     ----------
     url : str
-        The URL of the file to download.
+        The ``URL`` of the file to download.
     filename : str
-        The name to save the downloaded file as.
+        The name to save the downloaded file.
     download_dir : str
         The directory where the file will be saved.
+    
     Returns
     -------
     str
-        The path to the downloaded file, or None if the download failed.
+        The path to the downloaded file, or ``None`` if the download failed.
 
     """
     try:
@@ -82,20 +85,22 @@ def download_request(url, filename, download_dir):
 
 def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=5, found_files=set()):
     """Extract files from a compressed archive and return the paths of the extracted files.
+    
     Parameters
     ----------
     input_archive : str
-    The path to the compressed archive file.
+        The path to the compressed archive file.
     target_directory : str
-    The directory where the extracted files will be saved.
+        The directory where the extracted files will be saved.
     down_ext : list
-    A list of file extensions to filter the extracted files.
+        A list of file extensions to filter the extracted files.
     current_depth : int, optional
-    The current depth of extraction, used to limit recursion depth. Default is 0.
+        The current depth of extraction, used to limit recursion depth. Default is 0.
     max_depth : int, optional
-    The maximum depth of extraction to prevent infinite recursion. Default is 5.
+        The maximum depth of extraction is to prevent infinite recursion. Default is 5.
     found_files : set, optional
-    A set to keep track of already found files, used to avoid duplicates. Default is an empty set.
+        A set to keep track of already found files, used to avoid duplicates. Default is an empty set.
+    
     Returns
     -------
     set
@@ -153,11 +158,13 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
 
 
 def parse_pnadc_sas_script(file_path):
-    """Parse a SAS script file to extract column names and specifications.
+    """Parse a ``SAS`` script file to extract column names and specifications.
+    
     Parameters
     ----------
     file_path : str
-        The path to the SAS script file.
+        The path to the ``SAS`` script file.
+    
     Returns
     -------
     tuple

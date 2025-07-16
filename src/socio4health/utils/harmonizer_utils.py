@@ -15,14 +15,14 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     Parameters
     ----------
     raw_dict : pd.DataFrame
-        DataFrame containing the required columns: ``question', 'variable_name',
-        'description', 'value', and optionally 'subquestion'.
+        DataFrame containing the required columns: ``question``, ``variable_name``,
+        ``description``, ``value``, and optionally ``subquestion``.
 
     Returns
     -------
     pd.DataFrame
-        A cleaned and grouped DataFrame by 'question' and 'variable_name',
-        with an additional column 'possible_answers' containing concatenated descriptions.
+        A cleaned and grouped DataFrame by ``question`` and ``variable_name``,
+        with an additional column ``possible_answers`` containing concatenated descriptions.
     """
 
     if not isinstance(raw_dict, pd.DataFrame):
@@ -84,18 +84,18 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
 def _process_group(group: pd.DataFrame) -> pd.Series:
     """
     Processes a group of rows by combining multiple answer descriptions and
-    values for each 'question' and 'variable_name' pair.
+    values for each ``question`` and ``variable_name`` pair.
 
     Parameters
     ----------
-    group : pd.DataFrame
-        A subgroup of the original DataFrame, grouped by 'question' and 'variable_name'.
+    group: pd.DataFrame
+        A subgroup of the original DataFrame, grouped by ``question`` and ``variable_name``.
 
     Returns
     -------
     pd.Series
         A single summary row with the base description (if available),
-        concatenated 'possible_answers', and joined 'values'.
+        concatenated ``possible_answers``, and joined ``values``.
     """
 
     required_columns = {'description', 'value'}
@@ -139,7 +139,7 @@ def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> p
         Name of the column to translate.
 
     language : str
-        Target language code (default is 'en').
+        Target language code (default is ``en``).
 
     Returns
     -------
@@ -215,9 +215,9 @@ def classify_rows(
         Name of the third column containing survey-related text.
     new_column_name : str, optional
         Name of the new column to store the predicted categories (default is
-        'category').
+        ``category``).
     MODEL_PATH: str
-        Path to the model weights (default is './bert_finetuned_classifier')
+        Path to the model weights (default is ``./bert_finetuned_classifier``)
 
     Returns:
     --------

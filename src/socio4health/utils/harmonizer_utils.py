@@ -20,7 +20,7 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
 
     Returns
     -------
-    pd.DataFrame
+    `pd.DataFrame <https://pandas.pydata.org/docs/reference/frame.html>`_
         A cleaned and grouped DataFrame by ``question`` and ``variable_name``,
         with an additional column ``possible_answers`` containing concatenated descriptions.
     """
@@ -93,7 +93,7 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
 
     Returns
     -------
-    pd.Series
+     `pd.Series <https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series>`_ 
         A single summary row with the base description (if available),
         concatenated ``possible_answers``, and joined ``values``.
     """
@@ -143,7 +143,7 @@ def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> p
 
     Returns
     -------
-    pd.DataFrame
+    `pd.DataFrame <https://pandas.pydata.org/docs/reference/frame.html>`_
         Original DataFrame with new column translated.
     """
 
@@ -182,7 +182,7 @@ def get_classifier(MODEL_PATH: str) -> Pipeline:
     Returns
     -------
     Pipeline
-        A HuggingFace pipeline for text classification.
+        A ``HuggingFace`` pipeline for text classification.
 
     """
 
@@ -218,8 +218,8 @@ def classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_colum
 
     Returns
     --------
-    pd.DataFrame 
-        pd.DataFrame with a new prediction column.
+    `pd.DataFrame <https://pandas.pydata.org/docs/reference/frame.html>`_ 
+        `pd.DataFrame <https://pandas.pydata.org/docs/reference/frame.html>`_ with a new prediction column.
     
     """
 

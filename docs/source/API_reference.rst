@@ -27,6 +27,7 @@ Harmonizer
 
 .. autosummary::
    :toctree: 
+
    Harmonizer.vertical_merge
    Harmonizer.drop_nan_columns
    Harmonizer.get_available_columns
@@ -48,7 +49,9 @@ Utils
 **Harmonizer**
 
 .. autosummary::
-   :toctree: 
+   :toctree:
+
+
    utils.harmonizer_utils.classify_rows
    utils.harmonizer_utils.get_classifier
    utils.harmonizer_utils.standardize_dict
@@ -57,7 +60,8 @@ Utils
 Enums 
 ~~~~~~~~~~
 .. autosummary::
-   :toctree: 
+   :toctree:
+
    enums.data_info_enum
    enums.data_info_enum.BraColspecsEnum
    enums.data_info_enum.CountryEnum

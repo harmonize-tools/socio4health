@@ -13,7 +13,7 @@ Extractor
 **Methods**
 
 .. autosummary::
-   :toctree: api/
+   :toctree: ./generated
 
    get_default_data_dir
    Extractor.extract
@@ -24,7 +24,7 @@ Harmonizer
 **Methods**
 
 .. autosummary::
-   :toctree: api/
+   :toctree: ./generated
 
    Harmonizer.vertical_merge
    Harmonizer.drop_nan_columns
@@ -32,32 +32,3 @@ Harmonizer
    Harmonizer.harmonize_dataframes
    Harmonizer.data_selector
 
-Utils
-~~~~~~~~~~
-**Extractor**
-
-.. autosummary::
-   :toctree: api/
-
-   utils.extractor_utils.compressed2files
-   utils.extractor_utils.download_request
-   utils.extractor_utils.parse_pnadc_sas_script
-   utils.extractor_utils.run_standard_spider
-**Harmonizer**
-.. autosummary::
-   :toctree: api/
-   utils.harmonizer_utils.classify_rows
-   utils.harmonizer_utils.get_classifier
-   utils.harmonizer_utils.standardize_dict
-   utils.harmonizer_utils.translate_column
-
-Enums 
-~~~~~~~~~~
-   .. autosummary::
-   :toctree: api/
-   enums.data_info_enum
-   enums.data_info_enum.BraColspecsEnum
-   enums.data_info_enum.CountryEnum
-   enums.data_info_enum.NameEnum
-   enums.dict_enum.ColumnMappingEnum
-   

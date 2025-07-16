@@ -173,7 +173,7 @@ _classifier = None
 
 def get_classifier(MODEL_PATH: str) -> Pipeline:
     """
-    Load the BERT fine-tuned model for classification only once.
+    Load the ``BERT`` fine-tuned model for classification only once.
 
     Parameters
     ----------

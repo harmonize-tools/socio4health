@@ -32,7 +32,7 @@ def run_standard_spider(url, depth, down_ext, key_words):
     
     Returns
     -------
-    None
+    ``None``
     """
     logging.getLogger('scrapy').propagate = False
     logging.getLogger('urllib3').setLevel(logging.CRITICAL)
@@ -103,8 +103,8 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
     
     Returns
     -------
-    set
-    A set containing the paths of the extracted files that match the specified extensions.
+    ``set``
+        A ``set`` containing the paths of the extracted files that match the specified extensions.
     """
 
 

@@ -221,7 +221,8 @@ def classify_rows(
 
     Returns:
     --------
-    pd.DataFrame with a new prediction column.
+    pd.DataFrame 
+        pd.DataFrame with a new prediction column.
     
     """
 

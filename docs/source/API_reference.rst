@@ -10,12 +10,13 @@ left-hand menu you will find the different categories of the API documentation.
 
 Extractor
 ~~~~~~~~~
+
 **Methods**
 
 .. autosummary::
    :toctree:
-
-   get_default_data_dir
+   
+   Extractor.get_default_data_dir
    Extractor.extract
    Extractor.delete_download_folder
 
@@ -31,3 +32,31 @@ Harmonizer
    Harmonizer.harmonize_dataframes
    Harmonizer.data_selector
 
+Utils
+~~~~~~~~~~
+**Extractor**
+
+.. autosummary::
+   :toctree: 
+
+   utils.extractor_utils.compressed2files
+   utils.extractor_utils.download_request
+   utils.extractor_utils.parse_pnadc_sas_script
+   utils.extractor_utils.run_standard_spider
+**Harmonizer**
+.. autosummary::
+   :toctree: 
+   utils.harmonizer_utils.classify_rows
+   utils.harmonizer_utils.get_classifier
+   utils.harmonizer_utils.standardize_dict
+   utils.harmonizer_utils.translate_column
+
+Enums 
+~~~~~~~~~~
+   .. autosummary::
+   :toctree: 
+   enums.data_info_enum
+   enums.data_info_enum.BraColspecsEnum
+   enums.data_info_enum.CountryEnum
+   enums.data_info_enum.NameEnum
+   enums.dict_enum.ColumnMappingEnum

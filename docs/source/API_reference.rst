@@ -16,14 +16,14 @@ Extractor
 .. autosummary::
    :toctree:
    
-   Extractor.get_default_data_dir
+   extractor.get_default_data_dir
    Extractor.extract
    Extractor.delete_download_folder
 
 Harmonizer
 ~~~~~~~~~~
-**Methods**
 
+**Methods**
 .. autosummary::
    :toctree: 
    Harmonizer.vertical_merge
@@ -43,6 +43,7 @@ Utils
    utils.extractor_utils.download_request
    utils.extractor_utils.parse_pnadc_sas_script
    utils.extractor_utils.run_standard_spider
+
 **Harmonizer**
 .. autosummary::
    :toctree: 
@@ -53,7 +54,7 @@ Utils
 
 Enums 
 ~~~~~~~~~~
-   .. autosummary::
+.. autosummary::
    :toctree: 
    enums.data_info_enum
    enums.data_info_enum.BraColspecsEnum

@@ -195,23 +195,20 @@ def get_classifier(MODEL_PATH: str) -> Pipeline:
         _classifier = pipeline("text-classification", model=MODEL_PATH, tokenizer=MODEL_PATH, device=device)
     return _classifier
 
-def classify_rows(
-        data: pd.DataFrame, col1: str, col2: str, col3: str,
-        new_column_name: str = "category",
-        MODEL_PATH: str = "./bert_finetuned_classifier"
-) -> pd.DataFrame:
+def classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_column_name: str = "category",
+        MODEL_PATH: str = "./bert_finetuned_classifier") -> pd.DataFrame:
     """
     Classify each row using a fine-tuned multiclass classification ``BERT`` model.
     
-    Parameters:
+    Parameters
     -----------
     data: pd.DataFrame
         The DataFrame with text columns.
-    col1_name: str
+    col1: str
         Name of the first column containing survey-related text.
-    col2_name: str
+    col2: str
         Name of the second column containing survey-related text.
-    col3_name: str
+    col3: str
         Name of the third column containing survey-related text.
     new_column_name: str, optional
         Name of the new column to store the predicted categories (default is
@@ -219,7 +216,7 @@ def classify_rows(
     MODEL_PATH: str
         Path to the model weights (default is ``./bert_finetuned_classifier``)
 
-    Returns:
+    Returns
     --------
     pd.DataFrame 
         pd.DataFrame with a new prediction column.

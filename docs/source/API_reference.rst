@@ -13,7 +13,7 @@ Extractor
 **Methods**
 
 .. autosummary::
-   :toctree: ./generated
+   :toctree:
 
    get_default_data_dir
    Extractor.extract
@@ -24,8 +24,7 @@ Harmonizer
 **Methods**
 
 .. autosummary::
-   :toctree: ./generated
-
+   :toctree: 
    Harmonizer.vertical_merge
    Harmonizer.drop_nan_columns
    Harmonizer.get_available_columns

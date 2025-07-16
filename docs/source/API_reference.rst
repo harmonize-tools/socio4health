@@ -24,6 +24,7 @@ Harmonizer
 ~~~~~~~~~~
 
 **Methods**
+
 .. autosummary::
    :toctree: 
    Harmonizer.vertical_merge
@@ -45,6 +46,7 @@ Utils
    utils.extractor_utils.run_standard_spider
 
 **Harmonizer**
+
 .. autosummary::
    :toctree: 
    utils.harmonizer_utils.classify_rows
@@ -57,6 +59,10 @@ Enums
 .. autosummary::
    :toctree: 
    enums.data_info_enum
+   enums.data_info_enum.BraColspecsEnum
+   enums.data_info_enum.CountryEnum
+   enums.data_info_enum.NameEnum
+   enums.dict_enum.ColumnMappingEnum
    enums.data_info_enum.BraColspecsEnum
    enums.data_info_enum.CountryEnum
    enums.data_info_enum.NameEnum

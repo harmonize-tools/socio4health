@@ -8,6 +8,6 @@ This section provides examples of how to use the socio4health library for data e
    :caption: Contents
 
    Extraction of Colombia, Brazil and Peru online data <notebooks/extractor>
-   Harmonization of Colombia, Brazil and Peru data <notebooks/harmonizer>
+   Harmonization of data (Brazil) <notebooks/harmonization>
 
 

@@ -201,19 +201,19 @@ def classify_rows(
         MODEL_PATH: str = "./bert_finetuned_classifier"
 ) -> pd.DataFrame:
     """
-    Classify each row using a fine-tuned multiclass classification BERT model.
-
+    Classify each row using a fine-tuned multiclass classification ``BERT`` model.
+    
     Parameters:
     -----------
-    data : pd.DataFrame
+    data: pd.DataFrame
         The DataFrame with text columns.
-    col1_name : str
+    col1_name: str
         Name of the first column containing survey-related text.
-    col2_name : str
+    col2_name: str
         Name of the second column containing survey-related text.
-    col3_name : str
+    col3_name: str
         Name of the third column containing survey-related text.
-    new_column_name : str, optional
+    new_column_name: str, optional
         Name of the new column to store the predicted categories (default is
         ``category``).
     MODEL_PATH: str
@@ -222,6 +222,7 @@ def classify_rows(
     Returns:
     --------
     pd.DataFrame with a new prediction column.
+    
     """
 
     if not isinstance(data, pd.DataFrame):

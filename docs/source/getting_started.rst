@@ -35,4 +35,4 @@ To use the socio4health package, follow these steps:
 
 The library has the following functionalities: ``extract``, ``vertical_merge``, ``drop_nan_columns``, ``get_available_columns`` and ``data_selector``. The ``extract`` method retrieves data from online or local sources, the ``vertical_merge`` consolidates a dataframe following the specifications given by the parameters, the ``get_available_columns`` retrieves the names of columns in the dataframe.
 
-To further learn how to use the library, refer to the :doc:`examples provided in the documentation and visit the :doc:`API_reference` for detailed descriptions of the available methods and classes.
+To further learn how to use the library, refer to the :doc:`examples` provided in the documentation and visit the :doc:`API_reference` for detailed descriptions of the available methods and classes.

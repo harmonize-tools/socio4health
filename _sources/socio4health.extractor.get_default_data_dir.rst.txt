@@ -1,0 +1,6 @@
+﻿socio4health.extractor.get\_default\_data\_dir
+==============================================
+
+.. currentmodule:: socio4health.extractor
+
+.. autofunction:: get_default_data_dir

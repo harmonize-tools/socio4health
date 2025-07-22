@@ -65,7 +65,8 @@ class Harmonizer:
                  categories: Optional[List[str]] = None,
                  key_col: Optional[str] = None,
                  key_val: Optional[List[Union[str, int, float]]] = None,
-                 extra_cols: Optional[List[str]] = None):
+                 extra_cols: Optional[List[str]] = None,
+                 join_key: str = None):
         """
         Initialize the Harmonizer class with default parameters.
         """
@@ -83,6 +84,7 @@ class Harmonizer:
         self.key_col = key_col
         self.key_val = key_val or []
         self.extra_cols = extra_cols or []
+        self.join_key = join_key
 
 
 
@@ -568,3 +570,26 @@ class Harmonizer:
             filtered_ddfs.append(filtered_ddf)
 
         return filtered_ddfs
+
+    def join_data(self, ddfs: List[dd.DataFrame]) -> dd.DataFrame:
+        """
+        Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified key column.
+
+        Parameters
+        ----------
+        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            List of Dask DataFrames to join.
+
+        Returns
+        -------
+        `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            The joined Dask DataFrame.
+        """
+        if not ddfs:
+            return dd.from_pandas(pd.DataFrame(), npartitions=1)
+
+        result = ddfs[0]
+        for ddf in ddfs[1:]: 
+            result = result.merge(ddf, on=self.join_key, how='outer')
+
+        return result

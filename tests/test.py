@@ -21,41 +21,39 @@ col_dict = pd.read_excel('../../input/GEIH_2022/DiccionarioFinal.xlsx')
 raw_dict = pd.read_excel('../../input/PNADC_2022/DiccionarioCrudo.xlsx')
 
 def test(extractor):
-    first_date = datetime.datetime.now()
-
     dfs = extractor.extract()
-    print("Extractor")
-    print(datetime.datetime.now() - first_date )
-    second_date = datetime.datetime.now()
 
     har = Harmonizer()
     har.similarity_threshold = 0.9
     har.nan_threshold = 1
     dfs = har.vertical_merge(dfs)
     #dfs = har.drop_nan_columns(dfs)
-    available_columns = har.get_available_columns(dfs)
-    print(available_columns)
 
-    dic = harmonizer_utils.standardize_dict(raw_dict)
-    dic = harmonizer_utils.translate_column(dic, "question", language="en")
-    dic = harmonizer_utils.translate_column(dic, "description", language="en")
-    dic = harmonizer_utils.translate_column(dic, "possible_answers", language="en")
-    dic = harmonizer_utils.classify_rows(dic, "question_en", "description_en", "possible_answers_en",
-                                         new_column_name="category",
-                                         MODEL_PATH="../../input/bert_finetuned_classifier")
+    har.join_key = 'DIRECTORIO'
+    joined_df = har.join_data(dfs)
 
-    har.dict_df = dic
+    #dic = harmonizer_utils.standardize_dict(col_dict)
+    #dic = harmonizer_utils.translate_column(dic, "question", language="en")
+    #dic = harmonizer_utils.translate_column(dic, "description", language="en")
+    #dic = harmonizer_utils.translate_column(dic, "possible_answers", language="en")
+    #dic = harmonizer_utils.classify_rows(dic, "question_en", "description_en", "possible_answers_en",
+    #                                     new_column_name="category",
+    #                                     MODEL_PATH="../../input/bert_finetuned_classifier")
+
+    har.dict_df = col_dict
 
     har.categories = ["Business"]
-    har.key_col = 'RM_RIDE'
-    har.key_val = ['13']
+    har.key_col = 'DPTO'
+    har.key_val = ['25']
     filtered_ddfs = har.data_selector(dfs)
-    available_columns = har.get_available_columns(filtered_ddfs)
-    print(available_columns)
-    print("Head of filtered data:")
     for ddf in filtered_ddfs:
-        print(ddf.head())
+        computed_df = ddf.compute()  # Convert Dask DataFrame to Pandas DataFrame
+        print(f"Filtered DataFrame shape: {computed_df.shape}")
+        print(computed_df.head())
+    print(f"Number of rows: {len(joined_df)}")
+    print(f"Number of columns: {len(joined_df.columns)}")
+    print(joined_df.head())
 
 
 if __name__ == "__main__":
-    test(bra_online_extractor)
+    test(col_extractor)

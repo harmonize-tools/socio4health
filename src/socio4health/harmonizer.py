@@ -384,30 +384,34 @@ class Harmonizer:
             return process_ddf(ddf_or_ddfs)
 
     @staticmethod
-    def get_available_columns(ddfs: List[dd.DataFrame]) -> List[str]:
+    def get_available_columns(ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> List[str]:
         """
-        Get a list of unique column names from a list of `Dask <https://docs.dask.org>`_ DataFrames.
+        Get a list of unique column names from a single `Dask <https://docs.dask.org>`_ DataFrame
+        or a list of `Dask <https://docs.dask.org>`_ DataFrames.
 
         Parameters
-        -----------
-        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            List of `Dask <https://docs.dask.org>`_ DataFrames to extract column names from.
+        ----------
+        ddf_or_ddfs : `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            or list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            A single Dask DataFrame or a list of Dask DataFrames to extract column names from.
 
         Returns
-        --------
+        -------
         list of str
             Sorted list of unique column names across all provided Dask DataFrames.
+
         Raises
         ------
         TypeError
-            If the input is not a list of `Dask <https://docs.dask.org>`_ DataFrames or if any element is not a Dask DataFrame.
-
+            If the input is not a Dask DataFrame or a list of Dask DataFrames.
         """
-        if not isinstance(ddfs, list):
-            raise TypeError("Input must be a list of Dask DataFrames")
+        if isinstance(ddf_or_ddfs, dd.DataFrame):
+            ddf_or_ddfs = [ddf_or_ddfs]
+        elif not isinstance(ddf_or_ddfs, list):
+            raise TypeError("Input must be a Dask DataFrame or a list of Dask DataFrames")
 
         unique_columns = set()
-        for ddf in ddfs:
+        for ddf in ddf_or_ddfs:
             if not isinstance(ddf, dd.DataFrame):
                 raise TypeError("All elements in the list must be Dask DataFrames")
             unique_columns.update(ddf.columns)
@@ -571,7 +575,7 @@ class Harmonizer:
 
         return filtered_ddfs
 
-    def join_data(self, ddfs: List[dd.DataFrame]) -> dd.DataFrame:
+    def join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
         """
         Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified key column.
 
@@ -582,14 +586,20 @@ class Harmonizer:
 
         Returns
         -------
-        `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            The joined Dask DataFrame.
+        `pandas.DataFrame <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_
         """
-        if not ddfs:
-            return dd.from_pandas(pd.DataFrame(), npartitions=1)
+        # Filter out empty DataFrames
+        non_empty_ddfs = [ddf for ddf in ddfs if not ddf.compute().empty]
 
-        result = ddfs[0]
-        for ddf in ddfs[1:]: 
+        if not non_empty_ddfs:
+            return pd.DataFrame()  # Return an empty pandas DataFrame if all are empty
+
+        if len(non_empty_ddfs) == 1:
+            return non_empty_ddfs[0].compute()
+
+        result = non_empty_ddfs[0]
+        for ddf in non_empty_ddfs[1:]:
             result = result.merge(ddf, on=self.join_key, how='outer')
 
-        return result
+        # Convert to pandas DataFrame for final output
+        return result.compute().reset_index(drop=True)

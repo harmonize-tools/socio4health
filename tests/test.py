@@ -1,4 +1,6 @@
 import datetime
+from zoneinfo import available_timezones
+
 import pandas as pd
 from socio4health import Extractor
 from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
@@ -22,15 +24,16 @@ raw_dict = pd.read_excel('../../input/PNADC_2022/DiccionarioCrudo.xlsx')
 
 def test(extractor):
     dfs = extractor.extract()
-
     har = Harmonizer()
     har.similarity_threshold = 0.9
-    har.nan_threshold = 1
-    dfs = har.vertical_merge(dfs)
-    #dfs = har.drop_nan_columns(dfs)
 
     har.join_key = 'DIRECTORIO'
-    joined_df = har.join_data(dfs)
+
+    print('Vertical merge_____________________________________')
+    dfs = har.vertical_merge(dfs)
+
+    # har.nan_threshold = 1
+    #dfs = har.drop_nan_columns(dfs)
 
     #dic = harmonizer_utils.standardize_dict(col_dict)
     #dic = harmonizer_utils.translate_column(dic, "question", language="en")
@@ -45,15 +48,22 @@ def test(extractor):
     har.categories = ["Business"]
     har.key_col = 'DPTO'
     har.key_val = ['25']
+    print('Data harmonization_________________________________')
     filtered_ddfs = har.data_selector(dfs)
+
     for ddf in filtered_ddfs:
         computed_df = ddf.compute()  # Convert Dask DataFrame to Pandas DataFrame
         print(f"Filtered DataFrame shape: {computed_df.shape}")
         print(computed_df.head())
-    print(f"Number of rows: {len(joined_df)}")
-    print(f"Number of columns: {len(joined_df.columns)}")
-    print(joined_df.head())
 
+    print('Horizontal merge___________________________________')
+    joined_df = har.join_data(filtered_ddfs)
+
+    available_cols = joined_df.columns.tolist()
+    print(f"Available columns: {available_cols}")
+    print(f"Shape of the joined DataFrame: {joined_df.shape}")
+    print(joined_df.head())
+    #joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
 
 if __name__ == "__main__":
-    test(col_extractor)
+    test(col_extractor_test)

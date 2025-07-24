@@ -12,6 +12,7 @@ import pandas as pd
 from tqdm import tqdm
 import logging
 from socio4health.enums.dict_enum import ColumnMappingEnum
+from functools import reduce
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -553,6 +554,9 @@ class Harmonizer:
             if self.extra_cols:
                 columns_list.extend(col.upper() for col in self.extra_cols if col.upper() not in columns_list)
 
+            if self.join_key:
+                columns_list.extend(col.upper() for col in filtered_ddf.columns if col.upper() == self.join_key)
+
             if columns_list:
                 logging.debug(f"Filtering DataFrame for columns: {columns_list}")
                 logging.debug(f"Available columns: {filtered_ddf.columns.tolist()}")
@@ -577,29 +581,37 @@ class Harmonizer:
 
     def join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
         """
-        Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified key column.
+        Join multiple Dask DataFrames on a specified key column, removing duplicate columns.
 
         Parameters
         ----------
-        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+        ddfs : list of dask.dataframe.DataFrame
             List of Dask DataFrames to join.
 
         Returns
         -------
-        `pandas.DataFrame <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_
+        pandas.DataFrame
+            Merged DataFrame with duplicate columns removed.
         """
-        # Filter out empty DataFrames
-        non_empty_ddfs = [ddf for ddf in ddfs if not ddf.compute().empty]
 
-        if not non_empty_ddfs:
-            return pd.DataFrame()  # Return an empty pandas DataFrame if all are empty
+        # Paso 2: Obtener columnas comunes a todos los dataframes
+        keys = sorted(set(ddfs[0].columns))
+        for ddf in ddfs[1:]:
+            keys = list(set(keys) & set(ddf.columns))
 
-        if len(non_empty_ddfs) == 1:
-            return non_empty_ddfs[0].compute()
+        # Convert Dask DataFrames to Pandas (compute them)
+        pandas_dfs = [df.compute() for df in ddfs]
 
-        result = non_empty_ddfs[0]
-        for ddf in non_empty_ddfs[1:]:
-            result = result.merge(ddf, on=self.join_key, how='outer')
+        # Identify which DF is the 'person' DF (the one with the most rows)
+        #person_df = max(pandas_dfs, key=lambda df: len(df))
+        #print(f"Person DataFrame shape: {person_df.shape}")
 
-        # Convert to pandas DataFrame for final output
-        return result.compute().reset_index(drop=True)
+        # The other DFs are housing and education (order doesn't matter)
+        #other_dfs = [df for df in pandas_dfs if df is not person_df]
+
+        # Merge all with left join to keep all person records
+        #merged_df = pd.concat(pandas_dfs, axis=1, join='outer', ignore_index=False)
+        merged_df = pd.concat(pandas_dfs, join='left', ignore_index=False)
+        print(f"Result shape: {merged_df.shape}")
+
+        return merged_df

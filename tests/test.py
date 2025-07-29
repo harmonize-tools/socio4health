@@ -28,6 +28,7 @@ def test(extractor):
     har.similarity_threshold = 0.9
 
     har.join_key = 'DIRECTORIO'
+    har.extra_cols = ['ORDEN']
 
     print('Vertical merge_____________________________________')
     dfs = har.vertical_merge(dfs)
@@ -58,12 +59,11 @@ def test(extractor):
 
     print('Horizontal merge___________________________________')
     joined_df = har.join_data(filtered_ddfs)
-
     available_cols = joined_df.columns.tolist()
     print(f"Available columns: {available_cols}")
     print(f"Shape of the joined DataFrame: {joined_df.shape}")
     print(joined_df.head())
-    #joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
+    joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
 
 if __name__ == "__main__":
     test(col_extractor_test)

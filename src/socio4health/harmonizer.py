@@ -594,24 +594,30 @@ class Harmonizer:
             Merged DataFrame with duplicate columns removed.
         """
 
-        # Paso 2: Obtener columnas comunes a todos los dataframes
-        keys = sorted(set(ddfs[0].columns))
-        for ddf in ddfs[1:]:
-            keys = list(set(keys) & set(ddf.columns))
-
-        # Convert Dask DataFrames to Pandas (compute them)
         pandas_dfs = [df.compute() for df in ddfs]
 
-        # Identify which DF is the 'person' DF (the one with the most rows)
-        #person_df = max(pandas_dfs, key=lambda df: len(df))
-        #print(f"Person DataFrame shape: {person_df.shape}")
+        directorio_dfs = []
+        other_dfs = []
+        for df in pandas_dfs:
+            if 'Directorio' in df.columns:
+                # Verify uniqueness (or near-uniqueness) of 'Directorio'
+                uniqueness = df['Directorio'].nunique() / len(df)
+                if uniqueness > 0.9:  # 90% unique threshold
+                    directorio_dfs.append(df)
+                else:
+                    other_dfs.append(df)
+            else:
+                other_dfs.append(df)
 
-        # The other DFs are housing and education (order doesn't matter)
-        #other_dfs = [df for df in pandas_dfs if df is not person_df]
+        if len(directorio_dfs) < 2:
+            raise ValueError("Fewer than 2 DataFrames contain a sufficiently unique 'Directorio' column")
 
-        # Merge all with left join to keep all person records
-        #merged_df = pd.concat(pandas_dfs, axis=1, join='outer', ignore_index=False)
-        merged_df = pd.concat(pandas_dfs, join='left', ignore_index=False)
+        merged_df = pd.merge(pandas_dfs[1],pandas_dfs[0], how='left', on="Dierectorio",  suffixes=('', '_y'))
         print(f"Result shape: {merged_df.shape}")
+        print(f"Available columns: {merged_df.columns.tolist()}")
+
+        merged_df = pd.merge(merged_df,pandas_dfs[2], how='left', on=["Dierectorio","ORDEN"],  suffixes=('', '_y'))
+        print(f"Result shape: {merged_df.shape}")
+        print(f"Available columns: {merged_df.columns.tolist()}")
 
         return merged_df

@@ -328,6 +328,8 @@ class Harmonizer:
 
                 merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
                 merged_dfs.append(merged_df)
+        if len(merged_dfs) > 1:
+            logging.warning("Dataframes that do not have the same columns could not be merged.")
 
         return merged_dfs
 

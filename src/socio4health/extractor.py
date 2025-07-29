@@ -75,8 +75,16 @@ class Extractor:
         Column specifications for fixed-width files, defining the widths of each column. Required if ``is_fwf`` is ``True``.
     sep : str
         The separator to use when reading CSV files. Defaults to ','.
-    dtype : Union[str, Dict]
+    ddtype : Union[str, Dict]
         The data type to use when reading files. Can be a single type or a dictionary mapping column names to types. Defaults to ``object``.
+    dtype : Union[str, Dict]
+        Data types to use when reading files with ``pandas``. Can be a string (e.g., ``'object'``) or a dictionary mapping column names to data types.
+    engine : str
+        The engine to use for reading Excel files (e.g., ``'openpyxl'`` or ``'xlrd'``). Leave as ``None`` to use the default engine based on file extension.
+    sheet_name : Union[str, int, list, None]
+        The name or index of the Excel sheet to read. Can also be a list to read multiple sheets or ``None`` to read all sheets. Defaults to the first sheet (``0``).
+    geodriver : str
+        The driver to use for reading geospatial files with ``geopandas.read_file()`` (e.g., ``'ESRI Shapefile'``, ``'KML'``, etc.). Optional.
 
     See Also
     -------

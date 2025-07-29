@@ -13,6 +13,8 @@ from typing import Optional, Union, Dict
 
 import appdirs
 import os
+import pandas as pd
+import geopandas as gpd
 import dask.dataframe as dd
 from tqdm import tqdm
 import glob
@@ -98,7 +100,11 @@ class Extractor:
             colnames: list = None,
             colspecs: list = None,
             sep: str = None,
-            dtype: Union[str, Dict] = 'object'
+            ddtype: Union[str, Dict] = 'object',
+            dtype: str = None,
+            engine: str = None,
+            sheet_name: str = None,
+            geodriver: str = None
     ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.depth = depth
@@ -113,8 +119,23 @@ class Extractor:
         self.colspecs = colspecs
         self.sep = sep
         self.output_path = output_path or str(get_default_data_dir())
+        self.READERS = {
+            '.csv': self._read_csv,
+            '.parquet': self._read_parquet,
+            '.xls': self._read_excel,
+            '.xlsx': self._read_excel,
+            '.xlsm': self._read_excel,
+            '.json': self._read_json,
+            '.geojson': self._read_geospatial,
+            '.shp': self._read_geospatial,
+            '.kml': self._read_geospatial
+        }
         os.makedirs(self.output_path, exist_ok=True)
+        self.ddtype = ddtype
         self.dtype = dtype
+        self.engine = engine
+        self.sheet_name = sheet_name
+        self.geodriver = geodriver
         if not input_path:
             raise ValueError("input_path must be provided")
         if is_fwf and (not colnames or not colspecs):
@@ -333,6 +354,47 @@ class Extractor:
         if not self.dataframes:
             logging.warning("No files found matching the specified extensions.")
 
+    def _read_csv(self, filepath):
+        # Read everything as text first to avoid dtype issues
+        df = dd.read_csv(
+            filepath,
+            encoding=self.encoding,
+            sep=self.sep if self.sep else ',',
+            dtype=self.ddtype,
+            assume_missing = True,
+            on_bad_lines='warn'
+        )
+        if len(df.columns) == 1:
+            # Try different separator if we only got one column
+            df = dd.read_csv(
+                filepath,
+                encoding=self.encoding,
+                sep=',' if self.sep != ',' else ';',
+                dtype=self.ddtype,
+                assume_missing=True,
+                on_bad_lines='warn'
+            )
+        return df
+
+    def _read_excel(self, filepath):
+        return pd.read_excel(filepath,
+                             sheet_name=self.sheet_name,
+                             dtype=self.dtype,
+                             engine=self.engine)
+    
+    def _read_parquet(self, filepath):
+        return dd.read_parquet(filepath)
+
+    def _read_json(self, filepath):
+        with open(filepath, 'r', encoding=self.encoding) as f:
+            return json.load(f)
+
+    def _read_geospatial(self, filepath):
+        return gpd.read_file(filepath)
+    
+    def _read_txt(self, filepath):
+        return dd.read_csv(filepath, sep=self.sep or '\t', encoding=self.encoding, dtype=self.dtype)
+
     def _read_file(self, filepath):
         try:
             if self.is_fwf:
@@ -344,30 +406,16 @@ class Extractor:
                     colspecs=self.colspecs,
                     names=self.colnames,
                     encoding=self.encoding,
-                    dtype=self.dtype,
+                    dtype=self.ddtype,
                     assume_missing=True,
                     on_bad_lines='warn'
                 )
             else:
-                # Read everything as text first to avoid dtype issues
-                df = dd.read_csv(
-                    filepath,
-                    encoding=self.encoding,
-                    sep=self.sep if self.sep else ',',
-                    dtype=self.dtype,
-                    assume_missing = True,
-                    on_bad_lines='warn'
-                )
-                if len(df.columns) == 1:
-                    # Try different separator if we only got one column
-                    df = dd.read_csv(
-                        filepath,
-                        encoding=self.encoding,
-                        sep=',' if self.sep != ',' else ';',
-                        dtype=self.dtype,
-                        assume_missing=True,
-                        on_bad_lines='warn'
-                    )
+                ext = Path(filepath).suffix.lower()
+                if ext in self.READERS:
+                    return self.READERS[ext](filepath)
+                else:
+                    raise ValueError(f"Unsupported extension: {ext}")
 
             self.dataframes.append(df)
 

@@ -14,3 +14,4 @@ deep_translator
 transformers
 torch
 pytest
+geopandas

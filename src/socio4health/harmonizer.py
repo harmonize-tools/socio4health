@@ -331,6 +331,8 @@ class Harmonizer:
 
                 merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
                 merged_dfs.append(merged_df)
+        if len(merged_dfs) > 1:
+            logging.warning("Dataframes that do not have the same columns could not be merged.")
 
         return merged_dfs
 
@@ -512,6 +514,49 @@ class Harmonizer:
             country: [process_dataframe(df, country) for df in dfs]
             for country, dfs in country_dfs.items()
         }
+    
+    def compare_with_dict(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
+        """
+        Compare the columns available in the DataFrames with the variables in the dictionary and
+        return a DataFrame with the columns that do not match in both directions.
+
+        Parameters
+        ----------
+        ddfs : list of dask.dataframe.DataFrame
+            List of DataFrames to evaluate.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with mismatched columns.
+        """
+        if self.dict_df is None:
+            raise ValueError("dict_df has not been defined in the Harmonizer instance.")
+
+        available_cols = set(self.get_available_columns(ddfs))
+
+        expected_vars = set(self.dict_df['variable_name'].str.upper().unique())
+
+        in_df_not_in_dict = sorted(available_cols - expected_vars)
+        in_dict_not_in_df = sorted(expected_vars - available_cols)
+
+        max_len = max(len(in_df_not_in_dict), len(in_dict_not_in_df))
+        in_df_not_in_dict += [None] * (max_len - len(in_df_not_in_dict))
+        in_dict_not_in_df += [None] * (max_len - len(in_dict_not_in_df))
+
+        diff_df = pd.DataFrame({
+            "Unmatched ddfs variable": in_df_not_in_dict,
+            "Unmatched dict_df variables": in_dict_not_in_df
+        })
+
+        total = len(available_cols)
+        match_count = len(available_cols & expected_vars)
+        match_pct = (match_count / total) * 100 if total > 0 else 0
+
+        print(f"Matches with dict_df: {match_count} ({match_pct:.2f}%)")
+
+        return diff_df
+
 
     def data_selector(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
         """
@@ -569,10 +614,10 @@ class Harmonizer:
                 final_columns = [key_column_upper] + existing_columns
 
                 if len(final_columns) == 1:
-                    logging.warning("Only key column found in the filtered DataFrame")
+                    logging.warning("Only key column found in the filtered DataFrame. Use compare_with_dict() for more information.")
                 filtered_ddf = filtered_ddf[final_columns]
             else:
-                logging.warning("No columns found matching the specified categories")
+                logging.warning("No columns found matching the specified categories. Use compare_with_dict () for more information.")
                 filtered_ddf = filtered_ddf[[key_column_upper]]
 
             filtered_ddfs.append(filtered_ddf)

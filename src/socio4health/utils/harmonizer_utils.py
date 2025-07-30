@@ -159,12 +159,20 @@ def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> p
     if not isinstance(language, str) or len(language) != 2:
         raise ValueError("The 'language' parameter must be a 2-letter ISO 639-1 language code (e.g. 'en').")
     
+    
+    def translate_text(text):
+        if pd.isna(text):
+            return text
+        if len(text) < 5000:
+            return GoogleTranslator(source='auto', target=language).translate(text)
+        else:
+            print("Rows with contents longer than 5000 characters are cut off")
+            return GoogleTranslator(source='auto', target=language).translate(text[:4500])
+
     data = data.copy()
 
     new_col = f"{column}_{language}"
-    data[new_col] = data[column].apply(
-        lambda x: GoogleTranslator(source='auto', target=language).translate(x) if pd.notna(x) else x
-    )
+    data[new_col] = data[column].apply(translate_text)
     print(f"{column} translated")
 
     return data

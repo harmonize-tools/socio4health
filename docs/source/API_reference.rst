@@ -15,7 +15,8 @@ Extractor
 
 .. autosummary::
    :toctree:
-   
+
+   Extractor
    extractor.get_default_data_dir
    Extractor.extract
    Extractor.delete_download_folder

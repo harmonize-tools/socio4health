@@ -1,6 +1,6 @@
 """
 Extractor class for downloading and processing data files from various sources.
-This class supports both online scraping and local file processing, handling compressed files, fixed-width files, and CSV formats.
+This class supports both online scraping and local file processing, handling compressed files, fixed-width files, and ``CSV`` formats.
 It includes methods for downloading files, extracting data, and cleaning up after processing.
 """
 
@@ -35,13 +35,7 @@ def get_default_data_dir():
     Note
     ------
     This function ensures that the directory exists by creating it if necessary.
-    Examples
-    --------
-    >>> default_dir = get_default_data_dir()
-    >>> print(default_dir)
-    /home/user/.local/share/socio4health
-    >>> default_dir.exists()
-    True
+
     """
     path = Path(appdirs.user_data_dir("socio4health"))
     logging.info(f"Default data directory: {path}")
@@ -56,7 +50,7 @@ class Extractor:
     Attributes
     ----------
     input_path : str
-        The path to the input data source, which can be a URL or a local directory.
+        The path to the input data source, which can be a ``URL`` or a local directory.
     depth : int
         The depth of web scraping to perform when input_path is a ``URL``.
     down_ext : list
@@ -74,7 +68,7 @@ class Extractor:
     colspecs : list
         Column specifications for fixed-width files, defining the widths of each column. Required if ``is_fwf`` is ``True``.
     sep : str
-        The separator to use when reading CSV files. Defaults to ','.
+        The separator to use when reading ``CSV`` files. Defaults to ``','``.
     ddtype : Union[str, Dict]
         The data type to use when reading files. Can be a single type or a dictionary mapping column names to types. Defaults to ``object``.
     dtype : Union[str, Dict]
@@ -85,6 +79,10 @@ class Extractor:
         The name or index of the Excel sheet to read. Can also be a list to read multiple sheets or ``None`` to read all sheets. Defaults to the first sheet (``0``).
     geodriver : str
         The driver to use for reading geospatial files with ``geopandas.read_file()`` (e.g., ``'ESRI Shapefile'``, ``'KML'``, etc.). Optional.
+
+    Important
+    ------
+    In case ``is_fwf`` is ``True`` and fixed-width files are given, both ``colnames`` and ``colspecs`` must be provided.
 
     See Also
     -------

@@ -11,5 +11,7 @@ sphinx_copybutton
 nbsphinx
 torch
 geopandas
-
+jupyterlab-myst
+jupyterlab-widgets
+jupyter-book
 

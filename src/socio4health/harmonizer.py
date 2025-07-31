@@ -67,7 +67,8 @@ class Harmonizer:
                  key_col: Optional[str] = None,
                  key_val: Optional[List[Union[str, int, float]]] = None,
                  extra_cols: Optional[List[str]] = None,
-                 join_key: str = None):
+                 join_key: str = None,
+                 aux_key: Optional[str] = None):
         """
         Initialize the Harmonizer class with default parameters.
         """
@@ -86,6 +87,7 @@ class Harmonizer:
         self.key_val = key_val or []
         self.extra_cols = extra_cols or []
         self.join_key = join_key
+        self.aux_key = aux_key
 
 
 
@@ -638,31 +640,65 @@ class Harmonizer:
         pandas.DataFrame
             Merged DataFrame with duplicate columns removed.
         """
-
         pandas_dfs = [df.compute() for df in ddfs]
 
-        directorio_dfs = []
-        other_dfs = []
-        for df in pandas_dfs:
-            if 'Directorio' in df.columns:
-                # Verify uniqueness (or near-uniqueness) of 'Directorio'
-                uniqueness = df['Directorio'].nunique() / len(df)
-                if uniqueness > 0.9:  # 90% unique threshold
-                    directorio_dfs.append(df)
-                else:
-                    other_dfs.append(df)
+        def identify_primary_df(dfs):
+            """Identify which DataFrame has housing_id as a nearly-unique key"""
+            candidates = []
+
+            for i, df in enumerate(dfs):
+                if self.join_key not in df.columns:
+                    continue
+
+                total_rows = len(df)
+                unique_rows = df[self.join_key].nunique()
+                uniqueness_ratio = unique_rows / total_rows
+
+                if uniqueness_ratio > 0.9:
+                    candidates.append((i, df.copy(), uniqueness_ratio))
+
+            if not candidates:
+                raise ValueError("No table with nearly-unique key found")
+
+            candidates.sort(key=lambda x: x[2], reverse=True)
+            original_index, primary_df, _ = candidates[0]
+
+            primary_df = primary_df.drop_duplicates(subset=[self.join_key], keep='first')
+            dfs.pop(original_index)
+            dfs.insert(0, primary_df)
+
+            return dfs
+
+        ordered_dfs = identify_primary_df(pandas_dfs)
+
+        merged_df = pd.merge(ordered_dfs[0], ordered_dfs[1],
+                             on=self.join_key,
+                             how='outer',
+                             suffixes=('', '_dup'))
+
+        dup_cols = [col for col in merged_df.columns if col.endswith('_dup')]
+        merged_df = merged_df.drop(columns=dup_cols)
+
+        for df in ordered_dfs[2:]:
+            if self.join_key not in df.columns:
+                raise KeyError(f"Join key '{self.join_key}' not found in DataFrame")
+
+            original_cols = set(merged_df.columns)
+
+            if self.aux_key is not None and self.aux_key in df.columns:
+                merged_df = pd.merge(merged_df, df,
+                                     on=[self.join_key, self.aux_key],
+                                     how='outer',
+                                     suffixes=('', '_dup'))
             else:
-                other_dfs.append(df)
+                merged_df = pd.merge(merged_df, df,
+                                     on=self.join_key,
+                                     how='outer',
+                                     suffixes=('', '_dup'))
 
-        if len(directorio_dfs) < 2:
-            raise ValueError("Fewer than 2 DataFrames contain a sufficiently unique 'Directorio' column")
-
-        merged_df = pd.merge(pandas_dfs[1],pandas_dfs[0], how='left', on="Dierectorio",  suffixes=('', '_y'))
-        print(f"Result shape: {merged_df.shape}")
-        print(f"Available columns: {merged_df.columns.tolist()}")
-
-        merged_df = pd.merge(merged_df,pandas_dfs[2], how='left', on=["Dierectorio","ORDEN"],  suffixes=('', '_y'))
-        print(f"Result shape: {merged_df.shape}")
-        print(f"Available columns: {merged_df.columns.tolist()}")
+            new_dup_cols = [col for col in merged_df.columns
+                            if col.endswith('_dup') and
+                            col.replace('_dup', '') in original_cols]
+            merged_df = merged_df.drop(columns=new_dup_cols)
 
         return merged_df

@@ -67,4 +67,4 @@ def test(extractor):
     joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
 
 if __name__ == "__main__":
-    test(col_extractor_test)
+    test(col_online_extractor)

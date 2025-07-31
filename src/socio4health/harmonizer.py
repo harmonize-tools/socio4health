@@ -11,6 +11,9 @@ import dask.dataframe as dd
 import pandas as pd
 from tqdm import tqdm
 import logging
+
+from win32print import PRINTER_ATTRIBUTE_TS
+
 from socio4health.enums.dict_enum import ColumnMappingEnum
 from functools import reduce
 
@@ -54,7 +57,7 @@ class Harmonizer:
     """
     def __init__(self,
                  min_common_columns: int = 1,
-                 similarity_threshold: float = 0.8,
+                 similarity_threshold: float = 1,
                  nan_threshold: float = 1.0,
                  sample_frac: Optional[float] = None,
                  column_mapping: Optional[Union[Type[Enum], Dict[str, Dict[str, str]], str, Path]] = None,
@@ -643,7 +646,6 @@ class Harmonizer:
         pandas_dfs = [df.compute() for df in ddfs]
 
         def identify_primary_df(dfs):
-            """Identify which DataFrame has housing_id as a nearly-unique key"""
             candidates = []
 
             for i, df in enumerate(dfs):
@@ -654,6 +656,8 @@ class Harmonizer:
                 unique_rows = df[self.join_key].nunique()
                 uniqueness_ratio = unique_rows / total_rows
 
+                df[self.join_key].to_csv(f"data/directories_{df.index.name or 'index'}.csv", index=False)
+                print(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
                 if uniqueness_ratio > 0.9:
                     candidates.append((i, df.copy(), uniqueness_ratio))
 

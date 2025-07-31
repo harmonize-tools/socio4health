@@ -40,13 +40,6 @@ class StandardSpider(scrapy.Spider):
                         continue
                     if any(enlace.endswith(extension) for extension in self.ext):
                         nombre_archivo = os.path.basename(enlace)
-                        # Handle duplicate filenames
-                        if nombre_archivo in self.links:
-                            base_name, ext = os.path.splitext(nombre_archivo)
-                            counter = 1
-                            while f"{base_name}_{counter}{ext}" in self.links:
-                                counter += 1
-                            nombre_archivo = f"{base_name}_{counter}{ext}"
 
                         if self.key_words:  # Ensure key_words is not empty or None
                             if any(key_word in nombre_archivo for key_word in self.key_words):
@@ -57,15 +50,8 @@ class StandardSpider(scrapy.Spider):
                         for extension in self.ext:
                             if elemento.attrib['title'].endswith(extension):
                                 nombre_archivo = os.path.basename(enlace + extension)
-                                # Handle duplicate filenames
-                                if nombre_archivo in self.links:
-                                    base_name, ext = os.path.splitext(nombre_archivo)
-                                    counter = 1
-                                    while f"{base_name}_{counter}{ext}" in self.links:
-                                        counter += 1
-                                    nombre_archivo = f"{base_name}_{counter}{ext}"
 
-                                if self.key_words:  # Ensure key_words is not empty or None
+                                if self.key_words:
                                     if any(key_word in nombre_archivo for key_word in self.key_words):
                                         self.links[nombre_archivo] = full_url
                                 else:
@@ -81,15 +67,7 @@ class StandardSpider(scrapy.Spider):
                         onclick_url = onclick_url.replace(" ", "")
                         nombre_archivo = copy.deepcopy(input_element.css('::attr(title)').extract_first())
                         if nombre_archivo:
-                            # Handle duplicate filenames
-                            if nombre_archivo in self.links:
-                                base_name, ext = os.path.splitext(nombre_archivo)
-                                counter = 1
-                                while f"{base_name}_{counter}{ext}" in self.links:
-                                    counter += 1
-                                nombre_archivo = f"{base_name}_{counter}{ext}"
-
-                            if self.key_words:  # Ensure key_words is not empty or None
+                            if self.key_words:
                                 if any(key_word in nombre_archivo for key_word in self.key_words):
                                     self.links[nombre_archivo] = response.urljoin(onclick_url)
                             else:

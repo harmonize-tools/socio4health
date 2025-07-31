@@ -145,7 +145,8 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
                 elif f".{file.split('.')[-1].lower()}" in down_ext:
                     # Generate a unique filename
                     base_name, ext = os.path.splitext(file)
-                    unique_name = f"{base_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}{ext}"
+                    parent = os.path.splitext(os.path.basename(input_archive))[0]
+                    unique_name = f"{parent}_{base_name}{ext}"
                     destination_path = os.path.join(target_directory, unique_name)
                     shutil.move(file_path, destination_path)
                     found_files.add(destination_path)

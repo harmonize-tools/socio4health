@@ -384,17 +384,17 @@ class Extractor:
         return df
 
     def _read_excel(self, filepath):
-        return pd.read_excel(filepath,
+        return dd.from_pandas(pd.read_excel(filepath,
                              sheet_name=self.sheet_name,
                              dtype=self.dtype,
-                             engine=self.engine)
+                             engine=self.engine))
     
     def _read_parquet(self, filepath):
         return dd.read_parquet(filepath)
 
     def _read_json(self, filepath):
         with open(filepath, 'r', encoding=self.encoding) as f:
-            return json.load(f)
+            return dd.from_pandas(json.load(f))
 
     def _read_geospatial(self, filepath):
         return gpd.read_file(filepath)
@@ -404,6 +404,7 @@ class Extractor:
 
     def _read_file(self, filepath):
         try:
+            df = []
             if self.is_fwf:
                 if not self.colnames or not self.colspecs:
                     logging.error("Column specs required for fixed-width files")
@@ -422,9 +423,9 @@ class Extractor:
                 if ext in self.READERS:
                     df = self.READERS[ext](filepath)
                 else:
-                    raise ValueError(f"Unsupported extension: {ext}")
-
-            self.dataframes.append(df)
+                    logging.warning(f"Unsupported extension: {ext}")
+            if len(df) != 0:
+                self.dataframes.append(df)
 
         except Exception as e:
             logging.error(f"Error reading {filepath}: {e}")

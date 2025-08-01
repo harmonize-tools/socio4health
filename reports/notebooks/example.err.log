@@ -1,0 +1,123 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 154, in wrapped
+    asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 158, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+col_online_extractor = Extractor(input_path="https://microdatos.dane.gov.co/index.php/catalog/643/get-microdata",
+                                 down_ext=['.CSV','.csv','.zip'],
+                                 sep=';',
+                                 output_path="CNPV2018",
+                                 key_words=["73_Tolima.zip"],
+                                 depth=0)
+col_CNPV = col_online_extractor.extract()
+------------------
+
+----- stderr -----
+2025-08-01 17:52:55,608 - INFO - ----------------------
+----- stderr -----
+2025-08-01 17:52:55,608 - INFO - Starting data extraction...
+----- stderr -----
+2025-08-01 17:52:55,609 - INFO - Extracting data in online mode...
+----- stderr -----
+2025-08-01 17:52:55,609 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/643/get-microdata with depth 0
+----- stderr -----
+2025-08-01 17:52:55,626 - WARNING - /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/scrapy/utils/request.py:120: ScrapyDeprecationWarning: 'REQUEST_FINGERPRINTER_IMPLEMENTATION' is a deprecated setting.
+It will be removed in a future version of Scrapy.
+  return cls(crawler)
+----- stderr -----
+2025-08-01 17:52:55,763 - ERROR - Failed during web scraping: This event loop is already running
+----- stderr -----
+2025-08-01 17:52:55,763 - ERROR - Exception while extracting data: Web scraping failed: This event loop is already running
+------------------
+
+[31m---------------------------------------------------------------------------[39m
+[31mRuntimeError[39m                              Traceback (most recent call last)
+[36mFile [39m[32m~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:232[39m, in [36mExtractor._extract_online_mode[39m[34m(self)[39m
+[32m    231[39m logging.info([33mf[39m[33m"[39m[33mScraping URL: [39m[38;5;132;01m{[39;00m[38;5;28mself[39m.input_path[38;5;132;01m}[39;00m[33m with depth [39m[38;5;132;01m{[39;00m[38;5;28mself[39m.depth[38;5;132;01m}[39;00m[33m"[39m)
+[32m--> [39m[32m232[39m [43mrun_standard_spider[49m[43m([49m[38;5;28;43mself[39;49m[43m.[49m[43minput_path[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mdepth[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mdown_ext[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[43m.[49m[43mkey_words[49m[43m)[49m
+[32m    234[39m [38;5;66;03m# Read scraped links[39;00m
+
+[36mFile [39m[32m~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/utils/extractor_utils.py:47[39m, in [36mrun_standard_spider[39m[34m(url, depth, down_ext, key_words)[39m
+[32m     46[39m process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)
+[32m---> [39m[32m47[39m [43mprocess[49m[43m.[49m[43mstart[49m[43m([49m[43m)[49m
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/scrapy/crawler.py:502[39m, in [36mCrawlerProcess.start[39m[34m(self, stop_after_crawl, install_signal_handlers)[39m
+[32m    499[39m     reactor.addSystemEventTrigger(
+[32m    500[39m         [33m"[39m[33mafter[39m[33m"[39m, [33m"[39m[33mstartup[39m[33m"[39m, install_shutdown_handlers, [38;5;28mself[39m._signal_shutdown
+[32m    501[39m     )
+[32m--> [39m[32m502[39m [43mreactor[49m[43m.[49m[43mrun[49m[43m([49m[43minstallSignalHandlers[49m[43m=[49m[43minstall_signal_handlers[49m[43m)[49m
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/twisted/internet/asyncioreactor.py:253[39m, in [36mAsyncioSelectorReactor.run[39m[34m(self, installSignalHandlers)[39m
+[32m    252[39m [38;5;28mself[39m.startRunning(installSignalHandlers=installSignalHandlers)
+[32m--> [39m[32m253[39m [38;5;28;43mself[39;49m[43m.[49m[43m_asyncioEventloop[49m[43m.[49m[43mrun_forever[49m[43m([49m[43m)[49m
+[32m    254[39m [38;5;28;01mif[39;00m [38;5;28mself[39m._justStopped:
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/asyncio/base_events.py:634[39m, in [36mBaseEventLoop.run_forever[39m[34m(self)[39m
+[32m    633[39m [38;5;28mself[39m._check_closed()
+[32m--> [39m[32m634[39m [38;5;28;43mself[39;49m[43m.[49m[43m_check_running[49m[43m([49m[43m)[49m
+[32m    635[39m [38;5;28mself[39m._set_coroutine_origin_tracking([38;5;28mself[39m._debug)
+
+[36mFile [39m[32m/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/asyncio/base_events.py:626[39m, in [36mBaseEventLoop._check_running[39m[34m(self)[39m
+[32m    625[39m [38;5;28;01mif[39;00m [38;5;28mself[39m.is_running():
+[32m--> [39m[32m626[39m     [38;5;28;01mraise[39;00m [38;5;167;01mRuntimeError[39;00m([33m'[39m[33mThis event loop is already running[39m[33m'[39m)
+[32m    627[39m [38;5;28;01mif[39;00m events._get_running_loop() [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+
+[31mRuntimeError[39m: This event loop is already running
+
+During handling of the above exception, another exception occurred:
+
+[31mValueError[39m                                Traceback (most recent call last)
+[36mFile [39m[32m~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:175[39m, in [36mExtractor.extract[39m[34m(self)[39m
+[32m    174[39m [38;5;28;01mif[39;00m [38;5;28mself[39m.input_path [38;5;129;01mand[39;00m [38;5;28mself[39m.input_path.startswith([33m"[39m[33mhttp[39m[33m"[39m):
+[32m--> [39m[32m175[39m     [38;5;28;43mself[39;49m[43m.[49m[43m_extract_online_mode[49m[43m([49m[43m)[49m
+[32m    176[39m [38;5;28;01melif[39;00m [38;5;28mself[39m.input_path [38;5;129;01mand[39;00m os.path.isdir([38;5;28mself[39m.input_path):
+
+[36mFile [39m[32m~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:239[39m, in [36mExtractor._extract_online_mode[39m[34m(self)[39m
+[32m    238[39m     logging.error([33mf[39m[33m"[39m[33mFailed during web scraping: [39m[38;5;132;01m{[39;00me[38;5;132;01m}[39;00m[33m"[39m)
+[32m--> [39m[32m239[39m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([33mf[39m[33m"[39m[33mWeb scraping failed: [39m[38;5;132;01m{[39;00m[38;5;28mstr[39m(e)[38;5;132;01m}[39;00m[33m"[39m)
+[32m    241[39m [38;5;66;03m# Step 2: Filter and confirm files to download[39;00m
+
+[31mValueError[39m: Web scraping failed: This event loop is already running
+
+During handling of the above exception, another exception occurred:
+
+[31mValueError[39m                                Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[4][39m[32m, line 7[39m
+[32m      1[39m col_online_extractor = Extractor(input_path=[33m"[39m[33mhttps://microdatos.dane.gov.co/index.php/catalog/643/get-microdata[39m[33m"[39m,
+[32m      2[39m                                  down_ext=[[33m'[39m[33m.CSV[39m[33m'[39m,[33m'[39m[33m.csv[39m[33m'[39m,[33m'[39m[33m.zip[39m[33m'[39m],
+[32m      3[39m                                  sep=[33m'[39m[33m;[39m[33m'[39m,
+[32m      4[39m                                  output_path=[33m"[39m[33mCNPV2018[39m[33m"[39m,
+[32m      5[39m                                  key_words=[[33m"[39m[33m73_Tolima.zip[39m[33m"[39m],
+[32m      6[39m                                  depth=[32m0[39m)
+[32m----> [39m[32m7[39m col_CNPV = [43mcol_online_extractor[49m[43m.[49m[43mextract[49m[43m([49m[43m)[49m
+
+[36mFile [39m[32m~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:181[39m, in [36mExtractor.extract[39m[34m(self)[39m
+[32m    179[39m [38;5;28;01mexcept[39;00m [38;5;167;01mException[39;00m [38;5;28;01mas[39;00m e:
+[32m    180[39m     logging.error([33mf[39m[33m"[39m[33mException while extracting data: [39m[38;5;132;01m{[39;00me[38;5;132;01m}[39;00m[33m"[39m)
+[32m--> [39m[32m181[39m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([33mf[39m[33m"[39m[33mExtraction failed: [39m[38;5;132;01m{[39;00m[38;5;28mstr[39m(e)[38;5;132;01m}[39;00m[33m"[39m)
+[32m    183[39m [38;5;28;01mreturn[39;00m [38;5;28mself[39m.dataframes
+
+[31mValueError[39m: Extraction failed: Web scraping failed: This event loop is already running
+

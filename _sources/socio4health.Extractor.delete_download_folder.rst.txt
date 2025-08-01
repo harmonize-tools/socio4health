@@ -1,0 +1,6 @@
+﻿socio4health.Extractor.delete\_download\_folder
+===============================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Extractor.delete_download_folder

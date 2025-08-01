@@ -424,6 +424,7 @@ class Extractor:
                 else:
                     logging.warning(f"Unsupported extension: {ext}")
             if len(df) != 0:
+                df['filename'] = os.path.basename(filepath) 
                 self.dataframes.append(df)
 
         except Exception as e:

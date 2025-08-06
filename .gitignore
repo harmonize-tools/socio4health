@@ -180,3 +180,4 @@ _site/
 vendor/
 *.png
 /cache
+/docs/source/notebooks/files/

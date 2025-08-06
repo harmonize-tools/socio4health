@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 import re
 
 from scrapy.crawler import CrawlerProcess

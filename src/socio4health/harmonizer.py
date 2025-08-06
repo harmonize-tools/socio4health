@@ -657,12 +657,12 @@ class Harmonizer:
                 uniqueness_ratio = unique_rows / total_rows
 
                 df[self.join_key].to_csv(f"data/directories_{df.index.name or 'index'}.csv", index=False)
-                print(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
+                logging.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
                 if uniqueness_ratio > 0.9:
                     candidates.append((i, df.copy(), uniqueness_ratio))
 
             if not candidates:
-                raise ValueError("No table with nearly-unique key found")
+                logging.error("No table with nearly-unique key found")
 
             candidates.sort(key=lambda x: x[2], reverse=True)
             original_index, primary_df, _ = candidates[0]

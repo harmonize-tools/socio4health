@@ -7,7 +7,7 @@ from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
 from socio4health.harmonizer import Harmonizer
 from socio4health.utils import harmonizer_utils
 
-col_extractor_test = Extractor(input_path="../../input/GEIH_2022/Test",down_ext=['.csv'],sep=';', output_path="data")
+col_extractor_test = Extractor(input_path="../../input/GEIH_2022/sept",down_ext=['.csv','.zip'],sep=';', output_path="data")
 
 col_extractor = Extractor(input_path="../../input/GEIH_2022/Original",down_ext=['.csv','.zip'],sep=';', output_path="data")
 per_extractor = Extractor(input_path="../../input/ENAHO_2022/Original",down_ext=['.csv','.zip'], output_path="data")
@@ -30,11 +30,6 @@ def test(extractor):
     har.join_key = 'DIRECTORIO'
     har.aux_key = 'ORDEN'
     har.extra_cols = ['ORDEN']
-
-    for ddf in dfs:
-        computed_df = ddf.compute()  # Convert Dask DataFrame to Pandas DataFrame
-        print(f"Extracted DataFrame shape: {computed_df.shape}")
-        print(computed_df.head())
 
     print('Vertical merge_____________________________________')
     dfs = har.vertical_merge(dfs)
@@ -67,4 +62,4 @@ def test(extractor):
     joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
 
 if __name__ == "__main__":
-    test(col_online_extractor)
+    test(col_extractor_test)

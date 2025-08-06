@@ -12,10 +12,7 @@ import pandas as pd
 from tqdm import tqdm
 import logging
 
-from win32print import PRINTER_ATTRIBUTE_TS
-
 from socio4health.enums.dict_enum import ColumnMappingEnum
-from functools import reduce
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 

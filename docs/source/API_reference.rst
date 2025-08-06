@@ -28,12 +28,14 @@ Harmonizer
 
 .. autosummary::
    :toctree: 
-
+   Harmonizer
    Harmonizer.vertical_merge
    Harmonizer.drop_nan_columns
    Harmonizer.get_available_columns
    Harmonizer.harmonize_dataframes
    Harmonizer.data_selector
+   Harmonizer.compare_with_dict
+   Harmonizer.join_data
 
 Utils
 ~~~~~~~~~~
@@ -57,6 +59,15 @@ Utils
    utils.harmonizer_utils.get_classifier
    utils.harmonizer_utils.standardize_dict
    utils.harmonizer_utils.translate_column
+
+**Spider**
+
+.. autosummary::
+   :toctree:
+
+    utils.standard_spider.StandardSpider
+    utils.standard_spider.StandardSpider.parse
+    utils.standard_spider.StandardSpider.parse_item
 
 Enums 
 ~~~~~~~~~~

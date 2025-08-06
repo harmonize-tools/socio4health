@@ -11,6 +11,7 @@ import dask.dataframe as dd
 import pandas as pd
 from tqdm import tqdm
 import logging
+
 from socio4health.enums.dict_enum import ColumnMappingEnum
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -53,7 +54,7 @@ class Harmonizer:
     """
     def __init__(self,
                  min_common_columns: int = 1,
-                 similarity_threshold: float = 0.8,
+                 similarity_threshold: float = 1,
                  nan_threshold: float = 1.0,
                  sample_frac: Optional[float] = None,
                  column_mapping: Optional[Union[Type[Enum], Dict[str, Dict[str, str]], str, Path]] = None,
@@ -65,7 +66,9 @@ class Harmonizer:
                  categories: Optional[List[str]] = None,
                  key_col: Optional[str] = None,
                  key_val: Optional[List[Union[str, int, float]]] = None,
-                 extra_cols: Optional[List[str]] = None):
+                 extra_cols: Optional[List[str]] = None,
+                 join_key: str = None,
+                 aux_key: Optional[str] = None):
         """
         Initialize the Harmonizer class with default parameters.
         """
@@ -83,6 +86,8 @@ class Harmonizer:
         self.key_col = key_col
         self.key_val = key_val or []
         self.extra_cols = extra_cols or []
+        self.join_key = join_key
+        self.aux_key = aux_key
 
 
 
@@ -384,30 +389,34 @@ class Harmonizer:
             return process_ddf(ddf_or_ddfs)
 
     @staticmethod
-    def get_available_columns(ddfs: List[dd.DataFrame]) -> List[str]:
+    def get_available_columns(ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> List[str]:
         """
-        Get a list of unique column names from a list of `Dask <https://docs.dask.org>`_ DataFrames.
+        Get a list of unique column names from a single `Dask <https://docs.dask.org>`_ DataFrame
+        or a list of `Dask <https://docs.dask.org>`_ DataFrames.
 
         Parameters
-        -----------
-        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            List of `Dask <https://docs.dask.org>`_ DataFrames to extract column names from.
+        ----------
+        ddf_or_ddfs : `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            or list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
+            A single Dask DataFrame or a list of Dask DataFrames to extract column names from.
 
         Returns
-        --------
+        -------
         list of str
             Sorted list of unique column names across all provided Dask DataFrames.
+
         Raises
         ------
         TypeError
-            If the input is not a list of `Dask <https://docs.dask.org>`_ DataFrames or if any element is not a Dask DataFrame.
-
+            If the input is not a Dask DataFrame or a list of Dask DataFrames.
         """
-        if not isinstance(ddfs, list):
-            raise TypeError("Input must be a list of Dask DataFrames")
+        if isinstance(ddf_or_ddfs, dd.DataFrame):
+            ddf_or_ddfs = [ddf_or_ddfs]
+        elif not isinstance(ddf_or_ddfs, list):
+            raise TypeError("Input must be a Dask DataFrame or a list of Dask DataFrames")
 
         unique_columns = set()
-        for ddf in ddfs:
+        for ddf in ddf_or_ddfs:
             if not isinstance(ddf, dd.DataFrame):
                 raise TypeError("All elements in the list must be Dask DataFrames")
             unique_columns.update(ddf.columns)
@@ -592,6 +601,9 @@ class Harmonizer:
             if self.extra_cols:
                 columns_list.extend(col.upper() for col in self.extra_cols if col.upper() not in columns_list)
 
+            if self.join_key:
+                columns_list.extend(col.upper() for col in filtered_ddf.columns if col.upper() == self.join_key)
+
             if columns_list:
                 logging.debug(f"Filtering DataFrame for columns: {columns_list}")
                 logging.debug(f"Available columns: {filtered_ddf.columns.tolist()}")
@@ -613,3 +625,81 @@ class Harmonizer:
             filtered_ddfs.append(filtered_ddf)
 
         return filtered_ddfs
+
+    def join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
+        """
+        Join multiple Dask DataFrames on a specified key column, removing duplicate columns.
+
+        Parameters
+        ----------
+        ddfs : list of dask.dataframe.DataFrame
+            List of Dask DataFrames to join.
+
+        Returns
+        -------
+        pandas.DataFrame
+            Merged DataFrame with duplicate columns removed.
+        """
+        pandas_dfs = [df.compute() for df in ddfs]
+
+        def identify_primary_df(dfs):
+            candidates = []
+
+            for i, df in enumerate(dfs):
+                if self.join_key not in df.columns:
+                    continue
+
+                total_rows = len(df)
+                unique_rows = df[self.join_key].nunique()
+                uniqueness_ratio = unique_rows / total_rows
+
+                df[self.join_key].to_csv(f"data/directories_{df.index.name or 'index'}.csv", index=False)
+                logging.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
+                if uniqueness_ratio > 0.9:
+                    candidates.append((i, df.copy(), uniqueness_ratio))
+
+            if not candidates:
+                logging.error("No table with nearly-unique key found")
+
+            candidates.sort(key=lambda x: x[2], reverse=True)
+            original_index, primary_df, _ = candidates[0]
+
+            primary_df = primary_df.drop_duplicates(subset=[self.join_key], keep='first')
+            dfs.pop(original_index)
+            dfs.insert(0, primary_df)
+
+            return dfs
+
+        ordered_dfs = identify_primary_df(pandas_dfs)
+
+        merged_df = pd.merge(ordered_dfs[0], ordered_dfs[1],
+                             on=self.join_key,
+                             how='outer',
+                             suffixes=('', '_dup'))
+
+        dup_cols = [col for col in merged_df.columns if col.endswith('_dup')]
+        merged_df = merged_df.drop(columns=dup_cols)
+
+        for df in ordered_dfs[2:]:
+            if self.join_key not in df.columns:
+                raise KeyError(f"Join key '{self.join_key}' not found in DataFrame")
+
+            original_cols = set(merged_df.columns)
+
+            if self.aux_key is not None and self.aux_key in df.columns:
+                merged_df = pd.merge(merged_df, df,
+                                     on=[self.join_key, self.aux_key],
+                                     how='outer',
+                                     suffixes=('', '_dup'))
+            else:
+                merged_df = pd.merge(merged_df, df,
+                                     on=self.join_key,
+                                     how='outer',
+                                     suffixes=('', '_dup'))
+
+            new_dup_cols = [col for col in merged_df.columns
+                            if col.endswith('_dup') and
+                            col.replace('_dup', '') in original_cols]
+            merged_df = merged_df.drop(columns=new_dup_cols)
+
+        return merged_df

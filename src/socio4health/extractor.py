@@ -353,7 +353,6 @@ class Extractor:
                     )
             else:
                 files_list.extend(glob.glob(full_pattern))
-
         # Process all files using the shared method
         self._process_files_locally(files_list + extracted_files)
 

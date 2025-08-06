@@ -11,6 +11,7 @@ import tarfile
 import py7zr
 import os
 import requests
+import hashlib
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -85,7 +86,7 @@ def download_request(url, filename, download_dir):
 
 def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=5, found_files=set()):
     """Extract files from a compressed archive and return the paths of the extracted files.
-    
+
     Parameters
     ----------
     input_archive : str
@@ -100,63 +101,92 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
         The maximum depth of extraction is to prevent infinite recursion. Default is 5.
     found_files : set, optional
         A set to keep track of already found files, used to avoid duplicates. Default is an empty set.
-    
+
     Returns
     -------
     ``set``
         A ``set`` containing the paths of the extracted files that match the specified extensions.
     """
 
+    logging.info(f"Processing (depth {current_depth}): {os.path.basename(input_archive)}")
 
     if current_depth > max_depth:
-        logging.warning(f"Reached max depth of {max_depth}. Stopping further extraction.")
-        return found_files
+        logging.warning(f"Max depth {max_depth} reached")
+        return set()
+
+    found_files = set()
 
     with tempfile.TemporaryDirectory() as temp_dir:
-        # Determine the type of archive and extract accordingly
-        if zipfile.is_zipfile(input_archive):
-            with zipfile.ZipFile(input_archive, 'r') as zip_ref:
-                zip_ref.extractall(temp_dir)
-        elif tarfile.is_tarfile(input_archive):
-            with tarfile.open(input_archive, 'r:*') as tar_ref:
-                tar_ref.extractall(temp_dir)
-        elif input_archive.endswith('.7z'):
-            with py7zr.SevenZipFile(input_archive, mode='r') as z_ref:
-                z_ref.extractall(temp_dir)
-        else:
-            logging.error(f"Unsupported archive format: {input_archive}")
-            return None
+        try:
+            # Extract the archive
+            if zipfile.is_zipfile(input_archive):
+                with zipfile.ZipFile(input_archive, 'r') as zip_ref:
+                    zip_ref.extractall(temp_dir)
+            elif tarfile.is_tarfile(input_archive):
+                with tarfile.open(input_archive, 'r:*') as tar_ref:
+                    tar_ref.extractall(temp_dir)
+            elif input_archive.endswith('.7z'):
+                with py7zr.SevenZipFile(input_archive, mode='r') as z_ref:
+                    z_ref.extractall(temp_dir)
+            else:
+                logging.error(f"Unsupported format: {input_archive}")
+                return set()
 
-        # Ensure the target directory exists
-        if not os.path.exists(target_directory):
-            os.makedirs(target_directory)
-            logging.info(f"Created target directory: {target_directory}")
+            # Process all extracted items
+            for root, dirs, files in os.walk(temp_dir):
+                for name in files:
+                    item_path = os.path.join(root, name)
+                    rel_path = os.path.relpath(item_path, temp_dir)
 
-        # Process the extracted contents
-        for root, dirs, files in os.walk(temp_dir):
-            for file in files:
-                file_path = os.path.join(root, file)
-                # Check if file is a nested archive and process it
-                if any(file_path.endswith(ext) for ext in ['.zip', '.7z', '.tar', '.gz', '.tgz']):
-                    if current_depth < max_depth:
-                        found_files |= set(
-                            compressed2files(file_path, target_directory, down_ext, current_depth + 1, max_depth,
-                                             found_files))
-                elif f".{file.split('.')[-1].lower()}" in down_ext:
-                    # Generate a unique filename
-                    base_name, ext = os.path.splitext(file)
-                    parent = os.path.splitext(os.path.basename(input_archive))[0]
-                    unique_name = f"{parent}_{base_name}{ext}"
-                    destination_path = os.path.join(target_directory, unique_name)
-                    shutil.move(file_path, destination_path)
-                    found_files.add(destination_path)
-                    logging.info(f"Extracted file: {destination_path}")
+                    # Handle nested archives
+                    if any(item_path.endswith(ext) for ext in ['.zip', '.7z', '.tar', '.gz']):
+                        found_files.update(compressed2files(
+                            item_path,
+                            target_directory,
+                            down_ext,
+                            current_depth + 1,
+                            max_depth
+                        ))
+
+                    # Handle regular files with matching extensions
+                    else:
+                        file_ext = os.path.splitext(name)[1].lower()
+                        if any(file_ext == ext.lower() for ext in down_ext):
+                            # Create unique filename with archive path hash
+                            archive_hash = hashlib.md5(input_archive.encode()).hexdigest()[:8]
+                            parent_folders = rel_path.replace(os.path.sep, '_')
+                            unique_name = f"{archive_hash}_{parent_folders}"
+                            dest_path = os.path.join(target_directory, unique_name)
+
+                            # Ensure parent directory exists
+                            os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+
+                            # Always move the file (no duplicate checking)
+                            shutil.move(item_path, dest_path)
+                            found_files.add(dest_path)
+                            logging.info(f"Extracted: {unique_name}")
+
+        except Exception as e:
+            logging.error(f"Failed to process {input_archive}: {str(e)}", exc_info=True)
+            return set()
 
     if not found_files:
-        logging.warning("No files found matching the specified extensions.")
+        logging.warning(f"No matches in {os.path.basename(input_archive)}. Contents:")
+        for root, dirs, files in os.walk(temp_dir):
+            for f in files:
+                logging.info(f"  Found: {os.path.relpath(os.path.join(root, f), temp_dir)}")
+
+    if not found_files:
+            logging.warning("No files found matching the specified extensions.")
 
     return found_files
 
+def create_unique_path(archive_path, filename, target_dir):
+    """Generate unique destination path"""
+    archive_name = os.path.splitext(os.path.basename(archive_path))[0]
+    base, ext = os.path.splitext(filename)
+    unique_name = f"{archive_name}_{base}{ext}"
+    return os.path.join(target_dir, unique_name)
 
 def parse_pnadc_sas_script(file_path):
     """Parse a ``SAS`` script file to extract column names and specifications.

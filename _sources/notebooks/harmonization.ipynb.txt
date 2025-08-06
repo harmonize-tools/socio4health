@@ -1,0 +1,302 @@
+{
+ "cells": [
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "<img src=\"https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png\" alt=\"image info\" height=\"100\" width=\"100\"/>\n",
+   "id": "48dfedfd3488ed92"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "# Harmonization of data",
+   "id": "422e92e63d201714"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "**Run the tutorial via free cloud platforms:** [![badge](https://img.shields.io/badge/launch-binder-E66581.svg?logo=data:image/png;base64,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)](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb) <a target=\"_blank\" href=\"https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb\">\n",
+    "  <img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/>\n",
+    "</a>\n",
+    "\n"
+   ],
+   "id": "1599a585fa8204d6"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "This notebook provides you with a tutorial on how to process the sociodemographic and economic data from online data sources from  Brazil. This tutorial assumes you have an intermediate or advanced understanding of Python and data manipulation.\n",
+    "\n",
+    "## Prerequisites\n",
+    "\n",
+    "To run this notebook, you need to have the following prerequisites:\n",
+    "\n",
+    "- Python 3.10+\n",
+    "\n",
+    "Additionally, you need to install the `socio4health` and `pandas` package, which can be done using ``pip``:\n",
+    "\n"
+   ],
+   "id": "a04649ff2f2f8680"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "!pip install socio4health pandas -q",
+   "id": "59bb2e9841851c30"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "## Import Libraries",
+   "id": "af633dbea31aaaab"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "import pandas as pd\n",
+    "from socio4health import Extractor\n",
+    "from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum\n",
+    "from socio4health.harmonizer import Harmonizer\n",
+    "from socio4health.utils import harmonizer_utils\n",
+    "import tqdm as tqdm\n"
+   ],
+   "id": "e448c769134fe36d"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Extracting data from Brazil\n",
+    "\n",
+    "In this example, we will extract the Brazilian National Continuous Household Sample Survey (**PNADC**) for the year 2024 from the Brazilian Institute of Geography and Statistics (**IBGE**) website."
+   ],
+   "id": "8b286730445109e9"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "bra_online_extractor = Extractor(input_path=\"https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/\", down_ext=['.txt','.zip'], is_fwf=True, colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, output_path=\"../data\", depth=0)",
+   "id": "338d2512725fe9f0"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "## Providing the raw dictionary",
+   "id": "79484d3e09b568d6"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "We need to provide the raw dictionary to the harmonizer. The raw dictionary is a dictionary that contains the column names and their corresponding data types. This is necessary for the harmonization process, as it allows the harmonizer to understand the structure of the data. To know more about how to construct the raw dictionary, you can check the [documentation](https://harmonize-tools.github.io/socio4health/dictionary.html).",
+   "id": "ac3ad903ed8cb378"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "raw_dict = pd.read_excel('raw_dictionary.xlsx')",
+   "id": "6773c8ef688101e2"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "The raw dictionary is then standardized using the `standardize_dict` method, which ensures that the dictionary is in a consistent format, making it easier to work with during the harmonization process. Additionally, the content of columns of the dictionary can be translated  into English using `translate_column` function from `harmonizer_utils` module. Translation is performed for facilitate the understanding and processing of the data.",
+   "id": "492302dd9245be14"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "dict = harmonizer_utils.standardize_dict(raw_dict)",
+   "id": "65ab398829a1ad1f"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "dict = harmonizer_utils.standardize_dict(raw_dict)\n",
+    "dict = harmonizer_utils.translate_column(dic, \"question\", language=\"en\")\n",
+    "dict = harmonizer_utils.translate_column(dic, \"description\", language=\"en\")\n",
+    "dict = harmonizer_utils.translate_column(dic, \"possible_answers\", language=\"en\")\n"
+   ],
+   "id": "aea219ca608eab2a"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "The `classify_rows` method is then used to classify the rows of the standardized dictionary based on the content of the specified columns. This classification helps in organizing the data and making it easier to work with during the harmonization process. The `MODEL_PATH` parameter specifies the path to a pre-trained model that is used for classification. You can provide your own model or use the default one provided in the `files` folder. The model is a fine-tuned BERT model for text classification. You can find more details about the model in the [documentation](https://harmonize-tools.github.io/socio4health/socio4health.utils.harmonizer_utils.classify_rows.html#socio4health.utils.harmonizer_utils.classify_rows).",
+   "id": "35a68aa2dd5f1fba"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "dict = harmonizer_utils.classify_rows(dic, \"question_en\", \"description_en\", \"possible_answers_en\",\n",
+    "                                     new_column_name=\"category\",\n",
+    "                                     MODEL_PATH=\"files/bert_finetuned_classifier\")"
+   ],
+   "id": "e647e0ac0333a014"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Extracting the data\n",
+    "The `extract` method of the `Extractor` class is used retrieve the data from the specified input path. It returns a list of dataframes, each dataframe corresponding to a file extracted from the path."
+   ],
+   "id": "3b60a80f58e17a87"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "dfs = bra_online_extractor.extract()",
+   "id": "90f70dbe672991c1"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Harmonizing the data\n",
+    "First, we need to create an instance of the `Harmonizer` class."
+   ],
+   "id": "b1a6d1c13426a24a"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "har = Harmonizer()\n",
+   "id": "25f790988eec7f59"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "After the dictionary is standardized and translated, it can be used to harmonize the data. For this, set the `dict_df` attribute of the `Harmonizer` instance to the standardized dictionary. This allows the harmonizer to use the information from the dictionary to process the dataframes.",
+   "id": "dc2617ae56e96cf2"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "har.dict_df = dict",
+   "id": "b8362bf785529926"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "Next, we can set the parameters for the harmonization process. The `similarity_threshold` parameter is used to set the threshold for the similarity among column names. The `nan_threshold` parameter is used to set the threshold for the number of NaN values allowed in a column. If a column has more NaN values than the specified threshold, it will be dropped from the final dataframe.\n",
+    "\n"
+   ],
+   "id": "36d63e0b1a014c48"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "har.similarity_threshold = 0.9\n",
+    "har.nan_threshold = 1\n"
+   ],
+   "id": "bf8fc86992c07eff"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "The `vertical_merge` method is used to merge the dataframes vertically. This means that the dataframes will be concatenated along the rows, and the columns will be aligned based on their names. Available columns can be obtained using the `get_available_columns` method, which returns a list of column names that are present in all dataframes after the vertical merge.",
+   "id": "e237c0eedcc1f294"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "dfs = har.vertical_merge(dfs)\n",
+    "available_columns = har.get_available_columns(dfs)"
+   ],
+   "id": "f9afaf7e1579a9a7"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "For the selection of rows from the data, we can use the `data_selector` method. To use this method we first need to assign the categories of our interest, which can either be one or a set of the following categories:``  .This method allows us to select specific rows from the data based on the values in a specified column. The `key_col` parameter specifies the column to be used for selection, and the `key_val` parameter specifies the values to be selected. In this case, we will select rows where the value in the `DPTO` column is equal to `25`, which corresponds to the state of São Paulo.",
+   "id": "e1217f95a3c5f1d1"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "har.categories = [\"Business\"]\n",
+    "har.key_col = 'DPTO'\n",
+    "har.key_val = ['25']\n",
+    "filtered_ddfs = har.data_selector(dfs)"
+   ],
+   "id": "52a78bdb6f585801"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Finally, we can join the filtered dataframes into a single dataframe using the `join_data` method. This method combines the data from the filtered dataframes into a single dataframe, aligning the columns based on their names. The resulting dataframe will contain all the columns that are present in the filtered dataframes, and it will be ready for further analysis or export. ",
+   "id": "cefaf0588c9be884"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "joined_df = har.join_data(filtered_ddfs)\n",
+    "available_cols = joined_df.columns.tolist()\n",
+    "print(f\"Available columns: {available_cols}\")\n",
+    "print(f\"Shape of the joined DataFrame: {joined_df.shape}\")\n",
+    "print(joined_df.head())\n",
+    "joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)"
+   ],
+   "id": "1ca59653ff1335ac"
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

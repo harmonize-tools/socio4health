@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.data\_selector
+======================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.data_selector

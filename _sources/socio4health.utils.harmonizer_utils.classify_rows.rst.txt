@@ -1,0 +1,6 @@
+﻿socio4health.utils.harmonizer\_utils.classify\_rows
+===================================================
+
+.. currentmodule:: socio4health.utils.harmonizer_utils
+
+.. autofunction:: classify_rows

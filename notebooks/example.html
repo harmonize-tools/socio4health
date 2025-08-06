@@ -1,0 +1,1577 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>&lt;no title&gt; &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/example';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">custom_path</span> <span class="o">=</span> <span class="s2">&quot;../../../src&quot;</span>
+<span class="k">if</span> <span class="n">custom_path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">custom_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>torch
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: torch in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (2.7.1)
+Requirement already satisfied: filelock in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (3.18.0)
+Requirement already satisfied: typing-extensions&gt;=4.10.0 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (4.14.1)
+Requirement already satisfied: setuptools in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (80.9.0)
+Requirement already satisfied: sympy&gt;=1.13.3 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (1.14.0)
+Requirement already satisfied: networkx in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (3.5)
+Requirement already satisfied: jinja2 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (3.1.6)
+Requirement already satisfied: fsspec in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (2025.7.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.6.77 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.6.77)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.6.77 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.6.77)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.6.80 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.6.80)
+Requirement already satisfied: nvidia-cudnn-cu12==9.5.1.17 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (9.5.1.17)
+Requirement already satisfied: nvidia-cublas-cu12==12.6.4.1 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.6.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.0.4 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (11.3.0.4)
+Requirement already satisfied: nvidia-curand-cu12==10.3.7.77 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (10.3.7.77)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.1.2 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (11.7.1.2)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.4.2 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.5.4.2)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.3 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (0.6.3)
+Requirement already satisfied: nvidia-nccl-cu12==2.26.2 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (2.26.2)
+Requirement already satisfied: nvidia-nvtx-cu12==12.6.77 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.6.77)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.6.85 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (12.6.85)
+Requirement already satisfied: nvidia-cufile-cu12==1.11.1.6 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (1.11.1.6)
+Requirement already satisfied: triton==3.3.1 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from torch) (3.3.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from sympy&gt;=1.13.3-&gt;torch) (1.3.0)
+Requirement already satisfied: MarkupSafe&gt;=2.0 in /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages (from jinja2-&gt;torch) (3.0.2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.harmonizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harmonizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">harmonizer_utils</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col_online_extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="s2">&quot;https://microdatos.dane.gov.co/index.php/catalog/643/get-microdata&quot;</span><span class="p">,</span>
+                                 <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;.CSV&#39;</span><span class="p">,</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span><span class="s1">&#39;.zip&#39;</span><span class="p">],</span>
+                                 <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span>
+                                 <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;CNPV2018&quot;</span><span class="p">,</span>
+                                 <span class="n">key_words</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;73_Tolima.zip&quot;</span><span class="p">],</span>
+                                 <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">col_CNPV</span> <span class="o">=</span> <span class="n">col_online_extractor</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,030 - INFO - ----------------------
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,030 - INFO - Starting data extraction...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,031 - INFO - Extracting data in online mode...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,031 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/643/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,048 - WARNING - /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/scrapy/utils/request.py:120: ScrapyDeprecationWarning: &#39;REQUEST_FINGERPRINTER_IMPLEMENTATION&#39; is a deprecated setting.
+It will be removed in a future version of Scrapy.
+  return cls(crawler)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,147 - ERROR - Failed during web scraping: This event loop is already running
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-06 14:02:49,147 - ERROR - Exception while extracting data: Web scraping failed: This event loop is already running
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="nn">File ~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:232,</span> in <span class="ni">Extractor._extract_online_mode</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">231</span> <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scraping URL: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="si">}</span><span class="s2"> with depth </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">232</span> <span class="n">run_standard_spider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">down_ext</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_words</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># Read scraped links</span>
+
+<span class="nn">File ~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/utils/extractor_utils.py:47,</span> in <span class="ni">run_standard_spider</span><span class="nt">(url, depth, down_ext, key_words)</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span> <span class="n">process</span><span class="o">.</span><span class="n">crawl</span><span class="p">(</span><span class="n">StandardSpider</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">down_ext</span><span class="o">=</span><span class="n">down_ext</span><span class="p">,</span> <span class="n">key_words</span><span class="o">=</span><span class="n">key_words</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">47</span> <span class="n">process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/scrapy/crawler.py:502,</span> in <span class="ni">CrawlerProcess.start</span><span class="nt">(self, stop_after_crawl, install_signal_handlers)</span>
+<span class="g g-Whitespace">    </span><span class="mi">499</span>     <span class="n">reactor</span><span class="o">.</span><span class="n">addSystemEventTrigger</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">500</span>         <span class="s2">&quot;after&quot;</span><span class="p">,</span> <span class="s2">&quot;startup&quot;</span><span class="p">,</span> <span class="n">install_shutdown_handlers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal_shutdown</span>
+<span class="g g-Whitespace">    </span><span class="mi">501</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">502</span> <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">installSignalHandlers</span><span class="o">=</span><span class="n">install_signal_handlers</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/twisted/internet/asyncioreactor.py:253,</span> in <span class="ni">AsyncioSelectorReactor.run</span><span class="nt">(self, installSignalHandlers)</span>
+<span class="g g-Whitespace">    </span><span class="mi">252</span> <span class="bp">self</span><span class="o">.</span><span class="n">startRunning</span><span class="p">(</span><span class="n">installSignalHandlers</span><span class="o">=</span><span class="n">installSignalHandlers</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">253</span> <span class="bp">self</span><span class="o">.</span><span class="n">_asyncioEventloop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">254</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_justStopped</span><span class="p">:</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/asyncio/base_events.py:634,</span> in <span class="ni">BaseEventLoop.run_forever</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">633</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_closed</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">634</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_running</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">635</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_coroutine_origin_tracking</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_debug</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/asyncio/base_events.py:626,</span> in <span class="ni">BaseEventLoop._check_running</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">625</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_running</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">626</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This event loop is already running&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">627</span> <span class="k">if</span> <span class="n">events</span><span class="o">.</span><span class="n">_get_running_loop</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span>: This event loop is already running
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:175,</span> in <span class="ni">Extractor.extract</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">174</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http&quot;</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">175</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_extract_online_mode</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">176</span> <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="p">):</span>
+
+<span class="nn">File ~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:239,</span> in <span class="ni">Extractor._extract_online_mode</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">238</span>     <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed during web scraping: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">239</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Web scraping failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">241</span> <span class="c1"># Step 2: Filter and confirm files to download</span>
+
+<span class="ne">ValueError</span>: Web scraping failed: This event loop is already running
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">col_online_extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="s2">&quot;https://microdatos.dane.gov.co/index.php/catalog/643/get-microdata&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>                                  <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;.CSV&#39;</span><span class="p">,</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span><span class="s1">&#39;.zip&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>                                  <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>                                  <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;CNPV2018&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>                                  <span class="n">key_words</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;73_Tolima.zip&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>                                  <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">col_CNPV</span> <span class="o">=</span> <span class="n">col_online_extractor</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+
+<span class="nn">File ~/work/socio4health/socio4health/docs/source/notebooks/../../../src/socio4health/extractor.py:181,</span> in <span class="ni">Extractor.extract</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">179</span> <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span>     <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception while extracting data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">181</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extraction failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">183</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframes</span>
+
+<span class="ne">ValueError</span>: Extraction failed: Web scraping failed: This event loop is already running
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dask.dataframe</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span>
+
+<span class="c1"># Paso 1: Convertir todos a dask.DataFrame si no lo son ya</span>
+<span class="n">lista_dfs_normalizados</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">col_CNPV</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">ddf</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;compute&#39;</span><span class="p">):</span>  <span class="c1"># ya es Dask DataFrame</span>
+        <span class="n">ddf</span> <span class="o">=</span> <span class="n">df</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Tipo no soportado:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+    <span class="n">lista_dfs_normalizados</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ddf</span><span class="p">)</span>
+
+<span class="c1"># Paso 2: Obtener columnas comunes a todos los dataframes</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lista_dfs_normalizados</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ddf</span> <span class="ow">in</span> <span class="n">lista_dfs_normalizados</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">ddf</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>  <span class="c1"># intersección de columnas</span>
+
+<span class="c1"># Paso 2: Remover columnas duplicadas no clave antes de merge</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_duplicate_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+    <span class="c1"># Solo dejamos las columnas que no están duplicadas en la unión</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">keys</span> <span class="ow">or</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]]</span>
+
+<span class="n">dfs_limpios</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="n">keys</span><span class="p">)</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">lista_dfs_normalizados</span><span class="p">]</span>
+
+<span class="c1"># Paso 3: Hacer merge sucesivos</span>
+<span class="n">df_merged</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">dd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+        <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">right</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">left</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]],</span>
+        <span class="n">on</span><span class="o">=</span><span class="n">keys</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span>
+    <span class="p">),</span>
+    <span class="n">dfs_limpios</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prueba</span> <span class="o">=</span><span class="p">[</span><span class="n">df_merged</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="p">()</span>
+<span class="n">har</span><span class="o">.</span><span class="n">similarity_threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">har</span><span class="o">.</span><span class="n">nan_threshold</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># dfs = har.vertical_merge(col_CNPV)</span>
+<span class="n">dfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">drop_nan_columns</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span>
+<span class="n">available_columns</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">get_available_columns</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-07-25 09:50:18,406 - INFO - Dropping columns with majority NaN values...
+2025-07-25 09:50:19,322 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_1VIV_A2_73_20250725095009.CSV
+2025-07-25 09:50:19,328 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_3FALL_A2_73_20250725095009.CSV
+2025-07-25 09:50:19,333 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_5PER_A2_73_20250725095009.CSV
+2025-07-25 09:50:19,335 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_MGN_A2_73_20250725095009.CSV
+2025-07-25 09:50:19,352 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_2HOG_A2_73_20250725095009.CSV
+2025-07-25 09:50:59,388 - INFO - No columns with majority NaN values found
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-07-25 10:25:35,254 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_3FALL_A2_73_20250725095009.CSV
+2025-07-25 10:25:35,254 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_1VIV_A2_73_20250725095009.CSV
+2025-07-25 10:25:35,255 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_5PER_A2_73_20250725095009.CSV
+2025-07-25 10:25:35,255 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_MGN_A2_73_20250725095009.CSV
+2025-07-25 10:25:35,255 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/docs/source/notebooks/../CNPV2018/CNPV2018_2HOG_A2_73_20250725095009.CSV
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">available_columns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>92
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_dict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;../../Socio4HealthData/Dictionaries/Colombia/Diccionario Crudo CNVP.xlsx&#39;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">standardize_dict</span><span class="p">(</span><span class="n">raw_dict</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;possible_answers&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">classify_rows</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question_en&quot;</span><span class="p">,</span> <span class="s2">&quot;description_en&quot;</span><span class="p">,</span> <span class="s2">&quot;possible_answers_en&quot;</span><span class="p">,</span>
+                                        <span class="n">new_column_name</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span>
+                                        <span class="n">MODEL_PATH</span><span class="o">=</span><span class="s2">&quot;../../Socio4HealthData/input/bert_finetuned_classifier&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-07-17 15:00:44,650 - WARNING - c:\Users\jmont\OneDrive - Universidad de los andes\Uniandes\2025\Harmonize\socio4health\tests\../src\socio4health\utils\harmonizer_utils.py:42: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
+  column.replace(r&#39;^\s*$&#39;, np.nan, regex=True)
+
+2025-07-17 15:00:45,066 - WARNING - c:\Users\jmont\OneDrive - Universidad de los andes\Uniandes\2025\Harmonize\socio4health\tests\../src\socio4health\utils\harmonizer_utils.py:78: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  .apply(_process_group, include_groups=True)\
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>question translated
+description translated
+Rows with contents longer than 5000 characters are cut off
+Rows with contents longer than 5000 characters are cut off
+possible_answers translated
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;../../../../Socio4HealthData/Dictionaries/Colombia/Diccionario Crudo CNVP Categorizado.xlsx&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>variable_name</th>
+      <th>question</th>
+      <th>description</th>
+      <th>value</th>
+      <th>size</th>
+      <th>possible_answers</th>
+      <th>question_en</th>
+      <th>description_en</th>
+      <th>possible_answers_en</th>
+      <th>category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>p_enfermo</td>
+      <td>algun problema de salud en los últimos 30 días...</td>
+      <td>NaN</td>
+      <td>1; 2; 9</td>
+      <td>NaN</td>
+      <td>si; no; no informa</td>
+      <td>some health problem in the last 30 days, witho...</td>
+      <td>NaN</td>
+      <td>Yeah; No; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>condicion_fisica</td>
+      <td>alguna dificultad en su vida diaria</td>
+      <td>NaN</td>
+      <td>1; 2; 9</td>
+      <td>NaN</td>
+      <td>si; no; no informa</td>
+      <td>Some difficulty in your daily life</td>
+      <td>NaN</td>
+      <td>Yeah; No; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>pa_asistencia</td>
+      <td>asistencia escolar (de forma presencial o virt...</td>
+      <td>NaN</td>
+      <td>1; 2; 9;</td>
+      <td>NaN</td>
+      <td>si; no; no informa; no aplica</td>
+      <td>School Asistance (in person the virtual way)</td>
+      <td>NaN</td>
+      <td>Yeah; No; does not inform; It does not apply</td>
+      <td>Education</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>pa_lo_atendieron</td>
+      <td>atención del problema de salud</td>
+      <td>NaN</td>
+      <td>1; 2; 9;</td>
+      <td>NaN</td>
+      <td>si; no; no informa; no aplica</td>
+      <td>Health problem care</td>
+      <td>NaN</td>
+      <td>Yeah; No; does not inform; It does not apply</td>
+      <td>Nonstandard job</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>pa1_calidad_serv</td>
+      <td>calidad de la prestación del servicio de salud</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 9;</td>
+      <td>NaN</td>
+      <td>muy bueno; bueno; malo; muy malo; no informa; ...</td>
+      <td>quality of health service</td>
+      <td>NaN</td>
+      <td>very good; Well; bad; very bad; does not infor...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>167</th>
+      <td>167</td>
+      <td>p_quehizo_ppal</td>
+      <td>tratamiento principal del problema de salud</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 5; 6; 7; 8; 9; 99;</td>
+      <td>NaN</td>
+      <td>acudió a la entidad de seguridad social en sal...</td>
+      <td>Main treatment of the health problem</td>
+      <td>NaN</td>
+      <td>He went to the Social Security entity in healt...</td>
+      <td>Education</td>
+    </tr>
+    <tr>
+      <th>168</th>
+      <td>168</td>
+      <td>uva_uso_unidad</td>
+      <td>uso de la unidad</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4</td>
+      <td>NaN</td>
+      <td>vivienda; mixto (espacio independiente y separ...</td>
+      <td>Use of Unit</td>
+      <td>NaN</td>
+      <td>dwelling; mixed (independent and separate spac...</td>
+      <td>Housing</td>
+    </tr>
+    <tr>
+      <th>169</th>
+      <td>169</td>
+      <td>pa21_cod_vitsa</td>
+      <td>vitsa de pertenencia</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 5; 6; 7; 8; 9;</td>
+      <td>NaN</td>
+      <td>1_bolochok; 2_churon; 3_mijay; 4_ghuso – ruso;...</td>
+      <td>VITSA of belonging</td>
+      <td>NaN</td>
+      <td>1_bolchok; 2_Churon; 3_Mijay; 4_Ghuso - Russia...</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>170</th>
+      <td>170</td>
+      <td>uva_esta_areaprot</td>
+      <td>vivienda en un área protegida</td>
+      <td>NaN</td>
+      <td>1; 2; 9;</td>
+      <td>NaN</td>
+      <td>si; no; no informa; no aplica</td>
+      <td>Housing in a protected area</td>
+      <td>NaN</td>
+      <td>Yeah; No; does not inform; It does not apply</td>
+      <td>Housing</td>
+    </tr>
+    <tr>
+      <th>171</th>
+      <td>171</td>
+      <td>uva_estater</td>
+      <td>vivienda en una territorialidad étnica</td>
+      <td>NaN</td>
+      <td>1; 2</td>
+      <td>NaN</td>
+      <td>si; no</td>
+      <td>housing in an ethnic territoriality</td>
+      <td>NaN</td>
+      <td>Yeah; No</td>
+      <td>Housing</td>
+    </tr>
+  </tbody>
+</table>
+<p>172 rows × 11 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span><span class="p">[</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Business&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>variable_name</th>
+      <th>question</th>
+      <th>description</th>
+      <th>value</th>
+      <th>size</th>
+      <th>possible_answers</th>
+      <th>question_en</th>
+      <th>description_en</th>
+      <th>possible_answers_en</th>
+      <th>category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>p_enfermo</td>
+      <td>algun problema de salud en los últimos 30 días...</td>
+      <td>NaN</td>
+      <td>1; 2; 9</td>
+      <td>NaN</td>
+      <td>si; no; no informa</td>
+      <td>some health problem in the last 30 days, witho...</td>
+      <td>NaN</td>
+      <td>Yeah; No; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>condicion_fisica</td>
+      <td>alguna dificultad en su vida diaria</td>
+      <td>NaN</td>
+      <td>1; 2; 9</td>
+      <td>NaN</td>
+      <td>si; no; no informa</td>
+      <td>Some difficulty in your daily life</td>
+      <td>NaN</td>
+      <td>Yeah; No; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>pa1_calidad_serv</td>
+      <td>calidad de la prestación del servicio de salud</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 9;</td>
+      <td>NaN</td>
+      <td>muy bueno; bueno; malo; muy malo; no informa; ...</td>
+      <td>quality of health service</td>
+      <td>NaN</td>
+      <td>very good; Well; bad; very bad; does not infor...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>fa4_cert_defun</td>
+      <td>certificado médico de defunción</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 9</td>
+      <td>NaN</td>
+      <td>si; no; no sabe; no informa</td>
+      <td>Death Medical Certificate</td>
+      <td>NaN</td>
+      <td>Yeah; No; He doesn't know; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>ua_clase</td>
+      <td>clase</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4</td>
+      <td>NaN</td>
+      <td>1_cabecera municipal; 2_centro poblado; 3_rura...</td>
+      <td>class</td>
+      <td>NaN</td>
+      <td>1_ municipal box; 2_ Populated Center; 3_ Disp...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>vb_acu</td>
+      <td>cuenta con servicio de acueducto</td>
+      <td>NaN</td>
+      <td>1; 2</td>
+      <td>NaN</td>
+      <td>si; no</td>
+      <td>has aqueduct service</td>
+      <td>NaN</td>
+      <td>Yeah; No</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>vc_alc</td>
+      <td>cuenta con servicio de alcantarillado</td>
+      <td>NaN</td>
+      <td>1; 2</td>
+      <td>NaN</td>
+      <td>si; no</td>
+      <td>has sewerage service</td>
+      <td>NaN</td>
+      <td>Yeah; No</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>va_ee</td>
+      <td>cuenta con servicio de energía eléctrica</td>
+      <td>NaN</td>
+      <td>1; 2</td>
+      <td>NaN</td>
+      <td>si; no</td>
+      <td>has electric power service</td>
+      <td>NaN</td>
+      <td>Yeah; No</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>vd_gas</td>
+      <td>cuenta con servicio de gas natural conectado a...</td>
+      <td>NaN</td>
+      <td>1; 2; 9</td>
+      <td>NaN</td>
+      <td>si; no; no informa</td>
+      <td>has a natural gas service connected to a publi...</td>
+      <td>NaN</td>
+      <td>Yeah; No; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>ve_recbas</td>
+      <td>cuenta con servicio de recolección de basura</td>
+      <td>NaN</td>
+      <td>1; 2; 9</td>
+      <td>NaN</td>
+      <td>si; no; no informa</td>
+      <td>It has garbage collection service</td>
+      <td>NaN</td>
+      <td>Yeah; No; It does not inform</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>ve1_qsem</td>
+      <td>cuántas veces por semana (recolección basura)</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 5; 6; 7; 8; 9;</td>
+      <td>NaN</td>
+      <td>1 vez; 2 veces; 3 veces; 4 veces; 5 veces; 6 v...</td>
+      <td>How many times a week (garbage collection)</td>
+      <td>NaN</td>
+      <td>1 time; 2 times; 3 times; 4 times; 5 times; 6 ...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>fa3_edad_fall</td>
+      <td>edad al morir</td>
+      <td>NaN</td>
+      <td>0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; ...</td>
+      <td>NaN</td>
+      <td>0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; ...</td>
+      <td>Age at death</td>
+      <td>NaN</td>
+      <td>0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; ...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>26</td>
+      <td>pa_habla_leng</td>
+      <td>habla la lengua nativa de su pueblo</td>
+      <td>NaN</td>
+      <td>1; 2; 9;</td>
+      <td>NaN</td>
+      <td>si; no; no informa; no aplica</td>
+      <td>speaks the native language of his people</td>
+      <td>NaN</td>
+      <td>Yeah; No; does not inform; It does not apply</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>31</td>
+      <td>pa_hnvs</td>
+      <td>hijos(as) sobrevivientes</td>
+      <td>NaN</td>
+      <td>1; 2; 9;</td>
+      <td>NaN</td>
+      <td>si; no sabe; no informa; no aplica</td>
+      <td>Survivors</td>
+      <td>NaN</td>
+      <td>Yeah; He doesn't know; does not inform; It doe...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>46</td>
+      <td>v_mat_piso</td>
+      <td>material predominante en los pisos</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 5; 6</td>
+      <td>NaN</td>
+      <td>mármol, parqué, madera pulida y lacada; baldos...</td>
+      <td>predominant material on floors</td>
+      <td>NaN</td>
+      <td>marble, parquet, polished wood and lacquered; ...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>47</td>
+      <td>v_mat_pared</td>
+      <td>material predominante en paredes exteriores</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 5; 6; 7; 8; 9</td>
+      <td>NaN</td>
+      <td>bloque, ladrillo, piedra, madera pulida; concr...</td>
+      <td>predominant material on outer walls</td>
+      <td>NaN</td>
+      <td>block, brick, stone, polished wood; empty conc...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>49</td>
+      <td>pa2_ano_uhnv</td>
+      <td>nacimiento último hijo(a) nacido(a) vivo(a): año</td>
+      <td>NaN</td>
+      <td>1900; 1901; 1902; 1903; 1904; 1905; 1906; 1907...</td>
+      <td>NaN</td>
+      <td>1900; 1901; 1902; 1903; 1904; 1905; 1906; 1907...</td>
+      <td>Last Birth Son (a) Born (a) Live (a): Year</td>
+      <td>NaN</td>
+      <td>1900; 1901; 1902; 1903; 1904; 1905; 1906; 1907...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>59</td>
+      <td>u_secc_rur</td>
+      <td>nacimiento último hijo(a) nacido(a) vivo(a): a...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>Birth Last Son (a) Born (a) Live (a): Year Rur...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>61</th>
+      <td>61</td>
+      <td>u_sect_rur</td>
+      <td>nacimiento último hijo(a) nacido(a) vivo(a): a...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+      <td>Birth Last Son (a) Born (a) Live (a): Year Rur...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>72</td>
+      <td>fa1_nro_fall</td>
+      <td>número persona fallecida</td>
+      <td>NaN</td>
+      <td>0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; ...</td>
+      <td>NaN</td>
+      <td>00 personas fallecidas; 01 persona fallecida; ...</td>
+      <td>Death person number</td>
+      <td>NaN</td>
+      <td>00 deceased people; 01 deceased person; 02 dec...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>74</td>
+      <td>p_trabajo</td>
+      <td>que hizo durante la semana pasada</td>
+      <td>NaN</td>
+      <td>1; 2; 3; 4; 5; 6; 7; 8; 9; 0;</td>
+      <td>NaN</td>
+      <td>trabajó por lo menos una hora en una actividad...</td>
+      <td>what did during last week</td>
+      <td>NaN</td>
+      <td>He worked at least one hour in an activity tha...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>95</td>
+      <td>pa1_calidad_serv</td>
+      <td>registro de personas_hogar calidad de la prest...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>PEOPLE REGISTRATION_HOGAR QUALITY OF THE PROVI...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>126</th>
+      <td>126</td>
+      <td>p_trabajo</td>
+      <td>registro de personas_hogar que hizo durante la...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>PEOPLE OF PEOPLE_HOGAR WHAT MAKE DURING LAST WEEK</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>141</th>
+      <td>141</td>
+      <td>ve1_qsem</td>
+      <td>registro de vivienda cuántas veces por semana ...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>Housing registration how many times a week (ga...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>165</th>
+      <td>165</td>
+      <td>ha_nro_fall</td>
+      <td>total fallecidos en el hogar (2017)</td>
+      <td>NaN</td>
+      <td>0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11; 12; 13; ...</td>
+      <td>NaN</td>
+      <td>00 personas; 01 personas; 02 personas; 03 pers...</td>
+      <td>total deceased at home (2017)</td>
+      <td>NaN</td>
+      <td>00 people; 01 people; 02 people; 03 people; 04...</td>
+      <td>Business</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">dict_df</span> <span class="o">=</span> <span class="n">dic</span>
+<span class="n">har</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Business&quot;</span><span class="p">]</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_col</span> <span class="o">=</span> <span class="s1">&#39;U_MPIO&#39;</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_val</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;001&#39;</span><span class="p">]</span>
+<span class="n">filtered_ddfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">data_selector</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-07-25 10:25:44,257 - DEBUG - Filtering DataFrame for columns: [&#39;P_ENFERMO&#39;, &#39;CONDICION_FISICA&#39;, &#39;PA1_CALIDAD_SERV&#39;, &#39;FA4_CERT_DEFUN&#39;, &#39;UA_CLASE&#39;, &#39;VB_ACU&#39;, &#39;VC_ALC&#39;, &#39;VA_EE&#39;, &#39;VD_GAS&#39;, &#39;VE_RECBAS&#39;, &#39;VE1_QSEM&#39;, &#39;FA3_EDAD_FALL&#39;, &#39;PA_HABLA_LENG&#39;, &#39;PA_HNVS&#39;, &#39;V_MAT_PISO&#39;, &#39;V_MAT_PARED&#39;, &#39;PA2_ANO_UHNV&#39;, &#39;U_SECC_RUR&#39;, &#39;U_SECT_RUR&#39;, &#39;FA1_NRO_FALL&#39;, &#39;P_TRABAJO&#39;, &#39;HA_NRO_FALL&#39;]
+2025-07-25 10:25:44,257 - DEBUG - Available columns: [&#39;TIPO_REG&#39;, &#39;U_DPTO&#39;, &#39;U_MPIO&#39;, &#39;UA_CLASE&#39;, &#39;U_EDIFICA&#39;, &#39;COD_ENCUESTAS&#39;, &#39;U_VIVIENDA&#39;, &#39;UVA_ESTATER&#39;, &#39;UVA1_TIPOTER&#39;, &#39;UVA2_CODTER&#39;, &#39;UVA_ESTA_AREAPROT&#39;, &#39;UVA1_COD_AREAPROT&#39;, &#39;UVA_USO_UNIDAD&#39;, &#39;V_TIPO_VIV&#39;, &#39;V_CON_OCUP&#39;, &#39;V_TOT_HOG&#39;, &#39;V_MAT_PARED&#39;, &#39;V_MAT_PISO&#39;, &#39;VA_EE&#39;, &#39;VA1_ESTRATO&#39;, &#39;VB_ACU&#39;, &#39;VC_ALC&#39;, &#39;VD_GAS&#39;, &#39;VE_RECBAS&#39;, &#39;VE1_QSEM&#39;, &#39;VF_INTERNET&#39;, &#39;V_TIPO_SERSA&#39;, &#39;L_TIPO_INST&#39;, &#39;L_EXISTEHOG&#39;, &#39;L_TOT_PERL&#39;, &#39;F_NROHOG&#39;, &#39;FA1_NRO_FALL&#39;, &#39;FA2_SEXO_FALL&#39;, &#39;FA3_EDAD_FALL&#39;, &#39;FA4_CERT_DEFUN&#39;, &#39;P_NROHOG&#39;, &#39;P_NRO_PER&#39;, &#39;P_SEXO&#39;, &#39;P_EDADR&#39;, &#39;P_PARENTESCOR&#39;, &#39;PA1_GRP_ETNIC&#39;, &#39;PA11_COD_ETNIA&#39;, &#39;PA12_CLAN&#39;, &#39;PA21_COD_VITSA&#39;, &#39;PA22_COD_KUMPA&#39;, &#39;PA_HABLA_LENG&#39;, &#39;PA1_ENTIENDE&#39;, &#39;PB_OTRAS_LENG&#39;, &#39;PB1_QOTRAS_LENG&#39;, &#39;PA_LUG_NAC&#39;, &#39;PA_VIVIA_5ANOS&#39;, &#39;PA_VIVIA_1ANO&#39;, &#39;P_ENFERMO&#39;, &#39;P_QUEHIZO_PPAL&#39;, &#39;PA_LO_ATENDIERON&#39;, &#39;PA1_CALIDAD_SERV&#39;, &#39;CONDICION_FISICA&#39;, &#39;P_ALFABETA&#39;, &#39;PA_ASISTENCIA&#39;, &#39;P_NIVEL_ANOSR&#39;, &#39;P_TRABAJO&#39;, &#39;P_EST_CIVIL&#39;, &#39;PA_HNV&#39;, &#39;PA1_THNV&#39;, &#39;PA2_HNVH&#39;, &#39;PA3_HNVM&#39;, &#39;PA_HNVS&#39;, &#39;PA1_THSV&#39;, &#39;PA2_HSVH&#39;, &#39;PA3_HSVM&#39;, &#39;PA_HFC&#39;, &#39;PA1_THFC&#39;, &#39;PA2_HFCH&#39;, &#39;PA3_HFCM&#39;, &#39;PA_UHNV&#39;, &#39;PA1_MES_UHNV&#39;, &#39;PA2_ANO_UHNV&#39;, &#39;UA1_LOCALIDAD&#39;, &#39;U_SECT_RUR&#39;, &#39;U_SECC_RUR&#39;, &#39;UA2_CPOB&#39;, &#39;U_SECT_URB&#39;, &#39;U_SECC_URB&#39;, &#39;U_MZA&#39;, &#39;COD_DANE_ANM&#39;, &#39;H_NROHOG&#39;, &#39;H_NRO_CUARTOS&#39;, &#39;H_NRO_DORMIT&#39;, &#39;H_DONDE_PREPALIM&#39;, &#39;H_AGUA_COCIN&#39;, &#39;HA_NRO_FALL&#39;, &#39;HA_TOT_PER&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">compare_with_dict</span><span class="p">(</span><span class="n">prueba</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matches with dict_df: 91 (98.91%)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unmatched ddfs variable</th>
+      <th>Unmatched dict_df variables</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>COD_DANE_ANM</td>
+      <td>REGFALL</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>None</td>
+      <td>REGHOG</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>None</td>
+      <td>REGPER</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>None</td>
+      <td>REGVIVI</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ddfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-07-17 14:58:08,383 - DEBUG - open file: c:/Users/jmont/OneDrive - Universidad de los andes/Uniandes/2025/Harmonize/socio4health/tests/../CNPV2018/CNPV2018_2HOG_A2_73_20250717144528.CSV
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>U_MPIO</th>
+      <th>U_SECC_RUR</th>
+      <th>U_SECT_RUR</th>
+      <th>PA1_CALIDAD_SERV</th>
+      <th>P_TRABAJO</th>
+      <th>VE1_QSEM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>6</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>514951</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>514952</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>514953</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+    <tr>
+      <th>514954</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>514955</th>
+      <td>001</td>
+      <td>00</td>
+      <td>000</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+    </tr>
+  </tbody>
+</table>
+<p>199569 rows × 6 columns</p>
+</div></div></div>
+</div>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/example.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

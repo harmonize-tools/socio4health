@@ -1,0 +1,6 @@
+﻿socio4health.utils.extractor\_utils.parse\_pnadc\_sas\_script
+=============================================================
+
+.. currentmodule:: socio4health.utils.extractor_utils
+
+.. autofunction:: parse_pnadc_sas_script

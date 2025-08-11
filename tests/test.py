@@ -2,10 +2,13 @@ import datetime
 from zoneinfo import available_timezones
 
 import pandas as pd
+
+from build.lib.socio4health.utils.harmonizer_utils import standardize_dict
 from socio4health import Extractor
 from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
 from socio4health.harmonizer import Harmonizer
 from socio4health.utils import harmonizer_utils
+from socio4health.utils.extractor_utils import parse_fwf_dict
 
 col_extractor_test = Extractor(input_path="../../input/GEIH_2022/sept",down_ext=['.csv','.zip'],sep=';', output_path="data")
 
@@ -62,4 +65,9 @@ def test(extractor):
     joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
 
 if __name__ == "__main__":
-    test(col_extractor_test)
+    #test(col_extractor_test)
+    dict = standardize_dict(raw_dict)
+    print(dict.head())
+    colnames, colspecs = parse_fwf_dict(dict)
+    print("Column names:", colnames)
+    print("Column specifications:", colspecs)

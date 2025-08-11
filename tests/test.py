@@ -3,7 +3,7 @@ from zoneinfo import available_timezones
 
 import pandas as pd
 
-from build.lib.socio4health.utils.harmonizer_utils import standardize_dict
+from socio4health.utils.harmonizer_utils import standardize_dict
 from socio4health import Extractor
 from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
 from socio4health.harmonizer import Harmonizer
@@ -22,8 +22,8 @@ per_online_extractor = Extractor(input_path="https://www.inei.gob.pe/media/DATOS
 rd_online_extractor = Extractor(input_path="https://www.one.gob.do/datos-y-estadisticas/",down_ext=['.csv','.zip'], output_path="data", depth=0, key_words=["ENH22"])
 bra_online_extractor = Extractor(input_path="https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/",down_ext=['.txt','.zip'],is_fwf=True,colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, output_path="data", depth=0)
 
-col_dict = pd.read_excel('../../input/GEIH_2022/DiccionarioFinal.xlsx')
-raw_dict = pd.read_excel('../../input/PNADC_2022/DiccionarioCrudo.xlsx')
+# col_dict = pd.read_excel('../../input/GEIH_2022/DiccionarioFinal.xlsx')
+raw_dict = pd.read_excel('./tests/DiccionarioCrudo.xlsx')
 
 def test(extractor):
     dfs = extractor.extract()
@@ -65,9 +65,7 @@ def test(extractor):
     joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
 
 if __name__ == "__main__":
-    #test(col_extractor_test)
     dict = standardize_dict(raw_dict)
-    print(dict.head())
     colnames, colspecs = parse_fwf_dict(dict)
     print("Column names:", colnames)
     print("Column specifications:", colspecs)

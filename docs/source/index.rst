@@ -84,7 +84,8 @@ socio4health is ideal for data analysts, scientists, and researchers who frequen
 About the Project
 -----------------
 
-Developed by `Erick Lozano`_ and `Diego Irreño`_, © 2025
+Developed by `Erick Lozano`_, `Diego Irreño`_ and `Juan Montenegro-Torres`_  © 2025
+Documentation maintained by `Ingrid Mora`_.
 
 License
 -------
@@ -102,7 +103,8 @@ Code of Conduct
 socio4health is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct`_.
 
 ----
-
+.. _Juan Montenegro-Torres: https://github.com/Juanmontenegro99
+.. _Ingrid Mora:https://github.com/ingridvmoras
 .. _Erick Lozano: https://github.com/Ersebreck
 .. _Diego Irreño: https://github.com/dirreno
 .. _MIT License: https://opensource.org/licenses/MIT

@@ -77,8 +77,6 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     grouped_df = df.groupby(['question', 'variable_name'], group_keys=False)\
                .apply(_process_group, include_groups=True)\
                .reset_index(drop=True)
-
-
     return grouped_df
 
 def _process_group(group: pd.DataFrame) -> pd.Series:
@@ -108,21 +106,33 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
 
     base_row = group[group['value'].isna()].copy()
     answers = group[group['value'].notna()]
+    initial_position = None
+    size = None
+    if len({'size', 'initial_position'} - set(group.columns)) == 0:
+        initial_position = group[group['initial_position'].notna()]['initial_position'].values
+        size = group[group['size'].notna()]['size'].values
 
     possible_answers = '; '.join(answers['description'].astype(str))
     values_concat = '; '.join(answers['value'].astype(str))
     possible_answers = possible_answers if possible_answers else np.nan
     values_concat = values_concat if values_concat else np.nan
 
+
     if not base_row.empty:
         row = base_row.iloc[0]
         row['possible_answers'] = possible_answers
         row['value'] = values_concat
+        if initial_position is not None:
+            row['initial_position'] = initial_position
+            row['size'] = size
     else:
         row = group.iloc[0].copy()
         row['description'] = np.nan
         row['value'] = values_concat
         row['possible_answers'] = possible_answers
+        if initial_position is not None:
+            row['initial_position'] = initial_position
+            row['size'] = size
 
     return row
 

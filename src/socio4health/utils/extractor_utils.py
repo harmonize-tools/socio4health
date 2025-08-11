@@ -187,14 +187,14 @@ def create_unique_path(archive_path, filename, target_dir):
     unique_name = f"{archive_name}_{base}{ext}"
     return os.path.join(target_dir, unique_name)
 
-def parse_pnadc_sas_script(file_path):
+def parse_fwf_dict(dict_df):
     """Parse a ``SAS`` script file to extract column names and specifications.
-    
+
     Parameters
     ----------
     file_path : str
         The path to the ``SAS`` script file.
-    
+
     Returns
     -------
     tuple
@@ -202,22 +202,20 @@ def parse_pnadc_sas_script(file_path):
         - A list of column names.
         - A list of tuples representing column specifications (start, end).
     """
-    with open(file_path, 'r', encoding='latin-1') as file:
-        content = file.read()
 
     # Extract column names
-    colnames = re.findall(r'@\d+\s+(\w+)\s+', content)
+    colnames = dict_df['variable_name'].tolist()
+    size = dict_df['size'].tolist()
 
-    # Extract column specifications (start and end positions)
+    if not colnames:
+        raise ValueError("No column names found in the dictionary DataFrame.")
+    if not size:
+        raise ValueError("No sizes found in the dictionary DataFrame.")
+
     colspecs = []
-    for match in re.finditer(r'@(\d+)\s+\w+\s+[\$\.\d]+', content):
-        start = int(match.group(1)) - 1  # Convert to 0-based index
-        next_match = re.search(r'@(\d+)\s+\w+\s+[\$\.\d]+', content[match.end():])
-        if next_match:
-            end = int(next_match.group(1)) - 1
-        else:
-            # If no next match, assume the column ends at the end of the line
-            end = start + 1  # Default to 1 character width
+    for i,val in dict_df['initial_position'].items():
+        start = val - 1
+        end = start + size[i]
         colspecs.append((start, end))
 
     return colnames, colspecs

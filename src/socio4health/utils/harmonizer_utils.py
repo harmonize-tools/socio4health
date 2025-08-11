@@ -1,5 +1,7 @@
 import re
 import os
+from unittest.mock import inplace
+
 import torch
 import numpy as np
 import pandas as pd
@@ -74,6 +76,7 @@ def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
 
     df['description'] = clean_column(df['description'])
     df.drop_duplicates(inplace=True)
+    df['variable_name'] = df['variable_name'].str.upper()
     grouped_df = df.groupby(['question', 'variable_name'], group_keys=False)\
                .apply(_process_group, include_groups=True)\
                .reset_index(drop=True)

@@ -214,8 +214,8 @@ def parse_fwf_dict(dict_df):
 
     colspecs = []
     for i,val in dict_df['initial_position'].items():
-        start = val - 1
-        end = start + size[i]
+        start = int(val - 1)
+        end = int(start + size[i])
         colspecs.append((start, end))
 
     return colnames, colspecs

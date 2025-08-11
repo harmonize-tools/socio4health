@@ -181,3 +181,4 @@ vendor/
 *.png
 /cache
 /docs/source/notebooks/files/
+/docs/source/data

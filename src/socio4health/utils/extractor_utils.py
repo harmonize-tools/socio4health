@@ -188,19 +188,29 @@ def create_unique_path(archive_path, filename, target_dir):
     return os.path.join(target_dir, unique_name)
 
 def parse_fwf_dict(dict_df):
-    """Parse a ``SAS`` script file to extract column names and specifications.
+    """Parse a dictionary DataFrame to extract column names and fixed-width format specifications.
 
     Parameters
     ----------
-    file_path : str
-        The path to the ``SAS`` script file.
+    dict_df : pandas.DataFrame
+        A DataFrame containing the dictionary information with columns:
+        - 'variable_name': Column names
+        - 'initial_position': Starting position (1-based) of each column
+        - 'size': Width of each column
 
     Returns
     -------
     tuple
         A tuple containing:
         - A list of column names.
-        - A list of tuples representing column specifications (start, end).
+        - A list of tuples representing column specifications (start, end) where:
+          - start is 0-based starting position
+          - end is 0-based ending position (exclusive)
+
+    Raises
+    ------
+    ValueError
+        If no column names or sizes are found in the dictionary DataFrame.
     """
 
     # Extract column names

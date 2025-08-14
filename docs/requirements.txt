@@ -14,4 +14,4 @@ geopandas
 jupyterlab-myst
 jupyterlab-widgets
 jupyter-book
-
+ipywidgets

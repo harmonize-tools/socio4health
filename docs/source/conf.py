@@ -29,7 +29,7 @@ extensions = [
     'sphinx.ext.todo',
     'myst_nb',
     'sphinx_design',
-    'nbsphinx',
+    #'nbsphinx',
     'sphinx_copybutton'
     #'sphinx.ext.autosectionlabel'
 

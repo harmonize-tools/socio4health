@@ -1,0 +1,6 @@
+﻿socio4health.utils.harmonizer\_utils.standardize\_dict
+======================================================
+
+.. currentmodule:: socio4health.utils.harmonizer_utils
+
+.. autofunction:: standardize_dict

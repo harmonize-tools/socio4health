@@ -1,0 +1,6 @@
+﻿socio4health.utils.harmonizer\_utils.translate\_column
+======================================================
+
+.. currentmodule:: socio4health.utils.harmonizer_utils
+
+.. autofunction:: translate_column

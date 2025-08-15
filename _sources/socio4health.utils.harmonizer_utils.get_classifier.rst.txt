@@ -1,0 +1,6 @@
+﻿socio4health.utils.harmonizer\_utils.get\_classifier
+====================================================
+
+.. currentmodule:: socio4health.utils.harmonizer_utils
+
+.. autofunction:: get_classifier

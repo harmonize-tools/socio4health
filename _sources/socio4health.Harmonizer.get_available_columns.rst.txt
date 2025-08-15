@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.get\_available\_columns
+===============================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.get_available_columns

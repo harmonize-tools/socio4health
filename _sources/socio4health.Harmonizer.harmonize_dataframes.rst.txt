@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.harmonize\_dataframes
+=============================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.harmonize_dataframes

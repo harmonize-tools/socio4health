@@ -1,0 +1,1208 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Harmonization of data &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/harmonization';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to create a raw dictionary for data harmonization" href="../dictionary.html" />
+    <link rel="prev" title="Extraction of Colombia, Brazil and Peru online data" href="extractor.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../API_reference.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.html">socio4health.Extractor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.extractor.get_default_data_dir.html">socio4health.extractor.get_default_data_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.extract.html">socio4health.Extractor.extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.delete_download_folder.html">socio4health.Extractor.delete_download_folder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.html">socio4health.Harmonizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.vertical_merge.html">socio4health.Harmonizer.vertical_merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.drop_nan_columns.html">socio4health.Harmonizer.drop_nan_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.get_available_columns.html">socio4health.Harmonizer.get_available_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.harmonize_dataframes.html">socio4health.Harmonizer.harmonize_dataframes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.data_selector.html">socio4health.Harmonizer.data_selector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.compare_with_dict.html">socio4health.Harmonizer.compare_with_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.join_data.html">socio4health.Harmonizer.join_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.compressed2files.html">socio4health.utils.extractor_utils.compressed2files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.download_request.html">socio4health.utils.extractor_utils.download_request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.run_standard_spider.html">socio4health.utils.extractor_utils.run_standard_spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.classify_rows.html">socio4health.utils.harmonizer_utils.classify_rows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.get_classifier.html">socio4health.utils.harmonizer_utils.get_classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.standardize_dict.html">socio4health.utils.harmonizer_utils.standardize_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.translate_column.html">socio4health.utils.harmonizer_utils.translate_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.html">socio4health.utils.standard_spider.StandardSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.parse.html">socio4health.utils.standard_spider.StandardSpider.parse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.html">socio4health.enums.data_info_enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.BraColspecsEnum.html">socio4health.enums.data_info_enum.BraColspecsEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.CountryEnum.html">socio4health.enums.data_info_enum.CountryEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.NameEnum.html">socio4health.enums.data_info_enum.NameEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.dict_enum.ColumnMappingEnum.html">socio4health.enums.dict_enum.ColumnMappingEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.BraColspecsEnum.html">socio4health.enums.data_info_enum.BraColspecsEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.CountryEnum.html">socio4health.enums.data_info_enum.CountryEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.NameEnum.html">socio4health.enums.data_info_enum.NameEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.dict_enum.ColumnMappingEnum.html">socio4health.enums.dict_enum.ColumnMappingEnum</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="extractor.html">Extraction of Colombia, Brazil and Peru online data</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Harmonization of data (Brazil)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dictionary.html">How to create a raw dictionary for data harmonization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Harmonization of data</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="image info" height="100" width="100"/>
+<section id="harmonization-of-data">
+<h1>Harmonization of data<a class="headerlink" href="#harmonization-of-data" title="Link to this heading">#</a></h1>
+<p><strong>Run the tutorial via free cloud platforms:</strong> <a class="reference external" href="https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb"><img alt="badge" src="https://img.shields.io/badge/launch-binder-E66581.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFkAAABZCAMAAABi1XidAAAB8lBMVEX///9XmsrmZYH1olJXmsr1olJXmsrmZYH1olJXmsr1olJXmsrmZYH1olL1olJXmsr1olJXmsrmZYH1olL1olJXmsrmZYH1olJXmsr1olL1olJXmsrmZYH1olL1olJXmsrmZYH1olL1olL0nFf1olJXmsrmZYH1olJXmsq8dZb1olJXmsrmZYH1olJXmspXmspXmsr1olL1olJXmsrmZYH1olJXmsr1olL1olJXmsrmZYH1olL1olLeaIVXmsrmZYH1olL1olL1olJXmsrmZYH1olLna31Xmsr1olJXmsr1olJXmsrmZYH1olLqoVr1olJXmsr1olJXmsrmZYH1olL1olKkfaPobXvviGabgadXmsqThKuofKHmZ4Dobnr1olJXmsr1olJXmspXmsr1olJXmsrfZ4TuhWn1olL1olJXmsqBi7X1olJXmspZmslbmMhbmsdemsVfl8ZgmsNim8Jpk8F0m7R4m7F5nLB6jbh7jbiDirOEibOGnKaMhq+PnaCVg6qWg6qegKaff6WhnpKofKGtnomxeZy3noG6dZi+n3vCcpPDcpPGn3bLb4/Mb47UbIrVa4rYoGjdaIbeaIXhoWHmZYHobXvpcHjqdHXreHLroVrsfG/uhGnuh2bwj2Hxk17yl1vzmljzm1j0nlX1olL3AJXWAAAAbXRSTlMAEBAQHx8gICAuLjAwMDw9PUBAQEpQUFBXV1hgYGBkcHBwcXl8gICAgoiIkJCQlJicnJ2goKCmqK+wsLC4usDAwMjP0NDQ1NbW3Nzg4ODi5+3v8PDw8/T09PX29vb39/f5+fr7+/z8/Pz9/v7+zczCxgAABC5JREFUeAHN1ul3k0UUBvCb1CTVpmpaitAGSLSpSuKCLWpbTKNJFGlcSMAFF63iUmRccNG6gLbuxkXU66JAUef/9LSpmXnyLr3T5AO/rzl5zj137p136BISy44fKJXuGN/d19PUfYeO67Znqtf2KH33Id1psXoFdW30sPZ1sMvs2D060AHqws4FHeJojLZqnw53cmfvg+XR8mC0OEjuxrXEkX5ydeVJLVIlV0e10PXk5k7dYeHu7Cj1j+49uKg7uLU61tGLw1lq27ugQYlclHC4bgv7VQ+TAyj5Zc/UjsPvs1sd5cWryWObtvWT2EPa4rtnWW3JkpjggEpbOsPr7F7EyNewtpBIslA7p43HCsnwooXTEc3UmPmCNn5lrqTJxy6nRmcavGZVt/3Da2pD5NHvsOHJCrdc1G2r3DITpU7yic7w/7Rxnjc0kt5GC4djiv2Sz3Fb2iEZg41/ddsFDoyuYrIkmFehz0HR2thPgQqMyQYb2OtB0WxsZ3BeG3+wpRb1vzl2UYBog8FfGhttFKjtAclnZYrRo9ryG9uG/FZQU4AEg8ZE9LjGMzTmqKXPLnlWVnIlQQTvxJf8ip7VgjZjyVPrjw1te5otM7RmP7xm+sK2Gv9I8Gi++BRbEkR9EBw8zRUcKxwp73xkaLiqQb+kGduJTNHG72zcW9LoJgqQxpP3/Tj//c3yB0tqzaml05/+orHLksVO+95kX7/7qgJvnjlrfr2Ggsyx0eoy9uPzN5SPd86aXggOsEKW2Prz7du3VID3/tzs/sSRs2w7ovVHKtjrX2pd7ZMlTxAYfBAL9jiDwfLkq55Tm7ifhMlTGPyCAs7RFRhn47JnlcB9RM5T97ASuZXIcVNuUDIndpDbdsfrqsOppeXl5Y+XVKdjFCTh+zGaVuj0d9zy05PPK3QzBamxdwtTCrzyg/2Rvf2EstUjordGwa/kx9mSJLr8mLLtCW8HHGJc2R5hS219IiF6PnTusOqcMl57gm0Z8kanKMAQg0qSyuZfn7zItsbGyO9QlnxY0eCuD1XL2ys/MsrQhltE7Ug0uFOzufJFE2PxBo/YAx8XPPdDwWN0MrDRYIZF0mSMKCNHgaIVFoBbNoLJ7tEQDKxGF0kcLQimojCZopv0OkNOyWCCg9XMVAi7ARJzQdM2QUh0gmBozjc3Skg6dSBRqDGYSUOu66Zg+I2fNZs/M3/f/Grl/XnyF1Gw3VKCez0PN5IUfFLqvgUN4C0qNqYs5YhPL+aVZYDE4IpUk57oSFnJm4FyCqqOE0jhY2SMyLFoo56zyo6becOS5UVDdj7Vih0zp+tcMhwRpBeLyqtIjlJKAIZSbI8SGSF3k0pA3mR5tHuwPFoa7N7reoq2bqCsAk1HqCu5uvI1n6JuRXI+S1Mco54YmYTwcn6Aeic+kssXi8XpXC4V3t7/ADuTNKaQJdScAAAAAElFTkSuQmCC" /></a> <a target="_blank" href="https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a></p>
+<p>This notebook provides you with a tutorial on how to process the sociodemographic and economic data from online data sources from  <strong>Brazil</strong>. This tutorial assumes you have an <strong>intermediate</strong> or <strong>advanced</strong> understanding of <strong>Python</strong> and data manipulation.</p>
+<section id="setting-up-the-enviornment">
+<h2>Setting up the enviornment<a class="headerlink" href="#setting-up-the-enviornment" title="Link to this heading">#</a></h2>
+<p>To run this notebook, you need to have the following prerequisites:</p>
+<ul class="simple">
+<li><p>Python 3.10+</p></li>
+</ul>
+<p>Additionally, you need to install the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas</span></code> package, which can be done using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>socio4health<span class="w"> </span>pandas<span class="w"> </span>ipywidgets<span class="w"> </span>-q
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="import-libraries">
+<h2>Import Libraries<a class="headerlink" href="#import-libraries" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.enums.data_info_enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">BraColnamesEnum</span><span class="p">,</span> <span class="n">BraColspecsEnum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.harmonizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harmonizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">harmonizer_utils</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tqdm</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extracting-data-from-brazil">
+<h2>Extracting data from Brazil<a class="headerlink" href="#extracting-data-from-brazil" title="Link to this heading">#</a></h2>
+<p>In this example, we will extract the Brazilian National Continuous Household Sample Survey (<strong>PNADC</strong>) for the year 2024 from the Brazilian Institute of Geography and Statistics (<strong>IBGE</strong>) website.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bra_online_extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="s2">&quot;https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/&quot;</span><span class="p">,</span> <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;.txt&#39;</span><span class="p">,</span><span class="s1">&#39;.zip&#39;</span><span class="p">],</span> <span class="n">is_fwf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colnames</span><span class="o">=</span><span class="n">BraColnamesEnum</span><span class="o">.</span><span class="n">PNADC</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">colspecs</span><span class="o">=</span><span class="n">BraColspecsEnum</span><span class="o">.</span><span class="n">PNADC</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;../data&quot;</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="providing-the-raw-dictionary">
+<h2>Providing the raw dictionary<a class="headerlink" href="#providing-the-raw-dictionary" title="Link to this heading">#</a></h2>
+<p>We need to provide a <strong>raw dictionary</strong> to the <strong>harmonizer</strong> that contains the column names and their corresponding data types. This is necessary for the harmonization process, as it allows the harmonizer to understand the structure of the data. To know more about how to construct the raw dictionary, you can check the <a class="reference external" href="https://harmonize-tools.github.io/socio4health/dictionary.html">documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_dict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;raw_dictionary.xlsx&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">raw_dict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;raw_dictionary.xlsx&#39;</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/pandas/io/excel/_base.py:495,</span> in <span class="ni">read_excel</span><span class="nt">(io, sheet_name, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skiprows, nrows, na_values, keep_default_na, na_filter, verbose, parse_dates, date_parser, date_format, thousands, decimal, comment, skipfooter, storage_options, dtype_backend, engine_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">493</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">io</span><span class="p">,</span> <span class="n">ExcelFile</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">494</span>     <span class="n">should_close</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="ne">--&gt; </span><span class="mi">495</span>     <span class="n">io</span> <span class="o">=</span> <span class="n">ExcelFile</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">496</span>         <span class="n">io</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">497</span>         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">498</span>         <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">499</span>         <span class="n">engine_kwargs</span><span class="o">=</span><span class="n">engine_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">500</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">501</span> <span class="k">elif</span> <span class="n">engine</span> <span class="ow">and</span> <span class="n">engine</span> <span class="o">!=</span> <span class="n">io</span><span class="o">.</span><span class="n">engine</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">502</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span>         <span class="s2">&quot;Engine should not be specified when passing &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">504</span>         <span class="s2">&quot;an ExcelFile - ExcelFile already has the engine set&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">505</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/pandas/io/excel/_base.py:1550,</span> in <span class="ni">ExcelFile.__init__</span><span class="nt">(self, path_or_buffer, engine, storage_options, engine_kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1548</span>     <span class="n">ext</span> <span class="o">=</span> <span class="s2">&quot;xls&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1549</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1550</span>     <span class="n">ext</span> <span class="o">=</span> <span class="n">inspect_excel_format</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1551</span>         <span class="n">content_or_path</span><span class="o">=</span><span class="n">path_or_buffer</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span>
+<span class="g g-Whitespace">   </span><span class="mi">1552</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1553</span>     <span class="k">if</span> <span class="n">ext</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1554</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1555</span>             <span class="s2">&quot;Excel file format cannot be determined, you must specify &quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1556</span>             <span class="s2">&quot;an engine manually.&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1557</span>         <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/pandas/io/excel/_base.py:1402,</span> in <span class="ni">inspect_excel_format</span><span class="nt">(content_or_path, storage_options)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1399</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content_or_path</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1400</span>     <span class="n">content_or_path</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">content_or_path</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1402</span> <span class="k">with</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1403</span>     <span class="n">content_or_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span> <span class="n">is_text</span><span class="o">=</span><span class="kc">False</span>
+<span class="g g-Whitespace">   </span><span class="mi">1404</span> <span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1405</span>     <span class="n">stream</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">handle</span>
+<span class="g g-Whitespace">   </span><span class="mi">1406</span>     <span class="n">stream</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/pandas/io/common.py:882,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
+<span class="ne">--&gt; </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">883</span>     <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">885</span> <span class="c1"># Convert BytesIO or file objects passed with an encoding</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;raw_dictionary.xlsx&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>The raw dictionary is then standardized using the <code class="docutils literal notranslate"><span class="pre">standardize_dict</span></code> method, which ensures that the dictionary is in a consistent format, making it easier to work with during the harmonization process.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">standardize_dict</span><span class="p">(</span><span class="n">raw_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\isabe\PycharmProjects\socio4health\src\socio4health\utils\harmonizer_utils.py:78: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  .apply(_process_group, include_groups=True)\
+</pre></div>
+</div>
+</div>
+</div>
+<p>Additionally, the content of columns of the dictionary can be translated  into English using <code class="docutils literal notranslate"><span class="pre">translate_column</span></code> function from <code class="docutils literal notranslate"><span class="pre">harmonizer_utils</span></code> module. Translation is performed for facilitate the understanding and processing of the data.</p>
+<div style="border-left: 4px solid #e74c3c; background: #fdecea; color: #222; padding: 0.5em 1em; margin: 1em 0; display: flex; align-items: center;">
+  <span style="font-size: 20px; margin-right: 10px;">⚠️</span>
+  <div>
+    <strong>Warning:</strong> <code>translate_column</code> method may take some time depending on the <strong>size</strong> of the dictionary and the <strong> number of columns </strong> to be translated. It is recommended to use this method <strong> only </strong> if you need the content of the columns in English for further processing or analysis.
+  </div>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;possible_answers&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;possible_answers&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\src\socio4health\utils\harmonizer_utils.py:175,</span> in <span class="ni">translate_column</span><span class="nt">(data, column, language)</span>
+<span class="g g-Whitespace">    </span><span class="mi">172</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">174</span> <span class="n">new_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">175</span> <span class="n">data</span><span class="p">[</span><span class="n">new_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">translate_text</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">176</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> translated&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">178</span> <span class="k">return</span> <span class="n">data</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\pandas\core\series.py:4935,</span> in <span class="ni">Series.apply</span><span class="nt">(self, func, convert_dtype, args, by_row, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">4800</span> <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">4801</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4802</span>     <span class="n">func</span><span class="p">:</span> <span class="n">AggFuncType</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>   <span class="mi">4807</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4808</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span> <span class="o">|</span> <span class="n">Series</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">4809</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">4810</span><span class="sd">     Invoke function on values of Series.</span>
+<span class="g g-Whitespace">   </span><span class="mi">4811</span><span class="sd"> </span>
+<span class="sd">   (...)   4926     dtype: float64</span>
+<span class="g g-Whitespace">   </span><span class="mi">4927</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">4928</span>     <span class="k">return</span> <span class="n">SeriesApply</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">4929</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4930</span>         <span class="n">func</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4931</span>         <span class="n">convert_dtype</span><span class="o">=</span><span class="n">convert_dtype</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4932</span>         <span class="n">by_row</span><span class="o">=</span><span class="n">by_row</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4933</span>         <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">4934</span>         <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="ne">-&gt; </span><span class="mi">4935</span>     <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\pandas\core\apply.py:1422,</span> in <span class="ni">SeriesApply.apply</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1419</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_compat</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1421</span> <span class="c1"># self.func is Callable</span>
+<span class="ne">-&gt; </span><span class="mi">1422</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_standard</span><span class="p">()</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\pandas\core\apply.py:1502,</span> in <span class="ni">SeriesApply.apply_standard</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1496</span> <span class="c1"># row-wise access</span>
+<span class="g g-Whitespace">   </span><span class="mi">1497</span> <span class="c1"># apply doesn&#39;t have a `na_action` keyword and for backward compat reasons</span>
+<span class="g g-Whitespace">   </span><span class="mi">1498</span> <span class="c1"># we need to give `na_action=&quot;ignore&quot;` for categorical data.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1499</span> <span class="c1"># TODO: remove the `na_action=&quot;ignore&quot;` when that default has been changed in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1500</span> <span class="c1">#  Categorical (GH51645).</span>
+<span class="g g-Whitespace">   </span><span class="mi">1501</span> <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;ignore&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">CategoricalDtype</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="ne">-&gt; </span><span class="mi">1502</span> <span class="n">mapped</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_map_values</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1503</span>     <span class="n">mapper</span><span class="o">=</span><span class="n">curried</span><span class="p">,</span> <span class="n">na_action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">convert</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">convert_dtype</span>
+<span class="g g-Whitespace">   </span><span class="mi">1504</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1506</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mapped</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mapped</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ABCSeries</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1507</span>     <span class="c1"># GH#43986 Need to do list(mapped) in order to get treated as nested</span>
+<span class="g g-Whitespace">   </span><span class="mi">1508</span>     <span class="c1">#  See also GH#25959 regarding EA support</span>
+<span class="g g-Whitespace">   </span><span class="mi">1509</span>     <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_constructor_expanddim</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mapped</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\pandas\core\base.py:925,</span> in <span class="ni">IndexOpsMixin._map_values</span><span class="nt">(self, mapper, na_action, convert)</span>
+<span class="g g-Whitespace">    </span><span class="mi">922</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">ExtensionArray</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">923</span>     <span class="k">return</span> <span class="n">arr</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">mapper</span><span class="p">,</span> <span class="n">na_action</span><span class="o">=</span><span class="n">na_action</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">925</span> <span class="k">return</span> <span class="n">algorithms</span><span class="o">.</span><span class="n">map_array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">na_action</span><span class="o">=</span><span class="n">na_action</span><span class="p">,</span> <span class="n">convert</span><span class="o">=</span><span class="n">convert</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\pandas\core\algorithms.py:1743,</span> in <span class="ni">map_array</span><span class="nt">(arr, mapper, na_action, convert)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1741</span> <span class="n">values</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1742</span> <span class="k">if</span> <span class="n">na_action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1743</span>     <span class="k">return</span> <span class="n">lib</span><span class="o">.</span><span class="n">map_infer</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">convert</span><span class="o">=</span><span class="n">convert</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1744</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1745</span>     <span class="k">return</span> <span class="n">lib</span><span class="o">.</span><span class="n">map_infer_mask</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1746</span>         <span class="n">values</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">isna</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">),</span> <span class="n">convert</span><span class="o">=</span><span class="n">convert</span>
+<span class="g g-Whitespace">   </span><span class="mi">1747</span>     <span class="p">)</span>
+
+<span class="nn">File pandas/_libs/lib.pyx:2999,</span> in <span class="ni">pandas._libs.lib.map_infer</span><span class="nt">()</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\src\socio4health\utils\harmonizer_utils.py:167,</span> in <span class="ni">translate_column.&lt;locals&gt;.translate_text</span><span class="nt">(text)</span>
+<span class="g g-Whitespace">    </span><span class="mi">165</span>     <span class="k">return</span> <span class="n">text</span>
+<span class="g g-Whitespace">    </span><span class="mi">166</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5000</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">167</span>     <span class="k">return</span> <span class="n">GoogleTranslator</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">language</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">168</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">169</span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rows with contents longer than 5000 characters are cut off&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\deep_translator\google.py:67,</span> in <span class="ni">GoogleTranslator.translate</span><span class="nt">(self, text, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload_key</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">65</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_url_params</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">payload_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span>
+<span class="ne">---&gt; </span><span class="mi">67</span> <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_url_params</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">proxies</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>     <span class="k">raise</span> <span class="n">TooManyRequests</span><span class="p">()</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\requests\api.py:73,</span> in <span class="ni">get</span><span class="nt">(url, params, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span><span class="w">     </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Sends a GET request.</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span><span class="sd"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">65</span><span class="sd">     :param url: URL for the new :class:`Request` object.</span>
+<span class="sd">   (...)     70     :rtype: requests.Response</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">---&gt; </span><span class="mi">73</span>     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\requests\api.py:59,</span> in <span class="ni">request</span><span class="nt">(method, url, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="c1"># By using the &#39;with&#39; statement we are sure the session is closed, thus we</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="c1"># avoid leaving sockets open which can trigger a ResourceWarning in some</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span> <span class="c1"># cases, and look like a memory leak in others.</span>
+<span class="g g-Whitespace">     </span><span class="mi">58</span> <span class="k">with</span> <span class="n">sessions</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">59</span>     <span class="k">return</span> <span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\requests\sessions.py:589,</span> in <span class="ni">Session.request</span><span class="nt">(self, method, url, params, data, headers, cookies, files, auth, timeout, allow_redirects, proxies, hooks, stream, verify, cert, json)</span>
+<span class="g g-Whitespace">    </span><span class="mi">584</span> <span class="n">send_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+<span class="g g-Whitespace">    </span><span class="mi">585</span>     <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">586</span>     <span class="s2">&quot;allow_redirects&quot;</span><span class="p">:</span> <span class="n">allow_redirects</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">587</span> <span class="p">}</span>
+<span class="g g-Whitespace">    </span><span class="mi">588</span> <span class="n">send_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">589</span> <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="o">**</span><span class="n">send_kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">591</span> <span class="k">return</span> <span class="n">resp</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\requests\sessions.py:703,</span> in <span class="ni">Session.send</span><span class="nt">(self, request, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">700</span> <span class="n">start</span> <span class="o">=</span> <span class="n">preferred_clock</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">702</span> <span class="c1"># Send the request</span>
+<span class="ne">--&gt; </span><span class="mi">703</span> <span class="n">r</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">705</span> <span class="c1"># Total elapsed time of the request (approximately)</span>
+<span class="g g-Whitespace">    </span><span class="mi">706</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">preferred_clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\requests\adapters.py:486,</span> in <span class="ni">HTTPAdapter.send</span><span class="nt">(self, request, stream, timeout, verify, cert, proxies)</span>
+<span class="g g-Whitespace">    </span><span class="mi">483</span>     <span class="n">timeout</span> <span class="o">=</span> <span class="n">TimeoutSauce</span><span class="p">(</span><span class="n">connect</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">read</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">485</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">486</span>     <span class="n">resp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">487</span>         <span class="n">method</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">488</span>         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">489</span>         <span class="n">body</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">490</span>         <span class="n">headers</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">491</span>         <span class="n">redirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">492</span>         <span class="n">assert_same_host</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">493</span>         <span class="n">preload_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">494</span>         <span class="n">decode_content</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">495</span>         <span class="n">retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">496</span>         <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">497</span>         <span class="n">chunked</span><span class="o">=</span><span class="n">chunked</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">498</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">500</span> <span class="k">except</span> <span class="p">(</span><span class="n">ProtocolError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">501</span>     <span class="k">raise</span> <span class="ne">ConnectionError</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\urllib3\connectionpool.py:787,</span> in <span class="ni">HTTPConnectionPool.urlopen</span><span class="nt">(self, method, url, body, headers, retries, redirect, assert_same_host, timeout, pool_timeout, release_conn, chunked, body_pos, preload_content, decode_content, **response_kw)</span>
+<span class="g g-Whitespace">    </span><span class="mi">784</span> <span class="n">response_conn</span> <span class="o">=</span> <span class="n">conn</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">release_conn</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">786</span> <span class="c1"># Make the request on the HTTPConnection object</span>
+<span class="ne">--&gt; </span><span class="mi">787</span> <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">788</span>     <span class="n">conn</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">789</span>     <span class="n">method</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">790</span>     <span class="n">url</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">791</span>     <span class="n">timeout</span><span class="o">=</span><span class="n">timeout_obj</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">792</span>     <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span>     <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span>     <span class="n">chunked</span><span class="o">=</span><span class="n">chunked</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">795</span>     <span class="n">retries</span><span class="o">=</span><span class="n">retries</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">796</span>     <span class="n">response_conn</span><span class="o">=</span><span class="n">response_conn</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span>     <span class="n">preload_content</span><span class="o">=</span><span class="n">preload_content</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">798</span>     <span class="n">decode_content</span><span class="o">=</span><span class="n">decode_content</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span>     <span class="o">**</span><span class="n">response_kw</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">800</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">802</span> <span class="c1"># Everything went great!</span>
+<span class="g g-Whitespace">    </span><span class="mi">803</span> <span class="n">clean_exit</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\urllib3\connectionpool.py:464,</span> in <span class="ni">HTTPConnectionPool._make_request</span><span class="nt">(self, conn, method, url, body, headers, retries, timeout, chunked, response_conn, preload_content, decode_content, enforce_content_length)</span>
+<span class="g g-Whitespace">    </span><span class="mi">461</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">462</span>     <span class="c1"># Trigger any extra validation we need to do.</span>
+<span class="g g-Whitespace">    </span><span class="mi">463</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">464</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_conn</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">465</span>     <span class="k">except</span> <span class="p">(</span><span class="n">SocketTimeout</span><span class="p">,</span> <span class="n">BaseSSLError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">466</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_raise_timeout</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout_value</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\urllib3\connectionpool.py:1093,</span> in <span class="ni">HTTPSConnectionPool._validate_conn</span><span class="nt">(self, conn)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1091</span> <span class="c1"># Force connect early to allow us to validate the connection.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1092</span> <span class="k">if</span> <span class="n">conn</span><span class="o">.</span><span class="n">is_closed</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1093</span>     <span class="n">conn</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1095</span> <span class="c1"># TODO revise this, see https://github.com/urllib3/urllib3/issues/2791</span>
+<span class="g g-Whitespace">   </span><span class="mi">1096</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">is_verified</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">proxy_is_verified</span><span class="p">:</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\urllib3\connection.py:790,</span> in <span class="ni">HTTPSConnection.connect</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">787</span>     <span class="c1"># Remove trailing &#39;.&#39; from fqdn hostnames to allow certificate validation</span>
+<span class="g g-Whitespace">    </span><span class="mi">788</span>     <span class="n">server_hostname_rm_dot</span> <span class="o">=</span> <span class="n">server_hostname</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">790</span>     <span class="n">sock_and_verified</span> <span class="o">=</span> <span class="n">_ssl_wrap_socket_and_match_hostname</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">791</span>         <span class="n">sock</span><span class="o">=</span><span class="n">sock</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">792</span>         <span class="n">cert_reqs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cert_reqs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span>         <span class="n">ssl_version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ssl_version</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span>         <span class="n">ssl_minimum_version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ssl_minimum_version</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">795</span>         <span class="n">ssl_maximum_version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ssl_maximum_version</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">796</span>         <span class="n">ca_certs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ca_certs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span>         <span class="n">ca_cert_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ca_cert_dir</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">798</span>         <span class="n">ca_cert_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ca_cert_data</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span>         <span class="n">cert_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cert_file</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">800</span>         <span class="n">key_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_file</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">801</span>         <span class="n">key_password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_password</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">802</span>         <span class="n">server_hostname</span><span class="o">=</span><span class="n">server_hostname_rm_dot</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">803</span>         <span class="n">ssl_context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ssl_context</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">804</span>         <span class="n">tls_in_tls</span><span class="o">=</span><span class="n">tls_in_tls</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">805</span>         <span class="n">assert_hostname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assert_hostname</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">806</span>         <span class="n">assert_fingerprint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assert_fingerprint</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">807</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">808</span>     <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">sock_and_verified</span><span class="o">.</span><span class="n">socket</span>
+<span class="g g-Whitespace">    </span><span class="mi">810</span> <span class="c1"># If an error occurs during connection/handshake we may need to release</span>
+<span class="g g-Whitespace">    </span><span class="mi">811</span> <span class="c1"># our lock so another connection can probe the origin.</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\urllib3\connection.py:969,</span> in <span class="ni">_ssl_wrap_socket_and_match_hostname</span><span class="nt">(sock, cert_reqs, ssl_version, ssl_minimum_version, ssl_maximum_version, cert_file, key_file, key_password, ca_certs, ca_cert_dir, ca_cert_data, assert_hostname, assert_fingerprint, server_hostname, ssl_context, tls_in_tls)</span>
+<span class="g g-Whitespace">    </span><span class="mi">966</span>     <span class="k">if</span> <span class="n">is_ipaddress</span><span class="p">(</span><span class="n">normalized</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>         <span class="n">server_hostname</span> <span class="o">=</span> <span class="n">normalized</span>
+<span class="ne">--&gt; </span><span class="mi">969</span> <span class="n">ssl_sock</span> <span class="o">=</span> <span class="n">ssl_wrap_socket</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">sock</span><span class="o">=</span><span class="n">sock</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span>     <span class="n">keyfile</span><span class="o">=</span><span class="n">key_file</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">972</span>     <span class="n">certfile</span><span class="o">=</span><span class="n">cert_file</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span>     <span class="n">key_password</span><span class="o">=</span><span class="n">key_password</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="n">ca_certs</span><span class="o">=</span><span class="n">ca_certs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span>     <span class="n">ca_cert_dir</span><span class="o">=</span><span class="n">ca_cert_dir</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span>     <span class="n">ca_cert_data</span><span class="o">=</span><span class="n">ca_cert_data</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">977</span>     <span class="n">server_hostname</span><span class="o">=</span><span class="n">server_hostname</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>     <span class="n">ssl_context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>     <span class="n">tls_in_tls</span><span class="o">=</span><span class="n">tls_in_tls</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">980</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">982</span> <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">983</span>     <span class="k">if</span> <span class="n">assert_fingerprint</span><span class="p">:</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\.venv\Lib\site-packages\urllib3\util\ssl_.py:458,</span> in <span class="ni">ssl_wrap_socket</span><span class="nt">(sock, keyfile, certfile, cert_reqs, ca_certs, server_hostname, ssl_version, ciphers, ssl_context, ca_cert_dir, key_password, ca_cert_data, tls_in_tls)</span>
+<span class="g g-Whitespace">    </span><span class="mi">456</span> <span class="k">if</span> <span class="n">ca_certs</span> <span class="ow">or</span> <span class="n">ca_cert_dir</span> <span class="ow">or</span> <span class="n">ca_cert_data</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">457</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">458</span>         <span class="n">context</span><span class="o">.</span><span class="n">load_verify_locations</span><span class="p">(</span><span class="n">ca_certs</span><span class="p">,</span> <span class="n">ca_cert_dir</span><span class="p">,</span> <span class="n">ca_cert_data</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">459</span>     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">460</span>         <span class="k">raise</span> <span class="n">SSLError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">classify_rows</span></code> method is then used to classify the rows of the standardized dictionary based on the content of the specified columns. This classification helps in organizing the data and making it easier to work with during the harmonization process. The <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> parameter specifies the path to a pre-trained model that is used for classification. You can provide your own model or use the default one provided in the <code class="docutils literal notranslate"><span class="pre">files</span></code> folder. The model is a <strong>fine-tuned BERT model</strong> for text classification. You can find more details about the model in the <a class="reference external" href="https://harmonize-tools.github.io/socio4health/socio4health.utils.harmonizer_utils.classify_rows.html#socio4health.utils.harmonizer_utils.classify_rows">documentation</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">classify_rows</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question_en&quot;</span><span class="p">,</span> <span class="s2">&quot;description_en&quot;</span><span class="p">,</span> <span class="s2">&quot;possible_answers_en&quot;</span><span class="p">,</span>
+                                     <span class="n">new_column_name</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span>
+                                     <span class="n">MODEL_PATH</span><span class="o">=</span><span class="s2">&quot;files/bert_finetuned_classifier&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">classify_rows</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question_en&quot;</span><span class="p">,</span> <span class="s2">&quot;description_en&quot;</span><span class="p">,</span> <span class="s2">&quot;possible_answers_en&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>                                      <span class="n">new_column_name</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>                                      <span class="n">MODEL_PATH</span><span class="o">=</span><span class="s2">&quot;files/bert_finetuned_classifier&quot;</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\src\socio4health\utils\harmonizer_utils.py:241,</span> in <span class="ni">classify_rows</span><span class="nt">(data, col1, col2, col3, new_column_name, MODEL_PATH)</span>
+<span class="g g-Whitespace">    </span><span class="mi">239</span>         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The parameters col1, col2 and col3 must be strings.&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">240</span>     <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">241</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The column &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; is not found in the DataFrame.&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">243</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_column_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">new_column_name</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;new_column_name must be a non-empty string.&quot;</span><span class="p">)</span>
+
+<span class="ne">ValueError</span>: The column &#39;question_en&#39; is not found in the DataFrame.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extracting-the-data">
+<h2>Extracting the data<a class="headerlink" href="#extracting-the-data" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">extract</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class is used retrieve the data from the specified input path. It returns a list of dataframes, each dataframe corresponding to a file extracted from the path.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span> <span class="o">=</span> <span class="n">bra_online_extractor</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-11 11:20:47,090 - INFO - ----------------------
+2025-08-11 11:20:47,091 - INFO - Starting data extraction...
+2025-08-11 11:20:47,092 - INFO - Extracting data in online mode...
+2025-08-11 11:20:47,094 - INFO - Scraping URL: https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/ with depth 0
+2025-08-11 11:20:48,941 - INFO - Successfully saved links to Output_scrap.json.
+2025-08-11 11:20:49,089 - INFO - Downloading files to: ../data
+Downloading files:   0%|          | 0/4 [00:00&lt;?, ?it/s]2025-08-11 11:23:18,669 - INFO - Successfully downloaded: PNADC_012024.zip
+Downloading files:  25%|██▌       | 1/4 [02:29&lt;07:29, 149.90s/it]2025-08-11 11:23:31,982 - INFO - Successfully downloaded: PNADC_022024.zip
+Downloading files:  50%|█████     | 2/4 [02:42&lt;02:18, 69.36s/it] 2025-08-11 11:23:45,347 - INFO - Successfully downloaded: PNADC_032024.zip
+Downloading files:  75%|███████▌  | 3/4 [02:56&lt;00:43, 43.79s/it]2025-08-11 11:27:34,408 - INFO - Successfully downloaded: PNADC_042024.zip
+Downloading files: 100%|██████████| 4/4 [06:45&lt;00:00, 101.36s/it]
+2025-08-11 11:27:34,585 - INFO - Processing (depth 0): PNADC_012024.zip
+2025-08-11 11:27:48,576 - INFO - Extracted: 527fc860_PNADC_012024.txt
+2025-08-11 11:27:48,594 - INFO - Processing (depth 0): PNADC_022024.zip
+2025-08-11 11:28:10,944 - INFO - Extracted: 59b8bc43_PNADC_022024.txt
+2025-08-11 11:28:10,949 - INFO - Processing (depth 0): PNADC_032024.zip
+2025-08-11 11:28:38,720 - INFO - Extracted: 6703e676_PNADC_032024.txt
+2025-08-11 11:28:38,752 - INFO - Processing (depth 0): PNADC_042024.zip
+2025-08-11 11:29:05,214 - INFO - Extracted: fbbfc8d2_PNADC_042024.txt
+Processing files:   0%|          | 0/4 [00:00&lt;?, ?it/s]2025-08-11 11:29:09,412 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,780 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,794 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,798 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,799 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,800 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,807 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,809 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:29:10,815 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:22,484 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:22,655 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:22,977 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:23,441 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:25,346 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:25,651 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:25,951 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:30:31,747 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:31:45,883 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:31:53,754 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:31:54,989 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:12,154 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:12,154 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:12,937 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:14,465 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:15,519 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:37,354 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+2025-08-11 11:32:40,600 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/527fc860_PNADC_012024.txt
+Processing files:  25%|██▌       | 1/4 [04:09&lt;12:29, 249.68s/it]2025-08-11 11:33:15,339 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,576 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,576 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,577 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,577 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,577 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,577 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,578 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:15,579 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:33:59,737 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:01,070 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:01,386 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:02,500 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:02,519 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:04,139 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:04,535 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:05,699 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:51,589 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:57,616 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:57,619 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:34:57,917 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:35:01,565 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:35:02,895 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:35:03,717 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:35:06,165 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:35:28,267 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+2025-08-11 11:35:46,956 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/59b8bc43_PNADC_022024.txt
+Processing files:  50%|█████     | 2/4 [06:50&lt;06:35, 197.57s/it]2025-08-11 11:35:56,430 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,867 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,868 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,868 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,869 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,869 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,870 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,871 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:35:56,872 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:34,255 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:34,382 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:35,884 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:36,148 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:39,779 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:41,449 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:42,582 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:36:46,729 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:02,540 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:07,609 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:08,648 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:10,392 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:10,896 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:11,564 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:16,129 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:23,880 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:40,085 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+2025-08-11 11:37:47,832 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/6703e676_PNADC_032024.txt
+Processing files:  75%|███████▌  | 3/4 [09:17&lt;02:54, 174.40s/it]2025-08-11 11:38:23,261 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,490 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,490 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,490 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,490 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,490 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,491 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,491 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:38:23,492 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:09,084 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:09,621 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:19,081 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:19,103 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:20,163 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:20,793 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:21,181 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:39:25,673 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:40:52,590 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:40:53,385 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:02,250 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:02,827 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:04,508 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:04,787 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:09,654 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:16,589 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+2025-08-11 11:41:29,174 - DEBUG - open file: C:/Users/isabe/PycharmProjects/socio4health/docs/source/notebooks/../data/fbbfc8d2_PNADC_042024.txt
+Processing files: 100%|██████████| 4/4 [13:14&lt;00:00, 198.71s/it]
+2025-08-11 11:42:20,495 - INFO - Successfully processed 4/4 files
+2025-08-11 11:42:20,503 - INFO - Extraction completed successfully.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="harmonizing-the-data">
+<h2>Harmonizing the data<a class="headerlink" href="#harmonizing-the-data" title="Link to this heading">#</a></h2>
+<p>First, we need to create an instance of the <code class="docutils literal notranslate"><span class="pre">Harmonizer</span></code> class.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>After the dictionary is standardized and translated, it can be used to harmonize the data. For this, set the <code class="docutils literal notranslate"><span class="pre">dict_df</span></code> attribute of the <code class="docutils literal notranslate"><span class="pre">Harmonizer</span></code> instance to the standardized dictionary. This allows the harmonizer to use the information from the dictionary to process the dataframes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">dict_df</span> <span class="o">=</span> <span class="n">dic</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we can set the parameters for the harmonization process. The <code class="docutils literal notranslate"><span class="pre">similarity_threshold</span></code> parameter is used to set the threshold for the similarity among column names. The <code class="docutils literal notranslate"><span class="pre">nan_threshold</span></code> parameter is used to set the threshold for the number of <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values allowed in a column. If a column has more <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values than the specified threshold, it will be dropped from the final dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">similarity_threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">har</span><span class="o">.</span><span class="n">nan_threshold</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">vertical_merge</span></code> method merges dataframes <strong>vertically</strong>. This means the data frames will be concatenated along the rows and aligned if their column names meet the previously set similarity threshold. The available columns can be obtained using the <code class="docutils literal notranslate"><span class="pre">get_available_columns</span></code> method, which returns a list of column names present in all dataframes after vertical merging.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">vertical_merge</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+<span class="n">available_columns</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">get_available_columns</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-08-11 11:42:49,949 - WARNING - C:\Users\isabe\PycharmProjects\socio4health\.venv\Lib\site-packages\tqdm\std.py:580: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+  if rate and total else datetime.utcfromtimestamp(0))
+
+Grouping DataFrames: 100%|██████████| 4/4 [00:00&lt;00:00, 80.62it/s]
+2025-08-11 11:42:50,003 - WARNING - C:\Users\isabe\PycharmProjects\socio4health\.venv\Lib\site-packages\tqdm\std.py:580: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+  if rate and total else datetime.utcfromtimestamp(0))
+
+Merging groups: 100%|██████████| 1/1 [00:00&lt;00:00,  6.23it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<p>For the selection of rows from the data, we can use the <code class="docutils literal notranslate"><span class="pre">data_selector</span></code> method. To use this method we first need to assign the categories of our interest, which can either be one or a set of the following categories:  <code class="docutils literal notranslate"><span class="pre">Business</span></code>, <code class="docutils literal notranslate"><span class="pre">Educations</span></code>, <code class="docutils literal notranslate"><span class="pre">Fertility</span></code>, <code class="docutils literal notranslate"><span class="pre">Housing</span></code>, <code class="docutils literal notranslate"><span class="pre">Identification</span></code>, <code class="docutils literal notranslate"><span class="pre">Migration</span></code>, <code class="docutils literal notranslate"><span class="pre">Nonstandard</span> <span class="pre">job</span></code>, <code class="docutils literal notranslate"><span class="pre">Social</span> <span class="pre">Security</span></code> .This method allows us to <strong>select specific rows</strong> from the data based on the values in a specified column. The <code class="docutils literal notranslate"><span class="pre">key_col</span></code> parameter specifies the column to be used for selection, and the <code class="docutils literal notranslate"><span class="pre">key_val</span></code> parameter specifies the values to be selected. In this case, we will select rows where the value in the <code class="docutils literal notranslate"><span class="pre">DPTO</span></code> column is equal to <code class="docutils literal notranslate"><span class="pre">25</span></code>, which corresponds to the state of São Paulo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Business&quot;</span><span class="p">]</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_col</span> <span class="o">=</span> <span class="s1">&#39;DPTO&#39;</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_val</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;25&#39;</span><span class="p">]</span>
+<span class="n">filtered_ddfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">data_selector</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">har</span><span class="o">.</span><span class="n">key_col</span> <span class="o">=</span> <span class="s1">&#39;DPTO&#39;</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">har</span><span class="o">.</span><span class="n">key_val</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;25&#39;</span><span class="p">]</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">filtered_ddfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">data_selector</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+
+<span class="nn">File ~\PycharmProjects\socio4health\src\socio4health\harmonizer.py:590,</span> in <span class="ni">Harmonizer.data_selector</span><span class="nt">(self, ddfs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">588</span> <span class="k">for</span> <span class="n">ddf</span> <span class="ow">in</span> <span class="n">ddfs</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">589</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ddf</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">590</span>         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Key column &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key_col</span><span class="si">}</span><span class="s2">&#39; not found in DataFrame&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">592</span>     <span class="n">filtered_ddf</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="n">ddf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_val</span><span class="p">)]</span>
+<span class="g g-Whitespace">    </span><span class="mi">593</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_ddf</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+<span class="ne">KeyError</span>: &quot;Key column &#39;DPTO&#39; not found in DataFrame&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we can <strong>join</strong> the filtered dataframes into a <strong>single dataframe</strong> using the <code class="docutils literal notranslate"><span class="pre">join_data</span></code> method. This method combines the data from the <strong>filtered dataframes</strong> into a <strong>single dataframe</strong>, aligning the columns based on their names. The resulting dataframe will contain all the columns that are present in the filtered dataframes, and it will be ready for further analysis or <strong>export</strong> as a <code class="docutils literal notranslate"><span class="pre">CSV</span></code> file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">joined_df</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">join_data</span><span class="p">(</span><span class="n">filtered_ddfs</span><span class="p">)</span>
+<span class="n">available_cols</span> <span class="o">=</span> <span class="n">joined_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available columns: </span><span class="si">{</span><span class="n">available_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of the joined DataFrame: </span><span class="si">{</span><span class="n">joined_df</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">joined_df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="n">joined_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;data/GEIH_2022_harmonized.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">joined_df</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">join_data</span><span class="p">(</span><span class="n">filtered_ddfs</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">available_cols</span> <span class="o">=</span> <span class="n">joined_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available columns: </span><span class="si">{</span><span class="n">available_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;filtered_ddfs&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="extractor.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Extraction of Colombia, Brazil and Peru online data</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../dictionary.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How to create a raw dictionary for data harmonization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-enviornment">Setting up the enviornment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-libraries">Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-data-from-brazil">Extracting data from Brazil</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#providing-the-raw-dictionary">Providing the raw dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-data">Extracting the data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#harmonizing-the-data">Harmonizing the data</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/harmonization.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

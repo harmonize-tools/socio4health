@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.vertical\_merge
+=======================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.vertical_merge

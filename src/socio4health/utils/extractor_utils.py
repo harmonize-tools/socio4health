@@ -11,9 +11,27 @@ import py7zr
 import os
 import requests
 import hashlib
+import multiprocessing
+import logging
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def _run_spider_in_process(url, depth, down_ext, key_words):
+    """Internal function to run spider in a separate process"""
+    # Configure logging for the subprocess
+    logging.getLogger('scrapy').propagate = False
+    logging.getLogger('scrapy').setLevel(logging.CRITICAL)
+    logging.getLogger('urllib3').setLevel(logging.CRITICAL)
+
+    process = CrawlerProcess({
+        'LOG_LEVEL': 'CRITICAL',
+        'LOG_ENABLED': False,
+        'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
+    })
+    process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)
+    process.start(stop_after_crawl=True)
 
 
 def run_standard_spider(url, depth, down_ext, key_words):
@@ -29,22 +47,33 @@ def run_standard_spider(url, depth, down_ext, key_words):
         List of file extensions to download.
     key_words : list
         List of keywords to filter the crawled data.
-    
+
     Returns
     -------
-    ``None``
+    bool
+        True if spider completed successfully, False otherwise
     """
-    logging.getLogger('scrapy').propagate = False
-    logging.getLogger('scrapy').setLevel(logging.CRITICAL)
-    logging.getLogger('urllib3').setLevel(logging.CRITICAL)
+    try:
+        # Create and run spider in a separate process
+        spider_process = multiprocessing.Process(
+            target=_run_spider_in_process,
+            args=(url, depth, down_ext, key_words)
+        )
 
-    process = CrawlerProcess({
-        'LOG_LEVEL': 'CRITICAL',
-        'LOG_ENABLED': False,
-        'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
-    })
-    process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)
-    process.start(stop_after_crawl=True)
+        spider_process.start()
+        spider_process.join()  # Wait for the process to finish
+
+        # Check if process completed successfully
+        if spider_process.exitcode == 0:
+            logging.info(f"Spider completed successfully for URL: {url}")
+            return True
+        else:
+            logging.error(f"Spider process failed with exit code: {spider_process.exitcode}")
+            return False
+
+    except Exception as e:
+        logging.error(f"Error running spider: {str(e)}")
+        return False
 
 
 def download_request(url, filename, download_dir):

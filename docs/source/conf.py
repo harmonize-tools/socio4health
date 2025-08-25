@@ -29,13 +29,14 @@ extensions = [
     'sphinx.ext.todo',
     'myst_nb',
     'sphinx_design',
-    #'nbsphinx',
+    'nbsphinx',
     'sphinx_copybutton'
-    #'sphinx.ext.autosectionlabel'
 
 ]
 
-#autosectionlabel_prefix_document = True
+
+is_ci = os.getenv('GITHUB_ACTIONS') == 'true'
+nbsphinx_execute = 'never' if is_ci else 'auto'
 
 templates_path = ['_templates']
 exclude_patterns = []

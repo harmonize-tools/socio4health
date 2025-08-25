@@ -2,8 +2,8 @@ API Reference
 =============
 
 This section contains the Documentation of the Application Programming
-Interface (API) of socio4health. The information in this section is automatically
-created from the documentation strings in the original Python code.
+Interface (**API**) of **socio4health**. The information in this section is automatically
+created from the documentation strings in the original **Python** code.
 
 .. currentmodule:: socio4health
 

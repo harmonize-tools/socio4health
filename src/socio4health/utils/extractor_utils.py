@@ -44,7 +44,7 @@ def run_standard_spider(url, depth, down_ext, key_words):
         # Other Scrapy settings
     })
     process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)
-    process.start()
+    process.start(stop_after_crawl=True)
 
 
 def download_request(url, filename, download_dir):

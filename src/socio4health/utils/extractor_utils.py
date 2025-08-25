@@ -1,6 +1,5 @@
 import logging
 import re
-import threading
 
 from scrapy.crawler import CrawlerProcess
 from .standard_spider import StandardSpider
@@ -36,70 +35,16 @@ def run_standard_spider(url, depth, down_ext, key_words):
     ``None``
     """
     logging.getLogger('scrapy').propagate = False
+    logging.getLogger('scrapy').setLevel(logging.CRITICAL)
     logging.getLogger('urllib3').setLevel(logging.CRITICAL)
-    logging.getLogger('twisted').setLevel(logging.CRITICAL)
 
-    results = {}
-    exception = None
-
-    def _run_spider():
-        nonlocal results, exception
-        try:
-            # Create fresh settings each time
-            settings = {
-                'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'ROBOTSTXT_OBEY': False,
-                'LOG_LEVEL': 'ERROR',
-                'DOWNLOAD_TIMEOUT': 30,
-                'CONCURRENT_REQUESTS': 1,
-                'TELNET_ENABLED': False,
-                'EXTENSIONS': {
-                    'scrapy.extensions.telnet.TelnetConsole': None,
-                },
-                'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
-            }
-
-            process = CrawlerProcess(settings)
-
-            # Create spider instance to capture results
-            spider = StandardSpider(
-                url=url,
-                depth=depth,
-                ext=down_ext,
-                key_words=key_words
-            )
-
-            process.crawl(
-                StandardSpider,
-                url=url,
-                depth=depth,
-                ext=down_ext,
-                key_words=key_words
-            )
-
-            process.start(stop_after_crawl=True)
-
-            # Store the results from the spider instance
-            results = getattr(spider, 'links', {})
-
-        except Exception as e:
-            exception = e
-            logging.error(f"Spider execution failed: {e}")
-
-    # Run in a separate thread
-    thread = threading.Thread(target=_run_spider)
-    thread.daemon = True
-    thread.start()
-    thread.join(timeout=120)  # Timeout after 2 minutes
-
-    if thread.is_alive():
-        logging.warning("Spider thread timed out")
-        return {}
-
-    if exception:
-        raise RuntimeError(f"Web scraping failed: {exception}")
-
-    return results
+    process = CrawlerProcess({
+        'LOG_LEVEL': 'CRITICAL',
+        'LOG_ENABLED': False,
+        'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
+    })
+    process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)
+    process.start(stop_after_crawl=True)
 
 
 def download_request(url, filename, download_dir):

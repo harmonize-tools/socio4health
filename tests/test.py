@@ -50,9 +50,11 @@ def test():
     dfs = extractor.extract()
     har.similarity_threshold = 0.9
 
-    har.join_key = 'DIRECTORIO'
-    har.aux_key = 'ORDEN'
-    har.extra_cols = ['ORDEN']
+    # join key la columna presente en todos los dataframes y es unica en todas las filas (ID), aux_key se usa para colombia porque no hay un identificador de persona, depende de
+    #los datos.
+    har.join_key = 'DIRECTORIO' #ID de vivienda en Colombia
+    har.aux_key = 'ORDEN'  #numero de persona en la vivienda en Colombia, persona dentro de la vivienda
+    har.extra_cols = ['ORDEN'] #columnas que no estan en la categoria que se busco pero que se necesitan
 
     print('Vertical merge_____________________________________')
     dfs = har.vertical_merge(dfs)

@@ -6,13 +6,13 @@ Welcome to the Getting Started section of socio4health. This guide will walk you
 Installation
 ------------
 
-To install socio4health, use the following command:
+To install **socio4health**, use the following command:
 
 .. code-block:: shell
 
    pip install socio4health
 
-Make sure you have Python 3.12 installed on your system; the package requires Python version 3.10 or higher.
+Make sure you have **Python 3.12** installed on your system; the package requires **Python version 3.10** or higher.
 
 Usage
 -----

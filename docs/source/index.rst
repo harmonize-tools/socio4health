@@ -6,7 +6,7 @@ socio4health
    :alt: Lifecycle: experimental
 
 .. |license| image:: https://img.shields.io/badge/License-MIT-blue.svg
-   :target: https://github.com/harmonize-tools/socio4health/blob/main/LICENSE.md/
+   :target: https://github.com/harmonize-tools/socio4health/blob/main/LICENSE.md
    :alt: MIT license
 
 .. |contributors| image:: https://img.shields.io/github/contributors/harmonize-tools/socio4health
@@ -17,8 +17,6 @@ socio4health
    :alt: commits
 
 |lifecycle| |license| |contributors| |commits|
-
-
 
 Welcome to the official documentation site for **socio4health**! This site serves as the central hub for all documentation, resources, and updates related to the library.
 
@@ -52,7 +50,7 @@ Welcome to the official documentation site for **socio4health**! This site serve
 Introduction
 ------------
 
-The Python package `socio4health` is an extraction, transformation, loading, and AI-assisted query and visualization (ETL-AI QV) tool designed to simplify the process of collecting and merging data from multiple sources into a unified relational database structure, and to visualize or query it using natural language.
+The Python package **socio4health** is an **extraction**, **transformation**, **loading**, and **AI-assisted query** and **visualization** (ETL-AI QV) tool designed to simplify the process of collecting and merging data from multiple sources into a unified relational database structure, and to visualize or query it using natural language.
 
 Features
 --------
@@ -79,18 +77,19 @@ Features
 Who should use socio4health?
 ----------------------------
 
-socio4health is ideal for data analysts, scientists, and researchers who frequently handle large volumes of data from varied sources and are looking for a streamlined way to consolidate, query, and visualize their data. It is also a great tool for developers working on projects that require the integration of disparate data sets into a single, manageable format. Business intelligence professionals and decision-makers will find socio4health invaluable for generating insights through natural language queries and visualizations, making complex data more accessible and actionable. In essence, anyone looking to simplify their data workflows, from extraction to visualization, and leverage AI for natural language querying will benefit greatly from using socio4health.
+**socio4health** is ideal for data analysts, scientists, and researchers who frequently handle large volumes of data from varied sources and are looking for a streamlined way to consolidate, query, and visualize their data. It is also a great tool for developers working on projects that require the integration of disparate data sets into a single, manageable format. Business intelligence professionals and decision-makers will find socio4health invaluable for generating insights through natural language queries and visualizations, making complex data more accessible and actionable. In essence, anyone looking to simplify their data workflows, from extraction to visualization, and leverage AI for natural language querying will benefit greatly from using socio4health.
 
 About the Project
 -----------------
 
-Developed by `Erick Lozano`_, `Diego Irreño`_ and `Juan Montenegro-Torres`_  © 2025
+Developed by `Erick Lozano`_, `Diego Irreño`_ and `Juan Montenegro-Torres`_ © 2025
+
 Documentation maintained by `Ingrid Mora`_.
 
 License
 -------
 
-socio4health is distributed under the `MIT License`_. Feel free to use, modify, and distribute this project in accordance with the terms of the license.
+**socio4health** is distributed under the `MIT License`_. Feel free to use, modify, and distribute this project in accordance with the terms of the license.
 
 Contributing
 ------------
@@ -100,11 +99,11 @@ Contributions are warmly welcomed! If you wish to contribute, please start a dis
 Code of Conduct
 ---------------
 
-socio4health is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct`_.
+**socio4health** is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct`_.
 
 ----
 .. _Juan Montenegro-Torres: https://github.com/Juanmontenegro99
-.. _Ingrid Mora:https://github.com/ingridvmoras
+.. _Ingrid Mora: https://github.com/ingridvmoras
 .. _Erick Lozano: https://github.com/Ersebreck
 .. _Diego Irreño: https://github.com/dirreno
 .. _MIT License: https://opensource.org/licenses/MIT

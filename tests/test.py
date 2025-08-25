@@ -37,14 +37,15 @@ def test():
                                          new_column_name="category",
                                          MODEL_PATH="../../input/bert_finetuned_classifier")
     '''
-    dic = pd.read_excel('../../input/PNADC_2022/PNADC_2022_Dictionary.xlsx')
-    dic.to_excel('data/PNADC_2022_Dictionary.xlsx', index=False)
-    colnames, colspecs = parse_fwf_dict(dic)
+    # = pd.read_excel('../../input/PNADC_2022/PNADC_2022_Dictionary.xlsx')
+    #dic.to_excel('data/PNADC_2022_Dictionary.xlsx', index=False)
+    #colnames, colspecs = parse_fwf_dict(dic)
 
-    extractor = Extractor(input_path="../../input/PNADC_2022/Test", down_ext=['.txt', '.zip'], is_fwf=True,
-                          colnames = colnames, colspecs = colspecs,output_path="data")
+    #extractor = Extractor(input_path="../../input/PNADC_2022/Test", down_ext=['.txt', '.zip'], is_fwf=True,
+    #                      colnames = colnames, colspecs = colspecs,output_path="data")
 
-    har.dict_df = dic
+    extractor = col_online_extractor
+    har.dict_df = col_dict
 
     dfs = extractor.extract()
     har.similarity_threshold = 0.9
@@ -64,7 +65,7 @@ def test():
         print(df.head())
 
     har.categories = ["Business"]
-    har.key_col = 'UF'
+    har.key_col = 'DPTO'
     har.key_val = ['11']
     print('Data harmonization_________________________________')
     filtered_dask_dfs = har.data_selector(dfs)

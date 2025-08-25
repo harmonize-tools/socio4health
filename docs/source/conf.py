@@ -34,9 +34,7 @@ extensions = [
 
 ]
 
-
-is_ci = os.getenv('GITHUB_ACTIONS') == 'true'
-nbsphinx_execute = 'never' if is_ci else 'auto'
+nbsphinx_execute = 'never'
 
 templates_path = ['_templates']
 exclude_patterns = []

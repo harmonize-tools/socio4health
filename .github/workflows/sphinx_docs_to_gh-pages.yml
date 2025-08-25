@@ -28,8 +28,6 @@ jobs:
           pip install -e .
 
       - name: Build documentation
-        env:
-          GITHUB_ACTIONS: true
         run: sphinx-build -E -b html . _build/html
         working-directory: docs/source
 

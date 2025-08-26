@@ -51,6 +51,10 @@ class Harmonizer:
             Key values for data selection (default is an empty list).
         extra_cols : list of str
             Extra columns for data selection (default is an empty list).
+        join_key : str
+            Key column for joining DataFrames (default is ``None``).
+        aux_key : str
+            Auxiliary key column for joining DataFrames (default is ``None``).
     """
     def __init__(self,
                  min_common_columns: int = 1,
@@ -628,7 +632,7 @@ class Harmonizer:
 
     def join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
         """
-        Join multiple Dask DataFrames on a specified key column, removing duplicate columns.
+        Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified ``key_col``, removing duplicate columns.
 
         Parameters
         ----------

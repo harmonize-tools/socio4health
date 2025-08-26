@@ -1,7 +1,8 @@
 Examples
 ========
 
-This section provides examples of how to use the **socio4health** library for **data extraction**, **transformation**, **loading**, and **AI-assisted querying and visualization**. These examples cover various scenarios, including working with **online data sources**, **handling local files**, and **utilizing natural language processing** for **data queries and visualizations**.
+This section provides examples of how to use the **socio4health** library for **data extraction**, **transformation**, **loading**, and **AI-assisted querying and visualization**. These examples cover various scenarios, including working with online data sources, handling local files, and utilizing natural language processing** for data queries and visualizations.
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents

@@ -1,7 +1,7 @@
 How to create a raw dictionary for data harmonization
 =====================================================
 
-For data harmonization, it is **essential** to have a **raw dictionary** that defines the **structure** and **content** of the data. This dictionary serves as a reference for understanding the data fields, their types, and any transformations that may be necessary. In this section, we will outline the steps to create a raw dictionary for data harmonization.
+For data harmonization, it is **essential** to have a **raw dictionary** that defines the **structure** and **content** of the data. This dictionary serves as a reference for understanding the data fields, their types, and any transformations that may be necessary. In this section, we will outline the steps to create a **raw dictionary** for **data harmonization**.
 
 1. Retrieve dictionary from data sources
 -------------------------------------

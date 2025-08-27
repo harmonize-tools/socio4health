@@ -393,37 +393,39 @@ class Harmonizer:
             return process_ddf(ddf_or_ddfs)
 
     @staticmethod
-    def get_available_columns(ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> List[str]:
+    def get_available_columns(df_or_dfs: Union[dd.DataFrame, pd.DataFrame, List[Union[dd.DataFrame, pd.DataFrame]]]) -> \
+    List[str]:
         """
-        Get a list of unique column names from a single `Dask <https://docs.dask.org>`_ DataFrame
-        or a list of `Dask <https://docs.dask.org>`_ DataFrames.
+        Get a list of unique column names from a single DataFrame or a list of DataFrames.
+        Supports both Dask and pandas DataFrames.
 
         Parameters
         ----------
-        ddf_or_ddfs : `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            or list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            A single Dask DataFrame or a list of Dask DataFrames to extract column names from.
+        df_or_dfs : Union[dask.dataframe.DataFrame, pandas.DataFrame,
+                         List[Union[dask.dataframe.DataFrame, pandas.DataFrame]]]
+            A single DataFrame or a list of DataFrames to extract column names from.
+            Can be Dask DataFrames, pandas DataFrames, or a mix of both.
 
         Returns
         -------
         list of str
-            Sorted list of unique column names across all provided Dask DataFrames.
+            Sorted list of unique column names across all provided DataFrames.
 
         Raises
         ------
         TypeError
-            If the input is not a Dask DataFrame or a list of Dask DataFrames.
+            If the input is not a DataFrame or a list of DataFrames.
         """
-        if isinstance(ddf_or_ddfs, dd.DataFrame):
-            ddf_or_ddfs = [ddf_or_ddfs]
-        elif not isinstance(ddf_or_ddfs, list):
-            raise TypeError("Input must be a Dask DataFrame or a list of Dask DataFrames")
+        if isinstance(df_or_dfs, (dd.DataFrame, pd.DataFrame)):
+            df_or_dfs = [df_or_dfs]
+        elif not isinstance(df_or_dfs, list):
+            raise TypeError("Input must be a DataFrame or a list of DataFrames")
 
         unique_columns = set()
-        for ddf in ddf_or_ddfs:
-            if not isinstance(ddf, dd.DataFrame):
-                raise TypeError("All elements in the list must be Dask DataFrames")
-            unique_columns.update(ddf.columns)
+        for df in df_or_dfs:
+            if not isinstance(df, (dd.DataFrame, pd.DataFrame)):
+                raise TypeError("All elements in the list must be DataFrames (Dask or pandas)")
+            unique_columns.update(df.columns)
 
         return sorted(unique_columns)
 

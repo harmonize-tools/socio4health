@@ -82,7 +82,7 @@ Who should use socio4health?
 About the Project
 -----------------
 
-Developed by `Erick Lozano`_, `Diego Irreño`_ and `Juan Montenegro-Torres`_ © 2025
+Developed by `Erick Lozano`_, `Diego Irreño`_ and `Juan Montenegro`_ © 2025
 
 Documentation maintained by `Ingrid Mora`_
 
@@ -104,8 +104,8 @@ Code of Conduct
 ----
 .. _Erick Lozano: https://github.com/Ersebreck
 .. _Diego Irreño: https://github.com/dirreno
-.. _Juan Montenegro-Torres: https://github.com/Juanmontenegro99
 .. _Ingrid Mora: https://github.com/ingridvmoras
+.. _Juan Montenegro: https://github.com/Juanmontenegro99
 .. _MIT License: https://opensource.org/licenses/MIT
 .. _README: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
 .. _GitHub repository: https://github.com/harmonize-tools/socio4health

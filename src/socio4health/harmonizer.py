@@ -576,12 +576,12 @@ class Harmonizer:
         Returns
         -------
         list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            List of filtered Dask DataFrames according to the key column, key values, categories, and extra columns.
+            List of filtered Dask DataFrames according to the ``key_col``, ``key_val``, ``categories``, and ``extra_cols``.
 
         Raises
         ------
         KeyError
-            If the key column is not found in a DataFrame.
+            If the ``key_col`` is not found in a DataFrame.
         """
 
         dict_df = self.dict_df.copy()
@@ -636,7 +636,7 @@ class Harmonizer:
 
         Parameters
         ----------
-        ddfs : list of dask.dataframe.DataFrame
+        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
             List of Dask DataFrames to join.
 
         Returns

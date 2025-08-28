@@ -225,7 +225,7 @@ def parse_fwf_dict(dict_df):
         A DataFrame containing the dictionary information with columns:
         - 'variable_name': Column names
         - 'initial_position': Starting position (1-based) of each column
-        - 'size': Width of each column
+        - 'size': Width of each column or 'final_position': Ending position of each column
 
     Returns
     -------
@@ -242,19 +242,26 @@ def parse_fwf_dict(dict_df):
         If no column names or sizes are found in the dictionary DataFrame.
     """
 
+    if not 'variable_name' in dict_df.columns:
+        raise ValueError("No column names found in the dictionary DataFrame.")
+    if not 'initial_position' in dict_df.columns:
+        raise ValueError("No initial positions found in the dictionary DataFrame.")
+    if not 'size' in dict_df.columns or 'final_position' in dict_df.columns:
+        raise ValueError("No sizes or final postions found in the dictionary DataFrame.")
+
     # Extract column names
     colnames = dict_df['variable_name'].tolist()
-    size = dict_df['size'].tolist()
-
-    if not colnames:
-        raise ValueError("No column names found in the dictionary DataFrame.")
-    if not size:
-        raise ValueError("No sizes found in the dictionary DataFrame.")
-
     colspecs = []
-    for i,val in dict_df['initial_position'].items():
-        start = int(val - 1)
-        end = int(start + size[i])
-        colspecs.append((start, end))
+    if 'final_position' in dict_df.columns:
+        for i,val in dict_df['initial_position'].items():
+                start = int(val - 1)
+                end = int(dict_df['final_position'][i] - 1)
+                colspecs.append((start, end))
+        else:
+            size = dict_df['size'].tolist()
+            for i,val in dict_df['initial_position'].items():
+                start = int(val - 1)
+                end = int(start + size[i])
+                colspecs.append((start, end))
 
     return colnames, colspecs

@@ -26,7 +26,7 @@ Welcome to the official documentation site for **socio4health**\! This site serv
         :link: user_guide
         :link-type: doc
 
-        User guide on installation and the basic concepts of socio4health.
+        User guide on installation and the basic concepts of **socio4health**.
 
     .. grid-item-card:: Examples
         :link: examples
@@ -89,23 +89,22 @@ Documentation maintained by `Ingrid Mora <https://github.com/ingridvmoras>`_
 License
 -------
 
-**socio4health** is distributed under the `MIT License`_. Feel free to use, modify, and distribute this project in accordance with the terms of the license.
+**socio4health** is distributed under the `MIT License <_MIT License: https://opensource.org/licenses/MIT>`_. Feel free to use, modify, and distribute this project in accordance with the terms of the license.
 
 Contributing
 ------------
 
-Contributions are warmly welcomed\! If you wish to contribute, please start a discussion about the proposed change before implementing it. More details can be found in our `GitHub repository`_.
+Contributions are warmly welcomed\! If you wish to contribute, please start a discussion about the proposed change before implementing it. More details can be found in our `GitHub repository <https://github.com/harmonize-tools/socio4health>`_.
 
 Code of Conduct
 ---------------
 
-**socio4health** is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct`_.
+**socio4health** is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct < https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md>`_.
 
 ----
-.. _MIT License: https://opensource.org/licenses/MIT
+
 .. _README: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
-.. _GitHub repository: https://github.com/harmonize-tools/socio4health
-.. _Code of Conduct: https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md
+
 
 .. toctree::
     :maxdepth: 2

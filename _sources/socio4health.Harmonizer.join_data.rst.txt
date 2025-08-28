@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.join\_data
+==================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.join_data

@@ -47,7 +47,7 @@ In this example, we copy the data from the **two sheets** in the CNPV-2018 CSV f
    :width: 600px
    :alt: Raw dictionary
 
-With the raw dictionary created, we can now proceed to the next step of data harmonization, which involves mapping the raw dictionary to a standardized format. This is covered in the `Harmonization <https://harmonize-tools.github.io/socio4health/notebooks/harmonization.html>`_ tutorial.
+With the raw dictionary created, we can now proceed to the next step of data harmonization, which involves mapping the **raw dictionary** to a **standardized format**. This is covered in the `Harmonization <https://harmonize-tools.github.io/socio4health/notebooks/harmonization.html>`_ tutorial.
 
 .. toctree::
    :maxdepth: 1

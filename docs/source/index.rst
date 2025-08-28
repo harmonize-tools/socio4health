@@ -32,7 +32,7 @@ Welcome to the official documentation site for **socio4health**\! This site serv
         :link: examples
         :link-type: doc
 
-        Examples of socio4health usage.
+        Examples of **socio4health** usage.
 
     .. grid-item-card:: API Reference
         :link: API_reference
@@ -82,9 +82,9 @@ Who should use socio4health?
 About the Project
 -----------------
 
-Developed by `Erick Lozano`_, `Diego Irreño`_ and `Juan Montenegro`_ © 2025
+Developed by `Erick Lozano <https://github.com/Ersebreck>`_, `Diego Irreño <https://github.com/dirreno>`_ and `Juan Montenegro <https://github.com/Juanmontenegro99>`_ © 2025
 
-Documentation maintained by `Ingrid Mora`_
+Documentation maintained by `Ingrid Mora <https://github.com/ingridvmoras>`_
 
 License
 -------
@@ -102,10 +102,6 @@ Code of Conduct
 **socio4health** is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct`_.
 
 ----
-.. _Erick Lozano: https://github.com/Ersebreck
-.. _Diego Irreño: https://github.com/dirreno
-.. _Ingrid Mora: https://github.com/ingridvmoras
-.. _Juan Montenegro: https://github.com/Juanmontenegro99
 .. _MIT License: https://opensource.org/licenses/MIT
 .. _README: https://github.com/just-the-docs/just-the-docs-template/blob/main/README.md
 .. _GitHub repository: https://github.com/harmonize-tools/socio4health

@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.drop\_nan\_columns
+==========================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.drop_nan_columns

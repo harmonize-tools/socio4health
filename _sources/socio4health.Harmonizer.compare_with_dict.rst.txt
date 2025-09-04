@@ -1,0 +1,6 @@
+﻿socio4health.Harmonizer.compare\_with\_dict
+===========================================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Harmonizer.compare_with_dict

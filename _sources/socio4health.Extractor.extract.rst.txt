@@ -1,0 +1,6 @@
+﻿socio4health.Extractor.extract
+==============================
+
+.. currentmodule:: socio4health
+
+.. automethod:: Extractor.extract

@@ -55,29 +55,33 @@ The Python package **socio4health** is an **extraction**, **transformation**, **
 Features
 --------
 
-- **Extraction:**
-  - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-  - Support for various data formats, including ``.csv``, ``.xlsx``, ``.xls``, ``.txt``, ``.sav``, and compressed files.
+* **Extraction:**
 
-- **Transformation:**
-  - Consolidate extracted data into Dask DataFrames.
-  - Optimize the transformation process for large files (parallel processing, efficient data structures).
-  - Effectively manage data inconsistencies and discrepancies using anomaly detection algorithms.
+  * Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
+  * Support for various data formats, including ``.csv``, ``.xlsx``, ``.xls``, ``.txt``, ``.sav``, and compressed files.
 
-- **Load:**
-  - Consolidate transformed data into a cohesive relational database.
+* **Transformation:**
 
-- **Query:**
-  - Conduct precise queries and apply transformations to meet specific criteria.
+  * Consolidate extracted data into Dask DataFrames.
+  * Optimize the transformation process for large files (parallel processing, efficient data structures).
+  * Effectively manage data inconsistencies and discrepancies using anomaly detection algorithms.
 
-- **AI Query & Visualization:**
-  - Use natural language input to query data (from values to subsets).
-  - Use natural language input to create simple data visualizations.
+* **Load:**
+
+  * Consolidate transformed data into a cohesive relational database.
+
+* **Query:**
+
+  * Conduct precise queries and apply transformations to meet specific criteria.
+
+* **AI Query & Visualization:**
+
+  * Use natural language input to query data (from values to subsets).
 
 Who should use socio4health?
 ----------------------------
 
-**socio4health** is ideal for **data analysts**, **scientists**, and **researchers** who frequently handle large volumes of data from varied sources and are looking for a streamlined way to **consolidate**, **query**, and **visualize** their data. It is also a great tool for developers working on projects that require the integration of disparate data sets into a single, manageable format. Business intelligence professionals and decision-makers will find **socio4health** invaluable for generating insights through natural language queries and visualizations, making complex data more accessible and actionable. In essence, anyone looking to simplify their data workflows, from extraction to visualization, and leverage AI for natural language querying will benefit greatly from using **socio4health**.
+**socio4health** is ideal for **data analysts**, **scientists**, and **researchers** who frequently handle large volumes of data from varied sources and are looking for a streamlined way to **consolidate**, **query**, and **visualize** their data. It is also a great tool for **developers** working on projects that require the integration of disparate data sets into a single, manageable format. **Business intelligence professionals** and **decision-makers** will find **socio4health** invaluable for generating insights through natural language queries and visualizations, making complex data more accessible and actionable. In essence, anyone looking to simplify their data workflows, from extraction to visualization, and leverage AI for natural language querying will benefit greatly from using **socio4health**.
 
 About the Project
 -----------------
@@ -99,7 +103,7 @@ Contributions are warmly welcomed\! If you wish to contribute, please start a di
 Code of Conduct
 ---------------
 
-**socio4health** is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct < https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md>`_.
+**socio4health** is dedicated to fostering an inclusive community. We value the importance of creating a safe and welcoming environment for everyone. Please see our `Code of Conduct <https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md>`_.
 
 ----
 

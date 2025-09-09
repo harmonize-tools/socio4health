@@ -14,6 +14,7 @@ Extractor
 
 .. autosummary::
    :toctree:
+   :nosignatures:
 
    Extractor
    extractor.get_default_data_dir
@@ -26,7 +27,8 @@ Harmonizer
 **Methods**
 
 .. autosummary::
-   :toctree: 
+   :toctree:
+   :nosignatures:
 
    Harmonizer
    Harmonizer.vertical_merge
@@ -43,7 +45,7 @@ Utils
 
 .. autosummary::
    :toctree: 
-
+   :nosignatures:
    utils.extractor_utils.compressed2files
    utils.extractor_utils.download_request
    utils.extractor_utils.parse_pnadc_sas_script
@@ -53,7 +55,7 @@ Utils
 
 .. autosummary::
    :toctree:
-
+   :nosignatures:
 
    utils.harmonizer_utils.classify_rows
    utils.harmonizer_utils.get_classifier
@@ -64,6 +66,7 @@ Utils
 
 .. autosummary::
    :toctree:
+   :nosignatures:
 
     utils.standard_spider.StandardSpider
     utils.standard_spider.StandardSpider.parse
@@ -73,12 +76,9 @@ Enums
 ~~~~~~~~~~
 .. autosummary::
    :toctree:
+   :nosignatures:
 
    enums.data_info_enum
-   enums.data_info_enum.BraColspecsEnum
-   enums.data_info_enum.CountryEnum
-   enums.data_info_enum.NameEnum
-   enums.dict_enum.ColumnMappingEnum
    enums.data_info_enum.BraColspecsEnum
    enums.data_info_enum.CountryEnum
    enums.data_info_enum.NameEnum

@@ -1,0 +1,267 @@
+{
+ "cells": [
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "<img src=\"https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/Harmonize_LogoH.png\" alt=\"image info\" height=\"100\" width=\"300\"/><img src=\"https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png\" alt=\"image info\" height=\"100\" width=\"100\"/>\n",
+   "id": "b9fe8f91da39f9ea"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "# Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia\n",
+   "id": "33c9849cfbb06e9f"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "**Run the tutorial via free cloud platforms:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/harmonize-tools/socio4health/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Fsource%2Fnotebooks%2Fexample_colombia.ipynb)<a target=\"_blank\" href=\"https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_colombia.ipynb\">\n",
+    "  <img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/>\n",
+    "</a>"
+   ],
+   "id": "7d1e0ef9fbee1966"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "This notebook provides you with a real world example on how to use **socio4health** to **retrieve**, **harmonize** and **analyze** **socioeconomic and demographic** variables related to **dengue** incidence in Colombia and recreate a data set used in the publication *Exploring Dengue Dynamics: A Multi-Scale Analysis of Spatio-Temporal Trends in Ibagué, Colombia* by Otelo et al., published in *Virus* in 2024 ([DOI](https://doi.org/10.3390/v16060906)). This tutorial assumes you have an **intermediate** or **advanced** understanding of **Python** and data manipulation.\n",
+    "\n",
+    "## Setting up the environment\n",
+    "\n",
+    "To run this notebook, you need to have the following prerequisites:\n",
+    "\n",
+    "- **Python 3.10+**\n",
+    "\n",
+    "Additionally, you need to install the `socio4health` and `pandas` package, which can be done using ``pip``:\n",
+    "\n"
+   ],
+   "id": "dec1150c714064d2"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "!pip install socio4health pandas -q",
+   "id": "9cdfd4cac8c629e3"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Import Libraries\n",
+    "\n",
+    "To perform the data extraction, the `socio4health` library provides the `Extractor` class for data extraction, and the `Harmonizer` class for data harmonization of the retrieved date. `pandas` will be used for data manipulation. Additionally, we will use some utility functions from the `socio4health.utils.harmonizer_utils` module to standardize and translate the dictionary.\n"
+   ],
+   "id": "4765b96ff88fc80"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "import pandas as pd\n",
+    "from socio4health import Extractor\n",
+    "from socio4health.harmonizer import Harmonizer\n",
+    "from socio4health.utils import harmonizer_utils"
+   ],
+   "id": "65ee2588d8c01afb"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## 1. Extract data from Colombia\n",
+    "\n",
+    "To extract data from Colombia, use the `Extractor` class from the `socio4health` library. The `Extractor` class provides methods to retrieve data from various sources, including online databases and local files. As in the publication, extract the Colombian National Population and Housing Census 2018 (**CNPV 2018**) dataset from the Colombian Nacional Administration of Statistics (**DANE**) website. The dataset is available at: https://microdatos.dane.gov.co/index.php/catalog/643/related-materials.\n",
+    "\n",
+    "The `Extractor` class requires the following parameters:\n",
+    "- `input_path`: The `URL` or local path to the data source.\n",
+    "- `down_ext`: A list of file extensions to download. This can include `.CSV`, `.csv`, `.zip`, etc.\n",
+    "- `output_path`: The local path where the extracted data will be saved.\n",
+    "- `key_words`: A list of keywords to filter the files to be downloaded. In this case, we are only interested in the file `14045.zip`, which contains the data at the desired level of granularity (census block level or \"Manzana\").\n",
+    "- `depth`: The depth of the directory structure to traverse when downloading files. A depth of `0` means only the files in the specified directory will be downloaded.\n",
+    "\n"
+   ],
+   "id": "e3d11b09847a8374"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "col_online_extractor = Extractor(input_path=\"https://microdatos.dane.gov.co/index.php/catalog/643/related-materials\",\n",
+    "                                 down_ext=['.cpg', '.dbf', '.prj','.sbn', '.sbx', '.shx', '.shp', '.zip'],\n",
+    "                                 output_path=\"../CNVP2018\",\n",
+    "                                 key_words=[\"14045.zip\"],\n",
+    "                                 depth=0)\n",
+    "col_CNPV = col_online_extractor.extract()"
+   ],
+   "id": "a24fb3be14265d6a"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "col_CNPV[0]",
+   "id": "187c327da4ac4430"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## 2. Load and standardize the dictionary\n",
+    "To harmonize the data, provide a dictionary that describes the variables in the dataset. The CNPV 2018 dictionary is available at [here](https://microdatos.dane.gov.co/index.php/catalog/643/download/14045). Create a raw dictionary, which we will then standardize and translate to English. Follow the steps in the tutorial [\"How to Create a Raw Dictionary for Data Harmonization\"](https://harmonize-tools.github.io/socio4health/dictionary.html) to create a raw dictionary in Excel format.\n",
+    "\n"
+   ],
+   "id": "76a3896f4e05c875"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "raw_dic = pd.read_excel(\"DiccionarioManzanaCrudo.xlsx\"\"\")\n",
+    "raw_dic"
+   ],
+   "id": "f7e0c0271d1e50ea"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Standardize the dictionary using the `standardize_dict` function from the `harmonizer_utils` module. Then, translate it to English using the `translate_column` function from the same module. Finally, classify the variables into categories using a pre-trained **BERT model**.",
+   "id": "3c19d5943144f919"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "dic = harmonizer_utils.standardize_dict(raw_dic)\n",
+    "dic = harmonizer_utils.translate_column(dic, \"question\", language=\"en\")\n",
+    "dic = harmonizer_utils.translate_column(dic, \"description\", language=\"en\")\n",
+    "dic = harmonizer_utils.translate_column(dic, \"possible_answers\", language=\"en\")\n",
+    "dic = harmonizer_utils.classify_rows(dic, \"question_en\", \"description_en\", \"possible_answers_en\",\n",
+    "                                        new_column_name=\"category\",\n",
+    "                                        MODEL_PATH=\"files/bert_finetuned_classifier\")"
+   ],
+   "id": "4db0832c05516baf"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## 3. Harmonize the data\n",
+    "\n",
+    "Use the Harmonizer class from the **socio4health** library to harmonize the data. This class provides methods for harmonizing data based on a provided dictionary. First, set the similarity threshold to `0.9`, meaning that only variables with a similarity score of `0.9` or higher will be considered for harmonization. Next, set the `nan_threshold` to `1`, meaning that only variables with no missing values will be considered for harmonization.\n",
+    "\n",
+    "The available columns in the dataset can be checked using the `get_available_columns` method. This method takes a list of DataFrames as input and returns a list of column names that are present in the DataFrames."
+   ],
+   "id": "75baa26ef7894bea"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "har = Harmonizer()\n",
+    "har.similarity_threshold = 0.9\n",
+    "har.nan_threshold = 1\n",
+    "available_columns = har.get_available_columns(col_CNPV)"
+   ],
+   "id": "737255bee41adb0f"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Configure the dictionary, categories, additional columns, key column, and key values to prepare for the harmonization process. Set the `dict_df` parameter to the standardized and translated dictionary. Set the `categories` parameter to \"Housing\" to ensure that only housing-related variables are considered for harmonization. Set the `extra_cols` and `key_col`parameter to `MPIO_CDPMP`, which stands for the municipality code. This allows for **filtering the data** to include only records from a specific municipality. In this case, we are interested in the municipality with the code \"73001\", which corresponds to Ibague. Finally, use the `data_selector` method to **filter the data based on the specified key column and key values**. This method returns a list of DataFrames that match the filtering criteria.",
+   "id": "4e640d941b0b66cf"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "har.dict_df = dic\n",
+    "har.categories = [\"Housing\"]\n",
+    "har.extra_cols = ['MPIO_CDPMP']\n",
+    "har.key_col = 'MPIO_CDPMP'\n",
+    "har.key_val = ['73001']\n",
+    "filtered_ddfs = har.data_selector(col_CNPV)"
+   ],
+   "id": "b8bacc9375a51348"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "The method `compare_with_dict` can be used to compare the available columns in the dataset with the variables in the dictionary. This method helps to identify which variables from the dictionary are present in the dataset and can be harmonized.",
+   "id": "c620ef4d7b7fe030"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Finally, display the filtered DataFrames to see the harmonized data for the specified municipality. If needed, the harmonized data can be exported to a CSV file using the `to_csv` method.",
+   "id": "8db31a4e0f6039f2"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "har.compare_with_dict(col_CNPV)",
+   "id": "6b7ba1bb7a224d1b"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Finally, display the filtered DataFrames to see the harmonized data for the specified municipality. If needed, the harmonized data can be exported to a `CSV` file using the `to_csv` method.",
+   "id": "e25cb79503d8ea5f"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "filtered_ddfs[0]",
+   "id": "99f5a4729cc4d16c"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "",
+   "id": "2c6a42f3a7485c8b"
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "social4health",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.11"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

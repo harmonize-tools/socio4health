@@ -269,9 +269,9 @@ class Harmonizer:
         Returns
         -------
         list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            List of merged Dask <https://docs.dask.org>`_ DataFrames, where each group contains DataFrames with sufficient column overlap and compatible data types.
+            List of merged `Dask <https://docs.dask.org>`_ DataFrames, where each group contains DataFrames with sufficient column overlap and compatible data types.
 
-        Important
+        Notes
         -----
         - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column similarity is above ``similarity_threshold``.
         - Only columns with matching data types are considered compatible for merging.

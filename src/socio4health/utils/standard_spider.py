@@ -1,3 +1,4 @@
+import re
 import scrapy
 import json
 import os
@@ -18,7 +19,7 @@ class StandardSpider(scrapy.Spider):
     ext : list, optional
         A list of file extensions to filter links. Default includes common document formats.
     key_words : list, optional
-        A list of keywords to filter links by filename. Default is an empty list.
+        A list of keywords or regex conditions to filter links by filename. By default it is an empty list.
     start_urls : list
         A list containing the starting URL for the spider.
     links : dict
@@ -41,6 +42,16 @@ class StandardSpider(scrapy.Spider):
         self.links = {}
         self.ext = ext if ext is not None else ['.csv', '.xls', '.xlsx', '.zip']
         self.key_words = key_words if key_words is not None else []
+
+        if self.key_words and not hasattr(self, "_compiled_key_words"):
+            self._compiled_key_words = []
+            for kw in self.key_words:
+                try:
+                    # If it is a valid regex, it compiles as is.
+                    self._compiled_key_words.append(re.compile(kw))
+                except re.error:
+                    # If it is NOT a valid regex, it treats it as a literal.
+                    self._compiled_key_words.append(re.compile(re.escape(kw)))
 
     def parse(self, response, current_depth=0):
         """Parse the response to extract links based on criteria.
@@ -73,7 +84,7 @@ class StandardSpider(scrapy.Spider):
                         nombre_archivo = os.path.basename(enlace)
 
                         if self.key_words:  # Ensure key_words is not empty or None
-                            if any(key_word in nombre_archivo for key_word in self.key_words):
+                            if any(p.search(nombre_archivo) for p in self._compiled_key_words):
                                 self.links[nombre_archivo] = full_url
                         else:
                             self.links[nombre_archivo] = full_url
@@ -81,9 +92,8 @@ class StandardSpider(scrapy.Spider):
                         for extension in self.ext:
                             if elemento.attrib['title'].endswith(extension):
                                 nombre_archivo = os.path.basename(enlace + extension)
-
-                                if self.key_words:
-                                    if any(key_word in nombre_archivo for key_word in self.key_words):
+                                if self.key_words:  # Ensure key_words is not empty or None
+                                    if any(p.search(nombre_archivo) for p in self._compiled_key_words):
                                         self.links[nombre_archivo] = full_url
                                 else:
                                     self.links[nombre_archivo] = full_url
@@ -98,8 +108,8 @@ class StandardSpider(scrapy.Spider):
                         onclick_url = onclick_url.replace(" ", "")
                         nombre_archivo = copy.deepcopy(input_element.css('::attr(title)').extract_first())
                         if nombre_archivo:
-                            if self.key_words:
-                                if any(key_word in nombre_archivo for key_word in self.key_words):
+                            if self.key_words:  # Ensure key_words is not empty or None
+                                if any(p.search(nombre_archivo) for p in self._compiled_key_words):
                                     self.links[nombre_archivo] = response.urljoin(onclick_url)
                             else:
                                 self.links[nombre_archivo] = response.urljoin(onclick_url)

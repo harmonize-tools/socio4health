@@ -605,7 +605,12 @@ class Harmonizer:
                 logging.warning("key_col or key_val not defined, row-wise size will not be reduced")
                 filtered_ddf = ddf
 
-            if filtered_ddf.shape[0].compute() == 0:
+            if isinstance(filtered_ddf, dd.DataFrame):
+                n_rows = filtered_ddf.shape[0].compute()
+            else:
+                n_rows = filtered_ddf.shape[0]
+
+            if n_rows == 0:
                 logging.warning("No rows found matching key values in DataFrame")
 
             dict_df_filtered = dict_df[dict_df[ColumnMappingEnum.CATEGORY.value].isin(self.categories)]

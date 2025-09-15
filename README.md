@@ -13,7 +13,7 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Overview
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources focusing in sociodemografic and census datasets from Colombia, Brasil and Peru, into a unified relational database structure.
+  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data 📊 from multiple sources focusing in sociodemografic and census datasets from Colombia 🇨🇴, Brazil 🇧🇷 and Peru 🇵🇪, into a unified relational database structure.
 </p>
 
 - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
@@ -35,7 +35,7 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
     </td>
     <td align="left">
       <strong>Pandas</strong><br>
-      Pandas is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool.<br>
+      Pandas is a fast, powerful, flexible, and easy-to-use open source data analysis and manipulation tool.<br>
     </td>
   </tr>
   <tr>
@@ -136,7 +136,7 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
     </td>
     <td align="center">
       <a href="https://uniandes.edu.co/" target="_blank">
-        <img src="https://www.uniandes.edu.co/sites/default/files/2024-10/Logosimbolo-universidaddelosandes_0.eps" height="64" alt="uniandes logo">
+        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Findustrial.uniandes.edu.co%2Fes%2Fprofesores%2Fclaudia-jimenez&psig=AOvVaw3J7C-aul8Y7ADQygN52qdH&ust=1758055597110000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLiais7R248DFQAAAAAdAAAAABAh" height="64" alt="uniandes logo">
       </a>
     </td>
   </tr>

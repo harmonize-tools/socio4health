@@ -541,7 +541,7 @@ class Harmonizer:
         if self.dict_df is None:
             raise ValueError("dict_df has not been defined in the Harmonizer instance.")
 
-        available_cols = set(self.get_available_columns(ddfs))
+        available_cols = set(self.s4h_get_available_columns(ddfs))
 
         expected_vars = set(self.dict_df['variable_name'].str.upper().unique())
 

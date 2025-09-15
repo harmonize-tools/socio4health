@@ -116,5 +116,5 @@ Code of Conduct
 
     User Guide <user_guide>
     Getting Started <getting_started>
-    Examples <examples>
     API Reference <API_reference>
+    Examples <examples>

@@ -6,7 +6,7 @@ Welcome to the Getting Started section of **socio4health**. This guide will walk
 Installation
 ------------
 
-To install **socio4health**, use the following command:
+**socio4health** can be installed via pip from `PyPI<https://pypi.org/project/socio4health/>`_. To install the package, run the following command in your terminal:
 
 .. code-block:: shell
 

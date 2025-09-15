@@ -70,7 +70,7 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Installation
 
-You can install the latest version of the package from GitHub using the `remotes` package:
+**socio4health** can be installed via pip from [PyPI](https://pypi.org/project/socio4health/).
 
 ```python
 # Install using pip
@@ -145,7 +145,7 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
 
 ## Authors / Contact information
 
-List the authors/contributors of the package and provide contact information if users have questions or feedback.
+Here is the contact information of authors/contributors in case users have questions or feedback.
 </br>
 </br>
 <a href="https://github.com/dirreno">

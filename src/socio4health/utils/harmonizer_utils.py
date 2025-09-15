@@ -54,6 +54,11 @@ def s4h_standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
         )
 
     df = raw_dict.copy()
+    df["description"] = df["description"].astype("object")
+    if df["description"].isna().all():
+        mask = df["variable_name"].isna() & df["question"].notna()
+        df.loc[mask, "description"] = df.loc[mask, "question"]
+        df.loc[mask, "question"] = pd.NA
 
     df['question'] = clean_column(df['question']).ffill()
     cols_to_check = df.columns.difference(['question'])
@@ -75,6 +80,19 @@ def s4h_standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
         df['variable_name'] = clean_column(df['variable_name']).ffill()
 
     df['description'] = clean_column(df['description'])
+    if df["value"].isna().all():
+        df["value"] = pd.to_numeric(df["value"], errors="coerce")
+        pat = r'^\s*([+-]?\d+(?:[.,]\d+)?)(?:[\s\-_—–:|/\\]+)?(.*\S)?\s*$'
+        mask = df["value"].isna() & df["description"].astype(str).str.match(pat, na=False)
+        ext = df.loc[mask, "description"].astype(str).str.extract(pat)
+        num_str = ext[0]
+        txt_str = ext[1]
+        num = pd.to_numeric(num_str.str.replace(",", ".", regex=False), errors="coerce")
+        df.loc[mask, "value"] = num
+        df.loc[mask, "description"] = (
+            txt_str.fillna("").str.strip().replace({"": pd.NA})
+        )
+
     df.drop_duplicates(inplace=True)
     df['variable_name'] = df['variable_name'].str.upper()
     grouped_df = df.groupby(['question', 'variable_name'], group_keys=False)\

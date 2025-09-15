@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import pandas as pd
-from socio4health.utils.harmonizer_utils import standardize_dict, _process_group
+from socio4health.utils.harmonizer_utils import s4h_standardize_dict, _process_group
 
 def test_basic_standardisation() -> None:
     df = pd.DataFrame(
@@ -13,7 +13,7 @@ def test_basic_standardisation() -> None:
         }
     )
 
-    result = standardize_dict(df)
+    result = s4h_standardize_dict(df)
 
     assert isinstance(result, pd.DataFrame)
     assert list(result.columns) == [
@@ -43,7 +43,7 @@ def test_with_subquestion() -> None:
         }
     )
 
-    result = standardize_dict(df)
+    result = s4h_standardize_dict(df)
 
     assert result.shape[0] == 2
     row1 = result.iloc[0]
@@ -62,7 +62,7 @@ def test_removes_empty_rows() -> None:
         }
     )
 
-    result = standardize_dict(df)
+    result = s4h_standardize_dict(df)
 
     assert result.shape[0] == 1
     assert "yes" in result.loc[0, "possible_answers"]
@@ -71,7 +71,7 @@ def test_missing_required_columns() -> None:
     df = pd.DataFrame({"foo": [1], "bar": [2]})
 
     with pytest.raises(ValueError) as exc:
-        standardize_dict(df)
+        s4h_standardize_dict(df)
 
     assert "required columns" in str(exc.value).lower()
 
@@ -87,7 +87,7 @@ def test_invalid_subquestion_type() -> None:
     )
 
     with pytest.raises(TypeError) as exc:
-        standardize_dict(df)
+        s4h_standardize_dict(df)
 
     assert "subquestion" in str(exc.value).lower()
 
@@ -103,4 +103,4 @@ def test_non_dataframe_input() -> None:
     ]
 
     with pytest.raises(TypeError):
-        standardize_dict(data)
+        s4h_standardize_dict(data)

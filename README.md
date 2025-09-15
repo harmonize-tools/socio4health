@@ -13,16 +13,15 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Overview
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources focusing in sociodemografic and census datasets from Colombia, Brasil and Peru, into a unified relational database structure and visualize or querying it using natural language.
+  Package socio4health is an extraction, transformation, loading (ETL) and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data from multiple sources focusing in sociodemografic and census datasets from Colombia, Brasil and Peru, into a unified relational database structure.
 </p>
 
 - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-- Support for various data formats, including .csv, .xlsx, .xls, .txt, .sav, and compressed files, ensuring versatility in sourcing information.
+- Support for various data formats, including `.csv`, `.xlsx`, `.xls`, `.txt`, `.sav`, and compressed files, ensuring versatility in sourcing information.
 - Consolidating extracted data into pandas DataFrame.
 - Consolidating transformed data into a cohesive relational database.
 - Conduct precise queries and apply transformations to meet specific criteria.
-- Using natural language input to query data (Answers from values to subsets)
-- Using natural language input to create simple visualizations of data
+
 
 
 ## Dependencies
@@ -61,17 +60,6 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
       Framework for extracting the data you need from websites.<br>
     </td>
   </tr>
-  <tr>
-    <td align="center">
-      <a href="https://pandas-ai.com/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/154438448?s=48&v=4" height="50" alt="ggplot2 logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Pandasai</strong><br>
-      Integrates generative artificial intelligence capabilities into pandas, making dataframes conversational.<br>
-    </td>
-  </tr>
 </table>
 
 - <a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a>
@@ -84,14 +72,14 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 You can install the latest version of the package from GitHub using the `remotes` package:
 
-```R
+```python
 # Install using pip
-pip install nyctibius
+pip install socio4health
 ```
 
 ## How to Use it
 
-To use the Nyctibius package, follow these steps:
+To use the socio4health package, follow these steps:
 
 1. Import the package in your Python script:
 
@@ -99,10 +87,10 @@ To use the Nyctibius package, follow these steps:
    from socio4health import Harmonizer
    ```
 
-2. Create an instance of the `Harmonizer` class:
+2. Create an instance of the `Extractor` class:
 
    ```python
-   harmonizer = Harmonizer()
+   extractor = Extractor()
    ```
 
 3. Extract data from online sources and create a list of data information:
@@ -111,42 +99,8 @@ To use the Nyctibius package, follow these steps:
    url = 'https://www.example.com'
    depth = 0
    ext = 'csv'
-   list_datainfo = harmonizer.extract(url=url, depth=depth, ext=ext)
-   harmonizer = Harmonizer(list_datainfo)
-   ```
-
-4. Load the data from the list of data information and merge it into a relational database:
-
-   ```python
-   results = harmonizer.load()
-   ```
-
-5. Import the modifier module and create an instance of the `Modifier` class:
-
-   ```python
-   from socio4health.db.modifier import Modifier
-   modifier = Modifier(db_path='../../data/output/nyctibius.db')
-   ```
-   
-6. Perfom modifications:
-
-   ```python
-   tables = modifier.get_tables()
-   print(tables)
-   ```
-   
-7. Import the querier module and create an instance of the `Querier` class:
-
-   ```python
-   from socio4health.db.querier import Querier
-   querier = Querier(db_path='data/output/socio4health.db')
-   ```
-
-8. Perform queries:
-
-   ```python
-   df = querier.select(table="Estructura CHC_2017").execute()
-   print(df)
+   list_datainfo = extractor.s4h_extract(url=url, depth=depth, ext=ext)
+   harmonizer = Harmonizer()
    ```
 
 ## Resources
@@ -156,7 +110,7 @@ To use the Nyctibius package, follow these steps:
 Package Website
 </summary>
 
-The [socio4health website](https://ersebreck.github.io/Nyctibius/) package website includes a function reference, a model outline, and case studies using the package. The site mainly concerns the release version, but you can also find documentation for the latest development version.
+The [socio4health website](https://harmonize-tools.github.io/socio4health/) package website includes API reference, user guide, and case studies. The site mainly concerns the release version, but you can also find documentation for the latest development version.
 
 </details>
 <details>
@@ -205,4 +159,16 @@ List the authors/contributors of the package and provide contact information if 
 </a>
 <span style="display: flex; align-items: center; margin-left: 10px;">
   <strong>Erick Lozano</strong> (developer)
+</span>
+<a href="https://github.com/Juanmontenegro99">
+  <img src="https://avatars.githubusercontent.com/u/60274234?v=4" style="width: 50px; height: auto;" />
+</a>
+<span style="display: flex; align-items: center; margin-left: 10px;">
+  <strong>Juan Montenegro</strong> (developer)
+</span>
+<a href="https://github.com/ingridvmoras">
+  <img src="https://avatars.githubusercontent.com/u/91691844?s=400&u=945efa0d09fcc25d1e592d2a9fddb984fdc6ceea&v=4" style="width: 50px; height: auto;" />
+</a>
+<span style="display: flex; align-items: center; margin-left: 10px;">
+  <strong>Ingrid Mora</strong> (developer)
 </span>

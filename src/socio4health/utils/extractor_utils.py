@@ -1,6 +1,3 @@
-import logging
-import re
-
 from scrapy.crawler import CrawlerProcess
 from .standard_spider import StandardSpider
 import zipfile

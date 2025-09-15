@@ -84,9 +84,10 @@ To use the socio4health package, follow these steps:
 1. Import the package in your Python script:
 
    ```python
+   from socio4health import Extractor()
    from socio4health import Harmonizer
+   
    ```
-
 2. Create an instance of the `Extractor` class:
 
    ```python
@@ -110,7 +111,7 @@ To use the socio4health package, follow these steps:
 Package Website
 </summary>
 
-The [socio4health website](https://harmonize-tools.github.io/socio4health/) package website includes API reference, user guide, and case studies. The site mainly concerns the release version, but you can also find documentation for the latest development version.
+The [socio4health website](https://harmonize-tools.github.io/socio4health/) package website includes **API reference**, **user guide**, and **examples**. The site mainly concerns the release version, but you can also find documentation for the latest development version.
 
 </details>
 <details>
@@ -118,9 +119,9 @@ The [socio4health website](https://harmonize-tools.github.io/socio4health/) pack
 Organisation Website
 </summary>
 
-[Harmonize](https://www.harmonize-tools.org/) is an international develop cost-effective and reproducible digital tools for stakeholders in hotspots affected by a changing climate in Latin America & the Caribbean (LAC), including cities, small islands, highlands, and the Amazon rainforest.
+[Harmonize](https://www.harmonize-tools.org/) is an international project that develops cost-effective and reproducible digital tools for stakeholders in Latin America and the Caribbean (LAC) affected by a changing climate. These stakeholders include cities, small islands, highlands, and the Amazon rainforest.
 
-The project consists of resources and [tools](https://harmonize-tools.github.io/) developed in conjunction with different teams from Brazil, Colombia, Dominican Republic, Peru and Spain.
+The project consists of resources and [tools](https://harmonize-tools.github.io/) developed in conjunction with different teams from Brazil, Colombia, Dominican Republic, Peru, and Spain.
 
 </details>
 
@@ -135,7 +136,7 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
     </td>
     <td align="center">
       <a href="https://uniandes.edu.co/" target="_blank">
-        <img src="https://uniandes.edu.co/sites/default/files/logo-uniandes.png" height="64" alt="uniandes logo">
+        <img src="https://www.uniandes.edu.co/sites/default/files/2024-10/Logosimbolo-universidaddelosandes_0.eps" height="64" alt="uniandes logo">
       </a>
     </td>
   </tr>
@@ -160,15 +161,17 @@ List the authors/contributors of the package and provide contact information if 
 <span style="display: flex; align-items: center; margin-left: 10px;">
   <strong>Erick Lozano</strong> (developer)
 </span>
+</br>
 <a href="https://github.com/Juanmontenegro99">
   <img src="https://avatars.githubusercontent.com/u/60274234?v=4" style="width: 50px; height: auto;" />
 </a>
 <span style="display: flex; align-items: center; margin-left: 10px;">
   <strong>Juan Montenegro</strong> (developer)
 </span>
+</br>
 <a href="https://github.com/ingridvmoras">
   <img src="https://avatars.githubusercontent.com/u/91691844?s=400&u=945efa0d09fcc25d1e592d2a9fddb984fdc6ceea&v=4" style="width: 50px; height: auto;" />
 </a>
 <span style="display: flex; align-items: center; margin-left: 10px;">
-  <strong>Ingrid Mora</strong> (developer)
+  <strong>Ingrid Mora</strong> (documentation)
 </span>

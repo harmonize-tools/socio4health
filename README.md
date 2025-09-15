@@ -1,5 +1,9 @@
-# socio4health <a href='https://www.harmonize-tools.org/'><img src='https://harmonize-tools.github.io/harmonize-logo.png' align="right" height="139" /></a>
-
+<div style="display: flex; align-items: center;">
+  <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="image info" height="100" width="100" style="margin-right: 20px;"/>
+  <a href="https://www.harmonize-tools.org/">
+    <img src="https://harmonize-tools.github.io/harmonize-logo.png" height="139" alt="socio4health logo"/>
+  </a>
+</div>
 <!-- badges: start -->
 
 [![Lifecycle:

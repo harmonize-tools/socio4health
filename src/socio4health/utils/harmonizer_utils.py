@@ -1,6 +1,5 @@
 import re
 import os
-from unittest.mock import inplace
 
 import torch
 import numpy as np
@@ -280,7 +279,7 @@ def s4h_classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_c
     if not isinstance(MODEL_PATH, str):
         raise TypeError("MODEL_PATH must be a text string.")
 
-    classifier = get_classifier(MODEL_PATH)
+    classifier = s4h_get_classifier(MODEL_PATH)
 
     def classify_row(row):
         valid_parts = [

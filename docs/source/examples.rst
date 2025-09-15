@@ -11,6 +11,6 @@ This section provides examples of how to use the **socio4health** library for **
    Harmonization of data (Brazil) <notebooks/harmonization>
    How to create a raw dictionary for data harmonization <dictionary>
    Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia <notebooks/example_colombia>
-
+   Hands-on with socio4health: effects of hydrometeorologigcal hazards and urbanization on dengue risk in Brazil <notebooks/example_brazil>
 
 

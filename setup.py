@@ -28,7 +28,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.6',  # Required
+    version='0.1.7',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -103,7 +103,7 @@ setup(
     # project page. What does your project relate to?
     #
     # Note that this is a string of words separated by whitespace, not a list.
-    keywords='extract transform load etl scraping relational census',  # Optional
+    keywords='extract transform load etl scraping relational census sociodemographic colombia brazil',  # Optional
 
     # When your source code is in a subdirectory under the project root, e.g.
     # `src/`, it is necessary to specify the `package_dir` argument.
@@ -132,8 +132,24 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['pandas','requests','Scrapy','tqdm', 'pyreadstat', 'py7zr', 'matplotlib', 'numpy', 'openpyxl',
-                      'dask', 'appdirs', 'pyarrow', 'deep_translator', 'transformers', 'torch', 'pytest'],  # Optional
+    install_requires=[
+        "pandas>=2.0.0",
+        "requests>=2.31.0",
+        "Scrapy>=2.11.1",
+        "tqdm>=4.66.1",
+        "pyreadstat>=1.2.6",
+        "py7zr>=0.20.8",
+        "matplotlib>=3.7.0",
+        "numpy>=1.24.0",
+        "openpyxl>=3.1.2",
+        "dask>=2023.0.0",
+        "appdirs>=1.4.4",
+        "pyarrow>=12.0.0",
+        "deep-translator>=1.11.4",
+        "transformers>=4.30.0",
+        "torch>=2.0.0",
+        "geopandas>=0.14.0"
+    ],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
@@ -144,7 +160,7 @@ setup(
     # Similar to `install_requires` above, these must be valid existing
     # projects.
     extras_require={  # Optional
-        'dev': ['check-manifest'],
+        'dev': ['check-manifest',"pytest"],
         'test': ['coverage'],
     },
 

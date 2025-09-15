@@ -2,7 +2,7 @@ import pytest
 import importlib
 import pandas as pd
 from unittest.mock import MagicMock, patch
-from socio4health.utils.harmonizer_utils import get_classifier, _classifier, classify_rows
+from socio4health.utils.harmonizer_utils import s4h_get_classifier, _classifier, s4h_classify_rows
 
 MODULE_PATH = "socio4health.utils.harmonizer_utils"
 
@@ -18,8 +18,8 @@ def test_get_classifier_singleton(mock_pipeline, mock_cuda) -> None:
     mock_pipeline.return_value = MagicMock(name="dummy-pipeline")
 
     path = "hf/dummy-model"
-    clf1 = get_classifier(path)
-    clf2 = get_classifier(path)
+    clf1 = s4h_get_classifier(path)
+    clf2 = s4h_get_classifier(path)
 
     assert clf1 is clf2
     mock_pipeline.assert_called_once_with(
@@ -31,7 +31,7 @@ def test_get_classifier_singleton(mock_pipeline, mock_cuda) -> None:
 
 def test_get_classifier_invalid_path() -> None:
     with pytest.raises(ValueError, match="MODEL_PATH"):
-        get_classifier("non_existing_model_identifier")
+        s4h_get_classifier("non_existing_model_identifier")
 
 @patch(f"{MODULE_PATH}.get_classifier")
 def test_classify_rows_basic(mock_get_classifier) -> None:
@@ -50,7 +50,7 @@ def test_classify_rows_basic(mock_get_classifier) -> None:
         }
     )
 
-    result = classify_rows(
+    result = s4h_classify_rows(
         data=df,
         col1="col_1",
         col2="col_2",
@@ -65,7 +65,7 @@ def test_classify_rows_basic(mock_get_classifier) -> None:
 
 def test_classify_rows_invalid_input_type() -> None:
     with pytest.raises(TypeError):
-        classify_rows(
+        s4h_classify_rows(
             data=["not", "a", "DataFrame"],
             col1="a",
             col2="b",
@@ -75,7 +75,7 @@ def test_classify_rows_invalid_input_type() -> None:
 def test_classify_rows_missing_column() -> None:
     df = pd.DataFrame({"x": ["text"]})
     with pytest.raises(ValueError, match="not found"):
-        classify_rows(df, col1="x", col2="y", col3="z")
+        s4h_classify_rows(df, col1="x", col2="y", col3="z")
 
 def test_classify_rows_duplicate_new_column() -> None:
     df = pd.DataFrame(
@@ -87,4 +87,4 @@ def test_classify_rows_duplicate_new_column() -> None:
         }
     )
     with pytest.raises(ValueError, match="already exists"):
-        classify_rows(df, "col1", "col2", "col3", new_column_name="category")
+        s4h_classify_rows(df, "col1", "col2", "col3", new_column_name="category")

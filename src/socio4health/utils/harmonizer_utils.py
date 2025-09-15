@@ -9,7 +9,7 @@ from transformers import pipeline, Pipeline
 from deep_translator import GoogleTranslator
 
 
-def standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
+def s4h_standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     """
     Cleans and structures a dictionary-like DataFrame of variables by standardizing
     text fields, grouping possible answers, and removing duplicates.
@@ -139,7 +139,7 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
 
     return row
 
-def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> pd.DataFrame:
+def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> pd.DataFrame:
     """
     Translates the content of selected columns in a DataFrame using Google Translate.
 
@@ -192,7 +192,7 @@ def translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> p
 
 _classifier = None
 
-def get_classifier(MODEL_PATH: str) -> Pipeline:
+def s4h_get_classifier(MODEL_PATH: str) -> Pipeline:
     """
     Load the ``BERT`` fine-tuned model for classification only once.
 
@@ -216,7 +216,7 @@ def get_classifier(MODEL_PATH: str) -> Pipeline:
         _classifier = pipeline("text-classification", model=MODEL_PATH, tokenizer=MODEL_PATH, device=device)
     return _classifier
 
-def classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_column_name: str = "category",
+def s4h_classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_column_name: str = "category",
         MODEL_PATH: str = "./bert_finetuned_classifier") -> pd.DataFrame:
     """
     Classify each row using a fine-tuned multiclass classification ``BERT`` model.

@@ -17,9 +17,9 @@ Extractor
    :nosignatures:
 
    Extractor
-   extractor.get_default_data_dir
-   Extractor.extract
-   Extractor.delete_download_folder
+   extractor.s4h_get_default_data_dir
+   Extractor.s4h_extract
+   Extractor.s4h_delete_download_folder
 
 Harmonizer
 ~~~~~~~~~~
@@ -31,24 +31,25 @@ Harmonizer
    :nosignatures:
 
    Harmonizer
-   Harmonizer.vertical_merge
-   Harmonizer.drop_nan_columns
-   Harmonizer.get_available_columns
-   Harmonizer.harmonize_dataframes
-   Harmonizer.data_selector
-   Harmonizer.compare_with_dict
-   Harmonizer.join_data
+   Harmonizer.s4h_vertical_merge
+   Harmonizer.s4h_drop_nan_columns
+   Harmonizer.s4h_get_available_columns
+   Harmonizer.s4h_harmonize_dataframes
+   Harmonizer.s4h_data_selector
+   Harmonizer.s4h_compare_with_dict
+   Harmonizer.s4h_join_data
 
 Utils
 ~~~~~~~~~~
 **Extractor**
 
 .. autosummary::
-   :toctree: 
+   :toctree:
    :nosignatures:
+
    utils.extractor_utils.compressed2files
    utils.extractor_utils.download_request
-   utils.extractor_utils.parse_pnadc_sas_script
+   utils.extractor_utils.s4h_parse_fwf_dict
    utils.extractor_utils.run_standard_spider
 
 **Harmonizer**
@@ -57,10 +58,10 @@ Utils
    :toctree:
    :nosignatures:
 
-   utils.harmonizer_utils.classify_rows
-   utils.harmonizer_utils.get_classifier
-   utils.harmonizer_utils.standardize_dict
-   utils.harmonizer_utils.translate_column
+   utils.harmonizer_utils.s4h_classify_rows
+   utils.harmonizer_utils.s4h_get_classifier
+   utils.harmonizer_utils.s4h_standardize_dict
+   utils.harmonizer_utils.s4h_translate_column
 
 **Spider**
 

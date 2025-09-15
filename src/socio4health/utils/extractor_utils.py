@@ -216,7 +216,7 @@ def create_unique_path(archive_path, filename, target_dir):
     unique_name = f"{archive_name}_{base}{ext}"
     return os.path.join(target_dir, unique_name)
 
-def parse_fwf_dict(dict_df):
+def s4h_parse_fwf_dict(dict_df):
     """Parse a dictionary DataFrame to extract column names and fixed-width format specifications.
 
     Parameters

@@ -24,7 +24,7 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def get_default_data_dir():
+def s4h_get_default_data_dir():
     """
     Returns the default data directory for storing downloaded files.
 
@@ -86,10 +86,10 @@ class Extractor:
 
     See Also
     -------
-    Extractor.extract()
+    Extractor.s4h_extract()
         Extracts data from the specified input path, either by scraping online or processing local files.
 
-    Extractor.delete_download_folder(folder_path: Optional[str] = None) -> bool
+    Extractor.s4h_delete_download_folder(folder_path: Optional[str] = None) -> bool
         Safely deletes the download folder and all its contents, with safety checks to prevent accidental deletion of important directories.
 
 
@@ -124,7 +124,7 @@ class Extractor:
         self.colnames = colnames
         self.colspecs = colspecs
         self.sep = sep
-        self.output_path = output_path or str(get_default_data_dir())
+        self.output_path = output_path or str(s4h_get_default_data_dir())
         self.READERS = {
             '.csv': self._read_csv,
             '.parquet': self._read_parquet,
@@ -147,7 +147,7 @@ class Extractor:
         if is_fwf and (not colnames or not colspecs):
             raise ValueError("colnames and colspecs required for fixed-width files")
 
-    def extract(self):
+    def s4h_extract(self):
         """
         Extracts data from the specified input path, either by scraping online sources or processing local files.
 
@@ -430,7 +430,7 @@ class Extractor:
             logging.error(f"Error reading {filepath}: {e}")
             raise ValueError(f"Error reading file: {e}")
 
-    def delete_download_folder(self, folder_path: Optional[str] = None) -> bool:
+    def s4h_delete_download_folder(self, folder_path: Optional[str] = None) -> bool:
         """
         Safely delete the download folder and all its contents.
 

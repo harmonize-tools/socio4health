@@ -588,18 +588,30 @@ class Harmonizer:
 
         dict_df = self.dict_df.copy()
         dict_df['variable_name'] = dict_df['variable_name'].str.upper()
-        key_column_upper = self.key_col.upper()
+
+        key_column_upper = self.key_col.upper() if self.key_col else None
 
         filtered_ddfs = []
         for ddf in ddfs:
-            if self.key_col not in ddf.columns:
-                raise KeyError(f"Key column '{self.key_col}' not found in DataFrame")
+            ddf.columns = ddf.columns.str.upper()
 
-            filtered_ddf = ddf[ddf[self.key_col].isin(self.key_val)]
-            if len(filtered_ddf) == 0:
-                logging.warning(f"No rows found matching key values in DataFrame")
+            if self.key_col and self.key_val:
+                if key_column_upper not in ddf.columns:
+                    raise KeyError(f"Key column '{self.key_col}' not found in DataFrame")
 
-            filtered_ddf.columns = filtered_ddf.columns.str.upper()
+                filtered_ddf = ddf[ddf[key_column_upper].isin([val.upper() if isinstance(val, str) else val
+                                                               for val in self.key_val])]
+            else:
+                logging.warning("key_col or key_val not defined, row-wise size will not be reduced")
+                filtered_ddf = ddf
+
+            if isinstance(filtered_ddf, dd.DataFrame):
+                n_rows = filtered_ddf.shape[0].compute()
+            else:
+                n_rows = filtered_ddf.shape[0]
+
+            if n_rows == 0:
+                logging.warning("No rows found matching key values in DataFrame")
 
             dict_df_filtered = dict_df[dict_df[ColumnMappingEnum.CATEGORY.value].isin(self.categories)]
             columns_list = dict_df_filtered[ColumnMappingEnum.VARIABLE_NAME.value].dropna().unique().tolist()
@@ -611,22 +623,20 @@ class Harmonizer:
                 columns_list.extend(col.upper() for col in filtered_ddf.columns if col.upper() == self.join_key)
 
             if columns_list:
-                logging.debug(f"Filtering DataFrame for columns: {columns_list}")
-                logging.debug(f"Available columns: {filtered_ddf.columns.tolist()}")
+                existing_columns = [col for col in columns_list if col in filtered_ddf.columns]
 
-                existing_columns = [
-                    col for col in columns_list
-                    if col in filtered_ddf.columns and col != key_column_upper
-                ]
-
-                final_columns = [key_column_upper] + existing_columns
+                final_columns = []
+                if key_column_upper:
+                    final_columns.append(key_column_upper)
+                final_columns.extend(existing_columns)
+                final_columns = list(dict.fromkeys(final_columns))
 
                 if len(final_columns) == 1:
                     logging.warning("Only key column found in the filtered DataFrame. Use compare_with_dict() for more information.")
                 filtered_ddf = filtered_ddf[final_columns]
             else:
-                logging.warning("No columns found matching the specified categories. Use compare_with_dict () for more information.")
-                filtered_ddf = filtered_ddf[[key_column_upper]]
+                logging.warning("No columns found matching the specified categories. Use compare_with_dict() for more information.")
+                filtered_ddf = filtered_ddf[[key_column_upper]] if key_column_upper else filtered_ddf
 
             filtered_ddfs.append(filtered_ddf)
 

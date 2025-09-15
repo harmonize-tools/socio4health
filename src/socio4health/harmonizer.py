@@ -257,7 +257,7 @@ class Harmonizer:
             raise ValueError("extra_cols must be a list of strings")
         self._extra_cols = value
 
-    def vertical_merge(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
+    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
         """
         Merge a list of `Dask <https://docs.dask.org>`_ DataFrames vertically using instance parameters.
 
@@ -393,7 +393,7 @@ class Harmonizer:
             return process_ddf(ddf_or_ddfs)
 
     @staticmethod
-    def get_available_columns(df_or_dfs: Union[dd.DataFrame, pd.DataFrame, List[Union[dd.DataFrame, pd.DataFrame]]]) -> \
+    def s4h_get_available_columns(df_or_dfs: Union[dd.DataFrame, pd.DataFrame, List[Union[dd.DataFrame, pd.DataFrame]]]) -> \
     List[str]:
         """
         Get a list of unique column names from a single DataFrame or a list of DataFrames.
@@ -429,7 +429,7 @@ class Harmonizer:
 
         return sorted(unique_columns)
 
-    def harmonize_dataframes(
+    def s4h_harmonize_dataframes(
             self,
             country_dfs: Dict[str, List[dd.DataFrame]]
     ) -> Dict[str, List[dd.DataFrame]]:
@@ -523,7 +523,7 @@ class Harmonizer:
             for country, dfs in country_dfs.items()
         }
     
-    def compare_with_dict(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
+    def s4h_compare_with_dict(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
         """
         Compare the columns available in the DataFrames with the variables in the dictionary and
         return a DataFrame with the columns that do not match in both directions.
@@ -566,7 +566,7 @@ class Harmonizer:
         return diff_df
 
 
-    def data_selector(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
+    def s4h_data_selector(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
         """
         Select rows from `Dask <https://docs.dask.org>`_ DataFrames based on the instance parameters.
 
@@ -632,7 +632,7 @@ class Harmonizer:
 
         return filtered_ddfs
 
-    def join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
+    def s4h_join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
         """
         Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified ``key_col``, removing duplicate columns.
 

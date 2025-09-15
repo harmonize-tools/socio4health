@@ -17,7 +17,7 @@ Make sure you have **Python 3.12** installed on your system; the package require
 Usage
 -----
 
-To use the socio4health package, follow these steps:
+To use the **socio4health** package, follow these steps:
 
 1. Import the package in your Python script:
 

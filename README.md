@@ -1,7 +1,10 @@
-<div style="display: flex; align-items: center;">
-  <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="image info" height="100" width="100" style="margin-right: 20px;"/>
+<div style="display: flex; align-items: center; justify-content: space-between;">
+  <div style="display: flex; flex-direction: column; align-items: flex-start;">
+    <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="socio4health logo" height="100" width="100"/>
+    <span style="font-weight: bold; font-size: 1.2em; margin-top: 8px;">socio4health</span>
+  </div>
   <a href="https://www.harmonize-tools.org/">
-    <img src="https://harmonize-tools.github.io/harmonize-logo.png" height="139" alt="socio4health logo"/>
+    <img src="https://harmonize-tools.github.io/harmonize-logo.png" height="139" alt="harmonize logo"/>
   </a>
 </div>
 <!-- badges: start -->

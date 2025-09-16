@@ -1,4 +1,3 @@
-#
 
 <a href="https://www.harmonize-tools.org/">
     <img height="120" align="right" src="https://harmonize-tools.github.io/harmonize-logo.png" />

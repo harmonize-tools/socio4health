@@ -1,5 +1,3 @@
-<a href='https://harmonize-tools.github.io/socio4health/'><img height="100" src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png"/></a>
-
 # socio4health <a href='https://www.harmonize-tools.org/'><img height="139" src="https://harmonize-tools.github.io/harmonize-logo.png"/></a>
 
 <!-- badges: start -->
@@ -12,6 +10,8 @@ license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/
 contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4health)](https://github.com/harmonize-tools/socio4health/graphs/contributors)
 ![commits](https://badgen.net/github/commits/harmonize-tools/socio4health/main)
 <!-- badges: end -->
+
+<a href='https://harmonize-tools.github.io/socio4health/'><img height="100" src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png"/></a>
 
 ## Overview
 <p style="font-family: Arial, sans-serif; font-size: 14px;">

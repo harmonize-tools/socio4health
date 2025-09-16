@@ -50,7 +50,7 @@ Welcome to the official documentation site for **socio4health**\! This site serv
 Introduction
 ------------
 
-The Python package **socio4health** is an **extraction**, **transformation**, **loading**, and **AI-assisted query** and **visualization** (ETL-AI QV) tool designed to simplify the process of collecting and merging data from multiple sources into a unified relational database structure, and to visualize or query it using natural language.
+The Python package **socio4health** is an **extraction**, **transformation**,and **loading** tool designed to simplify the process of collecting and merging data from multiple sources into a unified database structure.
 
 Features
 --------
@@ -68,15 +68,12 @@ Features
 
 * **Load:**
 
-  * Consolidate transformed data into a cohesive relational database.
+  * Consolidate transformed data into a cohesive database.
 
 * **Query:**
 
   * Conduct precise queries and apply transformations to meet specific criteria.
 
-* **AI Query & Visualization:**
-
-  * Use natural language input to query data (from values to subsets).
 
 Who should use socio4health?
 ----------------------------

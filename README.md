@@ -22,14 +22,12 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Overview  
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Package socio4health is an extraction, transformation, loading (ETL), and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data 📊 from multiple sources, focusing on sociodemographic and census datasets from Colombia, Brazil, and Peru, into a unified relational database structure.
+  Package socio4health is an extraction, transformation, loading (ETL), and AI-assisted classification tool designed to simplify the intricate process of collecting and merging data from multiple sources, focusing on sociodemographic and census datasets from Colombia, Brazil, and Peru, into a harmonized dataset.
 </p>
 
 - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-- Support for various data formats, including `.csv`, `.xlsx`, `.xls`, `.txt`, `.sav`, and compressed files, ensuring versatility in sourcing information.
-- Consolidating extracted data into a pandas DataFrame.
-- Consolidating transformed data into a cohesive relational database.
-- Conduct precise queries and apply transformations to meet specific criteria.
+- Support for various data formats, including `.csv`, `.xlsx`, `.xls`, `.txt`, `.sav`, fixed-width files and geospatial files, ensuring versatility in sourcing information.
+- Consolidating extracted data into a pandas (or dask) DataFrame.
 
 
 
@@ -38,13 +36,35 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 <table>
   <tr>
     <td align="center">
+      <a href="https://www.dask.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/17131925?s=200&v=4" height="50" alt="pandas logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>Dask</strong><br>
+     Dask is a flexible parallel computing library for analytics.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
       <a href="https://pandas.pydata.org/" target="_blank">
         <img src="https://avatars.githubusercontent.com/u/21206976?s=280&v=4" height="50" alt="pandas logo">
       </a>
     </td>
     <td align="left">
       <strong>Pandas</strong><br>
-      Pandas is a fast, powerful, flexible, and easy-to-use open source data analysis and manipulation tool.<br>
+      Pandas is a well-known open source data analysis and manipulation tool.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://geopandas.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/8130715?s=48&v=4" height="50" alt="pandas logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>Geopandas</strong><br>
+     Python tools for geographic data.<br>
     </td>
   </tr>
   <tr>
@@ -69,6 +89,28 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
       Framework for extracting the data you need from websites.<br>
     </td>
   </tr>
+  <tr>
+    <td align="center">
+      <a href="https://matplotlib.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/215947?s=48&v=4" height="50" alt="scrapy logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>Matplotlib</strong><br>
+      Library for creating static, animated, and interactive visualizations in Python.<br>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://pytorch.org/" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/21003710?s=48&v=4" height="50" alt="scrapy logo">
+      </a>
+    </td>
+    <td align="left">
+      <strong>Torch</strong><br>
+      Python package for tensor computation and deep neural networks.<br>
+    </td>
+  </tr>
 </table>
 
 - <a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a>
@@ -76,12 +118,17 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 - <a href="https://pypi.org/project/pyreadstat/">pyreadstat</a>
 - <a href="https://tqdm.github.io/">tqdm</a>
 - <a href="https://requests.readthedocs.io/en/latest/">requests</a>
+- <a href="https://pypi.org/project/appdirs/">appdirs</a>
+- <a href="https://pypi.org/project/pyarrow/">pyarrow</a>
+- <a href="https://pypi.org/project/deep-translator/">deep_translator</a>
+- <a href="https://pypi.org/project/transformers/">transformers</a>
+- <a href="https://pypi.org/project/pytest/">pytest</a>
 
 ## Installation
 
 **socio4health** can be installed via pip from [PyPI](https://pypi.org/project/socio4health/).
 
-```python
+``` CMD
 # Install using pip
 pip install socio4health
 ```
@@ -112,6 +159,8 @@ To use the socio4health package, follow these steps:
    list_datainfo = extractor.s4h_extract(url=url, depth=depth, ext=ext)
    harmonizer = Harmonizer()
    ```
+
+For more detailed examples and use cases, please refer to the [socio4health documentation](https://harmonize-tools.github.io/socio4health/).
 
 ## Resources
 

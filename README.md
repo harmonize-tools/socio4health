@@ -1,4 +1,4 @@
-<a href='https://harmonize-tools.github.io/socio4health/'><img height="90" src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png"/></a>  <a href='https://www.harmonize-tools.org/'><img height="90" src="https://harmonize-tools.github.io/harmonize-logo.png"/></a>
+<a href='https://www.harmonize-tools.org/'><img height="90" src="https://harmonize-tools.github.io/harmonize-logo.png"/> </a>  <a href='https://harmonize-tools.github.io/socio4health/'><img height="90" src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png"/></a>
 # socio4health 
                                                              
 <!-- badges: start -->

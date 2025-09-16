@@ -1,0 +1,682 @@
+{
+ "cells": [
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "<img src=\"https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png\" alt=\"image info\" height=\"100\" width=\"100\"/>\n",
+   "id": "caedfce39082790"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "\n",
+    "\n",
+    "# Extraction of Colombia, Brazil and Peru online data"
+   ],
+   "id": "9d023f72c955dd48"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "**Run the tutorial via free cloud platforms:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/harmonize-tools/socio4health/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Fsource%2Fnotebooks%2Fextractor.ipynb) <a target=\"_blank\" href=\"https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb\">\n",
+    "  <img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/>\n",
+    "</a>\n",
+    "\n"
+   ],
+   "id": "6da3297d49a7570d"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "This notebook provides you with an introduction on how to retrieve data from online data sources through **web scraping**, as well as from **local files** from **Colombia**, **Brazil**, **Peru**, and the **Dominican Republic**. This tutorial assumes you have an **intermediate** or **advanced** understanding of **Python** and data manipulation.\n",
+    "\n",
+    "## Setting up the environment\n",
+    "\n",
+    "To run this notebook, you need to have the following prerequisites:\n",
+    "\n",
+    "- **Python 3.10+**\n",
+    "\n",
+    "Additionally, you need to install the `socio4health` and `pandas` package, which can be done using ``pip``:\n",
+    "\n"
+   ],
+   "id": "fb77fa154cef0f55"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-15T19:27:21.213368Z",
+     "start_time": "2025-09-15T19:27:17.682468Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "!pip install socio4health pandas -q",
+   "id": "9abffc345c4f2a92",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[notice] A new release of pip is available: 25.1.1 -> 25.2\n",
+      "[notice] To update, run: python.exe -m pip install --upgrade pip\n"
+     ]
+    }
+   ],
+   "execution_count": 2
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Import Libraries\n",
+    "\n",
+    "To perform the data extraction, the `socio4health` library provides the `Extractor` class for data extraction, and the `Harmonizer` class for data harmonization of the retrieved date. We will also use `pandas` for data manipulation.\n"
+   ],
+   "id": "f4fe1fa351acde3d"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-15T19:27:28.953028Z",
+     "start_time": "2025-09-15T19:27:21.268500Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "\n",
+    "from socio4health import Extractor\n",
+    "from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum\n"
+   ],
+   "id": "2005422ebb15c462",
+   "outputs": [],
+   "execution_count": 3
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Use case 1: Extracting data from Colombia\n",
+    "\n",
+    "To extract data from Colombia, we will use the `Extractor` class from the `socio4health` library. The `Extractor` class provides methods to retrieve data from various sources, including online databases and local files. In this example, we will extract the Large Integrated Household Survey - **GEIH** - 2022 (Gran Encuesta Integrada de Hogares - **GEIH** - 2022) dataset  from the Colombian Nacional Administration of Statistics (**DANE**) website"
+   ],
+   "id": "d9433843281038d3"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "The `Extractor` class requires the following parameters:\n",
+    "- `input_path`: The `URL` or local path to the data source.\n",
+    "- `down_ext`: A list of file extensions to download. This can include `.CSV`, `.csv`, `.zip`, etc.\n",
+    "- `sep`: The separator used in the data files (e.g., `;` for semicolon-separated values).\n",
+    "- `output_path`: The local path where the extracted data will be saved.\n",
+    "- `depth`: The depth of the directory structure to traverse when downloading files. A depth of `0` means only the files in the specified directory will be downloaded.\n"
+   ],
+   "id": "b50ed214470f9d0a"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-15T19:27:28.984883Z",
+     "start_time": "2025-09-15T19:27:28.968847Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "col_online_extractor = Extractor(input_path=\"https://microdatos.dane.gov.co/index.php/catalog/771/get-microdata\", down_ext=['.CSV','.csv','.zip'], sep=';', output_path=\"../data\", depth=0)",
+   "id": "e1a1f86f3ab5d185",
+   "outputs": [],
+   "execution_count": 4
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "After the instance is set up, we can call the `s4h_extract` method to download and extract the data. The method returns a list of `pandas` DataFrames containing the extracted data.",
+   "id": "7f67e91e5c10640"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-15T19:49:34.743231Z",
+     "start_time": "2025-09-15T19:31:37.295803Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "col_dfs = col_online_extractor.s4h_extract()",
+   "id": "6f4a44e349f461e5",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "2025-09-15 14:31:37,301 - INFO - ----------------------\n",
+      "2025-09-15 14:31:37,302 - INFO - Starting data extraction...\n",
+      "2025-09-15 14:31:37,303 - INFO - Extracting data in online mode...\n",
+      "2025-09-15 14:31:37,304 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/771/get-microdata with depth 0\n",
+      "2025-09-15 14:31:46,257 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/771/get-microdata\n",
+      "2025-09-15 14:31:46,259 - INFO - Downloading files to: ../data\n",
+      "Downloading files:   0%|          | 0/12 [00:00<?, ?it/s]2025-09-15 14:31:50,688 - INFO - Successfully downloaded: GEIH_Enero_2022_Marco_2018.zip\n",
+      "Downloading files:   8%|▊         | 1/12 [00:04<00:48,  4.44s/it]2025-09-15 14:31:54,617 - INFO - Successfully downloaded: GEIH_Febrero_2022_Marco_2018.zip\n",
+      "Downloading files:  17%|█▋        | 2/12 [00:08<00:41,  4.14s/it]2025-09-15 14:32:02,343 - INFO - Successfully downloaded: GEIH_Marzo_2022_Marco_2018.zip\n",
+      "Downloading files:  25%|██▌       | 3/12 [00:16<00:51,  5.77s/it]2025-09-15 14:32:06,274 - INFO - Successfully downloaded: GEIH_Mayo_2022_Marco_2018.zip\n",
+      "Downloading files:  33%|███▎      | 4/12 [00:20<00:40,  5.05s/it]2025-09-15 14:32:09,861 - INFO - Successfully downloaded: GEIH_Junio_2022_Marco_2018.zip\n",
+      "Downloading files:  42%|████▏     | 5/12 [00:23<00:31,  4.52s/it]2025-09-15 14:32:14,470 - INFO - Successfully downloaded: GEIH_Julio_2022_Marco_2018.zip\n",
+      "Downloading files:  50%|█████     | 6/12 [00:28<00:27,  4.55s/it]2025-09-15 14:32:17,734 - INFO - Successfully downloaded: GEIH_Agosto_2022_Marco_2018.zip\n",
+      "Downloading files:  58%|█████▊    | 7/12 [00:31<00:20,  4.13s/it]2025-09-15 14:32:25,048 - INFO - Successfully downloaded: GEIH_Septiembre_Marco_2018.zip\n",
+      "Downloading files:  67%|██████▋   | 8/12 [00:38<00:20,  5.14s/it]2025-09-15 14:32:28,507 - INFO - Successfully downloaded: GEIH_Octubre_Marco_2018.zip\n",
+      "Downloading files:  75%|███████▌  | 9/12 [00:42<00:13,  4.62s/it]2025-09-15 14:32:32,171 - INFO - Successfully downloaded: GEIH_Diciembre_2022_Marco_2018.zip\n",
+      "Downloading files:  83%|████████▎ | 10/12 [00:45<00:08,  4.32s/it]2025-09-15 14:32:37,456 - INFO - Successfully downloaded: GEIH_Abril_2022_Marco_2018_Act.zip\n",
+      "Downloading files:  92%|█████████▏| 11/12 [00:51<00:04,  4.62s/it]2025-09-15 14:32:42,170 - INFO - Successfully downloaded: GEIH_Noviembre_2022_Marco_2018.act.zip\n",
+      "Downloading files: 100%|██████████| 12/12 [00:55<00:00,  4.66s/it]\n",
+      "2025-09-15 14:32:42,191 - INFO - Processing (depth 0): GEIH_Enero_2022_Marco_2018.zip\n",
+      "2025-09-15 14:33:09,019 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Características generales, seguridad social en salud y educación.csv\n",
+      "2025-09-15 14:33:09,032 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:33:09,052 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Fuerza de trabajo.csv\n",
+      "2025-09-15 14:33:09,073 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Migración.CSV\n",
+      "2025-09-15 14:33:09,096 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_No ocupados.csv\n",
+      "2025-09-15 14:33:09,128 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Ocupados.csv\n",
+      "2025-09-15 14:33:09,161 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otras formas de trabajo.csv\n",
+      "2025-09-15 14:33:09,179 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ingresos e impuestos.csv\n",
+      "2025-09-15 14:33:09,200 - INFO - Extracted: c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Tipo de investigación.csv\n",
+      "2025-09-15 14:33:09,399 - INFO - Processing (depth 0): GEIH_Febrero_2022_Marco_2018.zip\n",
+      "2025-09-15 14:33:23,974 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:33:23,989 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:33:24,011 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:33:24,032 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Migración.CSV\n",
+      "2025-09-15 14:33:24,045 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:33:24,078 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:33:24,108 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:33:24,126 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:33:24,140 - INFO - Extracted: fb8de51c_GEIH_Febrero_2022_Marco_2018_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:33:24,363 - INFO - Processing (depth 0): GEIH_Marzo_2022_Marco_2018.zip\n",
+      "2025-09-15 14:33:39,314 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:33:39,324 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:33:39,355 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:33:39,377 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Migración.CSV\n",
+      "2025-09-15 14:33:39,389 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_No ocupados.CSV\n",
+      "2025-09-15 14:33:39,415 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Ocupados.CSV\n",
+      "2025-09-15 14:33:39,438 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:33:39,451 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:33:39,463 - INFO - Extracted: 0e57b75b_GEIH_Marzo_2022_Marco_2018_csv_Tipo de investigación.CSV\n",
+      "2025-09-15 14:33:39,680 - INFO - Processing (depth 0): GEIH_Mayo_2022_Marco_2018.zip\n",
+      "2025-09-15 14:33:40,225 - INFO - Processing (depth 1): CSV.zip\n",
+      "2025-09-15 14:33:40,774 - INFO - Extracted: 4ee14379_csv_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:33:40,778 - INFO - Extracted: 4ee14379_csv_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:33:40,832 - INFO - Extracted: 4ee14379_csv_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:33:40,839 - INFO - Extracted: 4ee14379_csv_Migración.CSV\n",
+      "2025-09-15 14:33:40,844 - INFO - Extracted: 4ee14379_csv_No ocupados.CSV\n",
+      "2025-09-15 14:33:40,851 - INFO - Extracted: 4ee14379_csv_Ocupados.CSV\n",
+      "2025-09-15 14:33:40,856 - INFO - Extracted: 4ee14379_csv_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:33:40,863 - INFO - Extracted: 4ee14379_csv_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:33:40,868 - INFO - Extracted: 4ee14379_csv_Tipo de investigación.CSV\n",
+      "2025-09-15 14:33:40,872 - INFO - Processing (depth 1): DTA.zip\n",
+      "2025-09-15 14:33:47,887 - WARNING - No matches in DTA.zip. Contents:\n",
+      "2025-09-15 14:33:47,889 - WARNING - No files found matching the specified extensions.\n",
+      "2025-09-15 14:33:47,890 - INFO - Processing (depth 1): SAV.zip\n",
+      "2025-09-15 14:33:54,967 - WARNING - No matches in SAV.zip. Contents:\n",
+      "2025-09-15 14:33:54,968 - WARNING - No files found matching the specified extensions.\n",
+      "2025-09-15 14:33:54,975 - INFO - Processing (depth 0): GEIH_Junio_2022_Marco_2018.zip\n",
+      "2025-09-15 14:34:09,306 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:34:09,320 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:34:09,345 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:34:09,377 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Migración.CSV\n",
+      "2025-09-15 14:34:09,388 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:34:09,420 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:34:09,449 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:34:09,467 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:34:09,483 - INFO - Extracted: 37710ed1_GEIH_Junio_2022_Marco_2018_CSV(1)_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:34:09,621 - INFO - Processing (depth 0): GEIH_Julio_2022_Marco_2018.zip\n",
+      "2025-09-15 14:34:23,690 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:34:23,707 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:34:23,723 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:34:23,744 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Migración.CSV\n",
+      "2025-09-15 14:34:23,760 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:34:23,785 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:34:23,810 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:34:23,824 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:34:23,838 - INFO - Extracted: 7a9c1851_GEIH_Julio_2022_Marco_2018_GEIH_Julio_Marco_2018_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:34:24,008 - INFO - Processing (depth 0): GEIH_Agosto_2022_Marco_2018.zip\n",
+      "2025-09-15 14:34:38,250 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:34:38,261 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:34:38,275 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:34:38,300 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Migración.CSV\n",
+      "2025-09-15 14:34:38,308 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:34:38,357 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:34:38,401 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:34:38,419 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:34:38,431 - INFO - Extracted: c80488e3_GEIH_Agosto_2022_Marco_2018_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:34:39,409 - INFO - Processing (depth 0): GEIH_Septiembre_Marco_2018.zip\n",
+      "2025-09-15 14:34:39,633 - INFO - Processing (depth 1): CSV.zip\n",
+      "2025-09-15 14:34:39,907 - INFO - Extracted: e81f1ab1_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:34:39,910 - INFO - Extracted: e81f1ab1_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:34:39,918 - INFO - Extracted: e81f1ab1_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:34:39,921 - INFO - Extracted: e81f1ab1_CSV_Migración.CSV\n",
+      "2025-09-15 14:34:39,924 - INFO - Extracted: e81f1ab1_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:34:39,926 - INFO - Extracted: e81f1ab1_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:34:39,932 - INFO - Extracted: e81f1ab1_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:34:39,936 - INFO - Extracted: e81f1ab1_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:34:39,938 - INFO - Extracted: e81f1ab1_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:34:39,941 - INFO - Processing (depth 1): DTA.zip\n",
+      "2025-09-15 14:34:47,128 - WARNING - No matches in DTA.zip. Contents:\n",
+      "2025-09-15 14:34:47,130 - WARNING - No files found matching the specified extensions.\n",
+      "2025-09-15 14:34:47,131 - INFO - Processing (depth 1): SAV.zip\n",
+      "2025-09-15 14:34:54,327 - WARNING - No matches in SAV.zip. Contents:\n",
+      "2025-09-15 14:34:54,329 - WARNING - No files found matching the specified extensions.\n",
+      "2025-09-15 14:34:54,346 - INFO - Processing (depth 0): GEIH_Octubre_Marco_2018.zip\n",
+      "2025-09-15 14:34:54,572 - INFO - Processing (depth 1): CSV 4.zip\n",
+      "2025-09-15 14:34:54,826 - INFO - Extracted: 4f6114f0_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:34:54,829 - INFO - Extracted: 4f6114f0_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:34:54,833 - INFO - Extracted: 4f6114f0_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:34:54,837 - INFO - Extracted: 4f6114f0_CSV_Migración.CSV\n",
+      "2025-09-15 14:34:54,843 - INFO - Extracted: 4f6114f0_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:34:54,853 - INFO - Extracted: 4f6114f0_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:34:54,857 - INFO - Extracted: 4f6114f0_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:34:54,860 - INFO - Extracted: 4f6114f0_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:34:54,867 - INFO - Extracted: 4f6114f0_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:34:54,871 - INFO - Processing (depth 1): DTA 4.zip\n",
+      "2025-09-15 14:35:01,222 - WARNING - No matches in DTA 4.zip. Contents:\n",
+      "2025-09-15 14:35:01,224 - WARNING - No files found matching the specified extensions.\n",
+      "2025-09-15 14:35:01,226 - INFO - Processing (depth 1): SAV 4.zip\n",
+      "2025-09-15 14:35:07,656 - WARNING - No matches in SAV 4.zip. Contents:\n",
+      "2025-09-15 14:35:07,660 - WARNING - No files found matching the specified extensions.\n",
+      "2025-09-15 14:35:07,667 - INFO - Processing (depth 0): GEIH_Diciembre_2022_Marco_2018.zip\n",
+      "2025-09-15 14:35:21,036 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:35:21,049 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:35:21,072 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:35:21,089 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Migración.CSV\n",
+      "2025-09-15 14:35:21,103 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_No ocupados.CSV\n",
+      "2025-09-15 14:35:21,126 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Ocupados.CSV\n",
+      "2025-09-15 14:35:21,159 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:35:21,172 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:35:21,184 - INFO - Extracted: 5881e2ed_GEIH_Diciembre_2022_Marco_2018_CVS_Tipo de investigación.CSV\n",
+      "2025-09-15 14:35:21,378 - INFO - Processing (depth 0): GEIH_Abril_2022_Marco_2018_Act.zip\n",
+      "2025-09-15 14:35:35,577 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:35:35,588 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:35:35,618 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:35:35,643 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Migración.CSV\n",
+      "2025-09-15 14:35:35,663 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:35:35,700 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:35:35,725 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:35:35,741 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:35:35,751 - INFO - Extracted: 4079475d_GEIH_Abril_2022_Marco_2018_CSV_Tipo de investigación.CSV\n",
+      "2025-09-15 14:35:35,927 - INFO - Processing (depth 0): GEIH_Noviembre_2022_Marco_2018.act.zip\n",
+      "2025-09-15 14:35:49,863 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Características generales, seguridad social en salud y educación.CSV\n",
+      "2025-09-15 14:35:49,878 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Datos del hogar y la vivienda.CSV\n",
+      "2025-09-15 14:35:49,891 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Fuerza de trabajo.CSV\n",
+      "2025-09-15 14:35:49,913 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Migración.CSV\n",
+      "2025-09-15 14:35:49,925 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_No ocupados.CSV\n",
+      "2025-09-15 14:35:49,955 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Ocupados.CSV\n",
+      "2025-09-15 14:35:49,972 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Otras formas de trabajo.CSV\n",
+      "2025-09-15 14:35:49,990 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Otros ingresos e impuestos.CSV\n",
+      "2025-09-15 14:35:50,007 - INFO - Extracted: 0d034efb_GEIH_Noviembre_2022_Marco_2018_CSV 5_CSV_Tipo de investigación.CSV\n",
+      "Processing files:  93%|█████████▎| 100/108 [13:43<01:05,  8.24s/it]  \n"
+     ]
+    },
+    {
+     "ename": "KeyboardInterrupt",
+     "evalue": "",
+     "output_type": "error",
+     "traceback": [
+      "\u001B[31m---------------------------------------------------------------------------\u001B[39m",
+      "\u001B[31mKeyboardInterrupt\u001B[39m                         Traceback (most recent call last)",
+      "\u001B[36mCell\u001B[39m\u001B[36m \u001B[39m\u001B[32mIn[6]\u001B[39m\u001B[32m, line 1\u001B[39m\n\u001B[32m----> \u001B[39m\u001B[32m1\u001B[39m col_dfs = \u001B[43mcol_online_extractor\u001B[49m\u001B[43m.\u001B[49m\u001B[43ms4h_extract\u001B[49m\u001B[43m(\u001B[49m\u001B[43m)\u001B[49m\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\src\\socio4health\\extractor.py:175\u001B[39m, in \u001B[36mExtractor.s4h_extract\u001B[39m\u001B[34m(self)\u001B[39m\n\u001B[32m    173\u001B[39m \u001B[38;5;28;01mtry\u001B[39;00m:\n\u001B[32m    174\u001B[39m     \u001B[38;5;28;01mif\u001B[39;00m \u001B[38;5;28mself\u001B[39m.input_path \u001B[38;5;129;01mand\u001B[39;00m \u001B[38;5;28mself\u001B[39m.input_path.startswith(\u001B[33m\"\u001B[39m\u001B[33mhttp\u001B[39m\u001B[33m\"\u001B[39m):\n\u001B[32m--> \u001B[39m\u001B[32m175\u001B[39m         \u001B[38;5;28;43mself\u001B[39;49m\u001B[43m.\u001B[49m\u001B[43m_extract_online_mode\u001B[49m\u001B[43m(\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    176\u001B[39m     \u001B[38;5;28;01melif\u001B[39;00m \u001B[38;5;28mself\u001B[39m.input_path \u001B[38;5;129;01mand\u001B[39;00m os.path.isdir(\u001B[38;5;28mself\u001B[39m.input_path):\n\u001B[32m    177\u001B[39m         \u001B[38;5;28mself\u001B[39m._extract_local_mode()\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\src\\socio4health\\extractor.py:281\u001B[39m, in \u001B[36mExtractor._extract_online_mode\u001B[39m\u001B[34m(self)\u001B[39m\n\u001B[32m    278\u001B[39m     logging.warning(\u001B[33mf\u001B[39m\u001B[33m\"\u001B[39m\u001B[33mFailed to download \u001B[39m\u001B[38;5;132;01m{\u001B[39;00m\u001B[38;5;28mlen\u001B[39m(failed_downloads)\u001B[38;5;132;01m}\u001B[39;00m\u001B[33m files\u001B[39m\u001B[33m\"\u001B[39m)\n\u001B[32m    280\u001B[39m \u001B[38;5;66;03m# Step 4: Process downloaded files using the local mode logic\u001B[39;00m\n\u001B[32m--> \u001B[39m\u001B[32m281\u001B[39m \u001B[38;5;28;43mself\u001B[39;49m\u001B[43m.\u001B[49m\u001B[43m_process_downloaded_files\u001B[49m\u001B[43m(\u001B[49m\u001B[43mdownloaded_files\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    283\u001B[39m \u001B[38;5;66;03m# Cleanup\u001B[39;00m\n\u001B[32m    284\u001B[39m \u001B[38;5;28;01mtry\u001B[39;00m:\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\src\\socio4health\\extractor.py:310\u001B[39m, in \u001B[36mExtractor._process_downloaded_files\u001B[39m\u001B[34m(self, downloaded_files)\u001B[39m\n\u001B[32m    307\u001B[39m         files_to_process.append(filepath)\n\u001B[32m    309\u001B[39m \u001B[38;5;66;03m# Process all files (both direct downloads and extracted files)\u001B[39;00m\n\u001B[32m--> \u001B[39m\u001B[32m310\u001B[39m \u001B[38;5;28;43mself\u001B[39;49m\u001B[43m.\u001B[49m\u001B[43m_process_files_locally\u001B[49m\u001B[43m(\u001B[49m\u001B[43mfiles_to_process\u001B[49m\u001B[43m)\u001B[49m\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\src\\socio4health\\extractor.py:322\u001B[39m, in \u001B[36mExtractor._process_files_locally\u001B[39m\u001B[34m(self, files)\u001B[39m\n\u001B[32m    319\u001B[39m         logging.warning(\u001B[33mf\u001B[39m\u001B[33m\"\u001B[39m\u001B[33mSkipping empty file: \u001B[39m\u001B[38;5;132;01m{\u001B[39;00mfilepath\u001B[38;5;132;01m}\u001B[39;00m\u001B[33m\"\u001B[39m)\n\u001B[32m    320\u001B[39m         \u001B[38;5;28;01mcontinue\u001B[39;00m\n\u001B[32m--> \u001B[39m\u001B[32m322\u001B[39m     \u001B[38;5;28;43mself\u001B[39;49m\u001B[43m.\u001B[49m\u001B[43m_read_file\u001B[49m\u001B[43m(\u001B[49m\u001B[43mfilepath\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    323\u001B[39m     valid_files += \u001B[32m1\u001B[39m\n\u001B[32m    324\u001B[39m \u001B[38;5;28;01mexcept\u001B[39;00m \u001B[38;5;167;01mException\u001B[39;00m \u001B[38;5;28;01mas\u001B[39;00m e:\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\src\\socio4health\\extractor.py:425\u001B[39m, in \u001B[36mExtractor._read_file\u001B[39m\u001B[34m(self, filepath)\u001B[39m\n\u001B[32m    423\u001B[39m     \u001B[38;5;28;01melse\u001B[39;00m:\n\u001B[32m    424\u001B[39m         logging.warning(\u001B[33mf\u001B[39m\u001B[33m\"\u001B[39m\u001B[33mUnsupported extension: \u001B[39m\u001B[38;5;132;01m{\u001B[39;00mext\u001B[38;5;132;01m}\u001B[39;00m\u001B[33m\"\u001B[39m)\n\u001B[32m--> \u001B[39m\u001B[32m425\u001B[39m \u001B[38;5;28;01mif\u001B[39;00m \u001B[38;5;28;43mlen\u001B[39;49m\u001B[43m(\u001B[49m\u001B[43mdf\u001B[49m\u001B[43m)\u001B[49m != \u001B[32m0\u001B[39m:\n\u001B[32m    426\u001B[39m     df[\u001B[33m'\u001B[39m\u001B[33mfilename\u001B[39m\u001B[33m'\u001B[39m] = os.path.basename(filepath) \n\u001B[32m    427\u001B[39m     \u001B[38;5;28mself\u001B[39m.dataframes.append(df)\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\.venv\\Lib\\site-packages\\dask\\dataframe\\dask_expr\\_collection.py:391\u001B[39m, in \u001B[36mFrameBase.__len__\u001B[39m\u001B[34m(self)\u001B[39m\n\u001B[32m    390\u001B[39m \u001B[38;5;28;01mdef\u001B[39;00m\u001B[38;5;250m \u001B[39m\u001B[34m__len__\u001B[39m(\u001B[38;5;28mself\u001B[39m):\n\u001B[32m--> \u001B[39m\u001B[32m391\u001B[39m     \u001B[38;5;28;01mreturn\u001B[39;00m \u001B[43mnew_collection\u001B[49m\u001B[43m(\u001B[49m\u001B[43mLen\u001B[49m\u001B[43m(\u001B[49m\u001B[38;5;28;43mself\u001B[39;49m\u001B[43m)\u001B[49m\u001B[43m)\u001B[49m\u001B[43m.\u001B[49m\u001B[43mcompute\u001B[49m\u001B[43m(\u001B[49m\u001B[43m)\u001B[49m\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\.venv\\Lib\\site-packages\\dask\\base.py:373\u001B[39m, in \u001B[36mDaskMethodsMixin.compute\u001B[39m\u001B[34m(self, **kwargs)\u001B[39m\n\u001B[32m    349\u001B[39m \u001B[38;5;28;01mdef\u001B[39;00m\u001B[38;5;250m \u001B[39m\u001B[34mcompute\u001B[39m(\u001B[38;5;28mself\u001B[39m, **kwargs):\n\u001B[32m    350\u001B[39m \u001B[38;5;250m    \u001B[39m\u001B[33;03m\"\"\"Compute this dask collection\u001B[39;00m\n\u001B[32m    351\u001B[39m \n\u001B[32m    352\u001B[39m \u001B[33;03m    This turns a lazy Dask collection into its in-memory equivalent.\u001B[39;00m\n\u001B[32m   (...)\u001B[39m\u001B[32m    371\u001B[39m \u001B[33;03m    dask.compute\u001B[39;00m\n\u001B[32m    372\u001B[39m \u001B[33;03m    \"\"\"\u001B[39;00m\n\u001B[32m--> \u001B[39m\u001B[32m373\u001B[39m     (result,) = \u001B[43mcompute\u001B[49m\u001B[43m(\u001B[49m\u001B[38;5;28;43mself\u001B[39;49m\u001B[43m,\u001B[49m\u001B[43m \u001B[49m\u001B[43mtraverse\u001B[49m\u001B[43m=\u001B[49m\u001B[38;5;28;43;01mFalse\u001B[39;49;00m\u001B[43m,\u001B[49m\u001B[43m \u001B[49m\u001B[43m*\u001B[49m\u001B[43m*\u001B[49m\u001B[43mkwargs\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    374\u001B[39m     \u001B[38;5;28;01mreturn\u001B[39;00m result\n",
+      "\u001B[36mFile \u001B[39m\u001B[32m~\\PycharmProjects\\socio4health\\.venv\\Lib\\site-packages\\dask\\base.py:681\u001B[39m, in \u001B[36mcompute\u001B[39m\u001B[34m(traverse, optimize_graph, scheduler, get, *args, **kwargs)\u001B[39m\n\u001B[32m    678\u001B[39m     expr = expr.optimize()\n\u001B[32m    679\u001B[39m     keys = \u001B[38;5;28mlist\u001B[39m(flatten(expr.__dask_keys__()))\n\u001B[32m--> \u001B[39m\u001B[32m681\u001B[39m     results = \u001B[43mschedule\u001B[49m\u001B[43m(\u001B[49m\u001B[43mexpr\u001B[49m\u001B[43m,\u001B[49m\u001B[43m \u001B[49m\u001B[43mkeys\u001B[49m\u001B[43m,\u001B[49m\u001B[43m \u001B[49m\u001B[43m*\u001B[49m\u001B[43m*\u001B[49m\u001B[43mkwargs\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    683\u001B[39m \u001B[38;5;28;01mreturn\u001B[39;00m repack(results)\n",
+      "\u001B[36mFile \u001B[39m\u001B[32mC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\\Lib\\queue.py:180\u001B[39m, in \u001B[36mQueue.get\u001B[39m\u001B[34m(self, block, timeout)\u001B[39m\n\u001B[32m    178\u001B[39m         \u001B[38;5;28;01mif\u001B[39;00m remaining <= \u001B[32m0.0\u001B[39m:\n\u001B[32m    179\u001B[39m             \u001B[38;5;28;01mraise\u001B[39;00m Empty\n\u001B[32m--> \u001B[39m\u001B[32m180\u001B[39m         \u001B[38;5;28;43mself\u001B[39;49m\u001B[43m.\u001B[49m\u001B[43mnot_empty\u001B[49m\u001B[43m.\u001B[49m\u001B[43mwait\u001B[49m\u001B[43m(\u001B[49m\u001B[43mremaining\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    181\u001B[39m item = \u001B[38;5;28mself\u001B[39m._get()\n\u001B[32m    182\u001B[39m \u001B[38;5;28mself\u001B[39m.not_full.notify()\n",
+      "\u001B[36mFile \u001B[39m\u001B[32mC:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\\Lib\\threading.py:359\u001B[39m, in \u001B[36mCondition.wait\u001B[39m\u001B[34m(self, timeout)\u001B[39m\n\u001B[32m    357\u001B[39m \u001B[38;5;28;01melse\u001B[39;00m:\n\u001B[32m    358\u001B[39m     \u001B[38;5;28;01mif\u001B[39;00m timeout > \u001B[32m0\u001B[39m:\n\u001B[32m--> \u001B[39m\u001B[32m359\u001B[39m         gotit = \u001B[43mwaiter\u001B[49m\u001B[43m.\u001B[49m\u001B[43macquire\u001B[49m\u001B[43m(\u001B[49m\u001B[38;5;28;43;01mTrue\u001B[39;49;00m\u001B[43m,\u001B[49m\u001B[43m \u001B[49m\u001B[43mtimeout\u001B[49m\u001B[43m)\u001B[49m\n\u001B[32m    360\u001B[39m     \u001B[38;5;28;01melse\u001B[39;00m:\n\u001B[32m    361\u001B[39m         gotit = waiter.acquire(\u001B[38;5;28;01mFalse\u001B[39;00m)\n",
+      "\u001B[31mKeyboardInterrupt\u001B[39m: "
+     ]
+    }
+   ],
+   "execution_count": 6
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T21:20:47.236179Z",
+     "start_time": "2025-09-09T21:20:46.790913Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "col_dfs[0].head()",
+   "id": "f7996fd1393bddf5",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "    PERIODO DIRECTORIO SECUENCIA_P ORDEN HOGAR P7495 P7500S1 P7500S1A1  \\\n",
+       "0  20220104    5000000           1     1     1     2    <NA>      <NA>   \n",
+       "1  20220104    5000000           1     2     1     2    <NA>      <NA>   \n",
+       "2  20220104    5000000           1     6     1     2    <NA>      <NA>   \n",
+       "3  20220104    5000001           1     1     1     2    <NA>      <NA>   \n",
+       "4  20220104    5000001           1     2     1     2    <NA>      <NA>   \n",
+       "\n",
+       "  P7500S2 P7500S2A1  ... P3371S1 P3371S2 P3371S3 P3371S4 P3372 P3372S1  \\\n",
+       "0    <NA>      <NA>  ...    <NA>    <NA>    <NA>    <NA>     2    <NA>   \n",
+       "1    <NA>      <NA>  ...    <NA>    <NA>    <NA>    <NA>     2    <NA>   \n",
+       "2    <NA>      <NA>  ...    <NA>    <NA>    <NA>    <NA>     2    <NA>   \n",
+       "3    <NA>      <NA>  ...    <NA>    <NA>    <NA>    <NA>     2    <NA>   \n",
+       "4    <NA>      <NA>  ...    <NA>    <NA>    <NA>    <NA>     2    <NA>   \n",
+       "\n",
+       "        FEX_C18   PER REGIS                                           filename  \n",
+       "0  1432.4633227  2022    90  c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...  \n",
+       "1  1432.4633227  2022    90  c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...  \n",
+       "2  1432.4633227  2022    90  c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...  \n",
+       "3  1088.7962663  2022    90  c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...  \n",
+       "4  1088.7962663  2022    90  c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...  \n",
+       "\n",
+       "[5 rows x 60 columns]"
+      ],
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>PERIODO</th>\n",
+       "      <th>DIRECTORIO</th>\n",
+       "      <th>SECUENCIA_P</th>\n",
+       "      <th>ORDEN</th>\n",
+       "      <th>HOGAR</th>\n",
+       "      <th>P7495</th>\n",
+       "      <th>P7500S1</th>\n",
+       "      <th>P7500S1A1</th>\n",
+       "      <th>P7500S2</th>\n",
+       "      <th>P7500S2A1</th>\n",
+       "      <th>...</th>\n",
+       "      <th>P3371S1</th>\n",
+       "      <th>P3371S2</th>\n",
+       "      <th>P3371S3</th>\n",
+       "      <th>P3371S4</th>\n",
+       "      <th>P3372</th>\n",
+       "      <th>P3372S1</th>\n",
+       "      <th>FEX_C18</th>\n",
+       "      <th>PER</th>\n",
+       "      <th>REGIS</th>\n",
+       "      <th>filename</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>20220104</td>\n",
+       "      <td>5000000</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>...</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>1432.4633227</td>\n",
+       "      <td>2022</td>\n",
+       "      <td>90</td>\n",
+       "      <td>c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>20220104</td>\n",
+       "      <td>5000000</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>...</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>1432.4633227</td>\n",
+       "      <td>2022</td>\n",
+       "      <td>90</td>\n",
+       "      <td>c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>20220104</td>\n",
+       "      <td>5000000</td>\n",
+       "      <td>1</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>...</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>1432.4633227</td>\n",
+       "      <td>2022</td>\n",
+       "      <td>90</td>\n",
+       "      <td>c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>20220104</td>\n",
+       "      <td>5000001</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>...</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>1088.7962663</td>\n",
+       "      <td>2022</td>\n",
+       "      <td>90</td>\n",
+       "      <td>c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>20220104</td>\n",
+       "      <td>5000001</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>...</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>2</td>\n",
+       "      <td>&lt;NA&gt;</td>\n",
+       "      <td>1088.7962663</td>\n",
+       "      <td>2022</td>\n",
+       "      <td>90</td>\n",
+       "      <td>c8bca186_GEIH_Enero_2022_Marco_2018_CSV_Otros ...</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 60 columns</p>\n",
+       "</div>"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 5
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Use case 2: Extracting data from Brazil\n",
+    "\n",
+    "We are downloading the Brazilian data from the Brazilian Institute of Geography and Statistics (**IBGE**) website. The `Extractor` class is used to download the data. In this case, we are extracting the Brazilian National Continuous Household Sample Survey (**PNADC**) for the year 2024\n",
+    "\n"
+   ],
+   "id": "4c34d27d4f475406"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "<div style=\"border-left: 4px solid #e74c3c; background: #fdecea; color: #222; padding: 0.5em 1em; margin: 1em 0; display: flex; align-items: center;\">\n",
+    "  <span style=\"font-size: 20px; margin-right: 10px;\">⚠️</span>\n",
+    "  <div>\n",
+    "    <strong>Important:</strong> <code>is_fwf</code> parameter is set to <code>True</code>, which indicates that the data files are in fixed-width format. The <code>colnames</code> and <code>colspecs</code> parameters must be provided. In this example, they are set to the corresponding available enums for <strong> PNADC </strong> data, which define the column names and specifications for the dataset.\n",
+    "    See more details in\n",
+    "    <a href=\"https://harmonize-tools.github.io/socio4health/socio4health.enums.html#module-socio4health.enums.data_info_enum\" target=\"_blank\">\n",
+    "      socio4health.enums.data_info_enum documentation\n",
+    "    </a>.\n",
+    "  </div>\n",
+    "</div>"
+   ],
+   "id": "23e82c1d06bb2a51"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-15T19:31:21.173438300Z",
+     "start_time": "2025-09-15T19:27:11.192593Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "bra_online_extractor = Extractor(input_path=\"https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/\", down_ext=['.txt','.zip'], is_fwf=True, colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, output_path=\"../data\", depth=0)\n",
+    "\n",
+    "bra_dfs = bra_online_extractor.s4h_extract()\n"
+   ],
+   "id": "abef6948cdd837c7",
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'Extractor' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001B[31m---------------------------------------------------------------------------\u001B[39m",
+      "\u001B[31mNameError\u001B[39m                                 Traceback (most recent call last)",
+      "\u001B[36mCell\u001B[39m\u001B[36m \u001B[39m\u001B[32mIn[1]\u001B[39m\u001B[32m, line 1\u001B[39m\n\u001B[32m----> \u001B[39m\u001B[32m1\u001B[39m bra_online_extractor = \u001B[43mExtractor\u001B[49m(input_path=\u001B[33m\"\u001B[39m\u001B[33mhttps://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/\u001B[39m\u001B[33m\"\u001B[39m, down_ext=[\u001B[33m'\u001B[39m\u001B[33m.txt\u001B[39m\u001B[33m'\u001B[39m,\u001B[33m'\u001B[39m\u001B[33m.zip\u001B[39m\u001B[33m'\u001B[39m], is_fwf=\u001B[38;5;28;01mTrue\u001B[39;00m, colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, output_path=\u001B[33m\"\u001B[39m\u001B[33m../data\u001B[39m\u001B[33m\"\u001B[39m, depth=\u001B[32m0\u001B[39m)\n\u001B[32m      3\u001B[39m bra_dfs = bra_online_extractor.s4h_extract()\n",
+      "\u001B[31mNameError\u001B[39m: name 'Extractor' is not defined"
+     ]
+    }
+   ],
+   "execution_count": 1
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "bra_dfs[0].head()",
+   "id": "b641e6b7bae71a3c"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "\n",
+    "## Use case 3: Extracting data from Peru\n",
+    "\n",
+    "Peruvian data is extracted from the National Institute of Statistics and Informatics (**INEI**) website. In this case, we are extracting the National Household Survey (**ENAHO**) for the year 2022. The `down_ext` parameter is set to download `.csv` and `.zip` files, and the `sep` parameter is set to `;`, indicating that the data files are semicolon-separated values."
+   ],
+   "id": "eda3e40e8ef2af7"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "per_online_extractor = Extractor(input_path=\"https://www.inei.gob.pe/media/DATOS_ABIERTOS/ENAHO/DATA/2022.zip\", down_ext=['.csv','.zip'], output_path=\"../data\", depth=0)\n",
+    "\n",
+    "per_dfs = per_online_extractor.s4h_extract()"
+   ],
+   "id": "2a4a1125db3c4252"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": "per_dfs[0].head()",
+   "id": "30a2985125d9c2a7"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "\n",
+    "## Further steps\n",
+    "* Harmonize the extracted data using the `Harmonizer` class from the `socio4health` library. You can follow the [Harmonization tutorial](https://harmonize-tools.github.io/socio4health/notebooks/harmonization.html) for more details."
+   ],
+   "id": "cb61738179b2b70c"
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

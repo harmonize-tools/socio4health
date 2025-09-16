@@ -13,7 +13,6 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 <a href='https://harmonize-tools.github.io/socio4health/'><img height="80" src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png"/></a>
 # socio4health    
-
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
   Package socio4health is an extraction, transformation, loading (ETL), and AI-assisted query and visualization (AI QV) tool designed to simplify the intricate process of collecting and merging data 📊 from multiple sources, focusing on sociodemographic and census datasets from Colombia, Brazil, and Peru, into a unified relational database structure.
 </p>

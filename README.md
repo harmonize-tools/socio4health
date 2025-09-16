@@ -22,7 +22,7 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 
 ## Overview  
 <p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Package socio4health is an extraction, transformation, loading (ETL), and AI-assisted classification tool designed to simplify the intricate process of collecting and merging data from multiple sources, focusing on sociodemographic and census datasets from Colombia, Brazil, and Peru, into a harmonized dataset.
+  Package socio4health is an extraction, transformation and loading (ETL)  classification tool designed to simplify the intricate process of collecting and merging data from multiple sources, focusing on sociodemographic and census datasets from Colombia, Brazil, and Peru, into a harmonized dataset.
 </p>
 
 - Seamlessly retrieve data from online data sources through web scraping, as well as from local files.

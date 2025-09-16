@@ -1,4 +1,4 @@
-# socio4health <a href='https://www.harmonize-tools.org/'><img height="139" src="https://harmonize-tools.github.io/harmonize-logo.png"/></a>
+# socio4health                                                                        <a href='https://www.harmonize-tools.org/'><img height="139" src="https://harmonize-tools.github.io/harmonize-logo.png"/></a>
 
 <!-- badges: start -->
 

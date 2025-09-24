@@ -135,6 +135,7 @@ def test():
     joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
     """
 
+    extractor.s4h_delete_download_folder()
 
 if __name__ == "__main__":
     test()

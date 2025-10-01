@@ -180,6 +180,9 @@ class Extractor:
             logging.error(f"Exception while extracting data: {e}")
             raise ValueError(f"Extraction failed: {str(e)}")
 
+        if not self.dataframes:
+            logging.warning("No data was extracted. The extraction process returned an empty result.")
+
         return self.dataframes
 
     def _extract_online_mode(self):

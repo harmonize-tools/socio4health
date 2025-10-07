@@ -127,6 +127,7 @@ class Extractor:
         self.output_path = output_path or str(s4h_get_default_data_dir())
         self.READERS = {
             '.csv': self._read_csv,
+            '.txt': self._read_txt,
             '.parquet': self._read_parquet,
             '.xls': self._read_excel,
             '.xlsx': self._read_excel,
@@ -401,7 +402,7 @@ class Extractor:
         return gpd.read_file(filepath)
     
     def _read_txt(self, filepath):
-        return dd.read_csv(filepath, sep=self.sep or '\t', encoding=self.encoding, dtype=self.dtype)
+        return dd.read_csv(filepath, sep=self.sep or '\t', encoding=self.encoding, dtype=self.dtype or 'object')
 
     def _read_file(self, filepath):
         try:

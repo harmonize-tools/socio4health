@@ -124,7 +124,7 @@ def test():
 
     """
     print('Horizontal merge___________________________________')
-    joined_df = har.join_data(filtered_ddfs)
+    joined_df = har.s4h_join_data(filtered_ddfs)
     available_cols = joined_df.columns.tolist()
 
     print(f"Available columns: {available_cols}")

@@ -1,4 +1,4 @@
-User Interface Tutorial
+How to use socio4health GUI
 =====================================================
 
 For those who prefer a graphical user interface (GUI) over coding, the `Socio4Health GUI <https://harmonize-tools.github.io/socio4health/user_interface.html>`_ provides an easy-to-use platform for data harmonization. This tutorial will guide you through the steps of using a the GUI to export, manage, and harmonize demographic and socioeconomic data.
@@ -39,8 +39,8 @@ Choose the data source from the dropdown menu. The available options are: **Inte
    :alt: extract data from URL
 
 
-If you select **Internet (URL)**, you will need to provide the URL of the data file you want to upload. Additionally, you can specify any relevant keywords, file extensions to look for, scraping depth and whether the file is a fixed width file (FWF).
-Also make sure to set CSV parameters such as the separator and the encoding. Once you have filled in all the required information, click on the **Extract Data from URL (or File)** button to start the data extraction process.
+If you select **Internet (URL)**, you will need to provide the ``URL`` of the data file you want to upload. Additionally, you can specify any relevant keywords, file extensions to look for, scraping depth and whether the file is a fixed width file (``FWF``).
+Also make sure to set ``CSV`` parameters such as the separator and the encoding. Once you have filled in all the required information, click on the **Extract Data from URL (or File)** button to start the data extraction process.
 
 .. image:: ../img/ext_2.png
    :align: center

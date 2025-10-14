@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>socio4health.enums &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'socio4health.enums';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">socio4health.enums</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="socio4health-enums">
+<h1>socio4health.enums<a class="headerlink" href="#socio4health-enums" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+<section id="module-socio4health.enums.data_info_enum">
+<span id="socio4health-enums-data-info-enum"></span><h3>socio4health.enums.data_info_enum<a class="headerlink" href="#module-socio4health.enums.data_info_enum" title="Link to this heading">#</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.BraColnamesEnum">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socio4health.enums.data_info_enum.</span></span><span class="sig-name descname"><span class="pre">BraColnamesEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socio4health/enums/data_info_enum.html#BraColnamesEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socio4health.enums.data_info_enum.BraColnamesEnum" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.BraColnamesEnum.PNADC">
+<span class="sig-name descname"><span class="pre">PNADC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['Ano',</span> <span class="pre">'Trimestre',</span> <span class="pre">'UF',</span> <span class="pre">'Capital',</span> <span class="pre">'RM_RIDE',</span> <span class="pre">'UPA',</span> <span class="pre">'Estrato',</span> <span class="pre">'V1008',</span> <span class="pre">'V1014',</span> <span class="pre">'V1016',</span> <span class="pre">'V1022',</span> <span class="pre">'V1023',</span> <span class="pre">'V1027',</span> <span class="pre">'V1028',</span> <span class="pre">'V1029',</span> <span class="pre">'V1033',</span> <span class="pre">'posest',</span> <span class="pre">'posest_sxi',</span> <span class="pre">'V2001',</span> <span class="pre">'V2003',</span> <span class="pre">'V2005',</span> <span class="pre">'V2007',</span> <span class="pre">'V2008',</span> <span class="pre">'V20081',</span> <span class="pre">'V20082',</span> <span class="pre">'V2009',</span> <span class="pre">'V2010',</span> <span class="pre">'V3001',</span> <span class="pre">'V3002',</span> <span class="pre">'V3002A',</span> <span class="pre">'V3003',</span> <span class="pre">'V3003A',</span> <span class="pre">'V3004',</span> <span class="pre">'V3005',</span> <span class="pre">'V3005A',</span> <span class="pre">'V3006',</span> <span class="pre">'V3006A',</span> <span class="pre">'V3007',</span> <span class="pre">'V3008',</span> <span class="pre">'V3009',</span> <span class="pre">'V3009A',</span> <span class="pre">'V3010',</span> <span class="pre">'V3011',</span> <span class="pre">'V3011A',</span> <span class="pre">'V3012',</span> <span class="pre">'V3013',</span> <span class="pre">'V3013A',</span> <span class="pre">'V3013B',</span> <span class="pre">'V3014',</span> <span class="pre">'V4001',</span> <span class="pre">'V4002',</span> <span class="pre">'V4003',</span> <span class="pre">'V4004',</span> <span class="pre">'V4005',</span> <span class="pre">'V4006',</span> <span class="pre">'V4006A',</span> <span class="pre">'V4007',</span> <span class="pre">'V4008',</span> <span class="pre">'V40081',</span> <span class="pre">'V40082',</span> <span class="pre">'V40083',</span> <span class="pre">'V4009',</span> <span class="pre">'V4010',</span> <span class="pre">'V4012',</span> <span class="pre">'V40121',</span> <span class="pre">'V4013',</span> <span class="pre">'V40132',</span> <span class="pre">'V40132A',</span> <span class="pre">'V4014',</span> <span class="pre">'V4015',</span> <span class="pre">'V40151',</span> <span class="pre">'V401511',</span> <span class="pre">'V401512',</span> <span class="pre">'V4016',</span> <span class="pre">'V40161',</span> <span class="pre">'V40162',</span> <span class="pre">'V40163',</span> <span class="pre">'V4017',</span> <span class="pre">'V40171',</span> <span class="pre">'V401711',</span> <span class="pre">'V4018',</span> <span class="pre">'V40181',</span> <span class="pre">'V40182',</span> <span class="pre">'V40183',</span> <span class="pre">'V4019',</span> <span class="pre">'V4020',</span> <span class="pre">'V4021',</span> <span class="pre">'V4022',</span> <span class="pre">'V4024',</span> <span class="pre">'V4025',</span> <span class="pre">'V4026',</span> <span class="pre">'V4027',</span> <span class="pre">'V4028',</span> <span class="pre">'V4029',</span> <span class="pre">'V4032',</span> <span class="pre">'V4033',</span> <span class="pre">'V40331',</span> <span class="pre">'V403311',</span> <span class="pre">'V403312',</span> <span class="pre">'V40332',</span> <span class="pre">'V403321',</span> <span class="pre">'V403322',</span> <span class="pre">'V40333',</span> <span class="pre">'V403331',</span> <span class="pre">'V4034',</span> <span class="pre">'V40341',</span> <span class="pre">'V403411',</span> <span class="pre">'V403412',</span> <span class="pre">'V40342',</span> <span class="pre">'V403421',</span> <span class="pre">'V403422',</span> <span class="pre">'V4039',</span> <span class="pre">'V4039C',</span> <span class="pre">'V4040',</span> <span class="pre">'V40401',</span> <span class="pre">'V40402',</span> <span class="pre">'V40403',</span> <span class="pre">'V4041',</span> <span class="pre">'V4043',</span> <span class="pre">'V40431',</span> <span class="pre">'V4044',</span> <span class="pre">'V4045',</span> <span class="pre">'V4046',</span> <span class="pre">'V4047',</span> <span class="pre">'V4048',</span> <span class="pre">'V4049',</span> <span class="pre">'V4050',</span> <span class="pre">'V40501',</span> <span class="pre">'V405011',</span> <span class="pre">'V405012',</span> <span class="pre">'V40502',</span> <span class="pre">'V405021',</span> <span class="pre">'V405022',</span> <span class="pre">'V40503',</span> <span class="pre">'V405031',</span> <span class="pre">'V4051',</span> <span class="pre">'V40511',</span> <span class="pre">'V405111',</span> <span class="pre">'V405112',</span> <span class="pre">'V40512',</span> <span class="pre">'V405121',</span> <span class="pre">'V405122',</span> <span class="pre">'V4056',</span> <span class="pre">'V4056C',</span> <span class="pre">'V4057',</span> <span class="pre">'V4058',</span> <span class="pre">'V40581',</span> <span class="pre">'V405811',</span> <span class="pre">'V405812',</span> <span class="pre">'V40582',</span> <span class="pre">'V405821',</span> <span class="pre">'V405822',</span> <span class="pre">'V40583',</span> <span class="pre">'V405831',</span> <span class="pre">'V40584',</span> <span class="pre">'V4059',</span> <span class="pre">'V40591',</span> <span class="pre">'V405911',</span> <span class="pre">'V405912',</span> <span class="pre">'V40592',</span> <span class="pre">'V405921',</span> <span class="pre">'V405922',</span> <span class="pre">'V4062',</span> <span class="pre">'V4062C',</span> <span class="pre">'V4063',</span> <span class="pre">'V4063A',</span> <span class="pre">'V4064',</span> <span class="pre">'V4064A',</span> <span class="pre">'V4071',</span> <span class="pre">'V4072',</span> <span class="pre">'V4072A',</span> <span class="pre">'V4073',</span> <span class="pre">'V4074',</span> <span class="pre">'V4074A',</span> <span class="pre">'V4075A',</span> <span class="pre">'V4075A1',</span> <span class="pre">'V4076',</span> <span class="pre">'V40761',</span> <span class="pre">'V40762',</span> <span class="pre">'V40763',</span> <span class="pre">'V4077',</span> <span class="pre">'V4078',</span> <span class="pre">'V4078A',</span> <span class="pre">'V4082',</span> <span class="pre">'VD2002',</span> <span class="pre">'VD2003',</span> <span class="pre">'VD2004',</span> <span class="pre">'VD2006',</span> <span class="pre">'VD3004',</span> <span class="pre">'VD3005',</span> <span class="pre">'VD3006',</span> <span class="pre">'VD4001',</span> <span class="pre">'VD4002',</span> <span class="pre">'VD4003',</span> <span class="pre">'VD4004',</span> <span class="pre">'VD4004A',</span> <span class="pre">'VD4005',</span> <span class="pre">'VD4007',</span> <span class="pre">'VD4008',</span> <span class="pre">'VD4009',</span> <span class="pre">'VD4010',</span> <span class="pre">'VD4011',</span> <span class="pre">'VD4012',</span> <span class="pre">'VD4013',</span> <span class="pre">'VD4014',</span> <span class="pre">'VD4015',</span> <span class="pre">'VD4016',</span> <span class="pre">'VD4017',</span> <span class="pre">'VD4018',</span> <span class="pre">'VD4019',</span> <span class="pre">'VD4020',</span> <span class="pre">'VD4023',</span> <span class="pre">'VD4030',</span> <span class="pre">'VD4031',</span> <span class="pre">'VD4032',</span> <span class="pre">'VD4033',</span> <span class="pre">'VD4034',</span> <span class="pre">'VD4035',</span> <span class="pre">'VD4036',</span> <span class="pre">'VD4037',</span> <span class="pre">'V1028001',</span> <span class="pre">'V1028002',</span> <span class="pre">'V1028003',</span> <span class="pre">'V1028004',</span> <span class="pre">'V1028005',</span> <span class="pre">'V1028006',</span> <span class="pre">'V1028007',</span> <span class="pre">'V1028008',</span> <span class="pre">'V1028009',</span> <span class="pre">'V1028010',</span> <span class="pre">'V1028011',</span> <span class="pre">'V1028012',</span> <span class="pre">'V1028013',</span> <span class="pre">'V1028014',</span> <span class="pre">'V1028015',</span> <span class="pre">'V1028016',</span> <span class="pre">'V1028017',</span> <span class="pre">'V1028018',</span> <span class="pre">'V1028019',</span> <span class="pre">'V1028020',</span> <span class="pre">'V1028021',</span> <span class="pre">'V1028022',</span> <span class="pre">'V1028023',</span> <span class="pre">'V1028024',</span> <span class="pre">'V1028025',</span> <span class="pre">'V1028026',</span> <span class="pre">'V1028027',</span> <span class="pre">'V1028028',</span> <span class="pre">'V1028029',</span> <span class="pre">'V1028030',</span> <span class="pre">'V1028031',</span> <span class="pre">'V1028032',</span> <span class="pre">'V1028033',</span> <span class="pre">'V1028034',</span> <span class="pre">'V1028035',</span> <span class="pre">'V1028036',</span> <span class="pre">'V1028037',</span> <span class="pre">'V1028038',</span> <span class="pre">'V1028039',</span> <span class="pre">'V1028040',</span> <span class="pre">'V1028041',</span> <span class="pre">'V1028042',</span> <span class="pre">'V1028043',</span> <span class="pre">'V1028044',</span> <span class="pre">'V1028045',</span> <span class="pre">'V1028046',</span> <span class="pre">'V1028047',</span> <span class="pre">'V1028048',</span> <span class="pre">'V1028049',</span> <span class="pre">'V1028050',</span> <span class="pre">'V1028051',</span> <span class="pre">'V1028052',</span> <span class="pre">'V1028053',</span> <span class="pre">'V1028054',</span> <span class="pre">'V1028055',</span> <span class="pre">'V1028056',</span> <span class="pre">'V1028057',</span> <span class="pre">'V1028058',</span> <span class="pre">'V1028059',</span> <span class="pre">'V1028060',</span> <span class="pre">'V1028061',</span> <span class="pre">'V1028062',</span> <span class="pre">'V1028063',</span> <span class="pre">'V1028064',</span> <span class="pre">'V1028065',</span> <span class="pre">'V1028066',</span> <span class="pre">'V1028067',</span> <span class="pre">'V1028068',</span> <span class="pre">'V1028069',</span> <span class="pre">'V1028070',</span> <span class="pre">'V1028071',</span> <span class="pre">'V1028072',</span> <span class="pre">'V1028073',</span> <span class="pre">'V1028074',</span> <span class="pre">'V1028075',</span> <span class="pre">'V1028076',</span> <span class="pre">'V1028077',</span> <span class="pre">'V1028078',</span> <span class="pre">'V1028079',</span> <span class="pre">'V1028080',</span> <span class="pre">'V1028081',</span> <span class="pre">'V1028082',</span> <span class="pre">'V1028083',</span> <span class="pre">'V1028084',</span> <span class="pre">'V1028085',</span> <span class="pre">'V1028086',</span> <span class="pre">'V1028087',</span> <span class="pre">'V1028088',</span> <span class="pre">'V1028089',</span> <span class="pre">'V1028090',</span> <span class="pre">'V1028091',</span> <span class="pre">'V1028092',</span> <span class="pre">'V1028093',</span> <span class="pre">'V1028094',</span> <span class="pre">'V1028095',</span> <span class="pre">'V1028096',</span> <span class="pre">'V1028097',</span> <span class="pre">'V1028098',</span> <span class="pre">'V1028099',</span> <span class="pre">'V1028100',</span> <span class="pre">'V1028101',</span> <span class="pre">'V1028102',</span> <span class="pre">'V1028103',</span> <span class="pre">'V1028104',</span> <span class="pre">'V1028105',</span> <span class="pre">'V1028106',</span> <span class="pre">'V1028107',</span> <span class="pre">'V1028108',</span> <span class="pre">'V1028109',</span> <span class="pre">'V1028110',</span> <span class="pre">'V1028111',</span> <span class="pre">'V1028112',</span> <span class="pre">'V1028113',</span> <span class="pre">'V1028114',</span> <span class="pre">'V1028115',</span> <span class="pre">'V1028116',</span> <span class="pre">'V1028117',</span> <span class="pre">'V1028118',</span> <span class="pre">'V1028119',</span> <span class="pre">'V1028120',</span> <span class="pre">'V1028121',</span> <span class="pre">'V1028122',</span> <span class="pre">'V1028123',</span> <span class="pre">'V1028124',</span> <span class="pre">'V1028125',</span> <span class="pre">'V1028126',</span> <span class="pre">'V1028127',</span> <span class="pre">'V1028128',</span> <span class="pre">'V1028129',</span> <span class="pre">'V1028130',</span> <span class="pre">'V1028131',</span> <span class="pre">'V1028132',</span> <span class="pre">'V1028133',</span> <span class="pre">'V1028134',</span> <span class="pre">'V1028135',</span> <span class="pre">'V1028136',</span> <span class="pre">'V1028137',</span> <span class="pre">'V1028138',</span> <span class="pre">'V1028139',</span> <span class="pre">'V1028140',</span> <span class="pre">'V1028141',</span> <span class="pre">'V1028142',</span> <span class="pre">'V1028143',</span> <span class="pre">'V1028144',</span> <span class="pre">'V1028145',</span> <span class="pre">'V1028146',</span> <span class="pre">'V1028147',</span> <span class="pre">'V1028148',</span> <span class="pre">'V1028149',</span> <span class="pre">'V1028150',</span> <span class="pre">'V1028151',</span> <span class="pre">'V1028152',</span> <span class="pre">'V1028153',</span> <span class="pre">'V1028154',</span> <span class="pre">'V1028155',</span> <span class="pre">'V1028156',</span> <span class="pre">'V1028157',</span> <span class="pre">'V1028158',</span> <span class="pre">'V1028159',</span> <span class="pre">'V1028160',</span> <span class="pre">'V1028161',</span> <span class="pre">'V1028162',</span> <span class="pre">'V1028163',</span> <span class="pre">'V1028164',</span> <span class="pre">'V1028165',</span> <span class="pre">'V1028166',</span> <span class="pre">'V1028167',</span> <span class="pre">'V1028168',</span> <span class="pre">'V1028169',</span> <span class="pre">'V1028170',</span> <span class="pre">'V1028171',</span> <span class="pre">'V1028172',</span> <span class="pre">'V1028173',</span> <span class="pre">'V1028174',</span> <span class="pre">'V1028175',</span> <span class="pre">'V1028176',</span> <span class="pre">'V1028177',</span> <span class="pre">'V1028178',</span> <span class="pre">'V1028179',</span> <span class="pre">'V1028180',</span> <span class="pre">'V1028181',</span> <span class="pre">'V1028182',</span> <span class="pre">'V1028183',</span> <span class="pre">'V1028184',</span> <span class="pre">'V1028185',</span> <span class="pre">'V1028186',</span> <span class="pre">'V1028187',</span> <span class="pre">'V1028188',</span> <span class="pre">'V1028189',</span> <span class="pre">'V1028190',</span> <span class="pre">'V1028191',</span> <span class="pre">'V1028192',</span> <span class="pre">'V1028193',</span> <span class="pre">'V1028194',</span> <span class="pre">'V1028195',</span> <span class="pre">'V1028196',</span> <span class="pre">'V1028197',</span> <span class="pre">'V1028198',</span> <span class="pre">'V1028199',</span> <span class="pre">'V1028200']</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.BraColnamesEnum.PNADC" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.BraColspecsEnum">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socio4health.enums.data_info_enum.</span></span><span class="sig-name descname"><span class="pre">BraColspecsEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socio4health/enums/data_info_enum.html#BraColspecsEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socio4health.enums.data_info_enum.BraColspecsEnum" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.BraColspecsEnum.PNADC">
+<span class="sig-name descname"><span class="pre">PNADC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[(0,</span> <span class="pre">4),</span> <span class="pre">(4,</span> <span class="pre">5),</span> <span class="pre">(5,</span> <span class="pre">7),</span> <span class="pre">(7,</span> <span class="pre">9),</span> <span class="pre">(9,</span> <span class="pre">11),</span> <span class="pre">(11,</span> <span class="pre">20),</span> <span class="pre">(20,</span> <span class="pre">27),</span> <span class="pre">(27,</span> <span class="pre">29),</span> <span class="pre">(29,</span> <span class="pre">31),</span> <span class="pre">(31,</span> <span class="pre">32),</span> <span class="pre">(32,</span> <span class="pre">33),</span> <span class="pre">(33,</span> <span class="pre">34),</span> <span class="pre">(34,</span> <span class="pre">49),</span> <span class="pre">(49,</span> <span class="pre">64),</span> <span class="pre">(64,</span> <span class="pre">73),</span> <span class="pre">(73,</span> <span class="pre">82),</span> <span class="pre">(82,</span> <span class="pre">85),</span> <span class="pre">(85,</span> <span class="pre">88),</span> <span class="pre">(88,</span> <span class="pre">90),</span> <span class="pre">(90,</span> <span class="pre">92),</span> <span class="pre">(92,</span> <span class="pre">94),</span> <span class="pre">(94,</span> <span class="pre">95),</span> <span class="pre">(95,</span> <span class="pre">97),</span> <span class="pre">(97,</span> <span class="pre">99),</span> <span class="pre">(99,</span> <span class="pre">103),</span> <span class="pre">(103,</span> <span class="pre">106),</span> <span class="pre">(106,</span> <span class="pre">107),</span> <span class="pre">(107,</span> <span class="pre">108),</span> <span class="pre">(108,</span> <span class="pre">109),</span> <span class="pre">(109,</span> <span class="pre">110),</span> <span class="pre">(110,</span> <span class="pre">112),</span> <span class="pre">(112,</span> <span class="pre">114),</span> <span class="pre">(114,</span> <span class="pre">115),</span> <span class="pre">(115,</span> <span class="pre">116),</span> <span class="pre">(116,</span> <span class="pre">117),</span> <span class="pre">(117,</span> <span class="pre">119),</span> <span class="pre">(119,</span> <span class="pre">120),</span> <span class="pre">(120,</span> <span class="pre">121),</span> <span class="pre">(121,</span> <span class="pre">122),</span> <span class="pre">(122,</span> <span class="pre">124),</span> <span class="pre">(124,</span> <span class="pre">126),</span> <span class="pre">(126,</span> <span class="pre">127),</span> <span class="pre">(127,</span> <span class="pre">128),</span> <span class="pre">(128,</span> <span class="pre">129),</span> <span class="pre">(129,</span> <span class="pre">130),</span> <span class="pre">(130,</span> <span class="pre">132),</span> <span class="pre">(132,</span> <span class="pre">133),</span> <span class="pre">(133,</span> <span class="pre">134),</span> <span class="pre">(134,</span> <span class="pre">135),</span> <span class="pre">(135,</span> <span class="pre">136),</span> <span class="pre">(136,</span> <span class="pre">137),</span> <span class="pre">(137,</span> <span class="pre">138),</span> <span class="pre">(138,</span> <span class="pre">139),</span> <span class="pre">(139,</span> <span class="pre">140),</span> <span class="pre">(140,</span> <span class="pre">141),</span> <span class="pre">(141,</span> <span class="pre">142),</span> <span class="pre">(142,</span> <span class="pre">143),</span> <span class="pre">(143,</span> <span class="pre">144),</span> <span class="pre">(144,</span> <span class="pre">146),</span> <span class="pre">(146,</span> <span class="pre">148),</span> <span class="pre">(148,</span> <span class="pre">150),</span> <span class="pre">(150,</span> <span class="pre">151),</span> <span class="pre">(151,</span> <span class="pre">155),</span> <span class="pre">(155,</span> <span class="pre">156),</span> <span class="pre">(156,</span> <span class="pre">157),</span> <span class="pre">(157,</span> <span class="pre">162),</span> <span class="pre">(162,</span> <span class="pre">163),</span> <span class="pre">(163,</span> <span class="pre">164),</span> <span class="pre">(164,</span> <span class="pre">165),</span> <span class="pre">(165,</span> <span class="pre">166),</span> <span class="pre">(166,</span> <span class="pre">167),</span> <span class="pre">(167,</span> <span class="pre">168),</span> <span class="pre">(168,</span> <span class="pre">170),</span> <span class="pre">(170,</span> <span class="pre">171),</span> <span class="pre">(171,</span> <span class="pre">172),</span> <span class="pre">(172,</span> <span class="pre">174),</span> <span class="pre">(174,</span> <span class="pre">176),</span> <span class="pre">(176,</span> <span class="pre">177),</span> <span class="pre">(177,</span> <span class="pre">178),</span> <span class="pre">(178,</span> <span class="pre">179),</span> <span class="pre">(179,</span> <span class="pre">180),</span> <span class="pre">(180,</span> <span class="pre">181),</span> <span class="pre">(181,</span> <span class="pre">183),</span> <span class="pre">(183,</span> <span class="pre">185),</span> <span class="pre">(185,</span> <span class="pre">186),</span> <span class="pre">(186,</span> <span class="pre">187),</span> <span class="pre">(187,</span> <span class="pre">188),</span> <span class="pre">(188,</span> <span class="pre">189),</span> <span class="pre">(189,</span> <span class="pre">190),</span> <span class="pre">(190,</span> <span class="pre">191),</span> <span class="pre">(191,</span> <span class="pre">192),</span> <span class="pre">(192,</span> <span class="pre">193),</span> <span class="pre">(193,</span> <span class="pre">194),</span> <span class="pre">(194,</span> <span class="pre">195),</span> <span class="pre">(195,</span> <span class="pre">196),</span> <span class="pre">(196,</span> <span class="pre">197),</span> <span class="pre">(197,</span> <span class="pre">198),</span> <span class="pre">(198,</span> <span class="pre">199),</span> <span class="pre">(199,</span> <span class="pre">207),</span> <span class="pre">(207,</span> <span class="pre">208),</span> <span class="pre">(208,</span> <span class="pre">209),</span> <span class="pre">(209,</span> <span class="pre">217),</span> <span class="pre">(217,</span> <span class="pre">218),</span> <span class="pre">(218,</span> <span class="pre">219),</span> <span class="pre">(219,</span> <span class="pre">220),</span> <span class="pre">(220,</span> <span class="pre">221),</span> <span class="pre">(221,</span> <span class="pre">222),</span> <span class="pre">(222,</span> <span class="pre">230),</span> <span class="pre">(230,</span> <span class="pre">231),</span> <span class="pre">(231,</span> <span class="pre">232),</span> <span class="pre">(232,</span> <span class="pre">240),</span> <span class="pre">(240,</span> <span class="pre">243),</span> <span class="pre">(243,</span> <span class="pre">246),</span> <span class="pre">(246,</span> <span class="pre">247),</span> <span class="pre">(247,</span> <span class="pre">249),</span> <span class="pre">(249,</span> <span class="pre">251),</span> <span class="pre">(251,</span> <span class="pre">253),</span> <span class="pre">(253,</span> <span class="pre">257),</span> <span class="pre">(257,</span> <span class="pre">258),</span> <span class="pre">(258,</span> <span class="pre">259),</span> <span class="pre">(259,</span> <span class="pre">264),</span> <span class="pre">(264,</span> <span class="pre">265),</span> <span class="pre">(265,</span> <span class="pre">266),</span> <span class="pre">(266,</span> <span class="pre">267),</span> <span class="pre">(267,</span> <span class="pre">268),</span> <span class="pre">(268,</span> <span class="pre">269),</span> <span class="pre">(269,</span> <span class="pre">270),</span> <span class="pre">(270,</span> <span class="pre">271),</span> <span class="pre">(271,</span> <span class="pre">272),</span> <span class="pre">(272,</span> <span class="pre">280),</span> <span class="pre">(280,</span> <span class="pre">281),</span> <span class="pre">(281,</span> <span class="pre">282),</span> <span class="pre">(282,</span> <span class="pre">290),</span> <span class="pre">(290,</span> <span class="pre">291),</span> <span class="pre">(291,</span> <span class="pre">292),</span> <span class="pre">(292,</span> <span class="pre">293),</span> <span class="pre">(293,</span> <span class="pre">294),</span> <span class="pre">(294,</span> <span class="pre">295),</span> <span class="pre">(295,</span> <span class="pre">303),</span> <span class="pre">(303,</span> <span class="pre">304),</span> <span class="pre">(304,</span> <span class="pre">305),</span> <span class="pre">(305,</span> <span class="pre">313),</span> <span class="pre">(313,</span> <span class="pre">316),</span> <span class="pre">(316,</span> <span class="pre">319),</span> <span class="pre">(319,</span> <span class="pre">320),</span> <span class="pre">(320,</span> <span class="pre">321),</span> <span class="pre">(321,</span> <span class="pre">322),</span> <span class="pre">(322,</span> <span class="pre">323),</span> <span class="pre">(323,</span> <span class="pre">331),</span> <span class="pre">(331,</span> <span class="pre">332),</span> <span class="pre">(332,</span> <span class="pre">333),</span> <span class="pre">(333,</span> <span class="pre">341),</span> <span class="pre">(341,</span> <span class="pre">342),</span> <span class="pre">(342,</span> <span class="pre">343),</span> <span class="pre">(343,</span> <span class="pre">344),</span> <span class="pre">(344,</span> <span class="pre">345),</span> <span class="pre">(345,</span> <span class="pre">346),</span> <span class="pre">(346,</span> <span class="pre">347),</span> <span class="pre">(347,</span> <span class="pre">355),</span> <span class="pre">(355,</span> <span class="pre">356),</span> <span class="pre">(356,</span> <span class="pre">357),</span> <span class="pre">(357,</span> <span class="pre">365),</span> <span class="pre">(365,</span> <span class="pre">368),</span> <span class="pre">(368,</span> <span class="pre">371),</span> <span class="pre">(371,</span> <span class="pre">372),</span> <span class="pre">(372,</span> <span class="pre">373),</span> <span class="pre">(373,</span> <span class="pre">374),</span> <span class="pre">(374,</span> <span class="pre">375),</span> <span class="pre">(375,</span> <span class="pre">376),</span> <span class="pre">(376,</span> <span class="pre">378),</span> <span class="pre">(378,</span> <span class="pre">379),</span> <span class="pre">(379,</span> <span class="pre">380),</span> <span class="pre">(380,</span> <span class="pre">381),</span> <span class="pre">(381,</span> <span class="pre">383),</span> <span class="pre">(383,</span> <span class="pre">384),</span> <span class="pre">(384,</span> <span class="pre">386),</span> <span class="pre">(386,</span> <span class="pre">387),</span> <span class="pre">(387,</span> <span class="pre">389),</span> <span class="pre">(389,</span> <span class="pre">391),</span> <span class="pre">(391,</span> <span class="pre">393),</span> <span class="pre">(393,</span> <span class="pre">394),</span> <span class="pre">(394,</span> <span class="pre">395),</span> <span class="pre">(395,</span> <span class="pre">396),</span> <span class="pre">(396,</span> <span class="pre">397),</span> <span class="pre">(397,</span> <span class="pre">399),</span> <span class="pre">(399,</span> <span class="pre">401),</span> <span class="pre">(401,</span> <span class="pre">402),</span> <span class="pre">(402,</span> <span class="pre">404),</span> <span class="pre">(404,</span> <span class="pre">405),</span> <span class="pre">(405,</span> <span class="pre">407),</span> <span class="pre">(407,</span> <span class="pre">408),</span> <span class="pre">(408,</span> <span class="pre">409),</span> <span class="pre">(409,</span> <span class="pre">410),</span> <span class="pre">(410,</span> <span class="pre">411),</span> <span class="pre">(411,</span> <span class="pre">412),</span> <span class="pre">(412,</span> <span class="pre">413),</span> <span class="pre">(413,</span> <span class="pre">414),</span> <span class="pre">(414,</span> <span class="pre">415),</span> <span class="pre">(415,</span> <span class="pre">416),</span> <span class="pre">(416,</span> <span class="pre">418),</span> <span class="pre">(418,</span> <span class="pre">420),</span> <span class="pre">(420,</span> <span class="pre">422),</span> <span class="pre">(422,</span> <span class="pre">423),</span> <span class="pre">(423,</span> <span class="pre">424),</span> <span class="pre">(424,</span> <span class="pre">425),</span> <span class="pre">(425,</span> <span class="pre">426),</span> <span class="pre">(426,</span> <span class="pre">434),</span> <span class="pre">(434,</span> <span class="pre">442),</span> <span class="pre">(442,</span> <span class="pre">443),</span> <span class="pre">(443,</span> <span class="pre">451),</span> <span class="pre">(451,</span> <span class="pre">459),</span> <span class="pre">(459,</span> <span class="pre">460),</span> <span class="pre">(460,</span> <span class="pre">461),</span> <span class="pre">(461,</span> <span class="pre">464),</span> <span class="pre">(464,</span> <span class="pre">467),</span> <span class="pre">(467,</span> <span class="pre">470),</span> <span class="pre">(470,</span> <span class="pre">473),</span> <span class="pre">(473,</span> <span class="pre">476),</span> <span class="pre">(476,</span> <span class="pre">477),</span> <span class="pre">(477,</span> <span class="pre">478),</span> <span class="pre">(478,</span> <span class="pre">493),</span> <span class="pre">(493,</span> <span class="pre">508),</span> <span class="pre">(508,</span> <span class="pre">523),</span> <span class="pre">(523,</span> <span class="pre">538),</span> <span class="pre">(538,</span> <span class="pre">553),</span> <span class="pre">(553,</span> <span class="pre">568),</span> <span class="pre">(568,</span> <span class="pre">583),</span> <span class="pre">(583,</span> <span class="pre">598),</span> <span class="pre">(598,</span> <span class="pre">613),</span> <span class="pre">(613,</span> <span class="pre">628),</span> <span class="pre">(628,</span> <span class="pre">643),</span> <span class="pre">(643,</span> <span class="pre">658),</span> <span class="pre">(658,</span> <span class="pre">673),</span> <span class="pre">(673,</span> <span class="pre">688),</span> <span class="pre">(688,</span> <span class="pre">703),</span> <span class="pre">(703,</span> <span class="pre">718),</span> <span class="pre">(718,</span> <span class="pre">733),</span> <span class="pre">(733,</span> <span class="pre">748),</span> <span class="pre">(748,</span> <span class="pre">763),</span> <span class="pre">(763,</span> <span class="pre">778),</span> <span class="pre">(778,</span> <span class="pre">793),</span> <span class="pre">(793,</span> <span class="pre">808),</span> <span class="pre">(808,</span> <span class="pre">823),</span> <span class="pre">(823,</span> <span class="pre">838),</span> <span class="pre">(838,</span> <span class="pre">853),</span> <span class="pre">(853,</span> <span class="pre">868),</span> <span class="pre">(868,</span> <span class="pre">883),</span> <span class="pre">(883,</span> <span class="pre">898),</span> <span class="pre">(898,</span> <span class="pre">913),</span> <span class="pre">(913,</span> <span class="pre">928),</span> <span class="pre">(928,</span> <span class="pre">943),</span> <span class="pre">(943,</span> <span class="pre">958),</span> <span class="pre">(958,</span> <span class="pre">973),</span> <span class="pre">(973,</span> <span class="pre">988),</span> <span class="pre">(988,</span> <span class="pre">1003),</span> <span class="pre">(1003,</span> <span class="pre">1018),</span> <span class="pre">(1018,</span> <span class="pre">1033),</span> <span class="pre">(1033,</span> <span class="pre">1048),</span> <span class="pre">(1048,</span> <span class="pre">1063),</span> <span class="pre">(1063,</span> <span class="pre">1078),</span> <span class="pre">(1078,</span> <span class="pre">1093),</span> <span class="pre">(1093,</span> <span class="pre">1108),</span> <span class="pre">(1108,</span> <span class="pre">1123),</span> <span class="pre">(1123,</span> <span class="pre">1138),</span> <span class="pre">(1138,</span> <span class="pre">1153),</span> <span class="pre">(1153,</span> <span class="pre">1168),</span> <span class="pre">(1168,</span> <span class="pre">1183),</span> <span class="pre">(1183,</span> <span class="pre">1198),</span> <span class="pre">(1198,</span> <span class="pre">1213),</span> <span class="pre">(1213,</span> <span class="pre">1228),</span> <span class="pre">(1228,</span> <span class="pre">1243),</span> <span class="pre">(1243,</span> <span class="pre">1258),</span> <span class="pre">(1258,</span> <span class="pre">1273),</span> <span class="pre">(1273,</span> <span class="pre">1288),</span> <span class="pre">(1288,</span> <span class="pre">1303),</span> <span class="pre">(1303,</span> <span class="pre">1318),</span> <span class="pre">(1318,</span> <span class="pre">1333),</span> <span class="pre">(1333,</span> <span class="pre">1348),</span> <span class="pre">(1348,</span> <span class="pre">1363),</span> <span class="pre">(1363,</span> <span class="pre">1378),</span> <span class="pre">(1378,</span> <span class="pre">1393),</span> <span class="pre">(1393,</span> <span class="pre">1408),</span> <span class="pre">(1408,</span> <span class="pre">1423),</span> <span class="pre">(1423,</span> <span class="pre">1438),</span> <span class="pre">(1438,</span> <span class="pre">1453),</span> <span class="pre">(1453,</span> <span class="pre">1468),</span> <span class="pre">(1468,</span> <span class="pre">1483),</span> <span class="pre">(1483,</span> <span class="pre">1498),</span> <span class="pre">(1498,</span> <span class="pre">1513),</span> <span class="pre">(1513,</span> <span class="pre">1528),</span> <span class="pre">(1528,</span> <span class="pre">1543),</span> <span class="pre">(1543,</span> <span class="pre">1558),</span> <span class="pre">(1558,</span> <span class="pre">1573),</span> <span class="pre">(1573,</span> <span class="pre">1588),</span> <span class="pre">(1588,</span> <span class="pre">1603),</span> <span class="pre">(1603,</span> <span class="pre">1618),</span> <span class="pre">(1618,</span> <span class="pre">1633),</span> <span class="pre">(1633,</span> <span class="pre">1648),</span> <span class="pre">(1648,</span> <span class="pre">1663),</span> <span class="pre">(1663,</span> <span class="pre">1678),</span> <span class="pre">(1678,</span> <span class="pre">1693),</span> <span class="pre">(1693,</span> <span class="pre">1708),</span> <span class="pre">(1708,</span> <span class="pre">1723),</span> <span class="pre">(1723,</span> <span class="pre">1738),</span> <span class="pre">(1738,</span> <span class="pre">1753),</span> <span class="pre">(1753,</span> <span class="pre">1768),</span> <span class="pre">(1768,</span> <span class="pre">1783),</span> <span class="pre">(1783,</span> <span class="pre">1798),</span> <span class="pre">(1798,</span> <span class="pre">1813),</span> <span class="pre">(1813,</span> <span class="pre">1828),</span> <span class="pre">(1828,</span> <span class="pre">1843),</span> <span class="pre">(1843,</span> <span class="pre">1858),</span> <span class="pre">(1858,</span> <span class="pre">1873),</span> <span class="pre">(1873,</span> <span class="pre">1888),</span> <span class="pre">(1888,</span> <span class="pre">1903),</span> <span class="pre">(1903,</span> <span class="pre">1918),</span> <span class="pre">(1918,</span> <span class="pre">1933),</span> <span class="pre">(1933,</span> <span class="pre">1948),</span> <span class="pre">(1948,</span> <span class="pre">1963),</span> <span class="pre">(1963,</span> <span class="pre">1978),</span> <span class="pre">(1978,</span> <span class="pre">1993),</span> <span class="pre">(1993,</span> <span class="pre">2008),</span> <span class="pre">(2008,</span> <span class="pre">2023),</span> <span class="pre">(2023,</span> <span class="pre">2038),</span> <span class="pre">(2038,</span> <span class="pre">2053),</span> <span class="pre">(2053,</span> <span class="pre">2068),</span> <span class="pre">(2068,</span> <span class="pre">2083),</span> <span class="pre">(2083,</span> <span class="pre">2098),</span> <span class="pre">(2098,</span> <span class="pre">2113),</span> <span class="pre">(2113,</span> <span class="pre">2128),</span> <span class="pre">(2128,</span> <span class="pre">2143),</span> <span class="pre">(2143,</span> <span class="pre">2158),</span> <span class="pre">(2158,</span> <span class="pre">2173),</span> <span class="pre">(2173,</span> <span class="pre">2188),</span> <span class="pre">(2188,</span> <span class="pre">2203),</span> <span class="pre">(2203,</span> <span class="pre">2218),</span> <span class="pre">(2218,</span> <span class="pre">2233),</span> <span class="pre">(2233,</span> <span class="pre">2248),</span> <span class="pre">(2248,</span> <span class="pre">2263),</span> <span class="pre">(2263,</span> <span class="pre">2278),</span> <span class="pre">(2278,</span> <span class="pre">2293),</span> <span class="pre">(2293,</span> <span class="pre">2308),</span> <span class="pre">(2308,</span> <span class="pre">2323),</span> <span class="pre">(2323,</span> <span class="pre">2338),</span> <span class="pre">(2338,</span> <span class="pre">2353),</span> <span class="pre">(2353,</span> <span class="pre">2368),</span> <span class="pre">(2368,</span> <span class="pre">2383),</span> <span class="pre">(2383,</span> <span class="pre">2398),</span> <span class="pre">(2398,</span> <span class="pre">2413),</span> <span class="pre">(2413,</span> <span class="pre">2428),</span> <span class="pre">(2428,</span> <span class="pre">2443),</span> <span class="pre">(2443,</span> <span class="pre">2458),</span> <span class="pre">(2458,</span> <span class="pre">2473),</span> <span class="pre">(2473,</span> <span class="pre">2488),</span> <span class="pre">(2488,</span> <span class="pre">2503),</span> <span class="pre">(2503,</span> <span class="pre">2518),</span> <span class="pre">(2518,</span> <span class="pre">2533),</span> <span class="pre">(2533,</span> <span class="pre">2548),</span> <span class="pre">(2548,</span> <span class="pre">2563),</span> <span class="pre">(2563,</span> <span class="pre">2578),</span> <span class="pre">(2578,</span> <span class="pre">2593),</span> <span class="pre">(2593,</span> <span class="pre">2608),</span> <span class="pre">(2608,</span> <span class="pre">2623),</span> <span class="pre">(2623,</span> <span class="pre">2638),</span> <span class="pre">(2638,</span> <span class="pre">2653),</span> <span class="pre">(2653,</span> <span class="pre">2668),</span> <span class="pre">(2668,</span> <span class="pre">2683),</span> <span class="pre">(2683,</span> <span class="pre">2698),</span> <span class="pre">(2698,</span> <span class="pre">2713),</span> <span class="pre">(2713,</span> <span class="pre">2728),</span> <span class="pre">(2728,</span> <span class="pre">2743),</span> <span class="pre">(2743,</span> <span class="pre">2758),</span> <span class="pre">(2758,</span> <span class="pre">2773),</span> <span class="pre">(2773,</span> <span class="pre">2788),</span> <span class="pre">(2788,</span> <span class="pre">2803),</span> <span class="pre">(2803,</span> <span class="pre">2818),</span> <span class="pre">(2818,</span> <span class="pre">2833),</span> <span class="pre">(2833,</span> <span class="pre">2848),</span> <span class="pre">(2848,</span> <span class="pre">2863),</span> <span class="pre">(2863,</span> <span class="pre">2878),</span> <span class="pre">(2878,</span> <span class="pre">2893),</span> <span class="pre">(2893,</span> <span class="pre">2908),</span> <span class="pre">(2908,</span> <span class="pre">2923),</span> <span class="pre">(2923,</span> <span class="pre">2938),</span> <span class="pre">(2938,</span> <span class="pre">2953),</span> <span class="pre">(2953,</span> <span class="pre">2968),</span> <span class="pre">(2968,</span> <span class="pre">2983),</span> <span class="pre">(2983,</span> <span class="pre">2998),</span> <span class="pre">(2998,</span> <span class="pre">3013),</span> <span class="pre">(3013,</span> <span class="pre">3028),</span> <span class="pre">(3028,</span> <span class="pre">3043),</span> <span class="pre">(3043,</span> <span class="pre">3058),</span> <span class="pre">(3058,</span> <span class="pre">3073),</span> <span class="pre">(3073,</span> <span class="pre">3088),</span> <span class="pre">(3088,</span> <span class="pre">3103),</span> <span class="pre">(3103,</span> <span class="pre">3118),</span> <span class="pre">(3118,</span> <span class="pre">3133),</span> <span class="pre">(3133,</span> <span class="pre">3148),</span> <span class="pre">(3148,</span> <span class="pre">3163),</span> <span class="pre">(3163,</span> <span class="pre">3178),</span> <span class="pre">(3178,</span> <span class="pre">3193),</span> <span class="pre">(3193,</span> <span class="pre">3208),</span> <span class="pre">(3208,</span> <span class="pre">3223),</span> <span class="pre">(3223,</span> <span class="pre">3238),</span> <span class="pre">(3238,</span> <span class="pre">3253),</span> <span class="pre">(3253,</span> <span class="pre">3268),</span> <span class="pre">(3268,</span> <span class="pre">3283),</span> <span class="pre">(3283,</span> <span class="pre">3298),</span> <span class="pre">(3298,</span> <span class="pre">3313),</span> <span class="pre">(3313,</span> <span class="pre">3328),</span> <span class="pre">(3328,</span> <span class="pre">3343),</span> <span class="pre">(3343,</span> <span class="pre">3358),</span> <span class="pre">(3358,</span> <span class="pre">3373),</span> <span class="pre">(3373,</span> <span class="pre">3388),</span> <span class="pre">(3388,</span> <span class="pre">3403),</span> <span class="pre">(3403,</span> <span class="pre">3418),</span> <span class="pre">(3418,</span> <span class="pre">3433),</span> <span class="pre">(3433,</span> <span class="pre">3448),</span> <span class="pre">(3448,</span> <span class="pre">3463),</span> <span class="pre">(3463,</span> <span class="pre">3478)]</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.BraColspecsEnum.PNADC" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.CountryEnum">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socio4health.enums.data_info_enum.</span></span><span class="sig-name descname"><span class="pre">CountryEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socio4health/enums/data_info_enum.html#CountryEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socio4health.enums.data_info_enum.CountryEnum" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.CountryEnum.BRAZIL">
+<span class="sig-name descname"><span class="pre">BRAZIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'BRA'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.CountryEnum.BRAZIL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.CountryEnum.COLOMBIA">
+<span class="sig-name descname"><span class="pre">COLOMBIA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'COL'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.CountryEnum.COLOMBIA" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.CountryEnum.DOMINICAN_REPUBLIC">
+<span class="sig-name descname"><span class="pre">DOMINICAN_REPUBLIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DOM'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.CountryEnum.DOMINICAN_REPUBLIC" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.CountryEnum.PERU">
+<span class="sig-name descname"><span class="pre">PERU</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PER'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.CountryEnum.PERU" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.NameEnum">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socio4health.enums.data_info_enum.</span></span><span class="sig-name descname"><span class="pre">NameEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socio4health/enums/data_info_enum.html#NameEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socio4health.enums.data_info_enum.NameEnum" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.NameEnum.ENAHO">
+<span class="sig-name descname"><span class="pre">ENAHO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ENAHO'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.NameEnum.ENAHO" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.NameEnum.ENHOGAR">
+<span class="sig-name descname"><span class="pre">ENHOGAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ENHOGAR'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.NameEnum.ENHOGAR" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.NameEnum.GEIH">
+<span class="sig-name descname"><span class="pre">GEIH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GEIH'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.NameEnum.GEIH" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.NameEnum.PNAD">
+<span class="sig-name descname"><span class="pre">PNAD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PNAD'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.NameEnum.PNAD" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.data_info_enum.NameEnum.PNADC">
+<span class="sig-name descname"><span class="pre">PNADC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PNADC'</span></em><a class="headerlink" href="#socio4health.enums.data_info_enum.NameEnum.PNADC" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-socio4health.enums.dict_enum">
+<span id="socio4health-enums-dict-enum"></span><h3>socio4health.enums.dict_enum<a class="headerlink" href="#module-socio4health.enums.dict_enum" title="Link to this heading">#</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="socio4health.enums.dict_enum.ColumnMappingEnum">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">socio4health.enums.dict_enum.</span></span><span class="sig-name descname"><span class="pre">ColumnMappingEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/socio4health/enums/dict_enum.html#ColumnMappingEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#socio4health.enums.dict_enum.ColumnMappingEnum" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.dict_enum.ColumnMappingEnum.CATEGORY">
+<span class="sig-name descname"><span class="pre">CATEGORY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'category'</span></em><a class="headerlink" href="#socio4health.enums.dict_enum.ColumnMappingEnum.CATEGORY" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="socio4health.enums.dict_enum.ColumnMappingEnum.VARIABLE_NAME">
+<span class="sig-name descname"><span class="pre">VARIABLE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'variable_name'</span></em><a class="headerlink" href="#socio4health.enums.dict_enum.ColumnMappingEnum.VARIABLE_NAME" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-socio4health.enums.data_info_enum">socio4health.enums.data_info_enum</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.BraColnamesEnum"><code class="docutils literal notranslate"><span class="pre">BraColnamesEnum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.BraColnamesEnum.PNADC"><code class="docutils literal notranslate"><span class="pre">BraColnamesEnum.PNADC</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.BraColspecsEnum"><code class="docutils literal notranslate"><span class="pre">BraColspecsEnum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.BraColspecsEnum.PNADC"><code class="docutils literal notranslate"><span class="pre">BraColspecsEnum.PNADC</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.CountryEnum"><code class="docutils literal notranslate"><span class="pre">CountryEnum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.CountryEnum.BRAZIL"><code class="docutils literal notranslate"><span class="pre">CountryEnum.BRAZIL</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.CountryEnum.COLOMBIA"><code class="docutils literal notranslate"><span class="pre">CountryEnum.COLOMBIA</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.CountryEnum.DOMINICAN_REPUBLIC"><code class="docutils literal notranslate"><span class="pre">CountryEnum.DOMINICAN_REPUBLIC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.CountryEnum.PERU"><code class="docutils literal notranslate"><span class="pre">CountryEnum.PERU</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.NameEnum"><code class="docutils literal notranslate"><span class="pre">NameEnum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.NameEnum.ENAHO"><code class="docutils literal notranslate"><span class="pre">NameEnum.ENAHO</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.NameEnum.ENHOGAR"><code class="docutils literal notranslate"><span class="pre">NameEnum.ENHOGAR</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.NameEnum.GEIH"><code class="docutils literal notranslate"><span class="pre">NameEnum.GEIH</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.NameEnum.PNAD"><code class="docutils literal notranslate"><span class="pre">NameEnum.PNAD</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.data_info_enum.NameEnum.PNADC"><code class="docutils literal notranslate"><span class="pre">NameEnum.PNADC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-socio4health.enums.dict_enum">socio4health.enums.dict_enum</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.dict_enum.ColumnMappingEnum"><code class="docutils literal notranslate"><span class="pre">ColumnMappingEnum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.dict_enum.ColumnMappingEnum.CATEGORY"><code class="docutils literal notranslate"><span class="pre">ColumnMappingEnum.CATEGORY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#socio4health.enums.dict_enum.ColumnMappingEnum.VARIABLE_NAME"><code class="docutils literal notranslate"><span class="pre">ColumnMappingEnum.VARIABLE_NAME</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/socio4health.enums.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -16,6 +16,17 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+# Optionally append the changelog to the long description so PyPI shows it
+changelog_path = path.join(here, 'CHANGELOG.md')
+try:
+    with open(changelog_path, encoding='utf-8') as f:
+        changelog = f.read()
+    # Separate README and changelog with a horizontal rule for readability
+    long_description = long_description + "\n\n---\n\n" + changelog
+except FileNotFoundError:
+    # If changelog is missing, continue without it
+    changelog = None
+
 # Arguments marked as "Required" below must be included for upload to PyPI.
 # Fields marked as "Optional" may be commented out.
 
@@ -28,7 +39,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.7',  # Required
+    version='1.0.0',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -203,5 +214,6 @@ setup(
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/harmonize-tools/socio4health/issues',
         'Source': 'https://github.com/harmonize-tools/socio4health/',
+        'Changelog': 'https://github.com/harmonize-tools/socio4health/blob/main/CHANGELOG.md',
     },
 )

@@ -1,8 +1,24 @@
 How to use socio4health GUI
 =====================================================
 
-For those who prefer a graphical user interface (GUI) over coding, the `Socio4Health GUI <https://harmonize-tools.github.io/socio4health/user_interface.html>`_ provides an easy-to-use platform for data harmonization. This tutorial will guide you through the steps of using a the GUI to export, manage, and harmonize demographic and socioeconomic data.
+For those who prefer a graphical user interface (GUI) over coding, the `Socio4Health GUI <https://github.com/harmonize-tools/interfaz_s4h>`_ provides an easy-to-use platform for data harmonization. This tutorial will guide you through the steps of using a the GUI to export, manage, and harmonize demographic and socioeconomic data.
 
+
+Installation
+-----------------
+To use the Socio4Health GUI, you need to fork or clone the `interfaz_s4h repository <https://github.com/harmonize-tools/interfaz_s4h>`_ from GitHub. Once you have the repository on your local machine, navigate to the project directory and install the required dependencies using the following command:
+.. code-block:: bash
+
+   pip install -r requirements.txt
+After installing the dependencies, you can run the GUI by executing the following command in your terminal:
+.. code-block:: bash
+
+   streamlit run Home.py
+
+This will launch the GUI in your default web browser, allowing you to interact with the application.
+
+Using the GUI
+-----------------
 
 1. Standardize the raw dictionary
 -------------------------------------

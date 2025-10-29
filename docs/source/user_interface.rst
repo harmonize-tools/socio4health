@@ -9,11 +9,13 @@ Installation
 To use the Socio4Health GUI, you need to fork or clone the `interfaz_s4h repository <https://github.com/harmonize-tools/interfaz_s4h>`_ from GitHub. Once you have the repository on your local machine, navigate to the project directory and install the required dependencies using the following command:
 
 .. code-block:: bash
+
    pip install -r requirements.txt
 
 After installing the dependencies, you can run the GUI by executing the following command in your terminal:
 
 .. code-block:: bash
+
    streamlit run Home.py
 
 This will launch the GUI in your default web browser, allowing you to interact with the application.

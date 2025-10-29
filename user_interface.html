@@ -1,0 +1,604 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to use socio4health GUI &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_interface';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Extraction of Colombia, Brazil and Peru online data" href="notebooks/extractor.html" />
+    <link rel="prev" title="Examples" href="examples.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="API_reference.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Extractor.html">socio4health.Extractor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.extractor.s4h_get_default_data_dir.html">socio4health.extractor.s4h_get_default_data_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Extractor.s4h_extract.html">socio4health.Extractor.s4h_extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Extractor.s4h_delete_download_folder.html">socio4health.Extractor.s4h_delete_download_folder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.html">socio4health.Harmonizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.s4h_vertical_merge.html">socio4health.Harmonizer.s4h_vertical_merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.s4h_get_available_columns.html">socio4health.Harmonizer.s4h_get_available_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.s4h_harmonize_dataframes.html">socio4health.Harmonizer.s4h_harmonize_dataframes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.s4h_data_selector.html">socio4health.Harmonizer.s4h_data_selector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.s4h_compare_with_dict.html">socio4health.Harmonizer.s4h_compare_with_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.Harmonizer.s4h_join_data.html">socio4health.Harmonizer.s4h_join_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.extractor_utils.compressed2files.html">socio4health.utils.extractor_utils.compressed2files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.extractor_utils.download_request.html">socio4health.utils.extractor_utils.download_request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.extractor_utils.s4h_parse_fwf_dict.html">socio4health.utils.extractor_utils.s4h_parse_fwf_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.extractor_utils.run_standard_spider.html">socio4health.utils.extractor_utils.run_standard_spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.harmonizer_utils.s4h_classify_rows.html">socio4health.utils.harmonizer_utils.s4h_classify_rows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.harmonizer_utils.s4h_get_classifier.html">socio4health.utils.harmonizer_utils.s4h_get_classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.harmonizer_utils.s4h_standardize_dict.html">socio4health.utils.harmonizer_utils.s4h_standardize_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.harmonizer_utils.s4h_translate_column.html">socio4health.utils.harmonizer_utils.s4h_translate_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.standard_spider.StandardSpider.html">socio4health.utils.standard_spider.StandardSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.utils.standard_spider.StandardSpider.parse.html">socio4health.utils.standard_spider.StandardSpider.parse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.enums.data_info_enum.html">socio4health.enums.data_info_enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.enums.data_info_enum.BraColspecsEnum.html">socio4health.enums.data_info_enum.BraColspecsEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.enums.data_info_enum.CountryEnum.html">socio4health.enums.data_info_enum.CountryEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.enums.data_info_enum.NameEnum.html">socio4health.enums.data_info_enum.NameEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socio4health.enums.dict_enum.ColumnMappingEnum.html">socio4health.enums.dict_enum.ColumnMappingEnum</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="examples.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">How to use socio4health GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/extractor.html">Extraction of Colombia, Brazil and Peru online data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/harmonization.html">Harmonization of data (Brazil)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="dictionary.html">How to create a raw dictionary for data harmonization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/example_colombia.html">Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/example_brazil.html">Hands-on with socio4health: effects of hydrometeorological hazards and urbanization on dengue risk in Brazil</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">How to use socio4health GUI</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-use-socio4health-gui">
+<h1>How to use socio4health GUI<a class="headerlink" href="#how-to-use-socio4health-gui" title="Link to this heading">#</a></h1>
+<p>For those who prefer a graphical user interface (GUI) over coding, the <a class="reference external" href="https://github.com/harmonize-tools/interfaz_s4h">Socio4Health GUI</a> provides an easy-to-use platform for data harmonization. This tutorial will guide you through the steps of using a the GUI to <strong>export</strong>, <strong>manage</strong>, and <strong>harmonize</strong> demographic and socioeconomic data.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<p>To use the Socio4Health GUI, you need to fork or clone the <a class="reference external" href="https://github.com/harmonize-tools/interfaz_s4h">interfaz_s4h repository</a> from GitHub. Once you have the repository on your local machine, navigate to the project directory and install the required dependencies using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<p>After installing the dependencies, you can run the GUI by executing the following command in your terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>streamlit<span class="w"> </span>run<span class="w"> </span>Home.py
+</pre></div>
+</div>
+<p>This will launch the GUI in your default web browser, allowing you to interact with the application.</p>
+</section>
+<section id="using-the-gui">
+<h2>Using the GUI<a class="headerlink" href="#using-the-gui" title="Link to this heading">#</a></h2>
+</section>
+<section id="standardize-the-raw-dictionary">
+<h2>1. Standardize the raw dictionary<a class="headerlink" href="#standardize-the-raw-dictionary" title="Link to this heading">#</a></h2>
+<p>In the side menu, click on the <strong>Dictionary Standardization</strong> option. This will take you to a new page where you can upload your raw dictionary file.</p>
+<a class="reference internal image-reference" href="_images/dic_standard.png"><img alt="CSV file structure" class="align-center" src="_images/dic_standard.png" style="width: 600px;" />
+</a>
+<p>Here you can upload your raw dictionary file in <code class="docutils literal notranslate"><span class="pre">CSV</span></code> or Excel format. The raw dictionary should contain the following columns: <strong>question</strong>, <strong>variable_name</strong>, <strong>value</strong>, <strong>description</strong>, and <strong>possible_answers</strong>. Before uploading, ensure that your file is properly formatted and contains all the necessary information. Follow the <a class="reference external" href="https://harmonize-tools.github.io/socio4health/dictionary.html">dictionary creation tutorial</a> to create your raw dictionary.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case it is a Fixed Width File (<code class="docutils literal notranslate"><span class="pre">FWF</span></code>), you can process it by clicking on the <strong>Is this a fixed width file?</strong> sliding.</p>
+</div>
+<p>Once the file is uploaded, click on the <strong>Standardize Dictionary</strong> button. The GUI will process the file, standardize the dictionary according to the required format and load it into the system for further processing.</p>
+<a class="reference internal image-reference" href="_images/dic_standard2.png"><img alt="CSV file structure" class="align-center" src="_images/dic_standard2.png" style="width: 600px;" />
+</a>
+<p>If needed, you can download the standardized dictionary by clicking on the <strong>Download Standardized Dictionary</strong> button. This will allow you to save a copy of the standardized dictionary as a <code class="docutils literal notranslate"><span class="pre">CSV</span></code> file for your records or for further analysis.</p>
+</section>
+<section id="data-extraction">
+<h2>2.  Data Extraction<a class="headerlink" href="#data-extraction" title="Link to this heading">#</a></h2>
+<p>Choose the data source from the dropdown menu. The available options are: <strong>Internet (URL)</strong>, <strong>Local file</strong>, <strong>Example Brazil Census 2010</strong>, and <strong>Example Colombia Housing Survey 2021</strong>.</p>
+<a class="reference internal image-reference" href="_images/extractor.png"><img alt="extract data from URL" class="align-center" src="_images/extractor.png" style="width: 600px;" />
+</a>
+<p>If you select <strong>Internet (URL)</strong>, you will need to provide the <code class="docutils literal notranslate"><span class="pre">URL</span></code> of the data file you want to upload. Additionally, you can specify any relevant keywords, file extensions to look for, scraping depth and whether the file is a fixed width file (<code class="docutils literal notranslate"><span class="pre">FWF</span></code>).
+Also make sure to set <code class="docutils literal notranslate"><span class="pre">CSV</span></code> parameters such as the separator and the encoding. Once you have filled in all the required information, click on the <strong>Extract Data from URL (or File)</strong> button to start the data extraction process.</p>
+<a class="reference internal image-reference" href="_images/ext_2.png"><img alt="extract data from URL" class="align-center" src="_images/ext_2.png" style="width: 600px;" />
+</a>
+</section>
+<section id="data-harmonization">
+<h2>3. Data Harmonization<a class="headerlink" href="#data-harmonization" title="Link to this heading">#</a></h2>
+<p>Once you have extracted the data, you can proceed to harmonize it. Click on the <strong>Harmonization</strong> option in the side menu to access the harmonization page.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="examples.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="notebooks/extractor.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Extraction of Colombia, Brazil and Peru online data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-gui">Using the GUI</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardize-the-raw-dictionary">1. Standardize the raw dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-extraction">2.  Data Extraction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-harmonization">3. Data Harmonization</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/user_interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

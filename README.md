@@ -17,7 +17,7 @@ maturing](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https
 license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/harmonize-tools/socio4health/blob/main/LICENSE.md/)
 [![GitHub
 contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4health)](https://github.com/harmonize-tools/socio4health/graphs/contributors)
-![commits](https://badgen.net/github/commits/harmonize-tools/socio4health/main)
+![commits](https://img.shields.io/github/commit-activity/t/harmonize-tools/socio4health)
 <!-- badges: end -->
 
 ## Overview  

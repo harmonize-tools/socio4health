@@ -233,7 +233,7 @@ def s4h_get_classifier(MODEL_PATH: str) -> Pipeline:
         _classifier = pipeline("text-classification", model=MODEL_PATH, tokenizer=MODEL_PATH, device=device)
     return _classifier
 
-def s4h_classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_column_name: str = "category",
+def s4h_classify_rows(data: pd.DataFrame, col1: str, col2: str=None, col3: str=None, new_column_name: str = "category",
         MODEL_PATH: str = "./bert_finetuned_classifier") -> pd.DataFrame:
     """
     Classify each row using a fine-tuned multiclass classification ``BERT`` model.
@@ -263,8 +263,10 @@ def s4h_classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_c
 
     if not isinstance(data, pd.DataFrame):
         raise TypeError("data must be a pandas.DataFrame.")
+    
+    text_columns = [c for c in (col1, col2, col3) if c is not None]
 
-    for col in (col1, col2, col3):
+    for col in text_columns:
         if not isinstance(col, str):
             raise TypeError("The parameters col1, col2 and col3 must be strings.")
         if col not in data.columns:
@@ -282,11 +284,13 @@ def s4h_classify_rows(data: pd.DataFrame, col1: str, col2: str, col3: str, new_c
     classifier = s4h_get_classifier(MODEL_PATH)
 
     def classify_row(row):
-        valid_parts = [
-            str(x).strip()
-            for x in [row[col1], row[col2], row[col3]]
-            if isinstance(x, str) and x.strip() and x.strip().lower() != "not applicable"
-        ]
+        valid_parts = []
+        for col in text_columns:
+            x = row[col]
+            if isinstance(x, str):
+                x = x.strip()
+                if x and x.lower() != "not applicable":
+                    valid_parts.append(x)
         if not valid_parts:
             return ""
 

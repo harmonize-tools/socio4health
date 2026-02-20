@@ -644,7 +644,12 @@ class Harmonizer:
 
     def s4h_join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
         """
-        Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified ``key_col``, removing duplicate columns.
+        Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified ``join_key``.
+
+        The method supports a single-column join key (string) or a composite join key
+        provided as a list/tuple of column names. When composite keys are used, a
+        temporary concatenated key column is created for internal use and removed
+        from the final result.
 
         Parameters
         ----------
@@ -658,38 +663,92 @@ class Harmonizer:
         """
         pandas_dfs = [df.compute() for df in ddfs]
 
+        # support composite join keys
+        def _make_temp_key(df: pd.DataFrame, key) -> str:
+            """Create a temporary join column in df based on key (str or list).
+
+            Returns the temporary column name. The column is created in-place.
+            """
+            if isinstance(key, (list, tuple)):
+                for k in key:
+                    if k not in df.columns:
+                        raise KeyError(f"Join key part '{k}' not found in DataFrame")
+                temp = "__s4h_join_key__"
+                # ensure no collision
+                counter = 0
+                while temp in df.columns:
+                    counter += 1
+                    temp = f"__s4h_join_key__{counter}__"
+
+                df[temp] = (
+                    df[list(key)].astype(str).fillna("")
+                      .agg("||".join, axis=1)
+                )
+                return temp
+            else:
+                if key not in df.columns:
+                    raise KeyError(f"Join key '{key}' not found in DataFrame")
+                return key
+
         def identify_primary_df(dfs):
             candidates = []
 
             for i, df in enumerate(dfs):
-                if self.join_key not in df.columns:
+                try:
+                    temp_key = _make_temp_key(df, self.join_key)
+                except KeyError:
                     continue
 
                 total_rows = len(df)
-                unique_rows = df[self.join_key].nunique()
-                uniqueness_ratio = unique_rows / total_rows
+                unique_rows = df[temp_key].nunique()
+                uniqueness_ratio = unique_rows / total_rows if total_rows > 0 else 0
 
-                df[self.join_key].to_csv(f"data/directories_{df.index.name or 'index'}.csv", index=False)
                 logging.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
                 if uniqueness_ratio > 0.9:
-                    candidates.append((i, df.copy(), uniqueness_ratio))
+                    candidates.append((i, df.copy(), temp_key, uniqueness_ratio))
 
             if not candidates:
                 logging.error("No table with nearly-unique key found")
+                # fallback: use first dataframe and create temp key there
+                temp_key = _make_temp_key(dfs[0], self.join_key)
+                dfs[0] = dfs[0].drop_duplicates(subset=[temp_key], keep='first')
+                return dfs
 
-            candidates.sort(key=lambda x: x[2], reverse=True)
-            original_index, primary_df, _ = candidates[0]
+            candidates.sort(key=lambda x: x[3], reverse=True)
+            original_index, primary_df, temp_key, _ = candidates[0]
 
-            primary_df = primary_df.drop_duplicates(subset=[self.join_key], keep='first')
+            primary_df = primary_df.drop_duplicates(subset=[temp_key], keep='first')
             dfs.pop(original_index)
             dfs.insert(0, primary_df)
 
             return dfs
 
+        # create temp join keys where needed and track them for cleanup
+        temp_keys = {}
+        for i, df in enumerate(pandas_dfs):
+            if isinstance(self.join_key, (list, tuple)):
+                temp_keys[i] = _make_temp_key(df, self.join_key)
+            else:
+                if self.join_key not in df.columns:
+                    # leave unmodified; identify_primary_df will skip if key not present
+                    temp_keys[i] = None
+                else:
+                    temp_keys[i] = self.join_key
+
+        # make sure the dfs we pass to identify_primary_df are the modified ones
         ordered_dfs = identify_primary_df(pandas_dfs)
 
+        # determine actual key name used in ordered_dfs[0]
+        if isinstance(self.join_key, (list, tuple)):
+            actual_key = [c for c in ordered_dfs[0].columns if c.startswith("__s4h_join_key__")]
+            if not actual_key:
+                raise RuntimeError("Temporary join key was not created as expected")
+            actual_key = actual_key[0]
+        else:
+            actual_key = self.join_key
+
         merged_df = pd.merge(ordered_dfs[0], ordered_dfs[1],
-                             on=self.join_key,
+                             on=actual_key,
                              how='outer',
                              suffixes=('', '_dup'))
 
@@ -697,19 +756,64 @@ class Harmonizer:
         merged_df = merged_df.drop(columns=dup_cols)
 
         for df in ordered_dfs[2:]:
-            if self.join_key not in df.columns:
-                raise KeyError(f"Join key '{self.join_key}' not found in DataFrame")
+            # find key in df (could be temp key or original)
+            if isinstance(self.join_key, (list, tuple)):
+                key_candidates = [c for c in df.columns if c.startswith("__s4h_join_key__")]
+                if not key_candidates:
+                    raise KeyError(f"Composite join key parts not found in DataFrame")
+                df_key = key_candidates[0]
+            else:
+                if self.join_key not in df.columns:
+                    raise KeyError(f"Join key '{self.join_key}' not found in DataFrame")
+                df_key = self.join_key
 
             original_cols = set(merged_df.columns)
 
-            if self.aux_key is not None and self.aux_key in df.columns:
-                merged_df = pd.merge(merged_df, df,
-                                     on=[self.join_key, self.aux_key],
-                                     how='outer',
-                                     suffixes=('', '_dup'))
+            # aux_key support (single column or list)
+            if self.aux_key is not None:
+                if isinstance(self.aux_key, (list, tuple)):
+                    # create temporary aux_key in merged_df and df if needed
+                    aux_temp_left = None
+                    aux_temp_right = None
+                    # ensure aux parts exist
+                    for part in self.aux_key:
+                        if part not in merged_df.columns and not any(part in d.columns for d in ordered_dfs):
+                            raise KeyError(f"Aux key part '{part}' not found in any DataFrame")
+                    # create concatenated aux in both frames
+                    aux_temp_left = '__s4h_aux_key_left__'
+                    counter = 0
+                    while aux_temp_left in merged_df.columns:
+                        counter += 1
+                        aux_temp_left = f"__s4h_aux_key_left__{counter}__"
+                    merged_df[aux_temp_left] = merged_df[list(self.aux_key)].astype(str).fillna("").agg('||'.join, axis=1)
+
+                    aux_temp_right = '__s4h_aux_key_right__'
+                    counter = 0
+                    while aux_temp_right in df.columns:
+                        counter += 1
+                        aux_temp_right = f"__s4h_aux_key_right__{counter}__"
+                    df[aux_temp_right] = df[list(self.aux_key)].astype(str).fillna("").agg('||'.join, axis=1)
+
+                    merged_df = pd.merge(merged_df, df,
+                                         left_on=[actual_key, aux_temp_left],
+                                         right_on=[df_key, aux_temp_right],
+                                         how='outer',
+                                         suffixes=('', '_dup'))
+
+                    # cleanup aux temps
+                    merged_df = merged_df.drop(columns=[aux_temp_left, aux_temp_right], errors='ignore')
+                else:
+                    if self.aux_key not in df.columns and self.aux_key not in merged_df.columns:
+                        raise KeyError(f"Aux key '{self.aux_key}' not found in DataFrame")
+                    merged_df = pd.merge(merged_df, df,
+                                         left_on=actual_key,
+                                         right_on=df_key if df_key == self.join_key else df_key,
+                                         how='outer',
+                                         suffixes=('', '_dup'))
             else:
                 merged_df = pd.merge(merged_df, df,
-                                     on=self.join_key,
+                                     left_on=actual_key,
+                                     right_on=df_key,
                                      how='outer',
                                      suffixes=('', '_dup'))
 
@@ -717,5 +821,10 @@ class Harmonizer:
                             if col.endswith('_dup') and
                             col.replace('_dup', '') in original_cols]
             merged_df = merged_df.drop(columns=new_dup_cols)
+
+        # drop any temporary join keys created
+        tmp_cols = [c for c in merged_df.columns if c.startswith('__s4h_join_key__') or c.startswith('__s4h_aux_key')]
+        if tmp_cols:
+            merged_df = merged_df.drop(columns=tmp_cols)
 
         return merged_df

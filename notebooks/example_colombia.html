@@ -1,0 +1,1706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/example_colombia';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Hands-on with socio4health: effects of hydrometeorologigcal hazards and urbanization on dengue risk in Brazil" href="example_brazil.html" />
+    <link rel="prev" title="How to create a raw dictionary for data harmonization" href="../dictionary.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../API_reference.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.html">socio4health.Extractor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.extractor.s4h_get_default_data_dir.html">socio4health.extractor.s4h_get_default_data_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.s4h_extract.html">socio4health.Extractor.s4h_extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.s4h_delete_download_folder.html">socio4health.Extractor.s4h_delete_download_folder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.html">socio4health.Harmonizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_vertical_merge.html">socio4health.Harmonizer.s4h_vertical_merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_get_available_columns.html">socio4health.Harmonizer.s4h_get_available_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_harmonize_dataframes.html">socio4health.Harmonizer.s4h_harmonize_dataframes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_data_selector.html">socio4health.Harmonizer.s4h_data_selector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_compare_with_dict.html">socio4health.Harmonizer.s4h_compare_with_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_join_data.html">socio4health.Harmonizer.s4h_join_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.compressed2files.html">socio4health.utils.extractor_utils.compressed2files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.download_request.html">socio4health.utils.extractor_utils.download_request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.s4h_parse_fwf_dict.html">socio4health.utils.extractor_utils.s4h_parse_fwf_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.run_standard_spider.html">socio4health.utils.extractor_utils.run_standard_spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_classify_rows.html">socio4health.utils.harmonizer_utils.s4h_classify_rows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_get_classifier.html">socio4health.utils.harmonizer_utils.s4h_get_classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_standardize_dict.html">socio4health.utils.harmonizer_utils.s4h_standardize_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_translate_column.html">socio4health.utils.harmonizer_utils.s4h_translate_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.html">socio4health.utils.standard_spider.StandardSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.parse.html">socio4health.utils.standard_spider.StandardSpider.parse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.html">socio4health.enums.data_info_enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.BraColspecsEnum.html">socio4health.enums.data_info_enum.BraColspecsEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.CountryEnum.html">socio4health.enums.data_info_enum.CountryEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.NameEnum.html">socio4health.enums.data_info_enum.NameEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.dict_enum.ColumnMappingEnum.html">socio4health.enums.dict_enum.ColumnMappingEnum</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../user_interface.html">How to use socio4health GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extractor.html">Extraction of Colombia, Brazil and Peru online data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harmonization.html">Harmonization of data (Brazil)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dictionary.html">How to create a raw dictionary for data harmonization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
+</ul>
+</details></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_brazil.html">Hands-on with socio4health: effects of hydrometeorological hazards and urbanization on dengue risk in Brazil</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="image info" height="100" width="100"/>
+<section id="hands-on-with-socio4health-socioeconomic-and-demographic-variables-on-dengue-incidence-in-colombia">
+<h1>Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia<a class="headerlink" href="#hands-on-with-socio4health-socioeconomic-and-demographic-variables-on-dengue-incidence-in-colombia" title="Link to this heading">#</a></h1>
+<p><strong>Run the tutorial via free cloud platforms:</strong> <a class="reference external" href="https://mybinder.org/v2/gh/harmonize-tools/socio4health/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Fsource%2Fnotebooks%2Fexample_colombia.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a> <a target="_blank" href="https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_colombia.ipynb">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a></p>
+<p>This notebook provides you with a real world example on how to use <strong>socio4health</strong> to <strong>retrieve</strong>, <strong>harmonize</strong> and <strong>analyze</strong> <strong>socioeconomic and demographic</strong> variables related to <strong>dengue</strong> incidence in Colombia and recreate the dataset used in the publication <em>Exploring Dengue Dynamics: A Multi-Scale Analysis of Spatio-Temporal Trends in Ibagué, Colombia</em> by Otelo et al., published in <em>Virus</em> in 2024 (<a class="reference external" href="https://doi.org/10.3390/v16060906">DOI</a>). This tutorial assumes you have an <strong>intermediate</strong> or <strong>advanced</strong> understanding of <strong>Python</strong> and data manipulation.</p>
+<section id="setting-up-the-environment">
+<h2>Setting up the environment<a class="headerlink" href="#setting-up-the-environment" title="Link to this heading">#</a></h2>
+<p>To run this notebook, you need to have the following prerequisites:</p>
+<ul class="simple">
+<li><p><strong>Python 3.10+</strong></p></li>
+</ul>
+<p>Additionally, you need to install the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas</span></code> package, which can be done using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>socio4health<span class="w"> </span>pandas<span class="w"> </span>-q
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[notice] A new release of pip is available: 25.1.1 -&gt; 25.2
+[notice] To update, run: python.exe -m pip install --upgrade pip
+</pre></div>
+</div>
+</div>
+</div>
+<p>In case you want to run this notebook in <strong>Google Colab</strong>, you also need to run the following command to use your files stored in <strong>Google Drive</strong>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="import-libraries">
+<h2>Import Libraries<a class="headerlink" href="#import-libraries" title="Link to this heading">#</a></h2>
+<p>To perform the data extraction, the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> library provides the <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class for data extraction, and the <code class="docutils literal notranslate"><span class="pre">Harmonizer</span></code> class for data harmonization of the retrieved date. <code class="docutils literal notranslate"><span class="pre">pandas</span></code> will be used for data manipulation. Additionally, we will use some utility functions from the <code class="docutils literal notranslate"><span class="pre">socio4health.utils.harmonizer_utils</span></code> module to standardize and translate the dictionary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.harmonizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harmonizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">harmonizer_utils</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-data-from-colombia">
+<h2>1. Extract data from Colombia<a class="headerlink" href="#extract-data-from-colombia" title="Link to this heading">#</a></h2>
+<p>To extract data from Colombia, use the <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class from the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> library. As in the publication, extract the Colombian National Population and Housing Census 2018 (<strong>CNPV 2018</strong>) dataset from the Colombian Nacional Administration of Statistics (<strong>DANE</strong>) website. The dataset is available at: https://microdatos.dane.gov.co/index.php/catalog/643/related-materials.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class requires the following parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_path</span></code>: The <code class="docutils literal notranslate"><span class="pre">URL</span></code> or local path to the data source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">down_ext</span></code>: A list of file extensions to download. This can include <code class="docutils literal notranslate"><span class="pre">.CSV</span></code>, <code class="docutils literal notranslate"><span class="pre">.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">.zip</span></code>, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_path</span></code>: The local path where the extracted data will be saved.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key_words</span></code>: A list of keywords to filter the files to be downloaded. In this case, we are only interested in the file <code class="docutils literal notranslate"><span class="pre">14045.zip</span></code>, which contains the data at the desired level of granularity (census block level or “Manzana”).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">depth</span></code>: The depth of the directory structure to traverse when downloading files. A depth of <code class="docutils literal notranslate"><span class="pre">0</span></code> means only the files in the specified directory will be downloaded.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col_online_extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="s2">&quot;https://microdatos.dane.gov.co/index.php/catalog/643/related-materials&quot;</span><span class="p">,</span>
+                                 <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;.cpg&#39;</span><span class="p">,</span> <span class="s1">&#39;.dbf&#39;</span><span class="p">,</span> <span class="s1">&#39;.prj&#39;</span><span class="p">,</span><span class="s1">&#39;.sbn&#39;</span><span class="p">,</span> <span class="s1">&#39;.sbx&#39;</span><span class="p">,</span> <span class="s1">&#39;.shx&#39;</span><span class="p">,</span> <span class="s1">&#39;.shp&#39;</span><span class="p">,</span> <span class="s1">&#39;.zip&#39;</span><span class="p">],</span>
+                                 <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;../CNVP2018&quot;</span><span class="p">,</span>
+                                 <span class="n">key_words</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;14045.zip&quot;</span><span class="p">],</span>
+                                 <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">col_CNPV</span> <span class="o">=</span> <span class="n">col_online_extractor</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-09-23 09:49:52,233 - INFO - ----------------------
+2025-09-23 09:49:52,235 - INFO - Starting data extraction...
+2025-09-23 09:49:52,236 - INFO - Extracting data in online mode...
+2025-09-23 09:49:52,236 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/643/related-materials with depth 0
+2025-09-23 09:49:56,948 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/643/related-materials
+2025-09-23 09:49:56,950 - INFO - Downloading files to: ../CNVP2018
+Downloading files:   0%|          | 0/1 [00:00&lt;?, ?it/s]2025-09-23 09:50:07,974 - INFO - Successfully downloaded: 14045.zip
+Downloading files: 100%|██████████| 1/1 [00:11&lt;00:00, 11.02s/it]
+2025-09-23 09:50:07,986 - INFO - Processing (depth 0): 14045.zip
+2025-09-23 09:50:15,101 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.cpg
+2025-09-23 09:50:17,199 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.dbf
+2025-09-23 09:50:17,204 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.prj
+2025-09-23 09:50:17,219 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.sbn
+2025-09-23 09:50:17,227 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.sbx
+2025-09-23 09:50:17,862 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.shp
+2025-09-23 09:50:17,886 - INFO - Extracted: 383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_ANM_MANZANA.shx
+Processing files:   0%|          | 0/7 [00:00&lt;?, ?it/s]2025-09-23 09:50:17,904 - WARNING - Unsupported extension: .cpg
+2025-09-23 09:50:17,906 - WARNING - Unsupported extension: .shx
+2025-09-23 09:50:17,909 - WARNING - Unsupported extension: .dbf
+2025-09-23 09:50:17,917 - WARNING - Unsupported extension: .prj
+Processing files:  71%|███████▏  | 5/7 [01:13&lt;00:29, 14.60s/it]2025-09-23 09:51:31,124 - WARNING - Unsupported extension: .sbn
+Processing files:  86%|████████▌ | 6/7 [01:13&lt;00:11, 11.41s/it]2025-09-23 09:51:31,132 - WARNING - Unsupported extension: .sbx
+Processing files: 100%|██████████| 7/7 [01:13&lt;00:00, 10.46s/it]
+2025-09-23 09:51:31,136 - INFO - Successfully processed 7/7 files
+2025-09-23 09:51:31,141 - INFO - Extraction completed successfully.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col_CNPV</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>COD_DANE_A</th>
+      <th>DPTO_CCDGO</th>
+      <th>MPIO_CCDGO</th>
+      <th>MPIO_CDPMP</th>
+      <th>CLAS_CCDGO</th>
+      <th>SETR_CCDGO</th>
+      <th>SETR_CCNCT</th>
+      <th>SECR_CCDGO</th>
+      <th>SECR_CCNCT</th>
+      <th>ZU_CCDGO</th>
+      <th>...</th>
+      <th>TP51_13_ED</th>
+      <th>TP51_99_ED</th>
+      <th>CD_LC_CM</th>
+      <th>NMB_LC_CM</th>
+      <th>TP_LC_CM</th>
+      <th>Shape_Leng</th>
+      <th>Shape_Area</th>
+      <th>COD_RDTM</th>
+      <th>geometry</th>
+      <th>filename</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0500210000000000010101</td>
+      <td>05</td>
+      <td>002</td>
+      <td>05002</td>
+      <td>1</td>
+      <td>000</td>
+      <td>050021000</td>
+      <td>00</td>
+      <td>05002100000</td>
+      <td>000</td>
+      <td>...</td>
+      <td>10.0</td>
+      <td>1.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002298</td>
+      <td>2.038760e-07</td>
+      <td>050021990000000000010101</td>
+      <td>POLYGON ((-75.42779 5.79423, -75.4278 5.79422,...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0500210000000000010102</td>
+      <td>05</td>
+      <td>002</td>
+      <td>05002</td>
+      <td>1</td>
+      <td>000</td>
+      <td>050021000</td>
+      <td>00</td>
+      <td>05002100000</td>
+      <td>000</td>
+      <td>...</td>
+      <td>19.0</td>
+      <td>4.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.003402</td>
+      <td>5.600867e-07</td>
+      <td>050021990000000000010102</td>
+      <td>POLYGON ((-75.42719 5.79421, -75.42715 5.79415...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0500210000000000010103</td>
+      <td>05</td>
+      <td>002</td>
+      <td>05002</td>
+      <td>1</td>
+      <td>000</td>
+      <td>050021000</td>
+      <td>00</td>
+      <td>05002100000</td>
+      <td>000</td>
+      <td>...</td>
+      <td>6.0</td>
+      <td>1.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002622</td>
+      <td>4.293780e-07</td>
+      <td>050021990000000000010103</td>
+      <td>POLYGON ((-75.42804 5.79294, -75.42807 5.79291...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0500210000000000010104</td>
+      <td>05</td>
+      <td>002</td>
+      <td>05002</td>
+      <td>1</td>
+      <td>000</td>
+      <td>050021000</td>
+      <td>00</td>
+      <td>05002100000</td>
+      <td>000</td>
+      <td>...</td>
+      <td>11.0</td>
+      <td>2.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002673</td>
+      <td>4.493171e-07</td>
+      <td>050021990000000000010104</td>
+      <td>POLYGON ((-75.42853 5.79348, -75.4286 5.79342,...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0500210000000000010105</td>
+      <td>05</td>
+      <td>002</td>
+      <td>05002</td>
+      <td>1</td>
+      <td>000</td>
+      <td>050021000</td>
+      <td>00</td>
+      <td>05002100000</td>
+      <td>000</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.001338</td>
+      <td>8.776894e-08</td>
+      <td>050021990000000000010105</td>
+      <td>POLYGON ((-75.4291 5.79393, -75.4291 5.79393, ...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>504991</th>
+      <td>9977320030102700010102</td>
+      <td>99</td>
+      <td>773</td>
+      <td>99773</td>
+      <td>2</td>
+      <td>003</td>
+      <td>997732003</td>
+      <td>01</td>
+      <td>99773200301</td>
+      <td>027</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002270</td>
+      <td>2.451366e-07</td>
+      <td>997732990030102700010102</td>
+      <td>POLYGON ((-69.85155 4.33427, -69.85149 4.33427...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>504992</th>
+      <td>9977320030102700010103</td>
+      <td>99</td>
+      <td>773</td>
+      <td>99773</td>
+      <td>2</td>
+      <td>003</td>
+      <td>997732003</td>
+      <td>01</td>
+      <td>99773200301</td>
+      <td>027</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002919</td>
+      <td>5.196303e-07</td>
+      <td>997732990030102700010103</td>
+      <td>POLYGON ((-69.85227 4.33365, -69.85257 4.3337,...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>504993</th>
+      <td>9977320030102700010104</td>
+      <td>99</td>
+      <td>773</td>
+      <td>99773</td>
+      <td>2</td>
+      <td>003</td>
+      <td>997732003</td>
+      <td>01</td>
+      <td>99773200301</td>
+      <td>027</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002938</td>
+      <td>3.280837e-07</td>
+      <td>997732990030102700010104</td>
+      <td>POLYGON ((-69.85276 4.33338, -69.85274 4.3336,...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>504994</th>
+      <td>9977320030102700010105</td>
+      <td>99</td>
+      <td>773</td>
+      <td>99773</td>
+      <td>2</td>
+      <td>003</td>
+      <td>997732003</td>
+      <td>01</td>
+      <td>99773200301</td>
+      <td>027</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002514</td>
+      <td>3.375903e-07</td>
+      <td>997732990030102700010105</td>
+      <td>POLYGON ((-69.85313 4.33348, -69.85311 4.33368...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+    <tr>
+      <th>504995</th>
+      <td>9977320030102700010106</td>
+      <td>99</td>
+      <td>773</td>
+      <td>99773</td>
+      <td>2</td>
+      <td>003</td>
+      <td>997732003</td>
+      <td>01</td>
+      <td>99773200301</td>
+      <td>027</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.002535</td>
+      <td>1.992453e-07</td>
+      <td>997732990030102700010106</td>
+      <td>POLYGON ((-69.85425 4.33397, -69.8541 4.33396,...</td>
+      <td>383d6920_MGN_NivelManzana_Integrado_CNPV_MGN_A...</td>
+    </tr>
+  </tbody>
+</table>
+<p>504996 rows × 111 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="load-and-standardize-the-dictionary">
+<h2>2. Load and standardize the dictionary<a class="headerlink" href="#load-and-standardize-the-dictionary" title="Link to this heading">#</a></h2>
+<p>To harmonize the data, provide a dictionary that describes the variables in the dataset. The CNPV 2018 dictionary is available at <a class="reference external" href="https://microdatos.dane.gov.co/index.php/catalog/643/download/14045">here</a>. Follow the steps in the tutorial <a class="reference external" href="https://harmonize-tools.github.io/socio4health/dictionary.html">“How to Create a Raw Dictionary for Data Harmonization”</a> to create a raw dictionary in Excel format.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_dic</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;raw_dic_mzn.xlsx&quot;</span><span class="p">)</span>
+<span class="n">raw_dic</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable_name</th>
+      <th>type</th>
+      <th>size</th>
+      <th>question</th>
+      <th>description</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>COD_DANE_A</td>
+      <td>Text</td>
+      <td>22.0</td>
+      <td>Código de manzana concatenado (departamento, m...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>DPTO_CCDGO</td>
+      <td>Text</td>
+      <td>2.0</td>
+      <td>Código del departamento</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>MPIO_CCDGO</td>
+      <td>Text</td>
+      <td>3.0</td>
+      <td>Código del municipio</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>MPIO_CDPMP</td>
+      <td>Text</td>
+      <td>5.0</td>
+      <td>Código concatenado que identifica al municipio</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>CLAS_CCDGO</td>
+      <td>Text</td>
+      <td>1.0</td>
+      <td>Código de la clase 1 cabecera municipal, 2 cen...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>TP51_13_ED</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>Conteo de personas donde el nivel educativo de...</td>
+      <td>Ninguno</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>TP51_99_ED</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>Conteo de personas donde el nivel educativo de...</td>
+      <td>Sin información</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>103</th>
+      <td>CD_LC_CM</td>
+      <td>Text</td>
+      <td>10.0</td>
+      <td>Código de la localidad o comuna</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>NMB_LC_CM</td>
+      <td>Text</td>
+      <td>50.0</td>
+      <td>Nombre de la localidad o comuna</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>105</th>
+      <td>TP_LC_CM</td>
+      <td>Text</td>
+      <td>20.0</td>
+      <td>Descripción de tipo localidad o comuna o corre...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>106 rows × 6 columns</p>
+</div></div></div>
+</div>
+<p>Standardize the dictionary using the <code class="docutils literal notranslate"><span class="pre">s4h_standardize_dict</span></code> function from the <code class="docutils literal notranslate"><span class="pre">harmonizer_utils</span></code> module. Then, translate it to English using the <code class="docutils literal notranslate"><span class="pre">s4h_translate_column</span></code> function from the same module (<strong>Note</strong>: This function depends on your internet connection and Google’s deep_translator extension, so it may take a few minutes). Finally, classify the variables into categories using a pre-trained <strong>BERT model</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_standardize_dict</span><span class="p">(</span><span class="n">raw_dic</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;possible_answers&quot;</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\isabe\PycharmProjects\socio4health\src\socio4health\utils\harmonizer_utils.py:98: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  .apply(_process_group, include_groups=True)\
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>question translated
+description translated
+possible_answers translated
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_classify_rows</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">&quot;question_en&quot;</span><span class="p">,</span> <span class="s2">&quot;description_en&quot;</span><span class="p">,</span> <span class="s2">&quot;possible_answers_en&quot;</span><span class="p">,</span>
+                                        <span class="n">new_column_name</span><span class="o">=</span><span class="s2">&quot;category&quot;</span><span class="p">,</span>
+                                        <span class="n">MODEL_PATH</span><span class="o">=</span><span class="s2">&quot;files/bert_finetuned_classifier&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Device set to use cpu
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is how the standardized and translated dictionary looks:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable_name</th>
+      <th>type</th>
+      <th>size</th>
+      <th>question</th>
+      <th>description</th>
+      <th>value</th>
+      <th>possible_answers</th>
+      <th>question_en</th>
+      <th>description_en</th>
+      <th>possible_answers_en</th>
+      <th>category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>VERSION</td>
+      <td>Long Integer</td>
+      <td>NaN</td>
+      <td>año de la información geográfica</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>year of geographical information</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>CTNENCUEST</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>cantidad de encuestas cnpv 2018</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Number of CNPV 2018 surveys</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>TP3_1_SI</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>cantidad de encuestas que reportaron estar en ...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>number of surveys that reported to be in ethni...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>TP3A_RI</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>cantidad de encuestas que reportaron estar en ...</td>
+      <td>resguardo indígena</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>number of surveys that reported to be in ethni...</td>
+      <td>Indigenous shelter</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>TP3B_TCN</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>cantidad de encuestas que reportaron estar en ...</td>
+      <td>tccn</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>number of surveys that reported to be in ethni...</td>
+      <td>TCCN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>DATO_ANM</td>
+      <td>Text</td>
+      <td>50.0</td>
+      <td>nombre capa anonimizada</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Anonymity layer name</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>NMB_LC_CM</td>
+      <td>Text</td>
+      <td>50.0</td>
+      <td>nombre de la localidad o comuna</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>locality or commune name</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>103</th>
+      <td>TP27_PERSO</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>número de personas</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>number of people</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>DENSIDAD</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>número promedio de habitantes en la manzana qu...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Average number of inhabitants in the apple liv...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>105</th>
+      <td>AREA</td>
+      <td>Double</td>
+      <td>NaN</td>
+      <td>área de la manzana en metros cuadrados (sistem...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Apple area in square meters (Magna_Colombia_bo...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Identification</td>
+    </tr>
+  </tbody>
+</table>
+<p>106 rows × 11 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="harmonize-the-data">
+<h2>3. Harmonize the data<a class="headerlink" href="#harmonize-the-data" title="Link to this heading">#</a></h2>
+<p>Use the Harmonizer class from the <strong>socio4health</strong> library to harmonize the data. First, set the similarity threshold to <code class="docutils literal notranslate"><span class="pre">0.9</span></code>, meaning that only variables with a similarity score of <code class="docutils literal notranslate"><span class="pre">0.9</span></code> or higher will be considered for harmonization. Next, set the <code class="docutils literal notranslate"><span class="pre">nan_threshold</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>, meaning that <strong>only variables with no missing values</strong> will be considered for harmonization.</p>
+<p>The available columns in the dataset can be checked using the <code class="docutils literal notranslate"><span class="pre">s4h_get_available_columns</span></code> method. This method takes a list of DataFrames as input and <strong>returns a list of column names that are present in the DataFrames</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="p">()</span>
+<span class="n">har</span><span class="o">.</span><span class="n">similarity_threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">har</span><span class="o">.</span><span class="n">nan_threshold</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">available_columns</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">s4h_get_available_columns</span><span class="p">(</span><span class="n">col_CNPV</span><span class="p">)</span>
+<span class="n">available_columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;AG_CCDGO&#39;,
+ &#39;AREA&#39;,
+ &#39;CD_LC_CM&#39;,
+ &#39;CLAS_CCDGO&#39;,
+ &#39;COD_DANE_A&#39;,
+ &#39;COD_RDTM&#39;,
+ &#39;CTNENCUEST&#39;,
+ &#39;DATO_ANM&#39;,
+ &#39;DENSIDAD&#39;,
+ &#39;DPTO_CCDGO&#39;,
+ &#39;LATITUD&#39;,
+ &#39;LONGITUD&#39;,
+ &#39;MANZ_CCDGO&#39;,
+ &#39;MPIO_CCDGO&#39;,
+ &#39;MPIO_CDPMP&#39;,
+ &#39;NMB_LC_CM&#39;,
+ &#39;PERSONAS_L&#39;,
+ &#39;PERSONAS_S&#39;,
+ &#39;SECR_CCDGO&#39;,
+ &#39;SECR_CCNCT&#39;,
+ &#39;SECU_CCDGO&#39;,
+ &#39;SECU_CCNCT&#39;,
+ &#39;SETR_CCDGO&#39;,
+ &#39;SETR_CCNCT&#39;,
+ &#39;SETU_CCDGO&#39;,
+ &#39;SETU_CCNCT&#39;,
+ &#39;Shape_Area&#39;,
+ &#39;Shape_Leng&#39;,
+ &#39;TP14_1_TIP&#39;,
+ &#39;TP14_2_TIP&#39;,
+ &#39;TP14_3_TIP&#39;,
+ &#39;TP14_4_TIP&#39;,
+ &#39;TP14_5_TIP&#39;,
+ &#39;TP14_6_TIP&#39;,
+ &#39;TP15_1_OCU&#39;,
+ &#39;TP15_2_OCU&#39;,
+ &#39;TP15_3_OCU&#39;,
+ &#39;TP15_4_OCU&#39;,
+ &#39;TP16_HOG&#39;,
+ &#39;TP19_ACU_1&#39;,
+ &#39;TP19_ACU_2&#39;,
+ &#39;TP19_ALC_1&#39;,
+ &#39;TP19_ALC_2&#39;,
+ &#39;TP19_EE_1&#39;,
+ &#39;TP19_EE_2&#39;,
+ &#39;TP19_EE_E1&#39;,
+ &#39;TP19_EE_E2&#39;,
+ &#39;TP19_EE_E3&#39;,
+ &#39;TP19_EE_E4&#39;,
+ &#39;TP19_EE_E5&#39;,
+ &#39;TP19_EE_E6&#39;,
+ &#39;TP19_EE_E9&#39;,
+ &#39;TP19_GAS_1&#39;,
+ &#39;TP19_GAS_2&#39;,
+ &#39;TP19_GAS_9&#39;,
+ &#39;TP19_INTE1&#39;,
+ &#39;TP19_INTE2&#39;,
+ &#39;TP19_INTE9&#39;,
+ &#39;TP19_RECB1&#39;,
+ &#39;TP19_RECB2&#39;,
+ &#39;TP27_PERSO&#39;,
+ &#39;TP32_1_SEX&#39;,
+ &#39;TP32_2_SEX&#39;,
+ &#39;TP34_1_EDA&#39;,
+ &#39;TP34_2_EDA&#39;,
+ &#39;TP34_3_EDA&#39;,
+ &#39;TP34_4_EDA&#39;,
+ &#39;TP34_5_EDA&#39;,
+ &#39;TP34_6_EDA&#39;,
+ &#39;TP34_7_EDA&#39;,
+ &#39;TP34_8_EDA&#39;,
+ &#39;TP34_9_EDA&#39;,
+ &#39;TP3A_RI&#39;,
+ &#39;TP3B_TCN&#39;,
+ &#39;TP3_1_SI&#39;,
+ &#39;TP3_2_NO&#39;,
+ &#39;TP4_1_SI&#39;,
+ &#39;TP4_2_NO&#39;,
+ &#39;TP51POSTGR&#39;,
+ &#39;TP51PRIMAR&#39;,
+ &#39;TP51SECUND&#39;,
+ &#39;TP51SUPERI&#39;,
+ &#39;TP51_13_ED&#39;,
+ &#39;TP51_99_ED&#39;,
+ &#39;TP9_1_USO&#39;,
+ &#39;TP9_2_1_MI&#39;,
+ &#39;TP9_2_2_MI&#39;,
+ &#39;TP9_2_3_MI&#39;,
+ &#39;TP9_2_4_MI&#39;,
+ &#39;TP9_2_9_MI&#39;,
+ &#39;TP9_2_USO&#39;,
+ &#39;TP9_3_10_N&#39;,
+ &#39;TP9_3_1_NO&#39;,
+ &#39;TP9_3_2_NO&#39;,
+ &#39;TP9_3_3_NO&#39;,
+ &#39;TP9_3_4_NO&#39;,
+ &#39;TP9_3_5_NO&#39;,
+ &#39;TP9_3_6_NO&#39;,
+ &#39;TP9_3_7_NO&#39;,
+ &#39;TP9_3_8_NO&#39;,
+ &#39;TP9_3_99_N&#39;,
+ &#39;TP9_3_9_NO&#39;,
+ &#39;TP9_3_USO&#39;,
+ &#39;TP9_4_USO&#39;,
+ &#39;TP_LC_CM&#39;,
+ &#39;TVIVIENDA&#39;,
+ &#39;VERSION&#39;,
+ &#39;ZU_CCDGO&#39;,
+ &#39;ZU_CDIVI&#39;,
+ &#39;filename&#39;,
+ &#39;geometry&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Configure the dictionary, categories, additional columns, key column, and key values to prepare for the harmonization process. Set the <code class="docutils literal notranslate"><span class="pre">dict_df</span></code> parameter to the standardized and translated dictionary. Set the <code class="docutils literal notranslate"><span class="pre">categories</span></code> parameter to “Housing” to ensure that only housing-related variables are considered for harmonization. Set the <code class="docutils literal notranslate"><span class="pre">extra_cols</span></code> and <code class="docutils literal notranslate"><span class="pre">key_col</span></code>parameter to <code class="docutils literal notranslate"><span class="pre">MPIO_CDPMP</span></code>, which stands for the municipality code. This allows for <strong>filtering the data</strong> to include only records from a specific municipality. In this case, we are interested in the municipality with the code <code class="docutils literal notranslate"><span class="pre">73001</span></code>, which corresponds to Ibague. Finally, use the <code class="docutils literal notranslate"><span class="pre">s4h_data_selector</span></code> method to <strong>filter the data based on the specified key column and key values</strong>. This method returns a list of DataFrames that match the filtering criteria.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">col_CNPV</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(504996, 111)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">dict_df</span> <span class="o">=</span> <span class="n">dic</span>
+<span class="n">har</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Housing&quot;</span><span class="p">]</span>
+<span class="n">har</span><span class="o">.</span><span class="n">extra_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MPIO_CDPMP&#39;</span><span class="p">,</span> <span class="s1">&#39;GEOMETRY&#39;</span><span class="p">]</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_col</span> <span class="o">=</span> <span class="s1">&#39;MPIO_CDPMP&#39;</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_val</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;73001&#39;</span><span class="p">]</span>
+<span class="n">filtered_ddfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">s4h_data_selector</span><span class="p">(</span><span class="n">col_CNPV</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The method <code class="docutils literal notranslate"><span class="pre">s4h_compare_with_dict</span></code> can be used to compare the available columns in the dataset with the variables in the dictionary. This method helps to identify which variables from the dictionary are present in the dataset and can be harmonized.</p>
+<p>Finally, display the filtered DataFrames to see the harmonized data for the specified municipality. If needed, the harmonized data can be exported to a CSV file using the <code class="docutils literal notranslate"><span class="pre">to_csv</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">s4h_compare_with_dict</span><span class="p">(</span><span class="n">col_CNPV</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Matches with dict_df: 106 (95.50%)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unmatched ddfs variable</th>
+      <th>Unmatched dict_df variables</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>COD_RDTM</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>FILENAME</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>GEOMETRY</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>SHAPE_AREA</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>SHAPE_LENG</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Finally, display the filtered DataFrames to see the harmonized data for the specified municipality. If needed, the harmonized data can be <strong>exported to a CSV file</strong> using the <code class="docutils literal notranslate"><span class="pre">to_csv</span></code> method or <strong>visualized</strong> using <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> as shown below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ddfs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[       MPIO_CDPMP  TP9_4_USO  TP9_2_USO  TP9_3_USO  TP9_1_USO  TP9_2_9_MI  \
+ 422086      73001        0.0        1.0        1.0       48.0         0.0   
+ 422087      73001        0.0        0.0        2.0       67.0         0.0   
+ 422088      73001        0.0        0.0        0.0        0.0         0.0   
+ 422089      73001        0.0        2.0        3.0      110.0         0.0   
+ 422090      73001        0.0        0.0        1.0        0.0         0.0   
+ ...           ...        ...        ...        ...        ...         ...   
+ 427978      73001        0.0        1.0        0.0        9.0         0.0   
+ 427979      73001        0.0        1.0        1.0        3.0         0.0   
+ 427980      73001        0.0        1.0        0.0        9.0         0.0   
+ 427981      73001        0.0        0.0        0.0        8.0         0.0   
+ 427982      73001        0.0        0.0        0.0        1.0         0.0   
+ 
+         TP9_3_4_NO  TP9_3_7_NO  TP9_3_3_NO  TP9_3_99_N  ...  TP19_INTE2  \
+ 422086         0.0         0.0         0.0         0.0  ...        38.0   
+ 422087         0.0         0.0         0.0         0.0  ...         8.0   
+ 422088         0.0         0.0         0.0         0.0  ...         0.0   
+ 422089         0.0         0.0         1.0         0.0  ...        63.0   
+ 422090         0.0         0.0         0.0         0.0  ...         0.0   
+ ...            ...         ...         ...         ...  ...         ...   
+ 427978         0.0         0.0         0.0         0.0  ...         5.0   
+ 427979         0.0         0.0         0.0         0.0  ...         0.0   
+ 427980         0.0         0.0         0.0         0.0  ...         8.0   
+ 427981         0.0         0.0         0.0         0.0  ...         7.0   
+ 427982         0.0         0.0         0.0         0.0  ...         0.0   
+ 
+         TP19_RECB2  TP14_2_TIP  TP14_1_TIP  TP14_6_TIP  TP14_3_TIP  \
+ 422086         0.0        10.0        22.0         1.0        16.0   
+ 422087         1.0        57.0        10.0         0.0         0.0   
+ 422088         0.0         0.0         0.0         0.0         0.0   
+ 422089         3.0        81.0        20.0         0.0        11.0   
+ 422090         0.0         0.0         0.0         0.0         0.0   
+ ...            ...         ...         ...         ...         ...   
+ 427978         4.0         1.0         9.0         0.0         0.0   
+ 427979         0.0         0.0         4.0         0.0         0.0   
+ 427980         4.0         0.0        10.0         0.0         0.0   
+ 427981         1.0         0.0         8.0         0.0         0.0   
+ 427982         0.0         0.0         1.0         0.0         0.0   
+ 
+         TP14_4_TIP  TP14_5_TIP  TP15_3_OCU  \
+ 422086         0.0         0.0         1.0   
+ 422087         0.0         0.0         2.0   
+ 422088         0.0         0.0         0.0   
+ 422089         0.0         0.0         1.0   
+ 422090         0.0         0.0         0.0   
+ ...            ...         ...         ...   
+ 427978         0.0         0.0         2.0   
+ 427979         0.0         0.0         1.0   
+ 427980         0.0         0.0         2.0   
+ 427981         0.0         0.0         1.0   
+ 427982         0.0         0.0         1.0   
+ 
+                                                  GEOMETRY  
+ 422086  POLYGON ((-75.25204 4.45339, -75.25203 4.45339...  
+ 422087  POLYGON ((-75.24798 4.44987, -75.24797 4.44985...  
+ 422088  POLYGON ((-75.24873 4.44883, -75.24877 4.44879...  
+ 422089  POLYGON ((-75.24897 4.44924, -75.24893 4.44919...  
+ 422090  POLYGON ((-75.25099 4.45195, -75.25111 4.45187...  
+ ...                                                   ...  
+ 427978  POLYGON ((-75.19101 4.35893, -75.191 4.35893, ...  
+ 427979  POLYGON ((-75.18923 4.35806, -75.18929 4.35799...  
+ 427980  POLYGON ((-75.19102 4.35539, -75.19116 4.35513...  
+ 427981  POLYGON ((-75.19008 4.35431, -75.18991 4.35423...  
+ 427982  POLYGON ((-75.19121 4.35258, -75.19168 4.35285...  
+ 
+ [5897 rows x 42 columns]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">filtered_ddfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Create a GeoDataFrame</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s1">&#39;GEOMETRY&#39;</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+
+<span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;TP19_GAS_1_Log&#39;</span><span class="p">]</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;TP19_GAS_1&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\isabe\PycharmProjects\socio4health\.venv\Lib\site-packages\pandas\core\arraylike.py:399: RuntimeWarning: divide by zero encountered in log
+  result = getattr(ufunc, method)(*inputs, **kwargs)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="c1"># plot without automatic colorbar</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;TP19_GAS_1_Log&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="c1"># Plot with custom colorbar</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;TP19_GAS_1_Log&#39;</span><span class="p">])</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sm</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>  <span class="c1"># fraction controls the size of the colorbar</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Gas line connection (log)&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Gas line connection map&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\isabe\PycharmProjects\socio4health\.venv\Lib\site-packages\matplotlib\colors.py:2294: RuntimeWarning: invalid value encountered in subtract
+  resdat -= vmin
+C:\Users\isabe\PycharmProjects\socio4health\.venv\Lib\site-packages\matplotlib\colors.py:2295: RuntimeWarning: invalid value encountered in divide
+  resdat /= (vmax - vmin)
+</pre></div>
+</div>
+<img alt="../_images/c1c11a1dac7a7de20e333c7990d4b55adf344491de0bafc690eb880212f4d474.png" src="../_images/c1c11a1dac7a7de20e333c7990d4b55adf344491de0bafc690eb880212f4d474.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../dictionary.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">How to create a raw dictionary for data harmonization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_brazil.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Hands-on with socio4health: effects of hydrometeorologigcal hazards and urbanization on dengue risk in Brazil</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-environment">Setting up the environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-libraries">Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-data-from-colombia">1. Extract data from Colombia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-standardize-the-dictionary">2. Load and standardize the dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#harmonize-the-data">3. Harmonize the data</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/example_colombia.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

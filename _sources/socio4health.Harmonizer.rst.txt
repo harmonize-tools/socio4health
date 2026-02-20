@@ -1,0 +1,60 @@
+﻿socio4health.Harmonizer
+=======================
+
+.. currentmodule:: socio4health
+
+.. autoclass:: Harmonizer
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Harmonizer.__delattr__
+      ~Harmonizer.__dir__
+      ~Harmonizer.__eq__
+      ~Harmonizer.__format__
+      ~Harmonizer.__ge__
+      ~Harmonizer.__getattribute__
+      ~Harmonizer.__getstate__
+      ~Harmonizer.__gt__
+      ~Harmonizer.__hash__
+      ~Harmonizer.__init__
+      ~Harmonizer.__init_subclass__
+      ~Harmonizer.__le__
+      ~Harmonizer.__lt__
+      ~Harmonizer.__ne__
+      ~Harmonizer.__new__
+      ~Harmonizer.__reduce__
+      ~Harmonizer.__reduce_ex__
+      ~Harmonizer.__repr__
+      ~Harmonizer.__setattr__
+      ~Harmonizer.__sizeof__
+      ~Harmonizer.__str__
+      ~Harmonizer.__subclasshook__
+      ~Harmonizer.drop_nan_columns
+      ~Harmonizer.s4h_compare_with_dict
+      ~Harmonizer.s4h_data_selector
+      ~Harmonizer.s4h_get_available_columns
+      ~Harmonizer.s4h_harmonize_dataframes
+      ~Harmonizer.s4h_join_data
+      ~Harmonizer.s4h_vertical_merge
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Harmonizer.__annotations__
+      ~Harmonizer.__dict__
+      ~Harmonizer.__doc__
+      ~Harmonizer.__module__
+      ~Harmonizer.__weakref__
+   
+   

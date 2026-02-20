@@ -1,0 +1,1213 @@
+{
+ "cells": [
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "<img src=\"https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png\" alt=\"image info\" height=\"100\" width=\"100\"/>\n",
+   "id": "48dfedfd3488ed92"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "# Harmonization of data",
+   "id": "422e92e63d201714"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "**Run the tutorial via free cloud platforms:** [![badge](https://img.shields.io/badge/launch-binder-E66581.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFkAAABZCAMAAABi1XidAAAB8lBMVEX///9XmsrmZYH1olJXmsr1olJXmsrmZYH1olJXmsr1olJXmsrmZYH1olL1olJXmsr1olJXmsrmZYH1olL1olJXmsrmZYH1olJXmsr1olL1olJXmsrmZYH1olL1olJXmsrmZYH1olL1olL0nFf1olJXmsrmZYH1olJXmsq8dZb1olJXmsrmZYH1olJXmspXmspXmsr1olL1olJXmsrmZYH1olJXmsr1olL1olJXmsrmZYH1olL1olLeaIVXmsrmZYH1olL1olL1olJXmsrmZYH1olLna31Xmsr1olJXmsr1olJXmsrmZYH1olLqoVr1olJXmsr1olJXmsrmZYH1olL1olKkfaPobXvviGabgadXmsqThKuofKHmZ4Dobnr1olJXmsr1olJXmspXmsr1olJXmsrfZ4TuhWn1olL1olJXmsqBi7X1olJXmspZmslbmMhbmsdemsVfl8ZgmsNim8Jpk8F0m7R4m7F5nLB6jbh7jbiDirOEibOGnKaMhq+PnaCVg6qWg6qegKaff6WhnpKofKGtnomxeZy3noG6dZi+n3vCcpPDcpPGn3bLb4/Mb47UbIrVa4rYoGjdaIbeaIXhoWHmZYHobXvpcHjqdHXreHLroVrsfG/uhGnuh2bwj2Hxk17yl1vzmljzm1j0nlX1olL3AJXWAAAAbXRSTlMAEBAQHx8gICAuLjAwMDw9PUBAQEpQUFBXV1hgYGBkcHBwcXl8gICAgoiIkJCQlJicnJ2goKCmqK+wsLC4usDAwMjP0NDQ1NbW3Nzg4ODi5+3v8PDw8/T09PX29vb39/f5+fr7+/z8/Pz9/v7+zczCxgAABC5JREFUeAHN1ul3k0UUBvCb1CTVpmpaitAGSLSpSuKCLWpbTKNJFGlcSMAFF63iUmRccNG6gLbuxkXU66JAUef/9LSpmXnyLr3T5AO/rzl5zj137p136BISy44fKJXuGN/d19PUfYeO67Znqtf2KH33Id1psXoFdW30sPZ1sMvs2D060AHqws4FHeJojLZqnw53cmfvg+XR8mC0OEjuxrXEkX5ydeVJLVIlV0e10PXk5k7dYeHu7Cj1j+49uKg7uLU61tGLw1lq27ugQYlclHC4bgv7VQ+TAyj5Zc/UjsPvs1sd5cWryWObtvWT2EPa4rtnWW3JkpjggEpbOsPr7F7EyNewtpBIslA7p43HCsnwooXTEc3UmPmCNn5lrqTJxy6nRmcavGZVt/3Da2pD5NHvsOHJCrdc1G2r3DITpU7yic7w/7Rxnjc0kt5GC4djiv2Sz3Fb2iEZg41/ddsFDoyuYrIkmFehz0HR2thPgQqMyQYb2OtB0WxsZ3BeG3+wpRb1vzl2UYBog8FfGhttFKjtAclnZYrRo9ryG9uG/FZQU4AEg8ZE9LjGMzTmqKXPLnlWVnIlQQTvxJf8ip7VgjZjyVPrjw1te5otM7RmP7xm+sK2Gv9I8Gi++BRbEkR9EBw8zRUcKxwp73xkaLiqQb+kGduJTNHG72zcW9LoJgqQxpP3/Tj//c3yB0tqzaml05/+orHLksVO+95kX7/7qgJvnjlrfr2Ggsyx0eoy9uPzN5SPd86aXggOsEKW2Prz7du3VID3/tzs/sSRs2w7ovVHKtjrX2pd7ZMlTxAYfBAL9jiDwfLkq55Tm7ifhMlTGPyCAs7RFRhn47JnlcB9RM5T97ASuZXIcVNuUDIndpDbdsfrqsOppeXl5Y+XVKdjFCTh+zGaVuj0d9zy05PPK3QzBamxdwtTCrzyg/2Rvf2EstUjordGwa/kx9mSJLr8mLLtCW8HHGJc2R5hS219IiF6PnTusOqcMl57gm0Z8kanKMAQg0qSyuZfn7zItsbGyO9QlnxY0eCuD1XL2ys/MsrQhltE7Ug0uFOzufJFE2PxBo/YAx8XPPdDwWN0MrDRYIZF0mSMKCNHgaIVFoBbNoLJ7tEQDKxGF0kcLQimojCZopv0OkNOyWCCg9XMVAi7ARJzQdM2QUh0gmBozjc3Skg6dSBRqDGYSUOu66Zg+I2fNZs/M3/f/Grl/XnyF1Gw3VKCez0PN5IUfFLqvgUN4C0qNqYs5YhPL+aVZYDE4IpUk57oSFnJm4FyCqqOE0jhY2SMyLFoo56zyo6becOS5UVDdj7Vih0zp+tcMhwRpBeLyqtIjlJKAIZSbI8SGSF3k0pA3mR5tHuwPFoa7N7reoq2bqCsAk1HqCu5uvI1n6JuRXI+S1Mco54YmYTwcn6Aeic+kssXi8XpXC4V3t7/ADuTNKaQJdScAAAAAElFTkSuQmCC)](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb) <a target=\"_blank\" href=\"https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb\">\n",
+    "  <img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/>\n",
+    "</a>\n",
+    "\n"
+   ],
+   "id": "1599a585fa8204d6"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "This notebook provides you with a tutorial on how to **process sociodemographic and economic data** from online data sources from  **Brazil**. This tutorial assumes you have an **intermediate** or **advanced** understanding of **Python** and data manipulation.\n",
+    "\n",
+    "## Setting up the enviornment\n",
+    "\n",
+    "To run this notebook, you need to have the following prerequisites:\n",
+    "\n",
+    "- **Python 3.10+**\n",
+    "\n",
+    "Additionally, you need to install the `socio4health` and `pandas` package, which can be done using ``pip``:\n",
+    "\n"
+   ],
+   "id": "a04649ff2f2f8680"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T21:48:59.865202Z",
+     "start_time": "2025-09-09T21:48:57.210078Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "!pip install socio4health pandas ipywidgets -q",
+   "id": "59bb2e9841851c30",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[notice] A new release of pip is available: 25.1.1 -> 25.2\n",
+      "[notice] To update, run: python.exe -m pip install --upgrade pip\n"
+     ]
+    }
+   ],
+   "execution_count": 1
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "In case you want to run this notebook in **Google Colab**, you also need to run the following command to use your files stored in **Google Drive**:",
+   "id": "1f8040c7d752d6e"
+  },
+  {
+   "metadata": {},
+   "cell_type": "code",
+   "outputs": [],
+   "execution_count": null,
+   "source": [
+    "from google.colab import drive\n",
+    "drive.mount('/content/drive')"
+   ],
+   "id": "fe98fdf6d92dcdf5"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "## Import Libraries",
+   "id": "af633dbea31aaaab"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T21:49:15.597212Z",
+     "start_time": "2025-09-09T21:49:02.151208Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "import pandas as pd\n",
+    "from socio4health import Extractor\n",
+    "from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum\n",
+    "from socio4health.harmonizer import Harmonizer\n",
+    "from socio4health.utils import harmonizer_utils\n",
+    "import tqdm as tqdm\n"
+   ],
+   "id": "e448c769134fe36d",
+   "outputs": [],
+   "execution_count": 2
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "## Extracting data from Brazil\n",
+    "\n",
+    "In this example, we will extract the Brazilian National Continuous Household Sample Survey (**PNADC**) for the year 2024 from the Brazilian Institute of Geography and Statistics (**IBGE**) website."
+   ],
+   "id": "8b286730445109e9"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T21:49:39.972242Z",
+     "start_time": "2025-09-09T21:49:39.961328Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "bra_online_extractor = Extractor(input_path=\"https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/\", down_ext=['.txt','.zip'], is_fwf=True, colnames=BraColnamesEnum.PNADC.value, colspecs=BraColspecsEnum.PNADC.value, output_path=\"../data\", depth=0)",
+   "id": "338d2512725fe9f0",
+   "outputs": [],
+   "execution_count": 3
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "## Providing the raw dictionary",
+   "id": "79484d3e09b568d6"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "We need to provide a **raw dictionary** to the **harmonizer** that contains the column names and their corresponding data types. This is necessary for the harmonization process, as it allows the harmonizer to understand the structure of the data. To know more about how to construct the raw dictionary, you can check the [documentation](https://harmonize-tools.github.io/socio4health/dictionary.html).",
+   "id": "ac3ad903ed8cb378"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T21:49:42.656746Z",
+     "start_time": "2025-09-09T21:49:42.138143Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "raw_dict = pd.read_excel('raw_dictionary.xlsx')",
+   "id": "6773c8ef688101e2",
+   "outputs": [],
+   "execution_count": 4
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "The raw dictionary is then standardized using the `s4h_standardize_dict` method, which ensures that the dictionary is in a consistent format, making it easier to work with during the harmonization process.",
+   "id": "492302dd9245be14"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T21:49:50.710355Z",
+     "start_time": "2025-09-09T21:49:50.291050Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "dic = harmonizer_utils.s4h_standardize_dict(raw_dict)",
+   "id": "65ab398829a1ad1f",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\isabe\\PycharmProjects\\socio4health\\src\\socio4health\\utils\\harmonizer_utils.py:81: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.\n",
+      "  .apply(_process_group, include_groups=True)\\\n"
+     ]
+    }
+   ],
+   "execution_count": 5
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": "Additionally, the content of columns of the dictionary can be translated  into English using `s4h_translate_column` function from `s4h_harmonizer_utils` module. Translation is performed for facilitate the understanding and processing of the data.",
+   "id": "a2f7ece82aa5d5d"
+  },
+  {
+   "metadata": {},
+   "cell_type": "markdown",
+   "source": [
+    "<div style=\"border-left: 4px solid #e74c3c; background: #fdecea; color: #222; padding: 0.5em 1em; margin: 1em 0; display: flex; align-items: center;\">\n",
+    "  <span style=\"font-size: 20px; margin-right: 10px;\">⚠️</span>\n",
+    "  <div>\n",
+    "    <strong>Warning:</strong> <code>s4h_translate_column</code> method may take some time depending on the <strong>size</strong> of the dictionary and the <strong> number of columns </strong> to be translated. It is recommended to use this method <strong> only </strong> if you need the content of the columns in English for further processing or analysis.\n",
+    "  </div>\n",
+    "</div>"
+   ],
+   "id": "3eb0549ddf3d1ea4"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T22:07:01.105639Z",
+     "start_time": "2025-09-09T21:49:52.742541Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "dic = harmonizer_utils.s4h_translate_column(dic, \"question\", language=\"en\")\n",
+    "dic = harmonizer_utils.s4h_translate_column(dic, \"description\", language=\"en\")\n",
+    "dic = harmonizer_utils.s4h_translate_column(dic, \"possible_answers\", language=\"en\")\n"
+   ],
+   "id": "aea219ca608eab2a",
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "question translated\n",
+      "description translated\n",
+      "possible_answers translated\n"
+     ]
+    }
+   ],
+   "execution_count": 6
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T22:07:02.495652Z",
+     "start_time": "2025-09-09T22:07:02.052504Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "dic",
+   "id": "35a68aa2dd5f1fba",
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "    variable_name  No                                           question  \\\n",
+       "0           V3012 NaN   concluiu com aprovação, pelo menos a primeira...   \n",
+       "1           V3014 NaN   concluiu este curso que frequentou anteriormente   \n",
+       "2          V3013B NaN   concluiu os anos iniciais deste curso que fre...   \n",
+       "3           V4021 NaN   exercia normalmente o trabalho em estabelecim...   \n",
+       "4           V3002 NaN                                  frequenta escola?   \n",
+       "..            ...  ..                                                ...   \n",
+       "415       V405812 NaN  valor em dinheiro do rendimento mensal que rec...   \n",
+       "416       V405822 NaN  valor estimado do produtos e mercadorias que r...   \n",
+       "417       V405922 NaN  valor estimado do produtos e mercadorias que r...   \n",
+       "418       V405022 NaN  valor estimado dos produtos e mercadorias que ...   \n",
+       "419       V405122 NaN  valor estimado dos produtos e mercadorias que ...   \n",
+       "\n",
+       "              value    description  \\\n",
+       "0           1; 2; 3  não aplicável   \n",
+       "1              1; 2  não aplicável   \n",
+       "2              1; 2  não aplicável   \n",
+       "3              1; 2  não aplicável   \n",
+       "4              1; 2  não aplicável   \n",
+       "..              ...            ...   \n",
+       "415  valor em reais  não aplicável   \n",
+       "416  valor em reais  não aplicável   \n",
+       "417  valor em reais  não aplicável   \n",
+       "418  valor em reais  não aplicável   \n",
+       "419  valor em reais  não aplicável   \n",
+       "\n",
+       "                                      possible_answers  \\\n",
+       "0    concluiu; não concluiu; curso não classificado...   \n",
+       "1                                             sim; não   \n",
+       "2                                             sim; não   \n",
+       "3                                             sim; não   \n",
+       "4                                             sim; não   \n",
+       "..                                                 ...   \n",
+       "415                                                 r$   \n",
+       "416                                                 r$   \n",
+       "417                                                 r$   \n",
+       "418                                                 r$   \n",
+       "419                                                 r$   \n",
+       "\n",
+       "                                           question_en  description_en  \\\n",
+       "0    Completed with approval, at least the first se...  not applicable   \n",
+       "1       concluded this course that he attended earlier  not applicable   \n",
+       "2    Did you complete the early years of this cours...  not applicable   \n",
+       "3    Did you usually work in establishing this busi...  not applicable   \n",
+       "4                                       attend school?  not applicable   \n",
+       "..                                                 ...             ...   \n",
+       "415  cash value of the monthly income that normally...  not applicable   \n",
+       "416  Estimated value of the products and goods that...  not applicable   \n",
+       "417  estimated value of products and goods that nor...  not applicable   \n",
+       "418  estimated value of the products and goods that...  not applicable   \n",
+       "419  estimated value of the products and goods I re...  not applicable   \n",
+       "\n",
+       "                                   possible_answers_en  \n",
+       "0    concluded; did not conclude; Course not classi...  \n",
+       "1                                              Yes; no  \n",
+       "2                                              Yes; no  \n",
+       "3                                              Yes; no  \n",
+       "4                                              Yes; no  \n",
+       "..                                                 ...  \n",
+       "415                                                 r$  \n",
+       "416                                                 r$  \n",
+       "417                                                 r$  \n",
+       "418                                                 r$  \n",
+       "419                                                 r$  \n",
+       "\n",
+       "[420 rows x 9 columns]"
+      ],
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>variable_name</th>\n",
+       "      <th>No</th>\n",
+       "      <th>question</th>\n",
+       "      <th>value</th>\n",
+       "      <th>description</th>\n",
+       "      <th>possible_answers</th>\n",
+       "      <th>question_en</th>\n",
+       "      <th>description_en</th>\n",
+       "      <th>possible_answers_en</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>V3012</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>concluiu com aprovação, pelo menos a primeira...</td>\n",
+       "      <td>1; 2; 3</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>concluiu; não concluiu; curso não classificado...</td>\n",
+       "      <td>Completed with approval, at least the first se...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>concluded; did not conclude; Course not classi...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>V3014</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>concluiu este curso que frequentou anteriormente</td>\n",
+       "      <td>1; 2</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>sim; não</td>\n",
+       "      <td>concluded this course that he attended earlier</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>Yes; no</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>V3013B</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>concluiu os anos iniciais deste curso que fre...</td>\n",
+       "      <td>1; 2</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>sim; não</td>\n",
+       "      <td>Did you complete the early years of this cours...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>Yes; no</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>V4021</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>exercia normalmente o trabalho em estabelecim...</td>\n",
+       "      <td>1; 2</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>sim; não</td>\n",
+       "      <td>Did you usually work in establishing this busi...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>Yes; no</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>V3002</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>frequenta escola?</td>\n",
+       "      <td>1; 2</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>sim; não</td>\n",
+       "      <td>attend school?</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>Yes; no</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>415</th>\n",
+       "      <td>V405812</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>valor em dinheiro do rendimento mensal que rec...</td>\n",
+       "      <td>valor em reais</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>r$</td>\n",
+       "      <td>cash value of the monthly income that normally...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>r$</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>416</th>\n",
+       "      <td>V405822</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>valor estimado do produtos e mercadorias que r...</td>\n",
+       "      <td>valor em reais</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>r$</td>\n",
+       "      <td>Estimated value of the products and goods that...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>r$</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>417</th>\n",
+       "      <td>V405922</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>valor estimado do produtos e mercadorias que r...</td>\n",
+       "      <td>valor em reais</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>r$</td>\n",
+       "      <td>estimated value of products and goods that nor...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>r$</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>418</th>\n",
+       "      <td>V405022</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>valor estimado dos produtos e mercadorias que ...</td>\n",
+       "      <td>valor em reais</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>r$</td>\n",
+       "      <td>estimated value of the products and goods that...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>r$</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>419</th>\n",
+       "      <td>V405122</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>valor estimado dos produtos e mercadorias que ...</td>\n",
+       "      <td>valor em reais</td>\n",
+       "      <td>não aplicável</td>\n",
+       "      <td>r$</td>\n",
+       "      <td>estimated value of the products and goods I re...</td>\n",
+       "      <td>not applicable</td>\n",
+       "      <td>r$</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>420 rows × 9 columns</p>\n",
+       "</div>"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 7
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-25T23:01:38.180508Z",
+     "start_time": "2025-08-25T23:01:38.088592Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": "The `s4h_classify_rows` method is then used to classify the rows of the standardized dictionary based on the content of the specified columns. This classification helps in organizing the data and making it easier to work with during the harmonization process. The `MODEL_PATH` parameter specifies the path to a pre-trained model that is used for classification. You can provide your own model or use the default one provided in the `files` folder. The model is a **fine-tuned BERT model** for text classification. You can find more details about the model in the [documentation](https://harmonize-tools.github.io/socio4health/socio4health.utils.harmonizer_utils.classify_rows.html#socio4health.utils.harmonizer_utils.classify_rows).",
+   "id": "e647e0ac0333a014"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T22:07:55.472746Z",
+     "start_time": "2025-09-09T22:07:12.137383Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "dic = harmonizer_utils.s4h_classify_rows(dic, \"question_en\", \"description_en\", \"possible_answers_en\",\n",
+    "                                     new_column_name=\"category\",\n",
+    "                                     MODEL_PATH=\"files/bert_finetuned_classifier\")"
+   ],
+   "id": "3b60a80f58e17a87",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Device set to use cpu\n"
+     ]
+    }
+   ],
+   "execution_count": 8
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:42:20.509879Z",
+     "start_time": "2025-08-11T16:20:47.086777Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": [
+    "## Extracting the data\n",
+    "The `extract` method of the `Extractor` class is used retrieve the data from the specified input path. It returns a list of dataframes, each dataframe corresponding to a file extracted from the path."
+   ],
+   "id": "90f70dbe672991c1"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-09T22:25:05.528249Z",
+     "start_time": "2025-09-09T22:08:03.434017Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "dfs = bra_online_extractor.s4h_extract()",
+   "id": "b1a6d1c13426a24a",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "2025-09-09 17:08:03,445 - INFO - ----------------------\n",
+      "2025-09-09 17:08:03,453 - INFO - Starting data extraction...\n",
+      "2025-09-09 17:08:03,456 - INFO - Extracting data in online mode...\n",
+      "2025-09-09 17:08:03,459 - INFO - Scraping URL: https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/ with depth 0\n",
+      "2025-09-09 17:08:13,576 - INFO - Spider completed successfully for URL: https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/\n",
+      "2025-09-09 17:08:13,580 - INFO - Downloading files to: ../data\n",
+      "Downloading files:   0%|          | 0/4 [00:00<?, ?it/s]2025-09-09 17:08:27,760 - INFO - Successfully downloaded: PNADC_012024_20250815.zip\n",
+      "Downloading files:  25%|██▌       | 1/4 [00:14<00:42, 14.13s/it]2025-09-09 17:08:41,771 - INFO - Successfully downloaded: PNADC_022024_20250815.zip\n",
+      "Downloading files:  50%|█████     | 2/4 [00:28<00:28, 14.06s/it]2025-09-09 17:08:54,977 - INFO - Successfully downloaded: PNADC_032024_20250815.zip\n",
+      "Downloading files:  75%|███████▌  | 3/4 [00:41<00:13, 13.67s/it]2025-09-09 17:09:07,862 - INFO - Successfully downloaded: PNADC_042024_20250815.zip\n",
+      "Downloading files: 100%|██████████| 4/4 [00:54<00:00, 13.56s/it]\n",
+      "2025-09-09 17:09:07,868 - INFO - Processing (depth 0): PNADC_012024_20250815.zip\n",
+      "2025-09-09 17:10:00,060 - INFO - Extracted: a7db871d_PNADC_012024.txt\n",
+      "2025-09-09 17:10:00,107 - INFO - Processing (depth 0): PNADC_022024_20250815.zip\n",
+      "2025-09-09 17:10:21,652 - INFO - Extracted: 946bef7f_PNADC_022024.txt\n",
+      "2025-09-09 17:10:21,654 - INFO - Processing (depth 0): PNADC_032024_20250815.zip\n",
+      "2025-09-09 17:10:45,326 - INFO - Extracted: c8ebcb57_PNADC_032024.txt\n",
+      "2025-09-09 17:10:45,328 - INFO - Processing (depth 0): PNADC_042024_20250815.zip\n",
+      "2025-09-09 17:11:37,864 - INFO - Extracted: c1bffc2a_PNADC_042024.txt\n",
+      "Processing files: 100%|██████████| 4/4 [13:27<00:00, 201.91s/it]\n",
+      "2025-09-09 17:25:05,504 - INFO - Successfully processed 4/4 files\n",
+      "2025-09-09 17:25:05,516 - INFO - Extraction completed successfully.\n"
+     ]
+    }
+   ],
+   "execution_count": 9
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:42:42.892495Z",
+     "start_time": "2025-08-11T16:42:42.878365Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": [
+    "## Harmonizing the data\n",
+    "First, we need to create an instance of the `Harmonizer` class."
+   ],
+   "id": "25f790988eec7f59"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-10T13:57:56.130945Z",
+     "start_time": "2025-09-10T13:57:55.972434Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "har = Harmonizer()\n",
+   "id": "dc2617ae56e96cf2",
+   "outputs": [],
+   "execution_count": 10
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:42:45.139577Z",
+     "start_time": "2025-08-11T16:42:45.130578Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": "After the dictionary is standardized and translated, it can be used to harmonize the data. For this, set the `dict_df` attribute of the `Harmonizer` instance to the standardized dictionary. This allows the harmonizer to use the information from the dictionary to process the dataframes.",
+   "id": "b8362bf785529926"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-10T13:57:59.224580Z",
+     "start_time": "2025-09-10T13:57:59.211675Z"
+    }
+   },
+   "cell_type": "code",
+   "source": "har.dict_df = dic\n",
+   "id": "36d63e0b1a014c48",
+   "outputs": [],
+   "execution_count": 11
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:42:48.009360Z",
+     "start_time": "2025-08-11T16:42:48.001050Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": [
+    "Next, we can set the parameters for the harmonization process. The `similarity_threshold` parameter is used to set the threshold for the similarity among column names. The `nan_threshold` parameter is used to set the threshold for the number of `NaN` values allowed in a column. If a column has more `NaN` values than the specified threshold, it will be dropped from the final dataframe.\n",
+    "\n"
+   ],
+   "id": "bf8fc86992c07eff"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-10T13:58:03.029180Z",
+     "start_time": "2025-09-10T13:58:03.014998Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "har.similarity_threshold = 0.9\n",
+    "har.nan_threshold = 1\n"
+   ],
+   "id": "e237c0eedcc1f294",
+   "outputs": [],
+   "execution_count": 12
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:42:50.169176Z",
+     "start_time": "2025-08-11T16:42:49.922885Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": "The `s4h_vertical_merge` method merges dataframes **vertically**. This means the data frames will be concatenated along the rows and aligned if their column names meet the previously set similarity threshold. The available columns can be obtained using the `s4h_get_available_columns` method, which returns a list of column names present in all dataframes after vertical merging.",
+   "id": "f9afaf7e1579a9a7"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-10T13:58:17.684917Z",
+     "start_time": "2025-09-10T13:58:16.599850Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "dfs = har.s4h_vertical_merge(dfs)\n",
+    "available_columns = har.s4h_get_available_columns(dfs)\n",
+    "\n",
+    "available_columns"
+   ],
+   "id": "e1217f95a3c5f1d1",
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Grouping DataFrames: 100%|██████████| 4/4 [00:00<00:00, 10.89it/s]\n",
+      "Merging groups: 100%|██████████| 1/1 [00:00<00:00,  1.80it/s]\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "['Ano',\n",
+       " 'Capital',\n",
+       " 'Estrato',\n",
+       " 'RM_RIDE',\n",
+       " 'Trimestre',\n",
+       " 'UF',\n",
+       " 'UPA',\n",
+       " 'V1008',\n",
+       " 'V1014',\n",
+       " 'V1016',\n",
+       " 'V1022',\n",
+       " 'V1023',\n",
+       " 'V1027',\n",
+       " 'V1028',\n",
+       " 'V1028001',\n",
+       " 'V1028002',\n",
+       " 'V1028003',\n",
+       " 'V1028004',\n",
+       " 'V1028005',\n",
+       " 'V1028006',\n",
+       " 'V1028007',\n",
+       " 'V1028008',\n",
+       " 'V1028009',\n",
+       " 'V1028010',\n",
+       " 'V1028011',\n",
+       " 'V1028012',\n",
+       " 'V1028013',\n",
+       " 'V1028014',\n",
+       " 'V1028015',\n",
+       " 'V1028016',\n",
+       " 'V1028017',\n",
+       " 'V1028018',\n",
+       " 'V1028019',\n",
+       " 'V1028020',\n",
+       " 'V1028021',\n",
+       " 'V1028022',\n",
+       " 'V1028023',\n",
+       " 'V1028024',\n",
+       " 'V1028025',\n",
+       " 'V1028026',\n",
+       " 'V1028027',\n",
+       " 'V1028028',\n",
+       " 'V1028029',\n",
+       " 'V1028030',\n",
+       " 'V1028031',\n",
+       " 'V1028032',\n",
+       " 'V1028033',\n",
+       " 'V1028034',\n",
+       " 'V1028035',\n",
+       " 'V1028036',\n",
+       " 'V1028037',\n",
+       " 'V1028038',\n",
+       " 'V1028039',\n",
+       " 'V1028040',\n",
+       " 'V1028041',\n",
+       " 'V1028042',\n",
+       " 'V1028043',\n",
+       " 'V1028044',\n",
+       " 'V1028045',\n",
+       " 'V1028046',\n",
+       " 'V1028047',\n",
+       " 'V1028048',\n",
+       " 'V1028049',\n",
+       " 'V1028050',\n",
+       " 'V1028051',\n",
+       " 'V1028052',\n",
+       " 'V1028053',\n",
+       " 'V1028054',\n",
+       " 'V1028055',\n",
+       " 'V1028056',\n",
+       " 'V1028057',\n",
+       " 'V1028058',\n",
+       " 'V1028059',\n",
+       " 'V1028060',\n",
+       " 'V1028061',\n",
+       " 'V1028062',\n",
+       " 'V1028063',\n",
+       " 'V1028064',\n",
+       " 'V1028065',\n",
+       " 'V1028066',\n",
+       " 'V1028067',\n",
+       " 'V1028068',\n",
+       " 'V1028069',\n",
+       " 'V1028070',\n",
+       " 'V1028071',\n",
+       " 'V1028072',\n",
+       " 'V1028073',\n",
+       " 'V1028074',\n",
+       " 'V1028075',\n",
+       " 'V1028076',\n",
+       " 'V1028077',\n",
+       " 'V1028078',\n",
+       " 'V1028079',\n",
+       " 'V1028080',\n",
+       " 'V1028081',\n",
+       " 'V1028082',\n",
+       " 'V1028083',\n",
+       " 'V1028084',\n",
+       " 'V1028085',\n",
+       " 'V1028086',\n",
+       " 'V1028087',\n",
+       " 'V1028088',\n",
+       " 'V1028089',\n",
+       " 'V1028090',\n",
+       " 'V1028091',\n",
+       " 'V1028092',\n",
+       " 'V1028093',\n",
+       " 'V1028094',\n",
+       " 'V1028095',\n",
+       " 'V1028096',\n",
+       " 'V1028097',\n",
+       " 'V1028098',\n",
+       " 'V1028099',\n",
+       " 'V1028100',\n",
+       " 'V1028101',\n",
+       " 'V1028102',\n",
+       " 'V1028103',\n",
+       " 'V1028104',\n",
+       " 'V1028105',\n",
+       " 'V1028106',\n",
+       " 'V1028107',\n",
+       " 'V1028108',\n",
+       " 'V1028109',\n",
+       " 'V1028110',\n",
+       " 'V1028111',\n",
+       " 'V1028112',\n",
+       " 'V1028113',\n",
+       " 'V1028114',\n",
+       " 'V1028115',\n",
+       " 'V1028116',\n",
+       " 'V1028117',\n",
+       " 'V1028118',\n",
+       " 'V1028119',\n",
+       " 'V1028120',\n",
+       " 'V1028121',\n",
+       " 'V1028122',\n",
+       " 'V1028123',\n",
+       " 'V1028124',\n",
+       " 'V1028125',\n",
+       " 'V1028126',\n",
+       " 'V1028127',\n",
+       " 'V1028128',\n",
+       " 'V1028129',\n",
+       " 'V1028130',\n",
+       " 'V1028131',\n",
+       " 'V1028132',\n",
+       " 'V1028133',\n",
+       " 'V1028134',\n",
+       " 'V1028135',\n",
+       " 'V1028136',\n",
+       " 'V1028137',\n",
+       " 'V1028138',\n",
+       " 'V1028139',\n",
+       " 'V1028140',\n",
+       " 'V1028141',\n",
+       " 'V1028142',\n",
+       " 'V1028143',\n",
+       " 'V1028144',\n",
+       " 'V1028145',\n",
+       " 'V1028146',\n",
+       " 'V1028147',\n",
+       " 'V1028148',\n",
+       " 'V1028149',\n",
+       " 'V1028150',\n",
+       " 'V1028151',\n",
+       " 'V1028152',\n",
+       " 'V1028153',\n",
+       " 'V1028154',\n",
+       " 'V1028155',\n",
+       " 'V1028156',\n",
+       " 'V1028157',\n",
+       " 'V1028158',\n",
+       " 'V1028159',\n",
+       " 'V1028160',\n",
+       " 'V1028161',\n",
+       " 'V1028162',\n",
+       " 'V1028163',\n",
+       " 'V1028164',\n",
+       " 'V1028165',\n",
+       " 'V1028166',\n",
+       " 'V1028167',\n",
+       " 'V1028168',\n",
+       " 'V1028169',\n",
+       " 'V1028170',\n",
+       " 'V1028171',\n",
+       " 'V1028172',\n",
+       " 'V1028173',\n",
+       " 'V1028174',\n",
+       " 'V1028175',\n",
+       " 'V1028176',\n",
+       " 'V1028177',\n",
+       " 'V1028178',\n",
+       " 'V1028179',\n",
+       " 'V1028180',\n",
+       " 'V1028181',\n",
+       " 'V1028182',\n",
+       " 'V1028183',\n",
+       " 'V1028184',\n",
+       " 'V1028185',\n",
+       " 'V1028186',\n",
+       " 'V1028187',\n",
+       " 'V1028188',\n",
+       " 'V1028189',\n",
+       " 'V1028190',\n",
+       " 'V1028191',\n",
+       " 'V1028192',\n",
+       " 'V1028193',\n",
+       " 'V1028194',\n",
+       " 'V1028195',\n",
+       " 'V1028196',\n",
+       " 'V1028197',\n",
+       " 'V1028198',\n",
+       " 'V1028199',\n",
+       " 'V1028200',\n",
+       " 'V1029',\n",
+       " 'V1033',\n",
+       " 'V2001',\n",
+       " 'V2003',\n",
+       " 'V2005',\n",
+       " 'V2007',\n",
+       " 'V2008',\n",
+       " 'V20081',\n",
+       " 'V20082',\n",
+       " 'V2009',\n",
+       " 'V2010',\n",
+       " 'V3001',\n",
+       " 'V3002',\n",
+       " 'V3002A',\n",
+       " 'V3003',\n",
+       " 'V3003A',\n",
+       " 'V3004',\n",
+       " 'V3005',\n",
+       " 'V3005A',\n",
+       " 'V3006',\n",
+       " 'V3006A',\n",
+       " 'V3007',\n",
+       " 'V3008',\n",
+       " 'V3009',\n",
+       " 'V3009A',\n",
+       " 'V3010',\n",
+       " 'V3011',\n",
+       " 'V3011A',\n",
+       " 'V3012',\n",
+       " 'V3013',\n",
+       " 'V3013A',\n",
+       " 'V3013B',\n",
+       " 'V3014',\n",
+       " 'V4001',\n",
+       " 'V4002',\n",
+       " 'V4003',\n",
+       " 'V4004',\n",
+       " 'V4005',\n",
+       " 'V4006',\n",
+       " 'V4006A',\n",
+       " 'V4007',\n",
+       " 'V4008',\n",
+       " 'V40081',\n",
+       " 'V40082',\n",
+       " 'V40083',\n",
+       " 'V4009',\n",
+       " 'V4010',\n",
+       " 'V4012',\n",
+       " 'V40121',\n",
+       " 'V4013',\n",
+       " 'V40132',\n",
+       " 'V40132A',\n",
+       " 'V4014',\n",
+       " 'V4015',\n",
+       " 'V40151',\n",
+       " 'V401511',\n",
+       " 'V401512',\n",
+       " 'V4016',\n",
+       " 'V40161',\n",
+       " 'V40162',\n",
+       " 'V40163',\n",
+       " 'V4017',\n",
+       " 'V40171',\n",
+       " 'V401711',\n",
+       " 'V4018',\n",
+       " 'V40181',\n",
+       " 'V40182',\n",
+       " 'V40183',\n",
+       " 'V4019',\n",
+       " 'V4020',\n",
+       " 'V4021',\n",
+       " 'V4022',\n",
+       " 'V4024',\n",
+       " 'V4025',\n",
+       " 'V4026',\n",
+       " 'V4027',\n",
+       " 'V4028',\n",
+       " 'V4029',\n",
+       " 'V4032',\n",
+       " 'V4033',\n",
+       " 'V40331',\n",
+       " 'V403311',\n",
+       " 'V403312',\n",
+       " 'V40332',\n",
+       " 'V403321',\n",
+       " 'V403322',\n",
+       " 'V40333',\n",
+       " 'V403331',\n",
+       " 'V4034',\n",
+       " 'V40341',\n",
+       " 'V403411',\n",
+       " 'V403412',\n",
+       " 'V40342',\n",
+       " 'V403421',\n",
+       " 'V403422',\n",
+       " 'V4039',\n",
+       " 'V4039C',\n",
+       " 'V4040',\n",
+       " 'V40401',\n",
+       " 'V40402',\n",
+       " 'V40403',\n",
+       " 'V4041',\n",
+       " 'V4043',\n",
+       " 'V40431',\n",
+       " 'V4044',\n",
+       " 'V4045',\n",
+       " 'V4046',\n",
+       " 'V4047',\n",
+       " 'V4048',\n",
+       " 'V4049',\n",
+       " 'V4050',\n",
+       " 'V40501',\n",
+       " 'V405011',\n",
+       " 'V405012',\n",
+       " 'V40502',\n",
+       " 'V405021',\n",
+       " 'V405022',\n",
+       " 'V40503',\n",
+       " 'V405031',\n",
+       " 'V4051',\n",
+       " 'V40511',\n",
+       " 'V405111',\n",
+       " 'V405112',\n",
+       " 'V40512',\n",
+       " 'V405121',\n",
+       " 'V405122',\n",
+       " 'V4056',\n",
+       " 'V4056C',\n",
+       " 'V4057',\n",
+       " 'V4058',\n",
+       " 'V40581',\n",
+       " 'V405811',\n",
+       " 'V405812',\n",
+       " 'V40582',\n",
+       " 'V405821',\n",
+       " 'V405822',\n",
+       " 'V40583',\n",
+       " 'V405831',\n",
+       " 'V40584',\n",
+       " 'V4059',\n",
+       " 'V40591',\n",
+       " 'V405911',\n",
+       " 'V405912',\n",
+       " 'V40592',\n",
+       " 'V405921',\n",
+       " 'V405922',\n",
+       " 'V4062',\n",
+       " 'V4062C',\n",
+       " 'V4063',\n",
+       " 'V4063A',\n",
+       " 'V4064',\n",
+       " 'V4064A',\n",
+       " 'V4071',\n",
+       " 'V4072',\n",
+       " 'V4072A',\n",
+       " 'V4073',\n",
+       " 'V4074',\n",
+       " 'V4074A',\n",
+       " 'V4075A',\n",
+       " 'V4075A1',\n",
+       " 'V4076',\n",
+       " 'V40761',\n",
+       " 'V40762',\n",
+       " 'V40763',\n",
+       " 'V4077',\n",
+       " 'V4078',\n",
+       " 'V4078A',\n",
+       " 'V4082',\n",
+       " 'VD2002',\n",
+       " 'VD2003',\n",
+       " 'VD2004',\n",
+       " 'VD2006',\n",
+       " 'VD3004',\n",
+       " 'VD3005',\n",
+       " 'VD3006',\n",
+       " 'VD4001',\n",
+       " 'VD4002',\n",
+       " 'VD4003',\n",
+       " 'VD4004',\n",
+       " 'VD4004A',\n",
+       " 'VD4005',\n",
+       " 'VD4007',\n",
+       " 'VD4008',\n",
+       " 'VD4009',\n",
+       " 'VD4010',\n",
+       " 'VD4011',\n",
+       " 'VD4012',\n",
+       " 'VD4013',\n",
+       " 'VD4014',\n",
+       " 'VD4015',\n",
+       " 'VD4016',\n",
+       " 'VD4017',\n",
+       " 'VD4018',\n",
+       " 'VD4019',\n",
+       " 'VD4020',\n",
+       " 'VD4023',\n",
+       " 'VD4030',\n",
+       " 'VD4031',\n",
+       " 'VD4032',\n",
+       " 'VD4033',\n",
+       " 'VD4034',\n",
+       " 'VD4035',\n",
+       " 'VD4036',\n",
+       " 'VD4037',\n",
+       " 'filename',\n",
+       " 'posest',\n",
+       " 'posest_sxi']"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "execution_count": 13
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:42:56.043354Z",
+     "start_time": "2025-08-11T16:42:55.856410Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": "For the selection of rows from the data, we can use the `s4h_data_selector` method. To use this method we first need to assign the categories of our interest, which can either be one or a set of the following categories:  `Business`, `Educations`, `Fertility`, `Housing`, `Identification`, `Migration`, `Nonstandard job`, `Social Security` .This method allows us to **select specific rows** from the data based on the values in a specified column. The `key_col` parameter specifies the column to be used for selection, and the `key_val` parameter specifies the values to be selected. In this case, we will select rows where the value in the `UF` column is equal to `14`, which corresponds to the state of **Pernambuco**. This allows us to filter the data to include only records from this specific state.",
+   "id": "52a78bdb6f585801"
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-09-10T14:34:55.174315Z",
+     "start_time": "2025-09-10T13:58:25.480169Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "har.categories = [\"Business\"]\n",
+    "har.key_col = 'UF'\n",
+    "har.key_val = ['14']\n",
+    "filtered_ddfs = har.s4h_data_selector(dfs)"
+   ],
+   "id": "cefaf0588c9be884",
+   "outputs": [],
+   "execution_count": 14
+  },
+  {
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-08-11T16:43:11.090908Z",
+     "start_time": "2025-08-11T16:43:11.043927Z"
+    }
+   },
+   "cell_type": "markdown",
+   "source": "Finally, we can **join** the filtered dataframes into a **single dataframe** using the `s4h_join_data` method. This method combines the data from the **filtered dataframes** into a **single dataframe**, aligning the columns based on their names. The resulting dataframe will contain all the columns that are present in the filtered dataframes, and it will be ready for further analysis or **export** as a `CSV` file.",
+   "id": "1ca59653ff1335ac"
+  },
+  {
+   "metadata": {
+    "jupyter": {
+     "is_executing": true
+    },
+    "ExecuteTime": {
+     "start_time": "2025-09-10T14:41:56.654886Z"
+    }
+   },
+   "cell_type": "code",
+   "source": [
+    "joined_df = har.s4h_join_data(filtered_ddfs)\n",
+    "available_cols = joined_df.columns.tolist()\n",
+    "print(f\"Available columns: {available_cols}\")\n",
+    "print(f\"Shape of the joined DataFrame: {joined_df.shape}\")\n",
+    "print(joined_df.head())\n",
+    "joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)"
+   ],
+   "id": "5d4475d2bded1179",
+   "outputs": [],
+   "execution_count": null
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -1,0 +1,66 @@
+﻿socio4health.Extractor
+======================
+
+.. currentmodule:: socio4health
+
+.. autoclass:: Extractor
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Extractor.__delattr__
+      ~Extractor.__dir__
+      ~Extractor.__eq__
+      ~Extractor.__format__
+      ~Extractor.__ge__
+      ~Extractor.__getattribute__
+      ~Extractor.__getstate__
+      ~Extractor.__gt__
+      ~Extractor.__hash__
+      ~Extractor.__init__
+      ~Extractor.__init_subclass__
+      ~Extractor.__le__
+      ~Extractor.__lt__
+      ~Extractor.__ne__
+      ~Extractor.__new__
+      ~Extractor.__reduce__
+      ~Extractor.__reduce_ex__
+      ~Extractor.__repr__
+      ~Extractor.__setattr__
+      ~Extractor.__sizeof__
+      ~Extractor.__str__
+      ~Extractor.__subclasshook__
+      ~Extractor._extract_local_mode
+      ~Extractor._extract_online_mode
+      ~Extractor._process_downloaded_files
+      ~Extractor._process_files_locally
+      ~Extractor._read_csv
+      ~Extractor._read_excel
+      ~Extractor._read_file
+      ~Extractor._read_geospatial
+      ~Extractor._read_json
+      ~Extractor._read_parquet
+      ~Extractor._read_txt
+      ~Extractor.s4h_delete_download_folder
+      ~Extractor.s4h_extract
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Extractor.__annotations__
+      ~Extractor.__dict__
+      ~Extractor.__doc__
+      ~Extractor.__module__
+      ~Extractor.__weakref__
+   
+   

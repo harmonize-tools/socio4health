@@ -301,9 +301,13 @@ class Extractor:
         # Classify and extract compressed files
         for filepath in downloaded_files:
             if any(filepath.endswith(ext) for ext in self.compressed_ext):
+                base_name = os.path.splitext(os.path.basename(filepath))[0]
+                target_dir = os.path.join(self.output_path, base_name)
+                os.makedirs(target_dir, exist_ok=True)
+
                 extracted = compressed2files(
                     input_archive=filepath,
-                    target_directory=self.output_path,
+                    target_directory=target_dir,
                     down_ext=self.down_ext
                 )
                 files_to_process.extend(extracted)
@@ -346,8 +350,10 @@ class Extractor:
             if ext in self.compressed_ext:
                 compressed_list.extend(glob.glob(full_pattern))
                 for filepath in compressed_list:
-                    # Use same directory as source if download_dir not specified
-                    target_dir = self.output_path if self.output_path else os.path.dirname(filepath)
+                    base_name = os.path.splitext(os.path.basename(filepath))[0]
+                    parent_dir = self.output_path if self.output_path else os.path.dirname(filepath)
+                    target_dir = os.path.join(parent_dir, base_name)
+                    os.makedirs(target_dir, exist_ok=True)
                     extracted_files.extend(
                         compressed2files(
                             input_archive=filepath,

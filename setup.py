@@ -159,7 +159,9 @@ setup(
         "deep-translator>=1.11.4",
         "transformers>=4.30.0",
         "torch>=2.0.0",
-        "geopandas>=0.14.0"
+        "geopandas>=0.14.0",
+        "zipfile-deflate64==0.2.0",
+        "pyzipper==0.3.6"
     ],
 
     # List additional groups of dependencies here (e.g. development

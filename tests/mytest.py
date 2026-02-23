@@ -52,7 +52,8 @@ col_online_extractor = Extractor(
     down_ext=['.csv', '.zip'],
     sep=';',
     output_path="data",
-    depth=0
+    depth=0,
+    delete_zip_after=True
 )
 
 per_online_extractor = Extractor(

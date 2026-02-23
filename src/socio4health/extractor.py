@@ -15,6 +15,7 @@ import appdirs
 import os
 import pandas as pd
 import geopandas as gpd
+import pyreadstat
 import dask.dataframe as dd
 from tqdm import tqdm
 import glob
@@ -68,7 +69,7 @@ class Extractor:
     colspecs : list
         Column specifications for fixed-width files, defining the widths of each column. Required if ``is_fwf`` is ``True``.
     sep : str
-        The separator to use when reading ``CSV`` files. Defaults to ``','``.
+        The separator to use when reading ``CSV`` files. Defaults to ``,``.
     ddtype : Union[str, Dict]
         The data type to use when reading files. Can be a single type or a dictionary mapping column names to types. Defaults to ``object``.
     dtype : Union[str, Dict]
@@ -79,6 +80,8 @@ class Extractor:
         The name or index of the Excel sheet to read. Can also be a list to read multiple sheets or ``None`` to read all sheets. Defaults to the first sheet (``0``).
     geodriver : str
         The driver to use for reading geospatial files with ``geopandas.read_file()`` (e.g., ``'ESRI Shapefile'``, ``'KML'``, etc.). Optional.
+    delete_zip_after : bool
+        If True, delete zip/compressed files after extraction. Defaults to False.
 
     Important
     ------
@@ -110,8 +113,9 @@ class Extractor:
             dtype: str = None,
             engine: str = None,
             sheet_name: str = None,
-            geodriver: str = None
-    ):
+            geodriver: str = None,
+            delete_zip_after: bool = False
+        ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.depth = depth
         self.down_ext = down_ext if down_ext is not None else []
@@ -135,7 +139,8 @@ class Extractor:
             '.json': self._read_json,
             '.geojson': self._read_geospatial,
             '.shp': self._read_geospatial,
-            '.kml': self._read_geospatial
+            '.kml': self._read_geospatial,
+            '.sav': self._read_sav
         }
         os.makedirs(self.output_path, exist_ok=True)
         self.ddtype = ddtype
@@ -143,6 +148,7 @@ class Extractor:
         self.engine = engine
         self.sheet_name = sheet_name
         self.geodriver = geodriver
+        self.delete_zip_after = delete_zip_after
         if not input_path:
             raise ValueError("input_path must be provided")
         if is_fwf and (not colnames or not colspecs):
@@ -297,6 +303,7 @@ class Extractor:
     def _process_downloaded_files(self, downloaded_files):
         """Process downloaded files using local mode logic"""
         files_to_process = []
+        zip_to_delete = []
 
         # Classify and extract compressed files
         for filepath in downloaded_files:
@@ -311,11 +318,22 @@ class Extractor:
                     down_ext=self.down_ext
                 )
                 files_to_process.extend(extracted)
+                if self.delete_zip_after:
+                    zip_to_delete.append(filepath)
             else:
                 files_to_process.append(filepath)
 
         # Process all files (both direct downloads and extracted files)
         self._process_files_locally(files_to_process)
+
+        # Delete zip files if requested
+        if self.delete_zip_after:
+            for zip_path in zip_to_delete:
+                try:
+                    os.remove(zip_path)
+                    logging.info(f"Deleted zip file after extraction: {zip_path}")
+                except Exception as e:
+                    logging.warning(f"Could not delete zip file {zip_path}: {e}")
 
     def _process_files_locally(self, files):
         """Shared local processing logic used by both modes"""
@@ -344,6 +362,7 @@ class Extractor:
         iter_ext = list(compressed_inter) + list(set(self.down_ext) - compressed_inter)
 
         extracted_files = []
+        zip_to_delete = []
 
         for ext in iter_ext:
             full_pattern = os.path.join(self.input_path, f"*{ext}")
@@ -361,10 +380,21 @@ class Extractor:
                             down_ext=self.down_ext
                         )
                     )
+                    if self.delete_zip_after:
+                        zip_to_delete.append(filepath)
             else:
                 files_list.extend(glob.glob(full_pattern))
         # Process all files using the shared method
         self._process_files_locally(files_list + extracted_files)
+
+        # Delete zip files if requested
+        if self.delete_zip_after:
+            for zip_path in zip_to_delete:
+                try:
+                    os.remove(zip_path)
+                    logging.info(f"Deleted zip file after extraction: {zip_path}")
+                except Exception as e:
+                    logging.warning(f"Could not delete zip file {zip_path}: {e}")
 
         if not self.dataframes:
             logging.warning("No files found matching the specified extensions.")
@@ -410,6 +440,10 @@ class Extractor:
     def _read_txt(self, filepath):
         return dd.read_csv(filepath, sep=self.sep or '\t', encoding=self.encoding, dtype=self.dtype or 'object')
 
+    def _read_sav(self, filepath):
+        df, meta = pyreadstat.read_sav(filepath)
+        return df
+    
     def _read_file(self, filepath):
         try:
             df = []

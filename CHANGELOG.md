@@ -7,6 +7,12 @@ The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 - Prepare improvements and documentation updates.
 
+
+## [1.0.2] - 2026-02-23
+### Added
+- Extractor now can read .sav files.
+- Parameter to extractor to delete zip after extract.
+
 ## [1.0.1] - 2026-02-20
 ### Fixed
 - Each extracted compressed file is now stored in its own independent folder.

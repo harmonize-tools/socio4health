@@ -15,3 +15,5 @@ transformers
 torch
 pytest
 geopandas
+pyzipper
+zipfile-deflate64

@@ -441,7 +441,7 @@ class Extractor:
         return dd.read_csv(filepath, sep=self.sep or '\t', encoding=self.encoding, dtype=self.dtype or 'object')
 
     def _read_sav(self, filepath):
-        df, meta = pyreadstat.read_sav(filepath)
+        df, meta = pyreadstat.read_sav(filepath, encoding=self.encoding)
         return df
     
     def _read_file(self, filepath):

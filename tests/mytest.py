@@ -48,8 +48,8 @@ rd_extractor = Extractor(
 
 # Online extractors
 col_online_extractor = Extractor(
-    input_path="https://microdatos.dane.gov.co/index.php/catalog/771/get-microdata",
-    down_ext=['.csv', '.zip'],
+    input_path="https://microdatos.dane.gov.co/index.php/catalog/827/get-microdata",
+    down_ext=['.sav', '.zip'],
     sep=';',
     output_path="data",
     depth=0,
@@ -106,13 +106,14 @@ def test():
     print('Extracting data...')
     dfs = extractor.s4h_extract()
 
-    print('Vertical merge_____________________________________')
-    dfs = har.s4h_vertical_merge(dfs)
-
     for i, df in enumerate(dfs):
         print(f"DataFrame {i + 1} shape: {df.shape}")
         print(df.head())
         print("-" * 50)
+
+    """
+    print('Vertical merge_____________________________________')
+    dfs = har.s4h_vertical_merge(dfs)
 
     har.categories = ["Business"]
     har.key_col = 'DPTO'
@@ -123,7 +124,7 @@ def test():
 
     print(filtered_dask_dfs[0].head())
 
-    """
+    
     print('Horizontal merge___________________________________')
     joined_df = har.s4h_join_data(filtered_ddfs)
     available_cols = joined_df.columns.tolist()
@@ -136,7 +137,7 @@ def test():
     joined_df.to_csv('data/GEIH_2022_harmonized.csv', index=False)
     """
 
-    extractor.s4h_delete_download_folder()
+    #extractor.s4h_delete_download_folder()
 
 if __name__ == "__main__":
     test()

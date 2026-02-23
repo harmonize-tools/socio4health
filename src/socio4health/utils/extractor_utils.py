@@ -1,3 +1,5 @@
+import zipfile_deflate64
+import pyzipper
 from scrapy.crawler import CrawlerProcess
 from .standard_spider import StandardSpider
 import zipfile
@@ -145,8 +147,21 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
         try:
             # Extract the archive
             if zipfile.is_zipfile(input_archive):
-                with zipfile.ZipFile(input_archive, 'r') as zip_ref:
-                    zip_ref.extractall(temp_dir)
+                try:
+                    with zipfile.ZipFile(input_archive, 'r') as zip_ref:
+                        for zinfo in zip_ref.infolist():
+                            if getattr(zinfo, 'compress_type', None) == 9:
+                                logging.warning(f"Extracting Deflate64-compressed zip file: {input_archive}. This may take a while...")
+                                break
+                        zip_ref.extractall(temp_dir)
+                except NotImplementedError as e:
+                    logging.warning(f"zipfile failed for {input_archive}: {e}. Trying pyzipper fallback.")
+                    try:
+                        with pyzipper.ZipFile(input_archive, 'r') as zip_ref:
+                            zip_ref.extractall(temp_dir)
+                    except Exception as e2:
+                        logging.error(f"pyzipper extraction failed for {input_archive}: {e2}")
+                        return set()
             elif tarfile.is_tarfile(input_archive):
                 with tarfile.open(input_archive, 'r:*') as tar_ref:
                     tar_ref.extractall(temp_dir)

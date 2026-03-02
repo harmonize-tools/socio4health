@@ -97,7 +97,6 @@ def test():
 
     extractor = col_online_extractor
     har.dict_df = col_dict
-    har.similarity_threshold = 0.9
 
     har.join_key = 'DIRECTORIO'
     har.aux_key = 'ORDEN'
@@ -111,10 +110,11 @@ def test():
         print(df.head())
         print("-" * 50)
 
-    """
+    
     print('Vertical merge_____________________________________')
-    dfs = har.s4h_vertical_merge(dfs)
+    dfs = har.s4h_vertical_merge(dfs, similarity_threshold=0.5, method="union")
 
+"""
     har.categories = ["Business"]
     har.key_col = 'DPTO'
     har.key_val = ['11']

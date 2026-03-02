@@ -7,6 +7,15 @@ The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 - Prepare improvements and documentation updates.
 
+## [1.0.4] - 2026-03-02
+### Fixed
+ - Remove the similarity_threshold attribute and its property/setter,
+ - Normalize column names (upper/strip) when comparing.
+### Added
+ - Replace with an overlap_threshold parameter using the Szymkiewicz–Simpson coefficient.
+ - Method parameter on s4h_vertical_merge (supports 'union' and 'intersection').
+
+
 ## [1.0.3] - 2026-02-23
 ### Fixed
 - Extractor now decompress deflated64.

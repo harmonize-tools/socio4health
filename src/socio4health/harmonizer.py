@@ -25,8 +25,6 @@ class Harmonizer:
         ----------
         min_common_columns : int
             Minimum number of common columns required for vertical merge (default is 1).
-        similarity_threshold : float
-            Similarity threshold to consider for vertical merge (default is 0.8).
         nan_threshold : float
             Percentage threshold of ``NaN`` values to drop columns (default is 1.0).
         sample_frac : float or ``None``
@@ -58,7 +56,6 @@ class Harmonizer:
     """
     def __init__(self,
                  min_common_columns: int = 1,
-                 similarity_threshold: float = 1,
                  nan_threshold: float = 1.0,
                  sample_frac: Optional[float] = None,
                  column_mapping: Optional[Union[Type[Enum], Dict[str, Dict[str, str]], str, Path]] = None,
@@ -77,7 +74,6 @@ class Harmonizer:
         Initialize the Harmonizer class with default parameters.
         """
         self.min_common_columns = min_common_columns
-        self.similarity_threshold = similarity_threshold
         self.nan_threshold = nan_threshold
         self.sample_frac = sample_frac
         self.column_mapping = column_mapping
@@ -100,12 +96,7 @@ class Harmonizer:
     def min_common_columns(self) -> int:
         """Get the minimum number of common columns required for vertical merge."""
         return self._min_common_columns
-
-    @property
-    def similarity_threshold(self) -> float:
-        """Get the similarity threshold for vertical merge."""
-        return self._similarity_threshold
-
+    
     @property
     def nan_threshold(self) -> float:
         """Get the NaN threshold for column dropping."""
@@ -173,13 +164,6 @@ class Harmonizer:
         if not isinstance(value, int) or value < 0:
             raise ValueError("min_common_columns must be a non-negative integer")
         self._min_common_columns = value
-
-    @similarity_threshold.setter
-    def similarity_threshold(self, value: float):
-        """Set the similarity threshold for vertical merge."""
-        if not isinstance(value, (int, float)) or not 0 <= value <= 1:
-            raise ValueError("similarity_threshold must be a float between 0 and 1")
-        self._similarity_threshold = float(value)
 
     @nan_threshold.setter
     def nan_threshold(self, value: float):
@@ -257,7 +241,7 @@ class Harmonizer:
             raise ValueError("extra_cols must be a list of strings")
         self._extra_cols = value
 
-    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
+    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame], overlap_threshold: float = 1, method: str = "union") -> List[dd.DataFrame]:
         """
         Merge a list of `Dask <https://docs.dask.org>`_ DataFrames vertically using instance parameters.
 
@@ -265,6 +249,12 @@ class Harmonizer:
         ----------
         ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
             List of `Dask <https://docs.dask.org>`_ DataFrames to be merged.
+        overlap_threshold : float, optional
+            Overlap coefficient (Szymkiewicz–Simpson coefficient) threshold to consider for vertical merge (default is 1).
+        method : str, optional
+            Method to use for merging (default is "union").
+                - "union": Merge all columns from all DataFrames, filling missing values with NaN.
+                - "intersection": Merge only columns that are common to all DataFrames.
 
         Returns
         -------
@@ -273,11 +263,14 @@ class Harmonizer:
 
         Notes
         -----
-        - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column similarity is above ``similarity_threshold``.
+        - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column overlap coefficient is above ``overlap_threshold``.
         - Only columns with matching data types are considered compatible for merging.
         """
         if not ddfs:
             return []
+
+        if not isinstance(overlap_threshold, (int, float)) or not 0 <= overlap_threshold <= 1:
+            raise ValueError("overlap_threshold must be a float between 0 and 1")
 
         groups = []
         used_indices = set()
@@ -286,7 +279,12 @@ class Harmonizer:
             if i in used_indices:
                 continue
 
-            cols1 = set(df1.columns)
+            cols1 = set(
+                df1
+                .columns
+                .str.upper()
+                .str.strip()
+            )
             dtypes1 = {col: str(df1[col].dtype) for col in df1.columns}
             current_group = [i]
             used_indices.add(i)
@@ -296,12 +294,18 @@ class Harmonizer:
                 if j_actual in used_indices:
                     continue
 
-                cols2 = set(df2.columns)
+                cols2 = set(
+                    df2
+                    .columns
+                    .str.upper()
+                    .str.strip()
+                )
                 common_cols = cols1 & cols2
-                similarity = len(common_cols) / max(len(cols1), len(cols2))
+                
+                overlap = len(common_cols) / min(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
 
                 if (len(common_cols) >= self.min_common_columns and
-                        similarity >= self.similarity_threshold):
+                        overlap >= overlap_threshold):
 
                     compatible = True
                     for col in common_cols:
@@ -325,16 +329,19 @@ class Harmonizer:
                 merged_dfs.append(ddfs[group_indices[0]])
             else:
                 group_dfs = [ddfs[i] for i in group_indices]
-                common_cols = set(group_dfs[0].columns)
-                for df in group_dfs[1:]:
-                    common_cols.intersection_update(df.columns)
-
-                aligned_dfs = []
-                for df in group_dfs:
-                    common_cols_ordered = [col for col in df.columns if col in common_cols]
-                    other_cols = [col for col in df.columns if col not in common_cols]
-                    aligned_dfs.append(df[common_cols_ordered + other_cols])
-
+                if method == "intersection":
+                    common_cols = set(group_dfs[0].columns)
+                    for df in group_dfs[1:]:
+                        common_cols.intersection_update(df.columns)
+                    aligned_dfs = [df[list(common_cols)] for df in group_dfs]
+                elif method == "union":
+                    all_cols = set()
+                    for df in group_dfs:
+                        all_cols.update(df.columns)
+                    all_cols = list(all_cols)
+                    aligned_dfs = [df.reindex(columns=all_cols) for df in group_dfs]
+                else:
+                    raise ValueError("method must be 'union' or 'intersection'")
                 merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
                 merged_dfs.append(merged_df)
         if len(merged_dfs) > 1:

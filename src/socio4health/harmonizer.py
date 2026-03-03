@@ -279,12 +279,8 @@ class Harmonizer:
             if i in used_indices:
                 continue
 
-            cols1 = set(
-                df1
-                .columns
-                .str.upper()
-                .str.strip()
-            )
+            df1.columns = df1.columns.str.upper().str.strip()
+            cols1 = set(df1.columns)
             dtypes1 = {col: str(df1[col].dtype) for col in df1.columns}
             current_group = [i]
             used_indices.add(i)
@@ -294,12 +290,8 @@ class Harmonizer:
                 if j_actual in used_indices:
                     continue
 
-                cols2 = set(
-                    df2
-                    .columns
-                    .str.upper()
-                    .str.strip()
-                )
+                df2.columns = df2.columns.str.upper().str.strip()
+                cols2 = set(df2.columns)
                 common_cols = cols1 & cols2
                 
                 overlap = len(common_cols) / min(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
@@ -377,6 +369,8 @@ class Harmonizer:
             raise ValueError("Threshold must be between 0 and 1")
 
         def process_ddf(ddf):
+            ddf.columns = ddf.columns.str.upper().str.strip()
+            #ddf = ddf.loc[:, ~ddf.columns.duplicated()]
             if self.sample_frac is not None:
                 if not 0 < self.sample_frac <= 1:
                     raise ValueError("sample_frac must be between 0 and 1")
@@ -432,6 +426,9 @@ class Harmonizer:
         for df in df_or_dfs:
             if not isinstance(df, (dd.DataFrame, pd.DataFrame)):
                 raise TypeError("All elements in the list must be DataFrames (Dask or pandas)")
+            # Clean columns: uppercase, strip, deduplicate
+            df.columns = df.columns.str.upper().str.strip()
+            df = df.loc[:, ~df.columns.duplicated()]
             unique_columns.update(df.columns)
 
         return sorted(unique_columns)
@@ -493,6 +490,9 @@ class Harmonizer:
 
         def process_dataframe(df: dd.DataFrame, country: str) -> dd.DataFrame:
             """Process a single dataframe"""
+            # Clean columns: uppercase, strip, deduplicate
+            df.columns = df.columns.str.upper().str.strip()
+            df = df.loc[:, ~df.columns.duplicated()]
             # Get mappings for this country
             col_map = get_country_mapping(column_mapping, country)
             val_maps = get_country_mapping(value_mappings, country)
@@ -600,7 +600,9 @@ class Harmonizer:
 
         filtered_ddfs = []
         for ddf in ddfs:
-            ddf.columns = ddf.columns.str.upper()
+            # Clean columns: uppercase, strip, deduplicate
+            ddf.columns = ddf.columns.str.upper().str.strip()
+            ddf = ddf.loc[:, ~ddf.columns.duplicated()]
 
             if self.key_col and self.key_val:
                 if key_column_upper not in ddf.columns:
@@ -664,6 +666,9 @@ class Harmonizer:
             Merged DataFrame with duplicate columns removed.
         """
         pandas_dfs = [df.compute() for df in ddfs]
+        # Clean columns: uppercase, strip, deduplicate
+        pandas_dfs = [df.rename(columns=lambda x: str(x).upper().strip()) for df in pandas_dfs]
+        pandas_dfs = [df.loc[:, ~df.columns.duplicated()] for df in pandas_dfs]
 
         def identify_primary_df(dfs):
             candidates = []

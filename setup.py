@@ -39,7 +39,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.5',  # Required
+    version='1.0.6',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -158,7 +158,9 @@ setup(
         "pyarrow>=12.0.0",
         "deep-translator>=1.11.4",
         "transformers>=4.30.0",
-        "torch>=2.0.0",
+        "torch==2.8.0",
+        "torchaudio==2.8.0",
+        "torchvision==2.8.0",
         "geopandas>=0.14.0",
         "zipfile-deflate64==0.2.0",
         "pyzipper==0.3.6"

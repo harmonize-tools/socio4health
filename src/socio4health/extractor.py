@@ -250,8 +250,8 @@ class Extractor:
 
         # Step 2: Filter and confirm files to download
         if not links:
-            logging.error("No downloadable files found matching criteria")
-            raise ValueError("No files found matching the specified extensions and keywords")
+            logging.warning("No downloadable files found matching criteria. Returning empty extraction.")
+            return
 
         # Handle large number of files with user confirmation
         if len(links) > 30:
@@ -281,8 +281,8 @@ class Extractor:
                 failed_downloads.append((filename, str(e)))
 
         if not downloaded_files:
-            logging.error("No files were successfully downloaded")
-            raise ValueError("All download attempts failed")
+            logging.warning("No files were successfully downloaded. Returning empty extraction.")
+            return
 
         if failed_downloads:
             logging.warning(f"Failed to download {len(failed_downloads)} files")
@@ -297,8 +297,8 @@ class Extractor:
             logging.warning(f"Could not remove scrap file: {e}")
 
         if not self.dataframes:
-            logging.error("No valid data files found after processing")
-            raise ValueError("No data could be extracted from downloaded files")
+            logging.warning("No valid data files found after processing. Returning empty extraction.")
+            return
 
     def _process_downloaded_files(self, downloaded_files):
         """Process downloaded files using local mode logic"""
@@ -365,9 +365,9 @@ class Extractor:
         zip_to_delete = []
 
         for ext in iter_ext:
-            full_pattern = os.path.join(self.input_path, f"*{ext}")
+            full_pattern = os.path.join(self.input_path, f"**/*{ext}")
             if ext in self.compressed_ext:
-                compressed_list.extend(glob.glob(full_pattern))
+                compressed_list.extend(glob.glob(full_pattern, recursive=True))
                 for filepath in compressed_list:
                     base_name = os.path.splitext(os.path.basename(filepath))[0]
                     parent_dir = self.output_path if self.output_path else os.path.dirname(filepath)
@@ -383,7 +383,7 @@ class Extractor:
                     if self.delete_zip_after:
                         zip_to_delete.append(filepath)
             else:
-                files_list.extend(glob.glob(full_pattern))
+                files_list.extend(glob.glob(full_pattern, recursive=True))
         # Process all files using the shared method
         self._process_files_locally(files_list + extracted_files)
 

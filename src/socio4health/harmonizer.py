@@ -327,11 +327,17 @@ class Harmonizer:
                         common_cols.intersection_update(df.columns)
                     aligned_dfs = [df[list(common_cols)] for df in group_dfs]
                 elif method == "union":
+                    import numpy as np
                     all_cols = set()
                     for df in group_dfs:
                         all_cols.update(df.columns)
                     all_cols = list(all_cols)
-                    aligned_dfs = [df.reindex(columns=all_cols) for df in group_dfs]
+                    aligned_dfs = []
+                    for df in group_dfs:
+                        missing_cols = [col for col in all_cols if col not in df.columns]
+                        for col in missing_cols:
+                            df[col] = np.nan
+                        aligned_dfs.append(df[all_cols])
                 else:
                     raise ValueError("method must be 'union' or 'intersection'")
                 merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
@@ -426,9 +432,8 @@ class Harmonizer:
         for df in df_or_dfs:
             if not isinstance(df, (dd.DataFrame, pd.DataFrame)):
                 raise TypeError("All elements in the list must be DataFrames (Dask or pandas)")
-            # Clean columns: uppercase, strip, deduplicate
             df.columns = df.columns.str.upper().str.strip()
-            df = df.loc[:, ~df.columns.duplicated()]
+            #sdf = df.loc[:, ~df.columns.duplicated()]
             unique_columns.update(df.columns)
 
         return sorted(unique_columns)
@@ -600,7 +605,6 @@ class Harmonizer:
 
         filtered_ddfs = []
         for ddf in ddfs:
-            # Clean columns: uppercase, strip, deduplicate
             ddf.columns = ddf.columns.str.upper().str.strip()
             ddf = ddf.loc[:, ~ddf.columns.duplicated()]
 
@@ -666,7 +670,6 @@ class Harmonizer:
             Merged DataFrame with duplicate columns removed.
         """
         pandas_dfs = [df.compute() for df in ddfs]
-        # Clean columns: uppercase, strip, deduplicate
         pandas_dfs = [df.rename(columns=lambda x: str(x).upper().strip()) for df in pandas_dfs]
         pandas_dfs = [df.loc[:, ~df.columns.duplicated()] for df in pandas_dfs]
 

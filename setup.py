@@ -160,7 +160,7 @@ setup(
         "transformers>=4.30.0",
         "torch==2.8.0",
         "torchaudio==2.8.0",
-        "torchvision==0.20.1",
+        "torchvision==0.23.0",
         "geopandas>=0.14.0",
         "zipfile-deflate64==0.2.0",
         "pyzipper==0.3.6"

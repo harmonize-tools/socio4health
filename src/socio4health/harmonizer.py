@@ -279,7 +279,7 @@ class Harmonizer:
             if i in used_indices:
                 continue
 
-            df1.columns = df1.columns.str.upper().str.strip()
+            df1 = df1.rename(columns=lambda x: str(x).upper().strip())
             cols1 = set(df1.columns)
             dtypes1 = {col: str(df1[col].dtype) for col in df1.columns}
             current_group = [i]
@@ -290,7 +290,7 @@ class Harmonizer:
                 if j_actual in used_indices:
                     continue
 
-                df2.columns = df2.columns.str.upper().str.strip()
+                df2 = df2.rename(columns=lambda x: str(x).upper().strip())
                 cols2 = set(df2.columns)
                 common_cols = cols1 & cols2
                 
@@ -375,7 +375,7 @@ class Harmonizer:
             raise ValueError("Threshold must be between 0 and 1")
 
         def process_ddf(ddf):
-            ddf.columns = ddf.columns.str.upper().str.strip()
+            ddf = ddf.rename(columns=lambda x: str(x).upper().strip())
             #ddf = ddf.loc[:, ~ddf.columns.duplicated()]
             if self.sample_frac is not None:
                 if not 0 < self.sample_frac <= 1:
@@ -432,7 +432,7 @@ class Harmonizer:
         for df in df_or_dfs:
             if not isinstance(df, (dd.DataFrame, pd.DataFrame)):
                 raise TypeError("All elements in the list must be DataFrames (Dask or pandas)")
-            df.columns = df.columns.str.upper().str.strip()
+            df = df.rename(columns=lambda x: str(x).upper().strip())
             #sdf = df.loc[:, ~df.columns.duplicated()]
             unique_columns.update(df.columns)
 
@@ -496,7 +496,7 @@ class Harmonizer:
         def process_dataframe(df: dd.DataFrame, country: str) -> dd.DataFrame:
             """Process a single dataframe"""
             # Clean columns: uppercase, strip, deduplicate
-            df.columns = df.columns.str.upper().str.strip()
+            df = df.rename(columns=lambda x: str(x).upper().strip())
             df = df.loc[:, ~df.columns.duplicated()]
             # Get mappings for this country
             col_map = get_country_mapping(column_mapping, country)
@@ -605,7 +605,7 @@ class Harmonizer:
 
         filtered_ddfs = []
         for ddf in ddfs:
-            ddf.columns = ddf.columns.str.upper().str.strip()
+            ddf = ddf.rename(columns=lambda x: str(x).upper().strip())
             ddf = ddf.loc[:, ~ddf.columns.duplicated()]
 
             if self.key_col and self.key_val:

@@ -1,13 +1,15 @@
 import pandas as pd
 from socio4health import Extractor, Harmonizer
 
-def extract_and_prepare_data(year, path, ext, sep, output_path):
+def extract_and_prepare_data(year, path, ext, sep=None, output_path=None, colnames=None, colspecs=None):
     print(f"{year}: {path}")
     extractor = Extractor(
         input_path=path,
         down_ext=[ext],
         sep=sep,
-        output_path=output_path
+        output_path=output_path,
+        colnames=colnames,
+        colspecs=colspecs
     )
     dfs_extracted = extractor.s4h_extract()
     for df in dfs_extracted:

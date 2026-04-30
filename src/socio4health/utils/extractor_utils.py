@@ -1,4 +1,4 @@
-import zipfile_deflate64
+
 import pyzipper
 from scrapy.crawler import CrawlerProcess
 from .standard_spider import StandardSpider

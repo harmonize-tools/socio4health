@@ -18,4 +18,3 @@ torchvision==0.23.0
 pytest
 geopandas>=0.14.0
 pyzipper>=0.3.6
-zipfile-deflate64>=0.2.0

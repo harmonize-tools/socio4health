@@ -82,6 +82,8 @@ class Extractor:
         The driver to use for reading geospatial files with ``geopandas.read_file()`` (e.g., ``'ESRI Shapefile'``, ``'KML'``, etc.). Optional.
     delete_zip_after : bool
         If True, delete zip/compressed files after extraction. Defaults to False.
+    on_bad_lines : str
+        How to handle bad lines when reading ``CSV`` files. Options are 'error', 'warn', or 'skip'. Defaults to 'warn'.
 
     Important
     ------
@@ -114,7 +116,8 @@ class Extractor:
             engine: str = None,
             sheet_name: str = None,
             geodriver: str = None,
-            delete_zip_after: bool = False
+            delete_zip_after: bool = False,
+            on_bad_lines: str = 'warn'
         ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.depth = depth
@@ -149,6 +152,7 @@ class Extractor:
         self.sheet_name = sheet_name
         self.geodriver = geodriver
         self.delete_zip_after = delete_zip_after
+        self.on_bad_lines = on_bad_lines
         if not input_path:
             raise ValueError("input_path must be provided")
         if is_fwf and (not colnames or not colspecs):
@@ -407,7 +411,7 @@ class Extractor:
             sep=self.sep if self.sep else ',',
             dtype=self.ddtype,
             assume_missing = True,
-            on_bad_lines='warn'
+            on_bad_lines=self.on_bad_lines
         )
         if len(df.columns) == 1:
             # Try different separator if we only got one column
@@ -417,7 +421,7 @@ class Extractor:
                 sep=',' if self.sep != ',' else ';',
                 dtype=self.ddtype,
                 assume_missing=True,
-                on_bad_lines='warn'
+                on_bad_lines=self.on_bad_lines
             )
         return df
 

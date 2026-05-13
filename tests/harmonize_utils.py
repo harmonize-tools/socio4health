@@ -118,12 +118,22 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col):
                 cols_to_concat.append(dummies_df)
                 df_onehot = pd.concat(cols_to_concat, axis=1)
                 df_grouped = df_onehot.groupby(group_cols).sum(numeric_only=True).reset_index()
+                if df_grouped.columns.duplicated().any():
+                    group_cols_frame = df_grouped[group_cols]
+                    numeric_cols = df_grouped.drop(columns=group_cols).T.groupby(level=0).sum().T
+                    df_grouped = pd.concat([group_cols_frame, numeric_cols], axis=1)
+                dummy_cols = [col for col in df_grouped.columns if col not in group_cols + [weight_col]]
                 df_grouped = df_grouped.rename(columns={weight_col: f"{weight_col}_sum"})
+                if dummy_cols:
+                    total_weight = df_grouped[f"{weight_col}_sum"].replace(0, pd.NA)
+                    for col in dummy_cols:
+                        df_grouped[col] = df_grouped[col].div(total_weight).fillna(0)
+                df_grouped = df_grouped.drop(columns=[f"{weight_col}_sum"])
                 if 'YEAR' in df_grouped.columns:
                     cols = ['YEAR'] + [col for col in df_grouped.columns if col != 'YEAR']
                     df_grouped = df_grouped[cols]
                 grouped_dfs.append(df_grouped)
-                print(f"One-hot grouped DataFrame {i} by {group_cols} (weighted sum by {weight_col}):")
+                print(f"One-hot grouped DataFrame {i} by {group_cols} (proportions by total {weight_col}):")
                 print(df_grouped.head())
             else:
                 print(f"DataFrame {i} no tiene columnas categóricas para one-hot encoding.")

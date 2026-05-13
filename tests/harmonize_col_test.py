@@ -1,10 +1,15 @@
 
+from pathlib import Path
+import re
+
 from socio4health import Harmonizer
 from harmonize_utils import extract_and_prepare_data, merge_factor, select_and_filter_columns, group_and_onehot_encode, _clean_column_name
 import pandas as pd
 
 
 OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\GEIH\OUTPUT"
+
+SPECIAL_CLASE_FILE_PATTERN = re.compile(r".+\*csv_.+ - .+\.csv$", re.IGNORECASE)
 
 col_cols = [
         "YEAR",
@@ -48,6 +53,22 @@ def harmonize_directorio_columns(dfs):
             dfs[i] = df
     return dfs
 
+
+def add_clase_to_special_csvs(folder_path):
+    folder = Path(folder_path)
+    
+    for csv_path in folder.rglob("*.csv"):
+        if not SPECIAL_CLASE_FILE_PATTERN.match(csv_path.name):
+            continue
+
+        df = pd.read_csv(csv_path, sep=';', encoding='latin-1')
+        header_columns = [_clean_column_name(col) for col in df.columns]
+        
+        if 'CLASE' not in header_columns:
+            df['CLASE'] = 1
+            df.to_csv(csv_path, sep=';', index=False, encoding='latin-1')
+            print(f"Added CLASE=1 to {csv_path}")
+
 def main():
     GEIH_data = {
         2007: r"D:\EQUIPO\Documents HDD\Harmonize\GEIH\2007",
@@ -72,6 +93,7 @@ def main():
     }
     all_grouped_dfs = []
     for year, path in GEIH_data.items():
+        add_clase_to_special_csvs(path)
         ddfs = extract_and_prepare_data(year, path, ext='.csv', sep=';', output_path=OUTPUT_PATH, on_bad_lines='skip')
         ddfs = harmonize_directorio_columns(ddfs)
         ddfs = merge_factor(ddfs, factor_col='FEX_C18', id_col='DIRECTORIO')

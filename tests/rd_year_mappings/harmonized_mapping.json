@@ -1,0 +1,156 @@
+{
+  "AREA": {
+    "DESCRIPTION": "Housing area type",
+    "VALUES": {
+      "1": "Urban",
+      "2": "Rural",
+      "0": "Missing"
+    }
+  },
+  "H_TYPE": {
+    "DESCRIPTION": "Type of housing",
+    "VALUES": {
+      "1": "House",
+      "2": "Apartment",
+      "3": "Room",
+      "4": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_WALLS": {
+    "DESCRIPTION": "Primary building material used for the walls of this house",
+    "VALUES": {
+      "1": "No walls",
+      "2": "Masonry, stone, cement, adobe, metal, glass, and other fabricated materials (sometimes mixed with wood)",
+      "3": "Wood",
+      "4": "Other plant-based materials",
+      "5": "Cardboard, scrap, and miscellaneous materials",
+      "6": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_FLOOR": {
+    "DESCRIPTION": "Primary building material used for the floor of this house",
+    "VALUES": {
+      "1": "None/unfinished (earth)",
+      "2": "Cement",
+      "3": "Wood",
+      "4": "Parquet",
+      "5": "Tile",
+      "6": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_ROOF": {
+    "DESCRIPTION": "Primary building material used for the roof of this house",
+    "VALUES": {
+      "1": "Masonry, concrete, clay tile, or tiles of unspecified type",
+      "2": "Wood and other plant materials",
+      "3": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_ELECTRICITY": {
+    "DESCRIPTION": "Household has access to electricity",
+    "VALUES": {
+      "1": "Yes",
+      "2": "No",
+      "0": "Missing"
+    }
+  },
+  "H_SANITARY": {
+    "DESCRIPTION": "Household has access to a sewage system or septic tank",
+    "VALUES": {
+      "1": "Sewage system (public sewage disposal)",
+      "2": "Septic tank (private sewage disposal)",
+      "3": "Not connected to sewage disposal system",
+      "0": "Missing"
+    }
+  },
+  "H_GARBAGE": {
+    "DESCRIPTION": "Household's garbage is collected or disposed",
+    "VALUES": {
+      "1": "Collected by a sanitation service (public or private)",
+      "2": "Burned or buried",
+      "3": "Thrown into street, vacant land, or common area",
+      "4": "Thrown into river, lake, ocean, lagoon, etc.",
+      "5": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_WATER": {
+    "DESCRIPTION": " Physical means by which the housing receives its water",
+    "VALUES": {
+      "1": "Piped inside dwelling",
+      "2": "Piped outside the dwelling",
+      "3": "No piped water body",
+      "4": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_COOK": {
+    "DESCRIPTION": "Predominant type of fuel or energy used for cooking",
+    "VALUES": {
+      "1": "Electricity",
+      "2": "Piped gas",
+      "3": "Tanked gas",
+      "4": "Coal",
+      "5": "Wood",
+      "6": "Other",
+      "0": "Missing"
+    }
+  },
+  "H_PROPERTY": {
+    "DESCRIPTION": "Indicates whether a member of the household owned the housing",
+    "VALUES": {
+      "1": "Owned, already paid",
+      "2": "Owned, still paying",
+      "3": "Renting",
+      "4": "Free/usufruct (no cash rent)",
+      "5": "Other",
+      "0": "Missing"
+    }
+  },
+  "P_LITERACY": {
+    "DESCRIPTION": "Respondent could read and write in any language",
+    "VALUES": {
+      "1": "Yes",
+      "2": "No",
+      "0": "Missing"
+    }
+  },
+  "P_SEX": {
+    "DESCRIPTION": "Reports the sex of the respondent",
+    "VALUES": {
+      "1": "Male",
+      "2": "Female",
+      "0": "Missing"
+    }
+  },
+  "P_ETHNIC": {
+    "DESCRIPTION": "Ethnic group with which a person identified",
+    "VALUES": {
+      "1": "Indigenous",
+      "2": "Afro-descendant",
+      "3": "Mestizo or white",
+      "4": "Other",
+      "0": "Missing"
+    }
+  },
+  "P_AGE": {
+    "DESCRIPTION": "Age in years as of the person's last birthday",
+    "VALUES": {
+      "999": "Missing"
+    }
+  },
+  "P_EDUCATION": {
+    "DESCRIPTION": "Records the last educational attainment in terms of the level of schooling",
+    "VALUES": {
+      "1": "Less than primary completed",
+      "2": "Primary completed",
+      "3": "Secondary completed",
+      "4": "University and later completed",
+      "0": "Missing"
+    }
+  }
+}

@@ -29,14 +29,16 @@
     "V111": "H_SANITARY",
     "V116": "P_LITERACY",
     "V108": "H_WATER",
-    "V110": "H_COOK",
+    "V107": "H_COOK",
+    "P301": "P_LITERACY",
     "P202": "P_SEX",
     "P203": "P_AGE",
-    "P301": "P_EDUCATION",
+    "P303": "P_EDUCATION",
     "HVIVIEN": "ID",
     "REGION": "ADMIN_DIVISION",
     "HPROVI": "ADMIN_DIVISION_2",
-    "FEXPANSION": "EXP_FACTOR"
+    "FEXPANSION": "EXP_FACTOR",
+    "F_EXPANSIÓN": "EXP_FACTOR"
   },
   "2021": {
     "HZONA": "AREA",
@@ -57,7 +59,7 @@
     "REGION": "ADMIN_DIVISION",
     "HPROVI": "ADMIN_DIVISION_2",
     "F_EXP_HOG": "EXP_FACTOR",
-    "F_EXPANSI\u00d3N": "EXP_FACTOR_PER"
+    "F_EXPANSIÓN": "EXP_FACTOR"
   },
   "2019": {
     "HH6": "AREA",

@@ -25,10 +25,14 @@ def _coerce_int_keys(value):
         return [_coerce_int_keys(item) for item in value]
     return value
 
-
 COLUMN_MAPPING_BY_YEAR = _coerce_int_keys(_load_json("column_mapping_by_year.json"))
 HARMONIZED_MAPPING = _coerce_int_keys(_load_json("harmonized_mapping.json"))
-VALUE_MAPPING_BY_YEAR = _coerce_int_keys(_load_json("value_mapping_by_year.json"))
+
+
+def get_value_mapping_path(year: int) -> Path:
+    """Return the file path for the value mapping of a given year."""
+    filename = f"enhogar{year}_mapping.json"
+    return _coerce_int_keys(_load_json(filename))
 
 
 def get_columns_for_year(year: int) -> list:
@@ -40,11 +44,6 @@ def get_columns_for_year(year: int) -> list:
 def get_column_rename_map(year: int) -> dict:
     """Return the column rename map for a given year."""
     return COLUMN_MAPPING_BY_YEAR.get(year, {})
-
-
-def get_value_mappings(year: int) -> dict:
-    """Return the value mappings for a given year."""
-    return VALUE_MAPPING_BY_YEAR.get(year, {})
 
 
 def get_harmonized_columns() -> list:

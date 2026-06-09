@@ -110,14 +110,12 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col):
                 if pd.isna(val):
                     return val
                 s = str(val).strip()
-                # match leading integer
                 m = re.match(r"([+-]?\d+)", s)
                 if m:
                     try:
                         return int(m.group(1))
                     except Exception:
                         return s
-                # fallback: split on dot and take left part if numeric
                 if '.' in s:
                     left = s.split('.', 1)[0]
                     if re.fullmatch(r"[+-]?\d+", left):
@@ -129,16 +127,20 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col):
         if group_col in df.columns and weight_col in df.columns:
             df = df.drop(columns=[id_col], errors='ignore')
             df[weight_col] = pd.to_numeric(df[weight_col], errors='coerce')
+
+            df = df.dropna(subset=[group_col])
+            df = df[df[group_col].astype(str).str.strip() != '']
+
             group_cols = [group_col]
             if 'YEAR' in df.columns:
                 group_cols.append('YEAR')
             cat_cols = [col for col in df.columns if col not in [group_col, weight_col, 'YEAR']]
             dummies = [pd.get_dummies(df[col], prefix=col) for col in cat_cols]
+            
             if dummies:
                 dummies_df = pd.concat(dummies, axis=1)
                 dummies_df.columns = [c.replace('.0', '') for c in dummies_df.columns]
 
-                # Load harmonized mapping at runtime and translate dummy column suffixes (e.g., AREA_1)
                 try:
                     from rd_year_mappings import HARMONIZED_MAPPING
                 except Exception:
@@ -148,37 +150,56 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col):
                 for colname in dummies_df.columns:
                     if '_' not in colname:
                         continue
+                    
                     prefix, token = colname.rsplit('_', 1)
                     clean_prefix = _clean_column_name(prefix)
-                    harm_info = HARMONIZED_MAPPING.get(clean_prefix)
-                    if not isinstance(harm_info, dict):
-                        continue
-                    values_map = harm_info.get('VALUES')
-                    if not isinstance(values_map, dict):
-                        continue
-
-                    # Try token directly, then try numeric normalization
-                    label = values_map.get(token)
-                    if label is None:
-                        # If mapping keys are ints, try integer lookup
-                        if re.fullmatch(r"[-+]?\d+(?:\.0+)?", token):
-                            norm_str = str(int(float(token)))
-                            # try string key
-                            label = values_map.get(norm_str)
-                            # try integer key
-                            if label is None:
-                                try:
-                                    label = values_map.get(int(norm_str))
-                                except Exception:
-                                    pass
-                    if label:
-                        # Make safe column suffix
-                        label_clean = re.sub(r"\W+", "_", label).strip('_')
+                    
+                    # 1. Limpiar el token de espacios y formatos .0
+                    token_clean = str(token).strip().replace('.0', '')
+                    
+                    harm_info = HARMONIZED_MAPPING.get(clean_prefix, {})
+                    values_map = harm_info.get('VALUES', {})
+                    
+                    # 2. Búsqueda agresiva: probar como string, int y float
+                    label = None
+                    keys_to_try = [token_clean]
+                    if token_clean.isdigit():
+                        keys_to_try.append(int(token_clean))
+                        keys_to_try.append(float(token_clean))
+                    
+                    for key in keys_to_try:
+                        if key in values_map:
+                            label = values_map[key]
+                            break
+                    
+                    # 3. Decidir el nombre final
+                    if label is not None and str(label).strip() != "":
+                        # Existe un mapeo válido: limpiarlo y usarlo
+                        label_clean = re.sub(r"\W+", "_", str(label)).strip('_')
                         new_name = f"{prefix}_{label_clean}"
+                    else:
+                        # NO existe mapeo, o es vacío/None: Forzar a _Missing 
+                        # para evitar que queden columnas sueltas como P_EDUCATION_8
+                        new_name = f"{prefix}_Missing"
+                    
+                    # Solo agregar al mapa si el nombre realmente cambia
+                    if new_name != colname:
                         rename_map[colname] = new_name
 
+                # Aplicar el renombrado
                 if rename_map:
                     dummies_df = dummies_df.rename(columns=rename_map)
+                
+                clean_dummy_cols = {}
+                for col in dummies_df.columns:
+                    # Match columns ending with underscore + spaces, or _nan, _None
+                    if re.search(r'_\s*$', col) or re.search(r'_(nan|none)$', col, re.IGNORECASE):
+                        prefix = col.rsplit('_', 1)[0]
+                        clean_dummy_cols[col] = f"{prefix}_Missing"
+                
+                if clean_dummy_cols:
+                    dummies_df = dummies_df.rename(columns=clean_dummy_cols)
+
                 dummies_df = dummies_df.multiply(df[weight_col], axis=0)
                 cols_to_concat = [df[[group_col, weight_col]]]
                 if 'YEAR' in df.columns:
@@ -186,20 +207,25 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col):
                 cols_to_concat.append(dummies_df)
                 df_onehot = pd.concat(cols_to_concat, axis=1)
                 df_grouped = df_onehot.groupby(group_cols).sum(numeric_only=True).reset_index()
+                
                 if df_grouped.columns.duplicated().any():
                     group_cols_frame = df_grouped[group_cols]
                     numeric_cols = df_grouped.drop(columns=group_cols).T.groupby(level=0).sum().T
                     df_grouped = pd.concat([group_cols_frame, numeric_cols], axis=1)
+                
                 dummy_cols = [col for col in df_grouped.columns if col not in group_cols + [weight_col]]
                 df_grouped = df_grouped.rename(columns={weight_col: f"{weight_col}_sum"})
+                
                 if dummy_cols:
                     total_weight = df_grouped[f"{weight_col}_sum"].replace(0, pd.NA)
                     for col in dummy_cols:
                         df_grouped[col] = df_grouped[col].div(total_weight).fillna(0)
+                
                 df_grouped = df_grouped.drop(columns=[f"{weight_col}_sum"])
                 if 'YEAR' in df_grouped.columns:
                     cols = ['YEAR'] + [col for col in df_grouped.columns if col != 'YEAR']
                     df_grouped = df_grouped[cols]
+                    
                 grouped_dfs.append(df_grouped)
                 print(f"One-hot grouped DataFrame {i} by {group_cols} (proportions by total {weight_col}):")
                 print(df_grouped.head())
@@ -207,6 +233,7 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col):
                 print(f"DataFrame {i} no tiene columnas categóricas para one-hot encoding.")
         else:
             print(f"DataFrame {i} does not have '{group_col}' or '{weight_col}', skipping group.")
+            
     return grouped_dfs
 
 
@@ -376,48 +403,7 @@ def apply_value_mappings(dfs, year, value_mappings):
                 # explicit in mapping, keep the normalized token as-is instead of the raw token.
                 df[col_match] = mapped_series
                 print(f"Applied value mapping for {col_match} in year {year}")
-
-        # Enforce harmonized categorical schema: values outside allowed categories
-        # are sent to 0 (Missing), which avoids residual one-hot columns like _96/_99.
-        for col in df.columns:
-            clean_col = _clean_column_name(col)
-            harm_info = HARMONIZED_MAPPING.get(clean_col)
-            if not isinstance(harm_info, dict):
-                continue
-
-            allowed_values_raw = harm_info.get("VALUES")
-            if not isinstance(allowed_values_raw, dict):
-                continue
-
-            allowed_values = {
-                token
-                for token in (_normalize_value_token(v) for v in allowed_values_raw.keys())
-                if token is not None
-            }
-
-            # Detect open numeric columns (e.g., P_AGE where only 999 -> Missing is listed)
-            open_numeric = False
-            try:
-                if _clean_column_name(col) == 'P_AGE' and (999 in allowed_values_raw or '999' in allowed_values_raw) and len(allowed_values_raw) == 1:
-                    open_numeric = True
-            except Exception:
-                open_numeric = False
-
-            # Skip if there is no usable schema for this column and it's not open_numeric.
-            if not allowed_values and not open_numeric:
-                continue
-
-            normalized_series = df[col].map(_normalize_value_token)
-
-            def _clamp_value(x):
-                if x is None:
-                    return x
-                if open_numeric and re.fullmatch(r"\d+", str(x)):
-                    return x
-                return x if x in allowed_values else "0"
-
-            df[col] = normalized_series.map(_clamp_value)
-        
+                
         mapped_dfs.append(df)
     
     return mapped_dfs

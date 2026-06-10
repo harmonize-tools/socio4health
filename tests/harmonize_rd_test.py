@@ -30,13 +30,13 @@ def main():
         #2011: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2011",
         #2012: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2012",
         #2013: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2013",
-        #2014: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2014",
-        #2015: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2015",
-        #2016: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2016",
-        #2017: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2017",
-        #2018: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2018",
-        #2019: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2019",
-        #2021: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2021",
+        2014: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2014",
+        2015: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2015",
+        2016: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2016",
+        2017: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2017",
+        2018: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2018",
+        2019: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2019",
+        2021: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2021",
         2022: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2022",
         2024: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2024"
     }
@@ -99,7 +99,7 @@ def main():
 
     final_df = pd.concat(final_dfs, ignore_index=True)
     
-    fixed_cols = ['ADMIN_DIVISION', 'YEAR']
+    fixed_cols = ['YEAR', 'ADMIN_DIVISION']
     data_cols = sorted([col for col in final_df.columns if col not in fixed_cols])
     final_df = final_df[fixed_cols + data_cols]
     #final_df = final_df.sort_values(by=['ADMIN_DIVISION', 'YEAR']).reset_index(drop=True)

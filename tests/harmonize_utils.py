@@ -317,10 +317,6 @@ def apply_value_mappings(dfs, year, value_mappings):
     except Exception:
         year_column_map = {}
 
-    try:
-        from rd_year_mappings import HARMONIZED_MAPPING
-    except Exception:
-        HARMONIZED_MAPPING = {}
     
     if not year_value_map:
         print(f"No value mappings found for year {year}")

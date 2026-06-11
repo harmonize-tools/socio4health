@@ -190,11 +190,11 @@
     "H107": "H_SANITARY",
     "H105": "H_WATER",
     "H104": "H_COOK",
-    "ED2": "P_LITERACY",
-    "HL4": "P_SEX",
-    "HL6": "P_AGE",
-    "ED4A": "P_EDUCATION",
-    "HH2": "ID",
+    "H212": "P_LITERACY",
+    "H202": "P_SEX",
+    "H203": "P_AGE",
+    "H215B": "P_EDUCATION",
+    "HVIVIEN": "ID",
     "REGION": "ADMIN_DIVISION",
     "HPROVI": "ADMIN_DIVISION_2",
     "FEXPANSION": "EXP_FACTOR"
@@ -236,7 +236,7 @@
     "H214B": "P_EDUCATION",
     "REGION": "ADMIN_DIVISION",
     "HPROVI": "ADMIN_DIVISION_2",
-    "FEXPANSION": "EXP_FACTOR"
+    "FPONDERA": "EXP_FACTOR"
   },
   "2010": {
     "HH6": "AREA",
@@ -247,6 +247,7 @@
     "WS7": "H_SANITARY",
     "WS1": "H_WATER",
     "HC6": "H_COOK",
+    "ED2": "P_LITERACY",
     "HL4": "P_SEX",
     "HL5": "P_AGE",
     "ED6A": "P_EDUCATION",
@@ -310,8 +311,7 @@
     "P2004": "P_AGE",
     "P2016": "P_EDUCATION",
     "HVIVIEN": "ID",
-    "REGION": "ADMIN_DIVISION",
     "HPROVI": "ADMIN_DIVISION_2",
-    "FXPVIV4": "EXP_FACTOR"
+    "HHWEIGHT": "EXP_FACTOR"
   }
 }

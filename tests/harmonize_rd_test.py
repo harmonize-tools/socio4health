@@ -16,6 +16,7 @@ from rd_year_mappings import (
 )
 import pandas as pd
 from functools import reduce
+import json
 
 
 OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\OUTPUT"
@@ -23,13 +24,13 @@ OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\OUTPUT"
 
 def main():
     ENHOGAR_data = {
-        #2006: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2006",
-        #2007: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2007",
-        #2008: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2008",
-        #2010: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2010",
-        #2011: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2011",
-        #2012: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2012",
-        #2013: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2013",
+        2006: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2006",
+        2007: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2007",
+        2008: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2008",
+        2010: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2010",
+        2011: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2011",
+        2012: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2012",
+        2013: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2013",
         2014: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2014",
         2015: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2015",
         2016: r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\2016",
@@ -69,6 +70,16 @@ def main():
             col for col in HARMONIZED_MAPPING.keys()
             if any(col in df.columns for df in dfs)
         ]
+
+        if(year == 2006):
+            with open("tests/rd_year_mappings/region_mapping.json", "r", encoding="utf-8") as f:
+                region_map = json.load(f)
+            region_map = {str(k): v for k, v in region_map.items()}
+
+            for df in dfs:
+                if "ADMIN_DIVISION_2" in df.columns and "ADMIN_DIVISION" not in df.columns:
+                    df["ADMIN_DIVISION"] = df["ADMIN_DIVISION_2"].astype(str).map(region_map)
+
         for required_col in ("ADMIN_DIVISION", "EXP_FACTOR"):
             if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:
                 available_harmonized.append(required_col)

@@ -1,6 +1,6 @@
 
 from socio4health import Harmonizer
-from harmonize_utils import (
+from socio4health.utils.harmonizer_utils import (
     extract_and_prepare_data, 
     merge_factor, 
     select_and_filter_columns, 
@@ -8,18 +8,36 @@ from harmonize_utils import (
     harmonize_columns_by_year,
     apply_value_mappings
 )
-from rd_year_mappings import (
-    COLUMN_MAPPING_BY_YEAR,
-    HARMONIZED_MAPPING,
-    get_value_mapping_path,
-    get_columns_for_year,
+from pathlib import Path
+from socio4health.utils.mapping_utils import (
+    load_mapping_bundle,
+    get_value_mapping as _get_value_mapping,
+    get_columns_for_year as _get_columns_for_year,
 )
 import pandas as pd
 from functools import reduce
 import json
 
-
 OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\OUTPUT"
+
+_DATA_DIR = Path(__file__).resolve().parent / "rd_mappings"
+_BUNDLE = load_mapping_bundle(
+    _DATA_DIR,
+    value_mapping_prefix="enhogar",
+    harmonized_mapping_file=Path(__file__).resolve().parent / "harmonized_mapping.json",
+)
+
+COLUMN_MAPPING_BY_YEAR = _BUNDLE["column_mapping"]
+HARMONIZED_MAPPING = _BUNDLE["harmonized_mapping"]
+
+
+def get_value_mapping_path(year: int) -> dict:
+    return _get_value_mapping(_BUNDLE["value_mapping_by_year"], year)
+
+
+def get_columns_for_year(year: int) -> list:
+    return _get_columns_for_year(COLUMN_MAPPING_BY_YEAR, year)
+
 
 
 def main():
@@ -63,7 +81,7 @@ def main():
         
         # Aplicar mapeos de valores
         print(f"\nAplicando mapeos de valores para año {year}...")
-        dfs = apply_value_mappings(dfs, year, get_value_mapping_path(year))
+        dfs = apply_value_mappings(dfs, year, get_value_mapping_path(year), column_aliases=COLUMN_MAPPING_BY_YEAR)
         
         # Seleccionar las columnas harmonizadas inferidas y conservar metadatos necesarios para el agrupado
         available_harmonized = [
@@ -72,7 +90,7 @@ def main():
         ]
 
         if(year == 2006):
-            with open("tests/rd_year_mappings/region_mapping.json", "r", encoding="utf-8") as f:
+            with open("tests/rd_mappings/region_mapping.json", "r", encoding="utf-8") as f:
                 region_map = json.load(f)
             region_map = {str(k): v for k, v in region_map.items()}
 
@@ -88,7 +106,7 @@ def main():
         
         print(f"\nColumns after harmonization: {available_harmonized}")
         
-        grouped_dfs = group_and_onehot_encode(dfs, group_col='ADMIN_DIVISION', weight_col='EXP_FACTOR', id_col=None)
+        grouped_dfs = group_and_onehot_encode(dfs, group_col='ADMIN_DIVISION', weight_col='EXP_FACTOR', id_col=None, value_labels_by_column=HARMONIZED_MAPPING)
     
         if grouped_dfs:
             # 1. Set the join key as the index for all DataFrames

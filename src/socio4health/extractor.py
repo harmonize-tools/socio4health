@@ -14,12 +14,13 @@ from typing import Optional, Union, Dict
 import appdirs
 import os
 import pandas as pd
-import geopandas as gpd
+from socio4health.utils.deps import import_optional
 import pyreadstat
 import dask.dataframe as dd
 from tqdm import tqdm
 import glob
-from socio4health.utils.extractor_utils import run_standard_spider, compressed2files, download_request
+from socio4health.utils.extractor_utils import compressed2files, download_request
+from importlib import import_module
 import logging
 
 
@@ -243,6 +244,9 @@ class Extractor:
         # Step 1: Scrape for downloadable files
         try:
             logging.info(f"Scraping URL: {self.input_path} with depth {self.depth}")
+            # Import and run the spider only when needed (lazy)
+            extractor_utils = import_module('socio4health.utils.extractor_utils')
+            run_standard_spider = getattr(extractor_utils, 'run_standard_spider')
             run_standard_spider(self.input_path, self.depth, self.down_ext, self.key_words)
 
             # Read scraped links
@@ -439,6 +443,7 @@ class Extractor:
             return dd.from_pandas(json.load(f))
 
     def _read_geospatial(self, filepath):
+        gpd = import_optional('geopandas', extra='geo')
         return gpd.read_file(filepath)
     
     def _read_txt(self, filepath):

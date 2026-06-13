@@ -3,11 +3,18 @@ from pathlib import Path
 import re
 
 from socio4health import Harmonizer
-from harmonize_utils import extract_and_prepare_data, merge_factor, select_and_filter_columns, group_and_onehot_encode, _clean_column_name
+from socio4health.utils.harmonizer_utils import apply_value_mappings, extract_and_prepare_data, harmonize_columns_by_year, merge_factor, select_and_filter_columns, group_and_onehot_encode, _clean_column_name
 import pandas as pd
+
+from socio4health.utils.mapping_utils import load_json_mapping, load_int_key_mapping
 
 
 OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\GEIH\OUTPUT"
+
+_DATA_DIR = Path(__file__).resolve().parent / "col_mapping"
+COLUMN_MAPPING_BY_YEAR = load_json_mapping(_DATA_DIR, "column_mapping.json")["2007-2025"]
+HARMONIZED_MAPPING = load_int_key_mapping(Path(__file__).resolve().parent, "harmonized_mapping.json")
+GEIH_VALUE_MAPPING = load_int_key_mapping(_DATA_DIR, "geih_mapping.json")["mapping"]
 
 SPECIAL_CLASE_FILE_PATTERN = re.compile(r".+\*csv_.+ - .+\.csv$", re.IGNORECASE)
 
@@ -99,14 +106,44 @@ def main():
         ddfs = merge_factor(ddfs, factor_col='FEX_C18', id_col='DIRECTORIO')
         har = Harmonizer()
         dfs = har.s4h_vertical_merge(ddfs, overlap_threshold=0.9, method="union")
-        dfs = select_and_filter_columns(dfs, col_cols, num_cols_threshold=5)
+
+        # Harmonizar nombres de columnas
+        print(f"\nArmonizando nombres de columnas para año {year}...")
+        dfs = harmonize_columns_by_year(dfs, year, COLUMN_MAPPING_BY_YEAR)
+
+        # Aplicar mapeos de valores
+        print(f"\nAplicando mapeos de valores para año {year}...")
+        dfs = apply_value_mappings(dfs, year, GEIH_VALUE_MAPPING, column_aliases=COLUMN_MAPPING_BY_YEAR)
+
+        # Seleccionar las columnas harmonizadas inferidas y conservar metadatos necesarios para el agrupado
+        available_harmonized = [
+            col for col in HARMONIZED_MAPPING.keys()
+            if any(col in df.columns for df in dfs)
+        ]
+
+        for required_col in ("YEAR", "ADMIN_DIVISION", "EXP_FACTOR"):
+            if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:
+                available_harmonized.append(required_col)
+
+        dfs = select_and_filter_columns(dfs, available_harmonized, num_cols_threshold=5)
         print(f"Number of DataFrames after column selection: {len(dfs)} year: {year}")
         for i, df in enumerate(dfs):
             print(f"DataFrame {i} columns: {list(df.columns)}")
-        grouped_dfs = group_and_onehot_encode(dfs, group_col='DPTO', weight_col='FEX_C18', id_col='DIRECTORIO')
+
+        grouped_dfs = group_and_onehot_encode(
+            dfs,
+            group_col='ADMIN_DIVISION',
+            weight_col='EXP_FACTOR',
+            id_col='ID',
+            value_labels_by_column=HARMONIZED_MAPPING,
+        )
+        
         all_grouped_dfs.extend(grouped_dfs)
     if all_grouped_dfs:
         final_df = pd.concat(all_grouped_dfs, ignore_index=True)
+        if 'YEAR' in final_df.columns:
+            ordered_cols = ['YEAR'] + [col for col in final_df.columns if col != 'YEAR']
+            final_df = final_df[ordered_cols]
         final_df.to_csv(f"{OUTPUT_PATH}/GEIH_harmonized.csv", index=False)
     else:
         print("No data to save.")

@@ -1,10 +1,13 @@
 import re
-import scrapy
 import json
 import os
 import logging
-from scrapy.exceptions import IgnoreRequest
 import copy
+from socio4health.utils.deps import import_optional
+
+# Import scrapy at runtime with a helpful message if it's missing
+scrapy = import_optional('scrapy', extra='scraping')
+IgnoreRequest = scrapy.exceptions.IgnoreRequest
 
 
 class StandardSpider(scrapy.Spider):

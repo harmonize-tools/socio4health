@@ -1,7 +1,17 @@
 
 import pyzipper
-from scrapy.crawler import CrawlerProcess
-from .standard_spider import StandardSpider
+import zipfile
+import shutil
+import tempfile
+import tarfile
+import py7zr
+import os
+import requests
+import hashlib
+import multiprocessing
+import logging
+from importlib import import_module
+from socio4health.utils.deps import import_optional
 import zipfile
 import shutil
 import tempfile
@@ -23,6 +33,12 @@ def _run_spider_in_process(url, depth, down_ext, key_words):
     logging.getLogger('scrapy').propagate = False
     logging.getLogger('scrapy').setLevel(logging.CRITICAL)
     logging.getLogger('urllib3').setLevel(logging.CRITICAL)
+    # Import scrapy only when running the spider (lazy)
+    scrapy = import_optional('scrapy', extra='scraping')
+    CrawlerProcess = scrapy.crawler.CrawlerProcess
+    # Import local spider class
+    spider_mod = import_module('socio4health.utils.standard_spider')
+    StandardSpider = getattr(spider_mod, 'StandardSpider')
 
     process = CrawlerProcess({
         'LOG_LEVEL': 'CRITICAL',

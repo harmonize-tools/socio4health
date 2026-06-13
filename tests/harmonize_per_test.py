@@ -1,6 +1,6 @@
 
 from socio4health import Harmonizer
-from harmonize_utils import extract_and_prepare_data, merge_factor, select_and_filter_columns, group_and_onehot_encode
+from socio4health.utils.harmonizer_utils import extract_and_prepare_data, merge_factor, select_and_filter_columns, group_and_onehot_encode
 import pandas as pd
 
 

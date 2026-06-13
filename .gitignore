@@ -188,3 +188,8 @@ docs/source/notebooks/files
 docs/source/CNVP2018
 /docs/source/data
 docs/source/CNVP2018
+
+# Sphinx build outputs (generated; do not commit)
+docs/source/_build/
+docs/_build/
+_build/

@@ -92,7 +92,7 @@ setup(
         # ALL
         'all': [
             'socio4health[scraping,ml,geo]',
-        ]
+        ],
         
         # Desarrollo y testing
         'dev': [

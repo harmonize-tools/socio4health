@@ -399,6 +399,16 @@ class Harmonizer:
         else:
             return process_ddf(ddf_or_ddfs)
 
+    def s4h_drop_nan_columns(self, ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> Union[
+        dd.DataFrame, List[dd.DataFrame]]:
+        """
+        Compatibility wrapper for the legacy `s4h_drop_nan_columns` API.
+
+        This delegates to :meth:`drop_nan_columns` and preserves the old
+        public API expected by the documentation.
+        """
+        return self.drop_nan_columns(ddf_or_ddfs)
+
     @staticmethod
     def s4h_get_available_columns(df_or_dfs: Union[dd.DataFrame, pd.DataFrame, List[Union[dd.DataFrame, pd.DataFrame]]]) -> \
     List[str]:

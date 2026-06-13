@@ -245,29 +245,28 @@ def create_unique_path(archive_path, filename, target_dir):
     return os.path.join(target_dir, unique_name)
 
 def s4h_parse_fwf_dict(dict_df):
-    """Parse a dictionary DataFrame to extract column names and fixed-width format specifications.
+    """Parse a fixed-width format dictionary stored in a pandas DataFrame.
+
+    The DataFrame must contain at least the following columns:
+    ``variable_name`` and ``initial_position``. Either ``size`` or
+    ``final_position`` must be present to compute column spans.
 
     Parameters
     ----------
     dict_df : pandas.DataFrame
-        A DataFrame containing the dictionary information with columns:
-        - 'variable_name': Column names
-        - 'initial_position': Starting position (1-based) of each column
-        - 'size': Width of each column or 'final_position': Ending position of each column
+        Dictionary table describing fixed-width columns.
 
     Returns
     -------
     tuple
-        A tuple containing:
-        - A list of column names.
-        - A list of tuples representing column specifications (start, end) where:
-          - start is 0-based starting position
-          - end is 0-based ending position (exclusive)
+        ``(colnames, colspecs)`` where ``colnames`` is a list of column
+        names and ``colspecs`` is a list of ``(start, end)`` integer tuples
+        suitable for use with ``pandas.read_fwf`` (0-based, end exclusive).
 
     Raises
     ------
     ValueError
-        If no column names or sizes are found in the dictionary DataFrame.
+        If required columns are missing.
     """
 
     if not 'variable_name' in dict_df.columns:

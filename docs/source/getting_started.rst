@@ -12,6 +12,44 @@ Installation
 
    pip install socio4health
 
+You can also install optional feature groups using extras:
+
+- Web scraping support:
+
+.. code-block:: shell
+
+   pip install "socio4health[scraping]"
+
+- Machine learning and NLP support:
+
+.. code-block:: shell
+
+   pip install "socio4health[ml]"
+
+- Geospatial support:
+
+.. code-block:: shell
+
+   pip install "socio4health[geo]"
+
+- All optional extras:
+
+.. code-block:: shell
+
+   pip install "socio4health[all]"
+
+- Development dependencies:
+
+.. code-block:: shell
+
+   pip install "socio4health[dev]"
+
+- Testing dependencies:
+
+.. code-block:: shell
+
+   pip install "socio4health[test]"
+
 Make sure you have **Python 3.12** installed on your system; the package requires **Python version 3.10** or higher.
 
 Usage

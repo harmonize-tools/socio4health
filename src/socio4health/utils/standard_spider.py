@@ -5,12 +5,22 @@ import logging
 import copy
 from socio4health.utils.deps import import_optional
 
-# Import scrapy at runtime with a helpful message if it's missing
-scrapy = import_optional('scrapy', extra='scraping')
-IgnoreRequest = scrapy.exceptions.IgnoreRequest
+
+def _get_scrapy():
+    return import_optional('scrapy', extra='scraping')
 
 
-class StandardSpider(scrapy.Spider):
+try:
+    scrapy = _get_scrapy()
+    SpiderBase = scrapy.Spider
+    IgnoreRequest = scrapy.exceptions.IgnoreRequest
+except ImportError:
+    scrapy = None
+    SpiderBase = object
+    IgnoreRequest = Exception
+
+
+class StandardSpider(SpiderBase):
     """A standard spider for scraping links from a given ``URL``.
 
     Attributes
@@ -36,6 +46,11 @@ class StandardSpider(scrapy.Spider):
 
     def __init__(self, url=None, depth=0, ext=None, key_words=None, *args, **kwargs):
         """Initialize the spider with parameters."""
+        if scrapy is None:
+            raise ImportError(
+                "Optional dependency 'scrapy' is required for StandardSpider. "
+                "Install it with: pip install 'socio4health[scraping]'"
+            )
         super().__init__(*args, **kwargs)
         if url is None:
             logging.warning("No URL provided. Please specify a URL.")

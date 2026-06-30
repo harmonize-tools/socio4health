@@ -94,7 +94,7 @@ def s4h_standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
     df.drop_duplicates(inplace=True)
     df['variable_name'] = df['variable_name'].str.upper()
     grouped_df = df.groupby(['question', 'variable_name'], group_keys=False)\
-               .apply(_process_group, include_groups=True)\
+               .apply(_process_group)\
                .reset_index(drop=True)
     return grouped_df
 
@@ -122,6 +122,13 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
     
     if group.empty:
         return None
+
+    group_name = group.name
+    if isinstance(group_name, tuple) and len(group_name) == 2:
+        question_name, variable_name = group_name
+    else:
+        question_name = pd.NA
+        variable_name = pd.NA
 
     base_row = group[group['value'].isna()].copy()
     answers = group[group['value'].notna()]
@@ -152,6 +159,9 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
         if initial_position is not None:
             row['initial_position'] = initial_position
             row['size'] = size
+
+    row['question'] = question_name
+    row['variable_name'] = variable_name
 
     return row
 
@@ -545,6 +555,8 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col, value_labels_by_
 
                     if values_map and label is not None and str(label).strip() != '':
                         new_name = f'{prefix}_{_sanitize_suffix(label)}'
+                    elif values_map:
+                        new_name = f'{prefix}_Missing'
                     else:
                         new_name = f'{prefix}_{_sanitize_suffix(token_clean)}'
                         if new_name == f'{prefix}_':

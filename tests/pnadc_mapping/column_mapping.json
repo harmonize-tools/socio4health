@@ -1,0 +1,24 @@
+{
+  "2012-2025": {
+    "V1022": "AREA",
+    "S01001": "H_TYPE",
+    "S01002": "H_WALLS",
+    "S01004": "H_FLOOR",
+    "S01003": "H_ROOF",
+    "S01014": "H_ELECTRICITY",
+    "S01012A": "H_SANITARY",
+    "S01013": "H_GARBAGE",
+    "S01007": "H_WATER",
+    "S01016B": "H_COOK",
+    "S01017": "H_PROPERTY",
+    "V3001": "P_LITERACY",
+    "V2007": "P_SEX",
+    "V2010": "P_ETHNICITY",
+    "V2009": "P_AGE",
+    "V0607": "P_EDUCATION",
+    "Estrato": "ID",
+    "UF": "ADMIN_DIVISION",
+    "Capital": "ADMIN_DIVISION_2",
+    "V1032": "EXP_FACTOR"
+  }
+}

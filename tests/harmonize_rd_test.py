@@ -1,8 +1,7 @@
 
 from socio4health import Harmonizer
 from socio4health.utils.harmonizer_utils import (
-    extract_and_prepare_data, 
-    merge_factor, 
+    extract_and_prepare_data,
     select_and_filter_columns, 
     group_and_onehot_encode,
     harmonize_columns_by_year,
@@ -15,7 +14,6 @@ from socio4health.utils.mapping_utils import (
     get_columns_for_year as _get_columns_for_year,
 )
 import pandas as pd
-from functools import reduce
 import json
 
 OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\OUTPUT"

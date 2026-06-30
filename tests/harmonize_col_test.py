@@ -125,8 +125,12 @@ def main():
             if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:
                 available_harmonized.append(required_col)
 
-        dfs = select_and_filter_columns(dfs, available_harmonized, num_cols_threshold=5)
-        print(f"Number of DataFrames after column selection: {len(dfs)} year: {year}")
+        dfs = select_and_filter_columns(dfs, available_harmonized, num_cols_threshold=1)
+        
+        metadata_cols = {'YEAR', 'ADMIN_DIVISION', 'EXP_FACTOR', 'ID'}
+        dfs = [df for df in dfs if any(col not in metadata_cols for col in df.columns)]
+        
+        print(f"Number of valid DataFrames for grouping: {len(dfs)} year: {year}")
         for i, df in enumerate(dfs):
             print(f"DataFrame {i} columns: {list(df.columns)}")
 
@@ -139,14 +143,30 @@ def main():
         )
         
         all_grouped_dfs.extend(grouped_dfs)
-    if all_grouped_dfs:
-        final_df = pd.concat(all_grouped_dfs, ignore_index=True)
-        if 'YEAR' in final_df.columns:
-            ordered_cols = ['YEAR'] + [col for col in final_df.columns if col != 'YEAR']
+        if all_grouped_dfs:
+            print("\nCombining and aligning Household and Individual data horizontally...")
+            
+            # 1. Stack all DataFrames vertically
+            combined_df = pd.concat(all_grouped_dfs, ignore_index=True)
+            
+            # 2. Group by the identifiers and use .first() to grab the first non-null value for each column.
+            # This perfectly merges the disjoint P_ and H_ columns into a single row per department!
+            final_df = combined_df.groupby(['YEAR', 'ADMIN_DIVISION'], as_index=False, dropna=False).first()
+            
+            # 3. Sort by Year and Department so the output is clean and ordered
+            final_df = final_df.sort_values(by=['YEAR', 'ADMIN_DIVISION']).reset_index(drop=True)
+            
+            # 4. Order columns cleanly (YEAR and ADMIN_DIVISION first)
+            ordered_cols = ['YEAR', 'ADMIN_DIVISION'] + [col for col in final_df.columns if col not in ['YEAR', 'ADMIN_DIVISION']]
             final_df = final_df[ordered_cols]
-        final_df.to_csv(f"{OUTPUT_PATH}/GEIH_harmonized.csv", index=False)
-    else:
-        print("No data to save.")
+            
+            # 5. Save to CSV
+            output_file = f"{OUTPUT_PATH}\\GEIH_harmonized.csv"
+        
+            final_df.to_csv(output_file, index=False)
+            print(f"Successfully saved final harmonized data to {output_file}")
+        else:
+            print("No data to save.")
 
 if __name__ == "__main__":
     main()

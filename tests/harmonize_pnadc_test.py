@@ -1,33 +1,42 @@
-from socio4health.utils import extractor_utils, harmonizer_utils
-from socio4health import Extractor, Harmonizer
-from socio4health.utils.harmonizer_utils import extract_and_prepare_data, merge_factor, select_and_filter_columns, group_and_onehot_encode
+from pathlib import Path
+
 import pandas as pd
-import os
+
+from socio4health import Extractor, Harmonizer
+from socio4health.utils import extractor_utils, harmonizer_utils
+from socio4health.utils.harmonizer_utils import (
+    group_and_onehot_encode,
+    harmonize_columns_by_year,
+    select_and_filter_columns,
+)
+from socio4health.utils.mapping_utils import load_int_key_mapping, load_json_mapping
 
 
 OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\PNADC\OUTPUT"
 
-cols = [
-        "UPA",
-        "CAPITAL",
-        "V1032",
-        "V1022",
-        "S01001",
-        "S01002",
-        "S01003",
-        "S01004",
-        "S01014",
-        "S01012A",
-        "S01013",
-        "S01007",
-        "S01016B",
-        "S01017",
-        "V3001",
-        "V2007",
-        "V2010",
-        "V2009",
-        "V3003A"
-        ]
+_DATA_DIR = Path(__file__).resolve().parent / "pnadc_mapping"
+COLUMN_MAPPING_BY_YEAR = load_json_mapping(_DATA_DIR, "column_mapping.json")["2012-2025"]
+HARMONIZED_MAPPING = load_int_key_mapping(Path(__file__).resolve().parent, "harmonized_mapping.json")
+
+fallback_col_cols = [
+    "YEAR",
+    "AREA",
+    "H_TYPE",
+    "H_WALLS",
+    "H_FLOOR",
+    "H_ROOF",
+    "H_ELECTRICITY",
+    "H_SANITARY",
+    "H_GARBAGE",
+    "H_WATER",
+    "H_COOK",
+    "H_PROPERTY",
+    "P_LITERACY",
+    "P_SEX",
+    "P_ETHNIC",
+    "P_AGE",
+    "P_EDUCATION",
+]
 
 def main():
     PNADC_data = {
@@ -48,7 +57,7 @@ def main():
 
     
 
-    all_grouped_dfs_dom = []
+    all_grouped_dfs = []
     
     raw_dic = pd.read_excel(r"D:\EQUIPO\Documents HDD\Harmonize\PNADC\raw_pnadc_dict.xlsx")
     dic=harmonizer_utils.s4h_standardize_dict(raw_dic)
@@ -73,17 +82,43 @@ def main():
 
         har = Harmonizer()
         dfs = har.s4h_vertical_merge(dfs_extracted, overlap_threshold=0.9, method="union")
-        #for df in dfs:
-        #    print(df.head())
-        #dfs = merge_factor(dfs, factor_col='V4611', id_col='V0102')
-        dfs = select_and_filter_columns(dfs, cols, num_cols_threshold=0)
-        print(f"Number of DataFrames after column selection: {len(dfs)} year: {year}")
+
+        print(f"\nArmonizando nombres de columnas para año {year}...")
+        dfs = harmonize_columns_by_year(dfs, year, COLUMN_MAPPING_BY_YEAR)
+
+        available_harmonized = [
+            col for col in HARMONIZED_MAPPING.keys()
+            if any(col in df.columns for df in dfs)
+        ]
+
+        for extra_col in fallback_col_cols:
+            if any(extra_col in df.columns for df in dfs) and extra_col not in available_harmonized:
+                available_harmonized.append(extra_col)
+
+        for required_col in ("YEAR", "ADMIN_DIVISION_2", "EXP_FACTOR", "UPA"):
+            if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:
+                available_harmonized.append(required_col)
+
+        dfs = select_and_filter_columns(dfs, available_harmonized, num_cols_threshold=1)
+
+        metadata_cols = {'YEAR', 'ADMIN_DIVISION_2', 'EXP_FACTOR', 'UPA'}
+        dfs = [df for df in dfs if any(col not in metadata_cols for col in df.columns)]
+
+        print(f"Number of valid DataFrames for grouping: {len(dfs)} year: {year}")
         for i, df in enumerate(dfs):
             print(f"DataFrame {i} columns: {list(df.columns)}")
-        grouped_dfs = group_and_onehot_encode(dfs, group_col='CAPITAL', weight_col='V1032', id_col='UPA')
-        all_grouped_dfs_dom.extend(grouped_dfs)
-    if all_grouped_dfs_dom:
-        final_df = pd.concat(all_grouped_dfs_dom, ignore_index=True)
+
+        grouped_dfs = group_and_onehot_encode(
+            dfs,
+            group_col='ADMIN_DIVISION_2',
+            weight_col='EXP_FACTOR',
+            id_col='UPA',
+            value_labels_by_column=HARMONIZED_MAPPING,
+        )
+        all_grouped_dfs.extend(grouped_dfs)
+
+    if all_grouped_dfs:
+        final_df = pd.concat(all_grouped_dfs, ignore_index=True)
         final_df.to_csv(f"{OUTPUT_PATH}/PNADC_harmonized.csv", index=False)
     else:
         print("No data to save.")

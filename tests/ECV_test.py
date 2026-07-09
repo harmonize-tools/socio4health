@@ -1,75 +1,182 @@
 from socio4health import Extractor, Harmonizer
 from functools import reduce
 import pandas as pd
+from pathlib import Path
+import shutil
+import uuid
+
+
+def _first_dataframe_with_columns(dataframes, required_columns):
+    required_columns = set(required_columns)
+    for dataframe in dataframes:
+        if required_columns.issubset(dataframe.columns):
+            return dataframe
+    return None
+
 
 if __name__ == "__main__":
     ecv_data = {
         2010: "https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata",
         2011: "https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata",
-        2012: "https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata",
-        2013: "https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata",
-        2014: "https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata",
-        2015: "https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata",
-        2016: "https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata",
-        2017: "https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata",
-        2018: "https://microdatos.dane.gov.co/index.php/catalog/607/get-microdata",
-        2019: "https://microdatos.dane.gov.co/index.php/catalog/678/get-microdata",
-        2020: "https://microdatos.dane.gov.co/index.php/catalog/718/get-microdata",
-        2021: "https://microdatos.dane.gov.co/index.php/catalog/734/get-microdata",
-        2022: "https://microdatos.dane.gov.co/index.php/catalog/793/get-microdata",
-        2023: "https://microdatos.dane.gov.co/index.php/catalog/827/get-microdata",
-        2024: "https://microdatos.dane.gov.co/index.php/catalog/861/get-microdata"
+        #2012: "https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata",
+        #2013: "https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata",
+        #2014: "https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata",
+        #2015: "https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata",
+        #2016: "https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata",
+        #2017: "https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata"
     }
 
-    ddfs = []
-    extractor = None
+    # Variables a nivel VIVIENDA (una fila por DIRECTORIO)
+    vivienda_cols = [
+        "DIRECTORIO", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
+        "P4000", "P4005", "P4015", "P8520S1", "P8520S3", "P8520S4", "P8520S5", "P70", "CANT_HOGARES_VIVIENDA"
+    ]
+    
+    # Variables a nivel HOGAR (una fila por DIRECTORIO + HOGAR_ID)
+    hogar_cols = [
+        "DIRECTORIO", "HOGAR_ID", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
+        "P205", "CANT_PERSONAS_HOGAR", "P5010", "P8526", "P8530", "P8532"
+    ]
+
+    # Diccionarios para mantener dataframes separados por año
+    dfs_vivienda_by_year = {}
+    dfs_hogar_by_year = {}
+    
     for year, url in ecv_data.items():
-        print(f"{year}: {url}")
+        print(f"\n{year}: {url}")
+        
+        # Keywords para cada año
+        if year == 2010:
+            key_words = [
+                r"(?i)datos[\s_]+(?:de[\s_]+)?identificaci[oó]n",
+                r"(?i)servicios[\s_]+(?:del[\s_]+)?hogar",
+                r"(?i)composici[oó]n[\s_]+(?:del[\s_]+)?hogar",
+                r"(?i)datos[\s_]+(?:de[\s_]+)?(?:la[\s_]+)?vivienda",
+            ]
+        elif year == 2011:
+            key_words = [
+                r"(?i)identificaci[oó]n.*vivienda",
+                r"(?i)vivienda.*identificaci[oó]n",
+                r"(?i)datos[\s_]+de[\s_]+identificaci[oó]n",
+                r"(?i)datos[\s_]+de[\s_]+la[\s_]+vivienda",
+                r"(?i)servicios[\s_]+(?:del[\s_]+)?hogar",
+            ]
+        else:
+            key_words = [
+                r"(?i)datos[\s_]+(?:de[\s_]+)?identificaci[oó]n",
+                r"(?i)servicios[\s_]+(?:del[\s_]+)?hogar",
+                r"(?i)composici[oó]n[\s_]+(?:del[\s_]+)?hogar",
+                r"(?i)datos[\s_]+(?:de[\s_]+)?(?:la[\s_]+)?vivienda",
+            ]
+        
         extractor = Extractor(
             input_path=url,
             down_ext=['.sav', '.zip'],
             sep=' ',
             output_path = f"data/ECV/ECV_{year}",
             depth=0,
-            key_words=[
-                r"(?i)datos[\s_]+(?:de[\s_]+)?identificaci[oó]n",
-                r"(?i)servicios[\s_]+(?:del[\s_]+)?hogar",
-                r"(?i)composici[oó]n[\s_]+(?:del[\s_]+)?hogar",
-                r"(?i)datos[\s_]+(?:de[\s_]+)?(?:la[\s_]+)?vivienda",
-            ],
+            key_words=key_words,
             delete_zip_after=True
         )
 
         df_extracted = extractor.s4h_extract()
+        
+        # Clasificar dataframes en vivienda vs hogar
+        dfs_vivienda_year = []
+        dfs_hogar_year = []
+        
         for df in df_extracted:
+            df.columns = df.columns.str.strip()
+            df.columns = [col.upper() for col in df.columns]
             df['YEAR'] = year
-        ddfs.extend(df_extracted)
+            
+            # Normalizar nombres
+            rename_map = {}
+            if 'CANT_PERSONAS_HOGAR' not in df.columns and 'CUANTAS PERSONAS POR HOGAR' in df.columns:
+                rename_map['CUANTAS PERSONAS POR HOGAR'] = 'CANT_PERSONAS_HOGAR'
+            if 'CANT_HOGARES_VIVIENDA' not in df.columns and 'CANTIDAD DE HOGARES POR VIVIENDA' in df.columns:
+                rename_map['CANTIDAD DE HOGARES POR VIVIENDA'] = 'CANT_HOGARES_VIVIENDA'
+            if rename_map:
+                df = df.rename(columns=rename_map)
+            
+            # Renombrar columnas
+            if 'DPTO' in df.columns and 'P1_DEPARTAMENTO' not in df.columns:
+                df = df.rename(columns={'DPTO': 'P1_DEPARTAMENTO'})
+            if 'P3' in df.columns and 'CLASE' not in df.columns:
+                df = df.rename(columns={'P3': 'CLASE'})
+            
+            # Determinar si es tabla de vivienda o hogar
+            has_vivienda_vars = any(col in df.columns for col in ['P4000', 'P4005', 'P4015', 'P8520'])
+            has_hogar_vars = any(col in df.columns for col in ['P205', 'P5010', 'P8526', 'P8530', 'P8532', 'CANT_PERSONAS_HOGAR'])
+            
+            if 'DIRECTORIO' not in df.columns or df['DIRECTORIO'].isna().all():
+                continue
+            
+            if has_vivienda_vars and not has_hogar_vars:
+                dfs_vivienda_year.append(df)
+            elif has_hogar_vars:
+                if 'HOGAR_ID' not in df.columns:
+                    df['HOGAR_ID'] = df.groupby('DIRECTORIO').cumcount() + 1
+                dfs_hogar_year.append(df)
+            elif has_vivienda_vars and has_hogar_vars:
+                dfs_vivienda_year.append(df)
+        
+        # Merge de tablas de vivienda del mismo año
+        if dfs_vivienda_year:
+            if len(dfs_vivienda_year) == 1:
+                merged_vivienda = dfs_vivienda_year[0]
+            else:
+                common_cols = set(dfs_vivienda_year[0].columns)
+                for df in dfs_vivienda_year[1:]:
+                    common_cols = common_cols.intersection(set(df.columns))
+                common_cols.discard('DIRECTORIO')
+                
+                for i in range(1, len(dfs_vivienda_year)):
+                    cols_to_drop = [col for col in common_cols if col in dfs_vivienda_year[i].columns]
+                    if cols_to_drop:
+                        dfs_vivienda_year[i] = dfs_vivienda_year[i].drop(columns=cols_to_drop)
+                
+                merged_vivienda = reduce(
+                    lambda left, right: pd.merge(left, right, on='DIRECTORIO', how='outer'), 
+                    dfs_vivienda_year
+                )
+            
+            # Filtrar solo columnas de vivienda
+            merged_vivienda = merged_vivienda[[col for col in vivienda_cols if col in merged_vivienda.columns]]
+            dfs_vivienda_by_year[year] = merged_vivienda
+            print(f"  -> Vivienda {year}: {len(merged_vivienda)} viviendas, columnas: {list(merged_vivienda.columns)}")
+        
+        # Merge de tablas de hogar del mismo año
+        if dfs_hogar_year:
+            if len(dfs_hogar_year) == 1:
+                merged_hogar = dfs_hogar_year[0]
+            else:
+                common_cols = set(dfs_hogar_year[0].columns)
+                for df in dfs_hogar_year[1:]:
+                    common_cols = common_cols.intersection(set(df.columns))
+                for key in ['DIRECTORIO', 'HOGAR_ID']:
+                    common_cols.discard(key)
+                
+                for i in range(1, len(dfs_hogar_year)):
+                    cols_to_drop = [col for col in common_cols if col in dfs_hogar_year[i].columns]
+                    if cols_to_drop:
+                        dfs_hogar_year[i] = dfs_hogar_year[i].drop(columns=cols_to_drop)
+                
+                merged_hogar = reduce(
+                    lambda left, right: pd.merge(left, right, on=['DIRECTORIO', 'HOGAR_ID'], how='outer'), 
+                    dfs_hogar_year
+                )
+            
+            # Filtrar solo columnas de hogar
+            merged_hogar = merged_hogar[[col for col in hogar_cols if col in merged_hogar.columns]]
+            dfs_hogar_by_year[year] = merged_hogar
+            print(f"  -> Hogar {year}: {len(merged_hogar)} hogares, columnas: {list(merged_hogar.columns)}")
     
-    ddfs_mpio = []
+    # Extraer factores de expansion por año
+    dfs_fex_by_year = {}
     for year, url in ecv_data.items():
-        print(f"{year}: {url}")
-        extractor_mpio = Extractor(
-            input_path=url,
-            down_ext=['.sav', '.zip'],
-            sep=' ',
-            output_path = f"data/ECV/ECV_MPIO_{year}",
-            depth=0,
-            key_words=[
-                r"(?i)municipio[\s_]+de[\s_]+aplicaci[oó]n[\s_]+de[\s_]+la[\s_]+encuesta[\s_]+(?:20)?[0-9]{2}",
-            ],
-            delete_zip_after=True
-        )
-
-        try:
-            df_extracted_mpio = extractor_mpio.s4h_extract()
-            ddfs_mpio.extend(df_extracted_mpio)
-        except Exception as e:
-            print(f"Skipping year {year} for municipio extraction: {e}")
-
-    ddfs_fex_2018 = []
-    for year, url in ecv_data.items():
-
         if 2010 <= year <= 2018:
+            print(f"\n{year}: Extrayendo factores de expansion...")
             key_words_fex_2018 = [
                 r"(?i)factores[\s_]+de[\s_]+expansi[oó]n[\s_]+(?:20)?[0-9]{2}[\s_]+basados[\s_]+en[\s_]+el[\s_]+CNPV[\s_]+2018",
             ]
@@ -86,17 +193,54 @@ if __name__ == "__main__":
 
             try:
                 df_extracted_fex_2018 = extractor_fex_2018.s4h_extract()
-                ddfs_fex_2018.extend(df_extracted_fex_2018)
+                if df_extracted_fex_2018:
+                    df_fex = df_extracted_fex_2018[0]
+                    df_fex.columns = df_fex.columns.str.strip()
+                    df_fex.columns = [col.upper() for col in df_fex.columns]
+                    
+                    if 'DIRECTORIO' in df_fex.columns and 'FEX_C_2018' in df_fex.columns:
+                        df_fex = df_fex[['DIRECTORIO', 'FEX_C_2018']].drop_duplicates(subset=['DIRECTORIO'])
+                        dfs_fex_by_year[year] = df_fex
+                        print(f"  -> FEX {year}: {len(df_fex)} registros")
             except Exception as e:
                 print(f"Skipping year {year} for FEX_C_2018 extraction: {e}")
 
+    # Extraer municipio por año
+    dfs_mpio_by_year = {}
+    for year, url in ecv_data.items():
+        print(f"\n{year}: Extrayendo municipio...")
+        extractor_mpio = Extractor(
+            input_path=url,
+            down_ext=['.sav', '.zip'],
+            sep=' ',
+            output_path = f"data/ECV/ECV_MPIO_{year}",
+            depth=0,
+            key_words=[
+                r"(?i)municipio[\s_]+de[\s_]+aplicaci[oó]n[\s_]+de[\s_]+la[\s_]+encuesta[\s_]+(?:20)?[0-9]{2}",
+            ],
+            delete_zip_after=True
+        )
+
+        try:
+            df_extracted_mpio = extractor_mpio.s4h_extract()
+            if df_extracted_mpio:
+                df_mpio = df_extracted_mpio[0]
+                df_mpio.columns = df_mpio.columns.str.strip()
+                df_mpio.columns = [col.upper() for col in df_mpio.columns]
+                
+                if 'DIRECTORIO' in df_mpio.columns and 'P1_MUNICIPIO' in df_mpio.columns:
+                    df_mpio = df_mpio[['DIRECTORIO', 'P1_MUNICIPIO']].drop_duplicates(subset=['DIRECTORIO'])
+                    dfs_mpio_by_year[year] = df_mpio
+                    print(f"  -> Municipio {year}: {len(df_mpio)} registros")
+        except Exception as e:
+            print(f"Skipping year {year} for municipio extraction: {e}")
+
+    # Extraer identificacion 2010
     dfs_2010_id = []
     for year, url in ecv_data.items():
         if 2010 == year:
-            key_words_2010_id = [
-                "Datos de idenrificacion-final",
-            ]
-
+            print(f"\n{year}: Extrayendo identificacion-final...")
+            key_words_2010_id = ["Datos de idenrificacion-final"]
             extractor_2010_id = Extractor(
                 input_path=url,
                 down_ext=['.sav', '.zip'],
@@ -109,228 +253,120 @@ if __name__ == "__main__":
 
             try:
                 dfs_2010_id = extractor_2010_id.s4h_extract()
+                for df in dfs_2010_id:
+                    df.columns = df.columns.str.strip()
+                    df.columns = [col.upper() for col in df.columns]
             except Exception as e:
                 print(f"Skipping year {year} for 2010_ID extraction: {e}")
 
-    # Rename 'DPTO' to 'P1_DEPARTAMENTO' if needed before vertical merge
-    for i, df in enumerate(ddfs):
-        if 'DPTO' in df.columns and 'P1_DEPARTAMENTO' not in df.columns:
-            df = df.rename(columns={'DPTO': 'P1_DEPARTAMENTO'})
-            ddfs[i] = df
-
-    har = Harmonizer()
-    dfs = har.s4h_vertical_merge(ddfs, overlap_threshold=0.6, method="union")
-
-    df_mpio = har.s4h_vertical_merge(ddfs_mpio, overlap_threshold=0.6, method="union")
-    dfs_fex_2018 = har.s4h_vertical_merge(ddfs_fex_2018, overlap_threshold=0.6, method="union")
-
-    # Map FEX_C_2018 into dfs using dfs_fex_2018 by DIRECTORIO
-    if isinstance(dfs_fex_2018, list):
-        df_fex_2018_ref = dfs_fex_2018[0]
-    else:
-        df_fex_2018_ref = dfs_fex_2018
-    try:
-        import dask.dataframe as dd
-        if isinstance(df_fex_2018_ref, dd.DataFrame):
-            df_fex_2018_ref = df_fex_2018_ref.compute()
-    except ImportError:
-        pass
-    if 'DIRECTORIO' in df_fex_2018_ref.columns and 'FEX_C_2018' in df_fex_2018_ref.columns:
-        for i, df in enumerate(dfs):
-            if 'DIRECTORIO' in df.columns:
-                df = df.merge(df_fex_2018_ref[['DIRECTORIO', 'FEX_C_2018']], on='DIRECTORIO', how='left', suffixes=('', '_fex2018'))
-                dfs[i] = df
-
-    '''
-    for i, df in enumerate(dfs):
-        print(f"DataFrame {i + 1} shape: {df.shape}")
-        print(f"Columns: {list(df.columns)}")
-    '''  
-
-    cols = [
-        "DIRECTORIO",
-        "YEAR",
-        "CANT_PERSONAS_HOGAR",
-        "CLASE",
-        "FEX_C",
-        "FEX_C_2018",
-        "P1_DEPARTAMENTO",
-        "P1_MUNICIPIO",
-        "P1070",
-        "P205",
-        "P3",
-        "P4000",
-        "P4005",
-        "P4015",
-        "P5000",
-        "P5010",
-        "P5022",
-        "P5047",
-        "P5052",
-        "P5052S1",
-        "P5054",
-        "P5661",
-        "P5666",
-        "P6087",
-        "P6088",
-        "P8520",
-        "P8525",
-        "P8526",
-        "P853",
-        "P8530",
-        "PERCAPITA",
-        "REGION"
-    ]
-
-    dfs = [df[[col for col in cols if col in df.columns]] for df in dfs]
-
-    import re
-    for i, df in enumerate(dfs):
-        try:
-            import dask.dataframe as dd
-            if isinstance(df, dd.DataFrame):
-                df = df.compute()
-        except ImportError:
-            pass
-        # Enforce dtypes
-        dtype_map = {
-            "DIRECTORIO": "Int64",
-            "YEAR": "Int64",
-            "CANT_PERSONAS_HOGAR": "Int64",
-            "CLASE": "Int64",
-            "FEX_C": "float64",
-            "FEX_C_2018": "float64",
-            "P1_DEPARTAMENTO": "Int64",
-            "P1_MUNICIPIO": "Int64",
-            "P1070": "Int64",
-            "P205": "Int64",
-            "P3": "Int64",
-            "P4000": "Int64",
-            "P4005": "Int64",
-            "P4015": "Int64",
-            "P5000": "Int64",
-            "P5010": "Int64",
-            "P5022": "Int64",
-            "P5047": "Int64",
-            "P5052": "Int64",
-            "P5052S1": "Int64",
-            "P5054": "Int64",
-            "P5661": "Int64",
-            "P5666": "Int64",
-            "P6087": "Int64",
-            "P6088": "Int64",
-            "P8520": "Int64",
-            "P8525": "Int64",
-            "P8526": "Int64",
-            "P853": "Int64",
-            "P8530": "Int64",
-            "PERCAPITA": "float64",
-            "REGION": "Int64"
-        }
-        for col, dtype in dtype_map.items():
-            if col in df.columns:
-                if dtype == "string":
-                    # Strip FILENAME as before
-                    def strip_filename(val):
-                        if pd.isnull(val):
-                            return val
-                        m = re.match(r'^[a-fA-F0-9]+_(.*)\.[^.]+$', val)
-                        if m:
-                            return m.group(1)
-                        return re.sub(r'\.[^.]+$', '', val)
-                    df[col] = df[col].apply(strip_filename).astype("string")
-                else:
-                    df[col] = pd.to_numeric(df[col], errors="coerce").astype(dtype)
-        dfs[i] = df
-
-
-    if len(dfs) > 1:
+    # Procesar cada año por separado
+    for year in ecv_data.keys():
+        print(f"\nProcesando {year}...")
         
-        # Si existe dfs_2010_id, unirlo por DIRECTORIO (asegurando mayúsculas)
-        if 'dfs_2010_id' in locals() and dfs_2010_id:
+        # Merge con factores de expansion
+        if year in dfs_hogar_by_year and year in dfs_fex_by_year:
+            df_hogar = dfs_hogar_by_year[year]
+            df_fex = dfs_fex_by_year[year]
+            
+            df_hogar = df_hogar.merge(df_fex, on='DIRECTORIO', how='left')
+            dfs_hogar_by_year[year] = df_hogar
+            print(f"  -> Merge FEX_C_2018 completado")
+        
+        # Merge con municipio
+        if year in dfs_vivienda_by_year and year in dfs_mpio_by_year:
+            df_vivienda = dfs_vivienda_by_year[year]
+            df_mpio = dfs_mpio_by_year[year]
+            
+            if 'P1_MUNICIPIO' not in df_vivienda.columns or df_vivienda['P1_MUNICIPIO'].isna().all():
+                df_vivienda = df_vivienda.merge(df_mpio, on='DIRECTORIO', how='left')
+                dfs_vivienda_by_year[year] = df_vivienda
+                print(f"  -> Merge P1_MUNICIPIO completado")
+        
+        # Merge con identificacion 2010 (solo para 2010)
+        if year == 2010 and dfs_2010_id:
             df_2010_id = dfs_2010_id[0]
-            df_2010_id.columns = [col.upper() for col in df_2010_id.columns]
-            if 'DIRECTORIO' in df_2010_id.columns and 'P1_DEPARTAMENTO' in df_2010_id.columns and 'P3' in df_2010_id.columns and 'REGION' in df_2010_id.columns:
-                dfs[1] = dfs[1].merge(df_2010_id[['DIRECTORIO', 'P1_DEPARTAMENTO', 'P3', 'REGION']], on='DIRECTORIO', how='left', suffixes=('', '_2010'))
-                # Si hay conflicto de columnas, priorizar P1_DEPARTAMENTO_2010 si existe
-                if 'P1_DEPARTAMENTO_2010' in dfs[1].columns:
-                    dfs[1]['P1_DEPARTAMENTO'] = dfs[1]['P1_DEPARTAMENTO'].combine_first(dfs[1]['P1_DEPARTAMENTO_2010'])
-                    dfs[1] = dfs[1].drop(columns=['P1_DEPARTAMENTO_2010'])
-                if 'P3_2010' in dfs[1].columns:
-                    dfs[1]['P3'] = dfs[1]['P3'].combine_first(dfs[1]['P3_2010'])
-                    dfs[1] = dfs[1].drop(columns=['P3_2010'])
-                if 'REGION_2010' in dfs[1].columns:
-                    dfs[1]['REGION'] = dfs[1]['REGION'].combine_first(dfs[1]['REGION_2010'])
-                    dfs[1] = dfs[1].drop(columns=['REGION_2010'])
-                # Coerce dtypes simply
-                for col in ['P1_DEPARTAMENTO', 'P3', 'REGION']:
-                    if col in dfs[1].columns:
-                        dfs[1][col] = pd.to_numeric(dfs[1][col], errors='coerce').astype('Int64')
-
-        df_ref = dfs[1]
-        try:
-            import dask.dataframe as dd
-            if isinstance(df_ref, dd.DataFrame):
-                df_ref = df_ref.compute()
-        except ImportError:
-            pass
-
-
-        # Reference for P1_DEPARTAMENTO, P3, REGION: dfs[1] (df_ref)
-        directorio_map_depto = df_ref.set_index('DIRECTORIO')['P1_DEPARTAMENTO'].to_dict()
-        directorio_map_p3 = df_ref.set_index('DIRECTORIO')['P3'].to_dict() if 'P3' in df_ref.columns else {}
-        directorio_map_region = df_ref.set_index('DIRECTORIO')['REGION'].to_dict() if 'REGION' in df_ref.columns else {}
-        # Reference for P1_MUNICIPIO: df_mpio
-        if isinstance(df_mpio, list):
-            df_mpio_ref = df_mpio[0]
-        else:
-            df_mpio_ref = df_mpio
-        try:
-            import dask.dataframe as dd
-            if isinstance(df_mpio_ref, dd.DataFrame):
-                df_mpio_ref = df_mpio_ref.compute()
-        except ImportError:
-            pass
-        directorio_map_mpio = df_mpio_ref.set_index('DIRECTORIO')['P1_MUNICIPIO'].to_dict()
-
-        # Also get municipio mapping from dfs[1] (for 2023/2024)
-        directorio_map_mpio_alt = df_ref.set_index('DIRECTORIO')['P1_MUNICIPIO'].to_dict()
-
-        for i, df in enumerate(dfs):
-            if i == 1:
-                continue
-            try:
-                import dask.dataframe as dd
-                if isinstance(df, dd.DataFrame):
-                    df = df.compute()
-            except ImportError:
-                pass
-            # Map P1_DEPARTAMENTO
-            df['P1_DEPARTAMENTO'] = df['DIRECTORIO'].map(lambda x: directorio_map_depto.get(x))
-            df['P1_DEPARTAMENTO'] = pd.to_numeric(df['P1_DEPARTAMENTO'], errors='coerce').astype('Int64')
-            # Map P3
-            if directorio_map_p3:
-                df['P3'] = df['DIRECTORIO'].map(lambda x: directorio_map_p3.get(x))
-                df['P3'] = pd.to_numeric(df['P3'], errors='coerce').astype('Int64')
-            # Map REGION
-            if directorio_map_region:
-                df['REGION'] = df['DIRECTORIO'].map(lambda x: directorio_map_region.get(x))
-                df['REGION'] = pd.to_numeric(df['REGION'], errors='coerce').astype('Int64')
-            # Try both mappings for P1_MUNICIPIO
-            def municipio_mapper(x):
-                val = directorio_map_mpio.get(x)
-                if pd.isnull(val) or val is None:
-                    val = directorio_map_mpio_alt.get(x)
-                return val
-            df['P1_MUNICIPIO'] = df['DIRECTORIO'].map(municipio_mapper)
-            df['P1_MUNICIPIO'] = pd.to_numeric(df['P1_MUNICIPIO'], errors='coerce').astype('Int64')
-            dfs[i] = df
-
+            
+            if 'P3' in df_2010_id.columns and 'CLASE' not in df_2010_id.columns:
+                df_2010_id = df_2010_id.rename(columns={'P3': 'CLASE'})
+            
+            rename_map = {}
+            if 'P1_DEPARTAMENTO' not in df_2010_id.columns and 'DEPARTAMENTO' in df_2010_id.columns:
+                rename_map['DEPARTAMENTO'] = 'P1_DEPARTAMENTO'
+            if rename_map:
+                df_2010_id = df_2010_id.rename(columns=rename_map)
+            
+            if 'DIRECTORIO' in df_2010_id.columns:
+                df_2010_id = df_2010_id.drop_duplicates(subset=['DIRECTORIO'], keep='first')
+                
+                cols_to_merge = ['DIRECTORIO']
+                for col in ['P1_DEPARTAMENTO', 'CLASE', 'REGION']:
+                    if col in df_2010_id.columns:
+                        cols_to_merge.append(col)
+                
+                if len(cols_to_merge) > 1 and year in dfs_vivienda_by_year:
+                    df_vivienda = dfs_vivienda_by_year[year]
+                    
+                    df_vivienda = df_vivienda.merge(
+                        df_2010_id[cols_to_merge], 
+                        on='DIRECTORIO', 
+                        how='left', 
+                        suffixes=('', '_2010')
+                    )
+                    
+                    for col in ['P1_DEPARTAMENTO', 'CLASE', 'REGION']:
+                        col_2010 = f'{col}_2010'
+                        if col_2010 in df_vivienda.columns:
+                            if col in df_vivienda.columns:
+                                df_vivienda[col] = df_vivienda[col].combine_first(df_vivienda[col_2010])
+                            else:
+                                df_vivienda[col] = df_vivienda[col_2010]
+                            df_vivienda = df_vivienda.drop(columns=[col_2010])
+                    
+                    dfs_vivienda_by_year[year] = df_vivienda
+                    print(f"  -> Merge identificacion 2010 completado")
     
-    import os
-    os.makedirs("data/dfs", exist_ok=True)
-    for i, df in enumerate(dfs):
-        df.to_csv(f"data/dfs/df_{i}.csv", index=False)
+    # Convertir tipos de datos y guardar archivos separados por año
+    integer_cols_vivienda = ["DIRECTORIO", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
+                              "P4000", "P4005", "P4015", "P8520", "P70", "CANT_HOGARES_VIVIENDA"]
+    
+    integer_cols_hogar = ["DIRECTORIO", "HOGAR_ID", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
+                          "P205", "CANT_PERSONAS_HOGAR", "P5010", "P8526", "P8530", "P8532"]
+    
+    run_dir = Path("data/dfs") / f"run_{uuid.uuid4().hex[:8]}"
+    run_dir.mkdir(parents=True, exist_ok=False)
+    
+    print(f"\nGuardando archivos en: {run_dir}")
+    
+    for year in sorted(dfs_vivienda_by_year.keys()):
+        df_vivienda = dfs_vivienda_by_year[year]
+        
+        # Convertir tipos
+        for col in integer_cols_vivienda:
+            if col in df_vivienda.columns:
+                df_vivienda[col] = pd.to_numeric(df_vivienda[col], errors='coerce').astype('Int64')
+        
+        # Guardar
+        output_file = run_dir / f"df_vivienda_{year}.csv"
+        df_vivienda.to_csv(output_file, index=False)
+        print(f"  -> Vivienda {year}: {len(df_vivienda)} filas guardadas en {output_file.name}")
+    
+    for year in sorted(dfs_hogar_by_year.keys()):
+        df_hogar = dfs_hogar_by_year[year]
+        
+        # Convertir tipos
+        for col in integer_cols_hogar:
+            if col in df_hogar.columns:
+                df_hogar[col] = pd.to_numeric(df_hogar[col], errors='coerce').astype('Int64')
+        
+        if 'FEX_C_2018' in df_hogar.columns:
+            df_hogar['FEX_C_2018'] = pd.to_numeric(df_hogar['FEX_C_2018'], errors='coerce')
+        
+        # Guardar
+        output_file = run_dir / f"df_hogar_{year}.csv"
+        df_hogar.to_csv(output_file, index=False)
+        print(f"  -> Hogar {year}: {len(df_hogar)} filas guardadas en {output_file.name}")
+    
+    print(f"\nProceso completado. Archivos disponibles en: {run_dir}")
 
     if extractor is not None:
         extractor.s4h_delete_download_folder(folder_path="data/ECV")

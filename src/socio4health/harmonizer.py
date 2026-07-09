@@ -686,6 +686,17 @@ class Harmonizer:
         def identify_primary_df(dfs):
             candidates = []
 
+            def _table_label(df, fallback_index):
+                if 'filename' in df.columns and not df['filename'].empty:
+                    source_name = str(df['filename'].dropna().iloc[0]).strip()
+                    if source_name:
+                        return Path(source_name).stem
+
+                if df.index.name:
+                    return str(df.index.name).strip()
+
+                return f"table_{fallback_index}"
+
             for i, df in enumerate(dfs):
                 if self.join_key not in df.columns:
                     continue
@@ -694,7 +705,8 @@ class Harmonizer:
                 unique_rows = df[self.join_key].nunique()
                 uniqueness_ratio = unique_rows / total_rows
 
-                df[self.join_key].to_csv(f"data/directories_{df.index.name or 'index'}.csv", index=False)
+                table_label = _table_label(df, i)
+                df[self.join_key].to_csv(f"data/directories_{table_label}.csv", index=False)
                 logging.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
                 if uniqueness_ratio > 0.9:
                     candidates.append((i, df.copy(), uniqueness_ratio))

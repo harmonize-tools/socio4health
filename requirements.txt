@@ -1,5 +1,6 @@
 requests~=2.31.0
-Scrapy~=2.11.1
+Scrapy==2.14.1
+Twisted<25.0
 tqdm~=4.66.1
 pyreadstat~=1.2.6
 py7zr~=0.20.8

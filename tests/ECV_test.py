@@ -2,43 +2,31 @@ from socio4health import Extractor, Harmonizer
 from functools import reduce
 import pandas as pd
 from pathlib import Path
-import shutil
 import uuid
-
-
-def _first_dataframe_with_columns(dataframes, required_columns):
-    required_columns = set(required_columns)
-    for dataframe in dataframes:
-        if required_columns.issubset(dataframe.columns):
-            return dataframe
-    return None
 
 
 if __name__ == "__main__":
     ecv_data = {
         2010: "https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata",
         2011: "https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata",
-        #2012: "https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata",
-        #2013: "https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata",
-        #2014: "https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata",
-        #2015: "https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata",
-        #2016: "https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata",
-        #2017: "https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata"
+        2012: "https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata",
+        2013: "https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata",
+        2014: "https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata",
+        2015: "https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata",
+        2016: "https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata",
+        2017: "https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata"
     }
 
-    # Variables a nivel VIVIENDA (una fila por DIRECTORIO)
     vivienda_cols = [
         "DIRECTORIO", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
         "P4000", "P4005", "P4015", "P8520S1", "P8520S3", "P8520S4", "P8520S5", "P70", "CANT_HOGARES_VIVIENDA"
     ]
     
-    # Variables a nivel HOGAR (una fila por DIRECTORIO + HOGAR_ID)
     hogar_cols = [
         "DIRECTORIO", "HOGAR_ID", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
-        "P205", "CANT_PERSONAS_HOGAR", "P5010", "P8526", "P8530", "P8532"
+        "P205", "CANT_PERSONAS_HOGAR", "P5010", "P8526", "P8530", "P8532", "P764"
     ]
 
-    # Diccionarios para mantener dataframes separados por año
     dfs_vivienda_by_year = {}
     dfs_hogar_by_year = {}
     
@@ -81,7 +69,6 @@ if __name__ == "__main__":
 
         df_extracted = extractor.s4h_extract()
         
-        # Clasificar dataframes en vivienda vs hogar
         dfs_vivienda_year = []
         dfs_hogar_year = []
         
@@ -92,10 +79,8 @@ if __name__ == "__main__":
             
             # Normalizar nombres
             rename_map = {}
-            if 'CANT_PERSONAS_HOGAR' not in df.columns and 'CUANTAS PERSONAS POR HOGAR' in df.columns:
-                rename_map['CUANTAS PERSONAS POR HOGAR'] = 'CANT_PERSONAS_HOGAR'
-            if 'CANT_HOGARES_VIVIENDA' not in df.columns and 'CANTIDAD DE HOGARES POR VIVIENDA' in df.columns:
-                rename_map['CANTIDAD DE HOGARES POR VIVIENDA'] = 'CANT_HOGARES_VIVIENDA'
+            if 'CANT_HOGARES_VIVIENDA' not in df.columns and 'CANT_HOG_COMPLETOS' in df.columns:
+                rename_map['CANT_HOG_COMPLETOS'] = 'CANT_HOGARES_VIVIENDA'
             if rename_map:
                 df = df.rename(columns=rename_map)
             
@@ -263,14 +248,14 @@ if __name__ == "__main__":
     for year in ecv_data.keys():
         print(f"\nProcesando {year}...")
         
-        # Merge con factores de expansion
+        # Merge con factores de expansion (solo en df_hogar)
         if year in dfs_hogar_by_year and year in dfs_fex_by_year:
             df_hogar = dfs_hogar_by_year[year]
             df_fex = dfs_fex_by_year[year]
             
             df_hogar = df_hogar.merge(df_fex, on='DIRECTORIO', how='left')
             dfs_hogar_by_year[year] = df_hogar
-            print(f"  -> Merge FEX_C_2018 completado")
+            print(f"  -> Merge FEX_C_2018 completado en df_hogar")
         
         # Merge con municipio
         if year in dfs_vivienda_by_year and year in dfs_mpio_by_year:
@@ -325,27 +310,26 @@ if __name__ == "__main__":
                     dfs_vivienda_by_year[year] = df_vivienda
                     print(f"  -> Merge identificacion 2010 completado")
     
-    # Convertir tipos de datos y guardar archivos separados por año
-    integer_cols_vivienda = ["DIRECTORIO", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
-                              "P4000", "P4005", "P4015", "P8520", "P70", "CANT_HOGARES_VIVIENDA"]
-    
-    integer_cols_hogar = ["DIRECTORIO", "HOGAR_ID", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
-                          "P205", "CANT_PERSONAS_HOGAR", "P5010", "P8526", "P8530", "P8532"]
-    
+    # Guardar archivos separados por año
     run_dir = Path("data/dfs") / f"run_{uuid.uuid4().hex[:8]}"
     run_dir.mkdir(parents=True, exist_ok=False)
     
     print(f"\nGuardando archivos en: {run_dir}")
     
+    # Función helper para convertir tipos: todo a Int64 excepto FEX_C_2018
+    def convert_dtypes(df):
+        for col in df.columns:
+            if col == 'FEX_C_2018':
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            else:
+                df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')
+        return df
+    
     for year in sorted(dfs_vivienda_by_year.keys()):
         df_vivienda = dfs_vivienda_by_year[year]
-        
-        # Convertir tipos
-        for col in integer_cols_vivienda:
-            if col in df_vivienda.columns:
-                df_vivienda[col] = pd.to_numeric(df_vivienda[col], errors='coerce').astype('Int64')
-        
-        # Guardar
+
+        df_vivienda = convert_dtypes(df_vivienda)
+
         output_file = run_dir / f"df_vivienda_{year}.csv"
         df_vivienda.to_csv(output_file, index=False)
         print(f"  -> Vivienda {year}: {len(df_vivienda)} filas guardadas en {output_file.name}")
@@ -353,15 +337,8 @@ if __name__ == "__main__":
     for year in sorted(dfs_hogar_by_year.keys()):
         df_hogar = dfs_hogar_by_year[year]
         
-        # Convertir tipos
-        for col in integer_cols_hogar:
-            if col in df_hogar.columns:
-                df_hogar[col] = pd.to_numeric(df_hogar[col], errors='coerce').astype('Int64')
-        
-        if 'FEX_C_2018' in df_hogar.columns:
-            df_hogar['FEX_C_2018'] = pd.to_numeric(df_hogar['FEX_C_2018'], errors='coerce')
-        
-        # Guardar
+        df_hogar = convert_dtypes(df_hogar)
+
         output_file = run_dir / f"df_hogar_{year}.csv"
         df_hogar.to_csv(output_file, index=False)
         print(f"  -> Hogar {year}: {len(df_hogar)} filas guardadas en {output_file.name}")

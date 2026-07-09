@@ -35,7 +35,7 @@ def _run_spider_in_process(url, depth, down_ext, key_words):
     logging.getLogger('urllib3').setLevel(logging.CRITICAL)
     # Import scrapy only when running the spider (lazy)
     scrapy = import_optional('scrapy', extra='scraping')
-    CrawlerProcess = scrapy.crawler.CrawlerProcess
+    from scrapy.crawler import CrawlerProcess
     # Import local spider class
     spider_mod = import_module('socio4health.utils.standard_spider')
     StandardSpider = getattr(spider_mod, 'StandardSpider')
@@ -43,6 +43,7 @@ def _run_spider_in_process(url, depth, down_ext, key_words):
     process = CrawlerProcess({
         'LOG_LEVEL': 'CRITICAL',
         'LOG_ENABLED': False,
+        'TWISTED_REACTOR_ENABLED': False,
         'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
     })
     process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)

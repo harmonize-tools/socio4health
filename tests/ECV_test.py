@@ -23,7 +23,7 @@ if __name__ == "__main__":
     ]
     
     hogar_cols = [
-        "DIRECTORIO", "HOGAR_ID", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
+        "DIRECTORIO", "YEAR", "CLASE", "REGION", "P1_DEPARTAMENTO", "P1_MUNICIPIO",
         "P205", "CANT_PERSONAS_HOGAR", "P5010", "P8526", "P8530", "P8532", "P764"
     ]
 
@@ -100,8 +100,6 @@ if __name__ == "__main__":
             if has_vivienda_vars and not has_hogar_vars:
                 dfs_vivienda_year.append(df)
             elif has_hogar_vars:
-                if 'HOGAR_ID' not in df.columns:
-                    df['HOGAR_ID'] = df.groupby('DIRECTORIO').cumcount() + 1
                 dfs_hogar_year.append(df)
             elif has_vivienda_vars and has_hogar_vars:
                 dfs_vivienda_year.append(df)
@@ -139,8 +137,7 @@ if __name__ == "__main__":
                 common_cols = set(dfs_hogar_year[0].columns)
                 for df in dfs_hogar_year[1:]:
                     common_cols = common_cols.intersection(set(df.columns))
-                for key in ['DIRECTORIO', 'HOGAR_ID']:
-                    common_cols.discard(key)
+                common_cols.discard('DIRECTORIO')
                 
                 for i in range(1, len(dfs_hogar_year)):
                     cols_to_drop = [col for col in common_cols if col in dfs_hogar_year[i].columns]
@@ -148,7 +145,7 @@ if __name__ == "__main__":
                         dfs_hogar_year[i] = dfs_hogar_year[i].drop(columns=cols_to_drop)
                 
                 merged_hogar = reduce(
-                    lambda left, right: pd.merge(left, right, on=['DIRECTORIO', 'HOGAR_ID'], how='outer'), 
+                    lambda left, right: pd.merge(left, right, on='DIRECTORIO', how='outer'), 
                     dfs_hogar_year
                 )
             

@@ -307,7 +307,7 @@ if __name__ == "__main__":
                     dfs_vivienda_by_year[year] = df_vivienda
                     print(f"  -> Merge identificacion 2010 completado")
     
-    # Guardar archivos separados por año
+    # Guardar un único archivo por año con las columnas de vivienda y hogar
     run_dir = Path("data/dfs") / f"run_{uuid.uuid4().hex[:8]}"
     run_dir.mkdir(parents=True, exist_ok=False)
     
@@ -322,23 +322,39 @@ if __name__ == "__main__":
                 df[col] = pd.to_numeric(df[col], errors='coerce').astype('Int64')
         return df
     
-    for year in sorted(dfs_vivienda_by_year.keys()):
-        df_vivienda = dfs_vivienda_by_year[year]
+    years = sorted(set(dfs_vivienda_by_year.keys()) | set(dfs_hogar_by_year.keys()))
+    for year in years:
+        df_vivienda = dfs_vivienda_by_year.get(year)
+        df_hogar = dfs_hogar_by_year.get(year)
 
-        df_vivienda = convert_dtypes(df_vivienda)
+        if df_vivienda is not None and df_hogar is not None:
+            df_joined = df_vivienda.merge(
+                df_hogar,
+                on='DIRECTORIO',
+                how='outer',
+                suffixes=('_vivienda', '_hogar')
+            )
 
-        output_file = run_dir / f"df_vivienda_{year}.csv"
-        df_vivienda.to_csv(output_file, index=False)
-        print(f"  -> Vivienda {year}: {len(df_vivienda)} filas guardadas en {output_file.name}")
-    
-    for year in sorted(dfs_hogar_by_year.keys()):
-        df_hogar = dfs_hogar_by_year[year]
-        
-        df_hogar = convert_dtypes(df_hogar)
+            if 'YEAR_vivienda' in df_joined.columns:
+                df_joined = df_joined.rename(columns={'YEAR_vivienda': 'YEAR'})
+            if 'YEAR_hogar' in df_joined.columns:
+                if 'YEAR' in df_joined.columns:
+                    df_joined['YEAR'] = df_joined['YEAR'].combine_first(df_joined['YEAR_hogar'])
+                else:
+                    df_joined = df_joined.rename(columns={'YEAR_hogar': 'YEAR'})
+                df_joined = df_joined.drop(columns=['YEAR_hogar'])
+        elif df_vivienda is not None:
+            df_joined = df_vivienda.copy()
+        elif df_hogar is not None:
+            df_joined = df_hogar.copy()
+        else:
+            continue
 
-        output_file = run_dir / f"df_hogar_{year}.csv"
-        df_hogar.to_csv(output_file, index=False)
-        print(f"  -> Hogar {year}: {len(df_hogar)} filas guardadas en {output_file.name}")
+        df_joined = convert_dtypes(df_joined)
+
+        output_file = run_dir / f"df_ecv_{year}.csv"
+        df_joined.to_csv(output_file, index=False)
+        print(f"  -> {year}: {len(df_joined)} filas guardadas en {output_file.name}")
     
     print(f"\nProceso completado. Archivos disponibles en: {run_dir}")
 

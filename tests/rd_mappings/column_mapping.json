@@ -27,7 +27,7 @@
     "V103": "H_ROOF",
     "V114": "H_ELECTRICITY",
     "V111": "H_SANITARY",
-    "V116": "P_LITERACY",
+    "V116": "H_GARBAGE",
     "V108": "H_WATER",
     "V107": "H_COOK",
     "P301": "P_LITERACY",

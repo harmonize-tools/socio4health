@@ -21,11 +21,12 @@ OUTPUT_PATH = r"D:\EQUIPO\Documents HDD\Harmonize\ENHOGAR\OUTPUT"
 _DATA_DIR = Path(__file__).resolve().parent / "rd_mappings"
 _BUNDLE = load_mapping_bundle(
     _DATA_DIR,
+    column_mapping_file="column_mapping.json",
     value_mapping_prefix="enhogar",
     harmonized_mapping_file=Path(__file__).resolve().parent / "harmonized_mapping.json",
 )
 
-COLUMN_MAPPING_BY_YEAR = _BUNDLE["column_mapping"]
+COLUMN_MAPPING_BY_YEAR = _BUNDLE["column_mapping_by_year"]
 HARMONIZED_MAPPING = _BUNDLE["harmonized_mapping"]
 
 

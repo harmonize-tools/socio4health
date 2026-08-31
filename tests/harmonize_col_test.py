@@ -3,7 +3,14 @@ from pathlib import Path
 import re
 
 from socio4health import Harmonizer
-from socio4health.utils.harmonizer_utils import apply_value_mappings, extract_and_prepare_data, harmonize_columns_by_year, merge_factor, select_and_filter_columns, group_and_onehot_encode, _clean_column_name
+from socio4health.utils.harmonizer_utils import (
+    apply_value_mappings,
+    extract_and_prepare_data,
+    harmonize_columns_by_year,
+    merge_factor, select_and_filter_columns,
+    group_and_onehot_encode,
+    _clean_column_name
+)
 import pandas as pd
 
 from socio4health.utils.mapping_utils import load_json_mapping, load_int_key_mapping
@@ -17,34 +24,6 @@ HARMONIZED_MAPPING = load_int_key_mapping(Path(__file__).resolve().parent, "harm
 GEIH_VALUE_MAPPING = load_int_key_mapping(_DATA_DIR, "geih_mapping.json")["mapping"]
 
 SPECIAL_CLASE_FILE_PATTERN = re.compile(r".+\*csv_.+ - .+\.csv$", re.IGNORECASE)
-
-col_cols = [
-        "YEAR",
-        "DIRECTORIO",
-        "DPTO",
-        "FEX_C18",
-        "CLASE",
-        "P4000",
-        "P4005",
-        "P4010",
-        "P4020",
-        "P4030S1",
-        "P5020",
-        "P5040",
-        "P5050",
-        "P5080",
-        "P5090",
-        "P5000",
-        "P5010",
-        "P6160",
-        "P3271",
-        "P6080",
-        "P6040",
-        "P6042",
-        "Ï»¿DIRECTORIO",
-        "P6020",
-        "P6210"
-    ]
 
 
 def harmonize_directorio_columns(dfs):
@@ -107,15 +86,12 @@ def main():
         har = Harmonizer()
         dfs = har.s4h_vertical_merge(ddfs, overlap_threshold=0.9, method="union")
 
-        # Harmonizar nombres de columnas
         print(f"\nArmonizando nombres de columnas para año {year}...")
         dfs = harmonize_columns_by_year(dfs, year, COLUMN_MAPPING_BY_YEAR)
 
-        # Aplicar mapeos de valores
         print(f"\nAplicando mapeos de valores para año {year}...")
         dfs = apply_value_mappings(dfs, year, GEIH_VALUE_MAPPING, column_aliases=COLUMN_MAPPING_BY_YEAR)
 
-        # Seleccionar las columnas harmonizadas inferidas y conservar metadatos necesarios para el agrupado
         available_harmonized = [
             col for col in HARMONIZED_MAPPING.keys()
             if any(col in df.columns for df in dfs)
@@ -146,21 +122,15 @@ def main():
         if all_grouped_dfs:
             print("\nCombining and aligning Household and Individual data horizontally...")
             
-            # 1. Stack all DataFrames vertically
             combined_df = pd.concat(all_grouped_dfs, ignore_index=True)
             
-            # 2. Group by the identifiers and use .first() to grab the first non-null value for each column.
-            # This perfectly merges the disjoint P_ and H_ columns into a single row per department!
             final_df = combined_df.groupby(['YEAR', 'ADMIN_DIVISION'], as_index=False, dropna=False).first()
             
-            # 3. Sort by Year and Department so the output is clean and ordered
             final_df = final_df.sort_values(by=['YEAR', 'ADMIN_DIVISION']).reset_index(drop=True)
             
-            # 4. Order columns cleanly (YEAR and ADMIN_DIVISION first)
             ordered_cols = ['YEAR', 'ADMIN_DIVISION'] + [col for col in final_df.columns if col not in ['YEAR', 'ADMIN_DIVISION']]
             final_df = final_df[ordered_cols]
             
-            # 5. Save to CSV
             output_file = f"{OUTPUT_PATH}\\GEIH_harmonized.csv"
         
             final_df.to_csv(output_file, index=False)

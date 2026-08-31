@@ -22,37 +22,6 @@ COLUMN_MAPPING_BY_YEAR = load_json_mapping(_DATA_DIR, "column_mapping.json")["20
 HARMONIZED_MAPPING = load_int_key_mapping(Path(__file__).resolve().parent, "harmonized_mapping.json")
 ENAHO_VALUE_MAPPING = load_int_key_mapping(_DATA_DIR, "enaho_mapping.json")["mapping"]
 
-fallback_col_cols = [
-        "YEAR",
-        "VIVIENDA",
-        "UBIGEO",
-        "FACTOR07",
-        "ESTRATO",
-        "P101",
-        "P102",
-        "P103",
-        "P103A",
-        "P1121",
-        "P1123",
-        "P1124",
-        "P1125",
-        "P1126",
-        "P1127",
-        "P111A",
-        "P110",
-        "P113A",
-        "P105A",
-        "P5000",
-        "P5010",
-        "P302",
-        "P207",
-        "P558C",
-        "P208A",
-        "P301A"
-    ]
-
-
-
 def main():
     GEIH_data = {
         2004: r"D:\EQUIPO\Documents HDD\Harmonize\ENAHO\2004",
@@ -95,12 +64,6 @@ def main():
             col for col in HARMONIZED_MAPPING.keys()
             if any(col in df.columns for df in dfs)
         ]
-
-        if not available_harmonized:
-            available_harmonized = [
-                col for col in fallback_col_cols
-                if any(col in df.columns for df in dfs)
-            ]
 
         for required_col in ("YEAR", "ADMIN_DIVISION", "EXP_FACTOR"):
             if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:

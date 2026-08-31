@@ -18,26 +18,6 @@ _DATA_DIR = Path(__file__).resolve().parent / "pnadc_mapping"
 COLUMN_MAPPING_BY_YEAR = load_json_mapping(_DATA_DIR, "column_mapping.json")["2012-2025"]
 HARMONIZED_MAPPING = load_int_key_mapping(Path(__file__).resolve().parent, "harmonized_mapping.json")
 
-fallback_col_cols = [
-    "YEAR",
-    "AREA",
-    "H_TYPE",
-    "H_WALLS",
-    "H_FLOOR",
-    "H_ROOF",
-    "H_ELECTRICITY",
-    "H_SANITARY",
-    "H_GARBAGE",
-    "H_WATER",
-    "H_COOK",
-    "H_PROPERTY",
-    "P_LITERACY",
-    "P_SEX",
-    "P_ETHNIC",
-    "P_AGE",
-    "P_EDUCATION",
-]
-
 def main():
     PNADC_data = {
         2012: r"D:\EQUIPO\Documents HDD\Harmonize\PNADC\2012",
@@ -90,10 +70,6 @@ def main():
             col for col in HARMONIZED_MAPPING.keys()
             if any(col in df.columns for df in dfs)
         ]
-
-        for extra_col in fallback_col_cols:
-            if any(extra_col in df.columns for df in dfs) and extra_col not in available_harmonized:
-                available_harmonized.append(extra_col)
 
         for required_col in ("YEAR", "ADMIN_DIVISION_2", "EXP_FACTOR", "UPA"):
             if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:

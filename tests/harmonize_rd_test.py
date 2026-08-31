@@ -66,23 +66,18 @@ def main():
         print(f"Procesando año {year}")
         print(f"{'='*60}")
         
-        # Extraer datos
         ddfs = extract_and_prepare_data(year, path, ext='.csv', sep=',', output_path=OUTPUT_PATH)
         dfs = [df.compute() for df in ddfs]
         
-        # Selección de columnas originales según el año
         col_cols = get_columns_for_year(year)
         dfs = select_and_filter_columns(dfs, col_cols, num_cols_threshold=0)
         
-        # Harmonizar nombres de columnas
         print(f"\nArmonizando nombres de columnas para año {year}...")
         dfs = harmonize_columns_by_year(dfs, year, COLUMN_MAPPING_BY_YEAR)
         
-        # Aplicar mapeos de valores
         print(f"\nAplicando mapeos de valores para año {year}...")
         dfs = apply_value_mappings(dfs, year, get_value_mapping_path(year), column_aliases=COLUMN_MAPPING_BY_YEAR)
         
-        # Seleccionar las columnas harmonizadas inferidas y conservar metadatos necesarios para el agrupado
         available_harmonized = [
             col for col in HARMONIZED_MAPPING.keys()
             if any(col in df.columns for df in dfs)
@@ -108,17 +103,13 @@ def main():
         grouped_dfs = group_and_onehot_encode(dfs, group_col='ADMIN_DIVISION', weight_col='EXP_FACTOR', id_col=None, value_labels_by_column=HARMONIZED_MAPPING)
     
         if grouped_dfs:
-            # 1. Set the join key as the index for all DataFrames
             indexed_dfs = [df.set_index('ADMIN_DIVISION') for df in grouped_dfs]
             
-            # 2. Start with the first DataFrame as our base
             merged_df = indexed_dfs[0]
             
-            # 3. Sequentially merge horizontally.
             for df in indexed_dfs[1:]:
                 merged_df = merged_df.combine_first(df)
                 
-            # 4. Reset index to make 'ADMIN_DIVISION' a regular column again
             merged_df = merged_df.reset_index()
             merged_df['YEAR'] = year
             final_dfs.append(merged_df)

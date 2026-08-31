@@ -25,26 +25,6 @@ PNAD_STANDARD_RENAMES = {
     "P_ETHNICITY": "P_ETHNIC",
 }
 
-fallback_col_cols = [
-    "YEAR",
-    "AREA",
-    "H_TYPE",
-    "H_WALLS",
-    "H_FLOOR",
-    "H_ROOF",
-    "H_ELECTRICITY",
-    "H_SANITARY",
-    "H_GARBAGE",
-    "H_WATER",
-    "H_COOK",
-    "H_PROPERTY",
-    "P_LITERACY",
-    "P_SEX",
-    "P_ETHNICITY",
-    "P_AGE",
-    "P_EDUCATION"
-]
-
 def main():
     PNAD_data_dom = {
         2001: r"D:\EQUIPO\Documents HDD\Harmonize\PNAD\dom\2001",
@@ -113,10 +93,6 @@ def main():
             if any(col in df.columns for df in dfs)
         ]
 
-        for extra_col in fallback_col_cols:
-            if any(extra_col in df.columns for df in dfs) and extra_col not in available_harmonized:
-                available_harmonized.append(extra_col)
-
         for required_col in ("YEAR", "ADMIN_DIVISION", "EXP_FACTOR"):
             if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:
                 available_harmonized.append(required_col)
@@ -178,10 +154,6 @@ def main():
             col for col in HARMONIZED_MAPPING.keys()
             if any(col in df.columns for df in dfs)
         ]
-
-        for extra_col in fallback_col_cols:
-            if any(extra_col in df.columns for df in dfs) and extra_col not in available_harmonized:
-                available_harmonized.append(extra_col)
 
         for required_col in ("YEAR", "ADMIN_DIVISION", "EXP_FACTOR"):
             if any(required_col in df.columns for df in dfs) and required_col not in available_harmonized:

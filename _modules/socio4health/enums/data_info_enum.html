@@ -1,0 +1,578 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>socio4health.enums.data_info_enum &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/socio4health/enums/data_info_enum';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">socio4health.enums.data_info_enum</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for socio4health.enums.data_info_enum</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="CountryEnum">
+<a class="viewcode-back" href="../../../socio4health.enums.data_info_enum.CountryEnum.html#socio4health.enums.data_info_enum.CountryEnum">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CountryEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">COLOMBIA</span> <span class="o">=</span> <span class="s1">'COL'</span>
+    <span class="n">PERU</span> <span class="o">=</span> <span class="s1">'PER'</span>
+    <span class="n">BRAZIL</span> <span class="o">=</span> <span class="s1">'BRA'</span>
+    <span class="n">DOMINICAN_REPUBLIC</span> <span class="o">=</span> <span class="s1">'DOM'</span></div>
+
+
+<div class="viewcode-block" id="NameEnum">
+<a class="viewcode-back" href="../../../socio4health.enums.data_info_enum.NameEnum.html#socio4health.enums.data_info_enum.NameEnum">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NameEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PNAD</span> <span class="o">=</span> <span class="s1">'PNAD'</span>
+    <span class="n">PNADC</span> <span class="o">=</span> <span class="s1">'PNADC'</span>
+    <span class="n">ENAHO</span> <span class="o">=</span> <span class="s1">'ENAHO'</span>
+    <span class="n">GEIH</span> <span class="o">=</span> <span class="s1">'GEIH'</span>
+    <span class="n">ENHOGAR</span> <span class="o">=</span> <span class="s1">'ENHOGAR'</span></div>
+
+
+<div class="viewcode-block" id="BraColnamesEnum">
+<a class="viewcode-back" href="../../../socio4health.enums.html#socio4health.enums.data_info_enum.BraColnamesEnum">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BraColnamesEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PNADC</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">"Ano"</span><span class="p">,</span> <span class="s2">"Trimestre"</span><span class="p">,</span> <span class="s2">"UF"</span><span class="p">,</span> <span class="s2">"Capital"</span><span class="p">,</span> <span class="s2">"RM_RIDE"</span><span class="p">,</span> <span class="s2">"UPA"</span><span class="p">,</span> <span class="s2">"Estrato"</span><span class="p">,</span> <span class="s2">"V1008"</span><span class="p">,</span> <span class="s2">"V1014"</span><span class="p">,</span> <span class="s2">"V1016"</span><span class="p">,</span>
+        <span class="s2">"V1022"</span><span class="p">,</span> <span class="s2">"V1023"</span><span class="p">,</span> <span class="s2">"V1027"</span><span class="p">,</span> <span class="s2">"V1028"</span><span class="p">,</span> <span class="s2">"V1029"</span><span class="p">,</span> <span class="s2">"V1033"</span><span class="p">,</span> <span class="s2">"posest"</span><span class="p">,</span> <span class="s2">"posest_sxi"</span><span class="p">,</span> <span class="s2">"V2001"</span><span class="p">,</span> <span class="s2">"V2003"</span><span class="p">,</span>
+        <span class="s2">"V2005"</span><span class="p">,</span> <span class="s2">"V2007"</span><span class="p">,</span> <span class="s2">"V2008"</span><span class="p">,</span> <span class="s2">"V20081"</span><span class="p">,</span> <span class="s2">"V20082"</span><span class="p">,</span> <span class="s2">"V2009"</span><span class="p">,</span> <span class="s2">"V2010"</span><span class="p">,</span> <span class="s2">"V3001"</span><span class="p">,</span> <span class="s2">"V3002"</span><span class="p">,</span> <span class="s2">"V3002A"</span><span class="p">,</span>
+        <span class="s2">"V3003"</span><span class="p">,</span> <span class="s2">"V3003A"</span><span class="p">,</span> <span class="s2">"V3004"</span><span class="p">,</span> <span class="s2">"V3005"</span><span class="p">,</span> <span class="s2">"V3005A"</span><span class="p">,</span> <span class="s2">"V3006"</span><span class="p">,</span> <span class="s2">"V3006A"</span><span class="p">,</span> <span class="s2">"V3007"</span><span class="p">,</span> <span class="s2">"V3008"</span><span class="p">,</span> <span class="s2">"V3009"</span><span class="p">,</span>
+        <span class="s2">"V3009A"</span><span class="p">,</span> <span class="s2">"V3010"</span><span class="p">,</span> <span class="s2">"V3011"</span><span class="p">,</span> <span class="s2">"V3011A"</span><span class="p">,</span> <span class="s2">"V3012"</span><span class="p">,</span> <span class="s2">"V3013"</span><span class="p">,</span> <span class="s2">"V3013A"</span><span class="p">,</span> <span class="s2">"V3013B"</span><span class="p">,</span> <span class="s2">"V3014"</span><span class="p">,</span> <span class="s2">"V4001"</span><span class="p">,</span>
+        <span class="s2">"V4002"</span><span class="p">,</span> <span class="s2">"V4003"</span><span class="p">,</span> <span class="s2">"V4004"</span><span class="p">,</span> <span class="s2">"V4005"</span><span class="p">,</span> <span class="s2">"V4006"</span><span class="p">,</span> <span class="s2">"V4006A"</span><span class="p">,</span> <span class="s2">"V4007"</span><span class="p">,</span> <span class="s2">"V4008"</span><span class="p">,</span> <span class="s2">"V40081"</span><span class="p">,</span> <span class="s2">"V40082"</span><span class="p">,</span>
+        <span class="s2">"V40083"</span><span class="p">,</span> <span class="s2">"V4009"</span><span class="p">,</span> <span class="s2">"V4010"</span><span class="p">,</span> <span class="s2">"V4012"</span><span class="p">,</span> <span class="s2">"V40121"</span><span class="p">,</span> <span class="s2">"V4013"</span><span class="p">,</span> <span class="s2">"V40132"</span><span class="p">,</span> <span class="s2">"V40132A"</span><span class="p">,</span> <span class="s2">"V4014"</span><span class="p">,</span> <span class="s2">"V4015"</span><span class="p">,</span>
+        <span class="s2">"V40151"</span><span class="p">,</span> <span class="s2">"V401511"</span><span class="p">,</span> <span class="s2">"V401512"</span><span class="p">,</span> <span class="s2">"V4016"</span><span class="p">,</span> <span class="s2">"V40161"</span><span class="p">,</span> <span class="s2">"V40162"</span><span class="p">,</span> <span class="s2">"V40163"</span><span class="p">,</span> <span class="s2">"V4017"</span><span class="p">,</span> <span class="s2">"V40171"</span><span class="p">,</span>
+        <span class="s2">"V401711"</span><span class="p">,</span> <span class="s2">"V4018"</span><span class="p">,</span> <span class="s2">"V40181"</span><span class="p">,</span> <span class="s2">"V40182"</span><span class="p">,</span> <span class="s2">"V40183"</span><span class="p">,</span> <span class="s2">"V4019"</span><span class="p">,</span> <span class="s2">"V4020"</span><span class="p">,</span> <span class="s2">"V4021"</span><span class="p">,</span> <span class="s2">"V4022"</span><span class="p">,</span> <span class="s2">"V4024"</span><span class="p">,</span>
+        <span class="s2">"V4025"</span><span class="p">,</span> <span class="s2">"V4026"</span><span class="p">,</span> <span class="s2">"V4027"</span><span class="p">,</span> <span class="s2">"V4028"</span><span class="p">,</span> <span class="s2">"V4029"</span><span class="p">,</span> <span class="s2">"V4032"</span><span class="p">,</span> <span class="s2">"V4033"</span><span class="p">,</span> <span class="s2">"V40331"</span><span class="p">,</span> <span class="s2">"V403311"</span><span class="p">,</span> <span class="s2">"V403312"</span><span class="p">,</span>
+        <span class="s2">"V40332"</span><span class="p">,</span> <span class="s2">"V403321"</span><span class="p">,</span> <span class="s2">"V403322"</span><span class="p">,</span> <span class="s2">"V40333"</span><span class="p">,</span> <span class="s2">"V403331"</span><span class="p">,</span> <span class="s2">"V4034"</span><span class="p">,</span> <span class="s2">"V40341"</span><span class="p">,</span> <span class="s2">"V403411"</span><span class="p">,</span> <span class="s2">"V403412"</span><span class="p">,</span>
+        <span class="s2">"V40342"</span><span class="p">,</span> <span class="s2">"V403421"</span><span class="p">,</span> <span class="s2">"V403422"</span><span class="p">,</span> <span class="s2">"V4039"</span><span class="p">,</span> <span class="s2">"V4039C"</span><span class="p">,</span> <span class="s2">"V4040"</span><span class="p">,</span> <span class="s2">"V40401"</span><span class="p">,</span> <span class="s2">"V40402"</span><span class="p">,</span> <span class="s2">"V40403"</span><span class="p">,</span> <span class="s2">"V4041"</span><span class="p">,</span>
+        <span class="s2">"V4043"</span><span class="p">,</span> <span class="s2">"V40431"</span><span class="p">,</span> <span class="s2">"V4044"</span><span class="p">,</span> <span class="s2">"V4045"</span><span class="p">,</span> <span class="s2">"V4046"</span><span class="p">,</span> <span class="s2">"V4047"</span><span class="p">,</span> <span class="s2">"V4048"</span><span class="p">,</span> <span class="s2">"V4049"</span><span class="p">,</span> <span class="s2">"V4050"</span><span class="p">,</span> <span class="s2">"V40501"</span><span class="p">,</span>
+        <span class="s2">"V405011"</span><span class="p">,</span> <span class="s2">"V405012"</span><span class="p">,</span> <span class="s2">"V40502"</span><span class="p">,</span> <span class="s2">"V405021"</span><span class="p">,</span> <span class="s2">"V405022"</span><span class="p">,</span> <span class="s2">"V40503"</span><span class="p">,</span> <span class="s2">"V405031"</span><span class="p">,</span> <span class="s2">"V4051"</span><span class="p">,</span> <span class="s2">"V40511"</span><span class="p">,</span>
+        <span class="s2">"V405111"</span><span class="p">,</span> <span class="s2">"V405112"</span><span class="p">,</span> <span class="s2">"V40512"</span><span class="p">,</span> <span class="s2">"V405121"</span><span class="p">,</span> <span class="s2">"V405122"</span><span class="p">,</span> <span class="s2">"V4056"</span><span class="p">,</span> <span class="s2">"V4056C"</span><span class="p">,</span> <span class="s2">"V4057"</span><span class="p">,</span> <span class="s2">"V4058"</span><span class="p">,</span>
+        <span class="s2">"V40581"</span><span class="p">,</span> <span class="s2">"V405811"</span><span class="p">,</span> <span class="s2">"V405812"</span><span class="p">,</span> <span class="s2">"V40582"</span><span class="p">,</span> <span class="s2">"V405821"</span><span class="p">,</span> <span class="s2">"V405822"</span><span class="p">,</span> <span class="s2">"V40583"</span><span class="p">,</span> <span class="s2">"V405831"</span><span class="p">,</span> <span class="s2">"V40584"</span><span class="p">,</span>
+        <span class="s2">"V4059"</span><span class="p">,</span> <span class="s2">"V40591"</span><span class="p">,</span> <span class="s2">"V405911"</span><span class="p">,</span> <span class="s2">"V405912"</span><span class="p">,</span> <span class="s2">"V40592"</span><span class="p">,</span> <span class="s2">"V405921"</span><span class="p">,</span> <span class="s2">"V405922"</span><span class="p">,</span> <span class="s2">"V4062"</span><span class="p">,</span> <span class="s2">"V4062C"</span><span class="p">,</span>
+        <span class="s2">"V4063"</span><span class="p">,</span> <span class="s2">"V4063A"</span><span class="p">,</span> <span class="s2">"V4064"</span><span class="p">,</span> <span class="s2">"V4064A"</span><span class="p">,</span> <span class="s2">"V4071"</span><span class="p">,</span> <span class="s2">"V4072"</span><span class="p">,</span> <span class="s2">"V4072A"</span><span class="p">,</span> <span class="s2">"V4073"</span><span class="p">,</span> <span class="s2">"V4074"</span><span class="p">,</span> <span class="s2">"V4074A"</span><span class="p">,</span>
+        <span class="s2">"V4075A"</span><span class="p">,</span> <span class="s2">"V4075A1"</span><span class="p">,</span> <span class="s2">"V4076"</span><span class="p">,</span> <span class="s2">"V40761"</span><span class="p">,</span> <span class="s2">"V40762"</span><span class="p">,</span> <span class="s2">"V40763"</span><span class="p">,</span> <span class="s2">"V4077"</span><span class="p">,</span> <span class="s2">"V4078"</span><span class="p">,</span> <span class="s2">"V4078A"</span><span class="p">,</span> <span class="s2">"V4082"</span><span class="p">,</span>
+        <span class="s2">"VD2002"</span><span class="p">,</span> <span class="s2">"VD2003"</span><span class="p">,</span> <span class="s2">"VD2004"</span><span class="p">,</span> <span class="s2">"VD2006"</span><span class="p">,</span> <span class="s2">"VD3004"</span><span class="p">,</span> <span class="s2">"VD3005"</span><span class="p">,</span> <span class="s2">"VD3006"</span><span class="p">,</span> <span class="s2">"VD4001"</span><span class="p">,</span> <span class="s2">"VD4002"</span><span class="p">,</span>
+        <span class="s2">"VD4003"</span><span class="p">,</span> <span class="s2">"VD4004"</span><span class="p">,</span> <span class="s2">"VD4004A"</span><span class="p">,</span> <span class="s2">"VD4005"</span><span class="p">,</span> <span class="s2">"VD4007"</span><span class="p">,</span> <span class="s2">"VD4008"</span><span class="p">,</span> <span class="s2">"VD4009"</span><span class="p">,</span> <span class="s2">"VD4010"</span><span class="p">,</span> <span class="s2">"VD4011"</span><span class="p">,</span>
+        <span class="s2">"VD4012"</span><span class="p">,</span> <span class="s2">"VD4013"</span><span class="p">,</span> <span class="s2">"VD4014"</span><span class="p">,</span> <span class="s2">"VD4015"</span><span class="p">,</span> <span class="s2">"VD4016"</span><span class="p">,</span> <span class="s2">"VD4017"</span><span class="p">,</span> <span class="s2">"VD4018"</span><span class="p">,</span> <span class="s2">"VD4019"</span><span class="p">,</span> <span class="s2">"VD4020"</span><span class="p">,</span>
+        <span class="s2">"VD4023"</span><span class="p">,</span> <span class="s2">"VD4030"</span><span class="p">,</span> <span class="s2">"VD4031"</span><span class="p">,</span> <span class="s2">"VD4032"</span><span class="p">,</span> <span class="s2">"VD4033"</span><span class="p">,</span> <span class="s2">"VD4034"</span><span class="p">,</span> <span class="s2">"VD4035"</span><span class="p">,</span> <span class="s2">"VD4036"</span><span class="p">,</span> <span class="s2">"VD4037"</span><span class="p">,</span>
+        <span class="s2">"V1028001"</span><span class="p">,</span> <span class="s2">"V1028002"</span><span class="p">,</span> <span class="s2">"V1028003"</span><span class="p">,</span> <span class="s2">"V1028004"</span><span class="p">,</span> <span class="s2">"V1028005"</span><span class="p">,</span> <span class="s2">"V1028006"</span><span class="p">,</span> <span class="s2">"V1028007"</span><span class="p">,</span> <span class="s2">"V1028008"</span><span class="p">,</span>
+        <span class="s2">"V1028009"</span><span class="p">,</span> <span class="s2">"V1028010"</span><span class="p">,</span> <span class="s2">"V1028011"</span><span class="p">,</span> <span class="s2">"V1028012"</span><span class="p">,</span> <span class="s2">"V1028013"</span><span class="p">,</span> <span class="s2">"V1028014"</span><span class="p">,</span> <span class="s2">"V1028015"</span><span class="p">,</span> <span class="s2">"V1028016"</span><span class="p">,</span>
+        <span class="s2">"V1028017"</span><span class="p">,</span> <span class="s2">"V1028018"</span><span class="p">,</span> <span class="s2">"V1028019"</span><span class="p">,</span> <span class="s2">"V1028020"</span><span class="p">,</span> <span class="s2">"V1028021"</span><span class="p">,</span> <span class="s2">"V1028022"</span><span class="p">,</span> <span class="s2">"V1028023"</span><span class="p">,</span> <span class="s2">"V1028024"</span><span class="p">,</span>
+        <span class="s2">"V1028025"</span><span class="p">,</span> <span class="s2">"V1028026"</span><span class="p">,</span> <span class="s2">"V1028027"</span><span class="p">,</span> <span class="s2">"V1028028"</span><span class="p">,</span> <span class="s2">"V1028029"</span><span class="p">,</span> <span class="s2">"V1028030"</span><span class="p">,</span> <span class="s2">"V1028031"</span><span class="p">,</span> <span class="s2">"V1028032"</span><span class="p">,</span>
+        <span class="s2">"V1028033"</span><span class="p">,</span> <span class="s2">"V1028034"</span><span class="p">,</span> <span class="s2">"V1028035"</span><span class="p">,</span> <span class="s2">"V1028036"</span><span class="p">,</span> <span class="s2">"V1028037"</span><span class="p">,</span> <span class="s2">"V1028038"</span><span class="p">,</span> <span class="s2">"V1028039"</span><span class="p">,</span> <span class="s2">"V1028040"</span><span class="p">,</span>
+        <span class="s2">"V1028041"</span><span class="p">,</span> <span class="s2">"V1028042"</span><span class="p">,</span> <span class="s2">"V1028043"</span><span class="p">,</span> <span class="s2">"V1028044"</span><span class="p">,</span> <span class="s2">"V1028045"</span><span class="p">,</span> <span class="s2">"V1028046"</span><span class="p">,</span> <span class="s2">"V1028047"</span><span class="p">,</span> <span class="s2">"V1028048"</span><span class="p">,</span>
+        <span class="s2">"V1028049"</span><span class="p">,</span> <span class="s2">"V1028050"</span><span class="p">,</span> <span class="s2">"V1028051"</span><span class="p">,</span> <span class="s2">"V1028052"</span><span class="p">,</span> <span class="s2">"V1028053"</span><span class="p">,</span> <span class="s2">"V1028054"</span><span class="p">,</span> <span class="s2">"V1028055"</span><span class="p">,</span> <span class="s2">"V1028056"</span><span class="p">,</span>
+        <span class="s2">"V1028057"</span><span class="p">,</span> <span class="s2">"V1028058"</span><span class="p">,</span> <span class="s2">"V1028059"</span><span class="p">,</span> <span class="s2">"V1028060"</span><span class="p">,</span> <span class="s2">"V1028061"</span><span class="p">,</span> <span class="s2">"V1028062"</span><span class="p">,</span> <span class="s2">"V1028063"</span><span class="p">,</span> <span class="s2">"V1028064"</span><span class="p">,</span>
+        <span class="s2">"V1028065"</span><span class="p">,</span> <span class="s2">"V1028066"</span><span class="p">,</span> <span class="s2">"V1028067"</span><span class="p">,</span> <span class="s2">"V1028068"</span><span class="p">,</span> <span class="s2">"V1028069"</span><span class="p">,</span> <span class="s2">"V1028070"</span><span class="p">,</span> <span class="s2">"V1028071"</span><span class="p">,</span> <span class="s2">"V1028072"</span><span class="p">,</span>
+        <span class="s2">"V1028073"</span><span class="p">,</span> <span class="s2">"V1028074"</span><span class="p">,</span> <span class="s2">"V1028075"</span><span class="p">,</span> <span class="s2">"V1028076"</span><span class="p">,</span> <span class="s2">"V1028077"</span><span class="p">,</span> <span class="s2">"V1028078"</span><span class="p">,</span> <span class="s2">"V1028079"</span><span class="p">,</span> <span class="s2">"V1028080"</span><span class="p">,</span>
+        <span class="s2">"V1028081"</span><span class="p">,</span> <span class="s2">"V1028082"</span><span class="p">,</span> <span class="s2">"V1028083"</span><span class="p">,</span> <span class="s2">"V1028084"</span><span class="p">,</span> <span class="s2">"V1028085"</span><span class="p">,</span> <span class="s2">"V1028086"</span><span class="p">,</span> <span class="s2">"V1028087"</span><span class="p">,</span> <span class="s2">"V1028088"</span><span class="p">,</span>
+        <span class="s2">"V1028089"</span><span class="p">,</span> <span class="s2">"V1028090"</span><span class="p">,</span> <span class="s2">"V1028091"</span><span class="p">,</span> <span class="s2">"V1028092"</span><span class="p">,</span> <span class="s2">"V1028093"</span><span class="p">,</span> <span class="s2">"V1028094"</span><span class="p">,</span> <span class="s2">"V1028095"</span><span class="p">,</span> <span class="s2">"V1028096"</span><span class="p">,</span>
+        <span class="s2">"V1028097"</span><span class="p">,</span> <span class="s2">"V1028098"</span><span class="p">,</span> <span class="s2">"V1028099"</span><span class="p">,</span> <span class="s2">"V1028100"</span><span class="p">,</span> <span class="s2">"V1028101"</span><span class="p">,</span> <span class="s2">"V1028102"</span><span class="p">,</span> <span class="s2">"V1028103"</span><span class="p">,</span> <span class="s2">"V1028104"</span><span class="p">,</span>
+        <span class="s2">"V1028105"</span><span class="p">,</span> <span class="s2">"V1028106"</span><span class="p">,</span> <span class="s2">"V1028107"</span><span class="p">,</span> <span class="s2">"V1028108"</span><span class="p">,</span> <span class="s2">"V1028109"</span><span class="p">,</span> <span class="s2">"V1028110"</span><span class="p">,</span> <span class="s2">"V1028111"</span><span class="p">,</span> <span class="s2">"V1028112"</span><span class="p">,</span>
+        <span class="s2">"V1028113"</span><span class="p">,</span> <span class="s2">"V1028114"</span><span class="p">,</span> <span class="s2">"V1028115"</span><span class="p">,</span> <span class="s2">"V1028116"</span><span class="p">,</span> <span class="s2">"V1028117"</span><span class="p">,</span> <span class="s2">"V1028118"</span><span class="p">,</span> <span class="s2">"V1028119"</span><span class="p">,</span> <span class="s2">"V1028120"</span><span class="p">,</span>
+        <span class="s2">"V1028121"</span><span class="p">,</span> <span class="s2">"V1028122"</span><span class="p">,</span> <span class="s2">"V1028123"</span><span class="p">,</span> <span class="s2">"V1028124"</span><span class="p">,</span> <span class="s2">"V1028125"</span><span class="p">,</span> <span class="s2">"V1028126"</span><span class="p">,</span> <span class="s2">"V1028127"</span><span class="p">,</span> <span class="s2">"V1028128"</span><span class="p">,</span>
+        <span class="s2">"V1028129"</span><span class="p">,</span> <span class="s2">"V1028130"</span><span class="p">,</span> <span class="s2">"V1028131"</span><span class="p">,</span> <span class="s2">"V1028132"</span><span class="p">,</span> <span class="s2">"V1028133"</span><span class="p">,</span> <span class="s2">"V1028134"</span><span class="p">,</span> <span class="s2">"V1028135"</span><span class="p">,</span> <span class="s2">"V1028136"</span><span class="p">,</span>
+        <span class="s2">"V1028137"</span><span class="p">,</span> <span class="s2">"V1028138"</span><span class="p">,</span> <span class="s2">"V1028139"</span><span class="p">,</span> <span class="s2">"V1028140"</span><span class="p">,</span> <span class="s2">"V1028141"</span><span class="p">,</span> <span class="s2">"V1028142"</span><span class="p">,</span> <span class="s2">"V1028143"</span><span class="p">,</span> <span class="s2">"V1028144"</span><span class="p">,</span>
+        <span class="s2">"V1028145"</span><span class="p">,</span> <span class="s2">"V1028146"</span><span class="p">,</span> <span class="s2">"V1028147"</span><span class="p">,</span> <span class="s2">"V1028148"</span><span class="p">,</span> <span class="s2">"V1028149"</span><span class="p">,</span> <span class="s2">"V1028150"</span><span class="p">,</span> <span class="s2">"V1028151"</span><span class="p">,</span> <span class="s2">"V1028152"</span><span class="p">,</span>
+        <span class="s2">"V1028153"</span><span class="p">,</span> <span class="s2">"V1028154"</span><span class="p">,</span> <span class="s2">"V1028155"</span><span class="p">,</span> <span class="s2">"V1028156"</span><span class="p">,</span> <span class="s2">"V1028157"</span><span class="p">,</span> <span class="s2">"V1028158"</span><span class="p">,</span> <span class="s2">"V1028159"</span><span class="p">,</span> <span class="s2">"V1028160"</span><span class="p">,</span>
+        <span class="s2">"V1028161"</span><span class="p">,</span> <span class="s2">"V1028162"</span><span class="p">,</span> <span class="s2">"V1028163"</span><span class="p">,</span> <span class="s2">"V1028164"</span><span class="p">,</span> <span class="s2">"V1028165"</span><span class="p">,</span> <span class="s2">"V1028166"</span><span class="p">,</span> <span class="s2">"V1028167"</span><span class="p">,</span> <span class="s2">"V1028168"</span><span class="p">,</span>
+        <span class="s2">"V1028169"</span><span class="p">,</span> <span class="s2">"V1028170"</span><span class="p">,</span> <span class="s2">"V1028171"</span><span class="p">,</span> <span class="s2">"V1028172"</span><span class="p">,</span> <span class="s2">"V1028173"</span><span class="p">,</span> <span class="s2">"V1028174"</span><span class="p">,</span> <span class="s2">"V1028175"</span><span class="p">,</span> <span class="s2">"V1028176"</span><span class="p">,</span>
+        <span class="s2">"V1028177"</span><span class="p">,</span> <span class="s2">"V1028178"</span><span class="p">,</span> <span class="s2">"V1028179"</span><span class="p">,</span> <span class="s2">"V1028180"</span><span class="p">,</span> <span class="s2">"V1028181"</span><span class="p">,</span> <span class="s2">"V1028182"</span><span class="p">,</span> <span class="s2">"V1028183"</span><span class="p">,</span> <span class="s2">"V1028184"</span><span class="p">,</span>
+        <span class="s2">"V1028185"</span><span class="p">,</span> <span class="s2">"V1028186"</span><span class="p">,</span> <span class="s2">"V1028187"</span><span class="p">,</span> <span class="s2">"V1028188"</span><span class="p">,</span> <span class="s2">"V1028189"</span><span class="p">,</span> <span class="s2">"V1028190"</span><span class="p">,</span> <span class="s2">"V1028191"</span><span class="p">,</span> <span class="s2">"V1028192"</span><span class="p">,</span>
+        <span class="s2">"V1028193"</span><span class="p">,</span> <span class="s2">"V1028194"</span><span class="p">,</span> <span class="s2">"V1028195"</span><span class="p">,</span> <span class="s2">"V1028196"</span><span class="p">,</span> <span class="s2">"V1028197"</span><span class="p">,</span> <span class="s2">"V1028198"</span><span class="p">,</span> <span class="s2">"V1028199"</span><span class="p">,</span> <span class="s2">"V1028200"</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="BraColspecsEnum">
+<a class="viewcode-back" href="../../../socio4health.enums.data_info_enum.BraColspecsEnum.html#socio4health.enums.data_info_enum.BraColspecsEnum">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BraColspecsEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PNADC</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">27</span><span class="p">),</span> <span class="p">(</span><span class="mi">27</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span> <span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="p">(</span><span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">33</span><span class="p">),</span> <span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="mi">34</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="mi">49</span><span class="p">),</span> <span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">73</span><span class="p">),</span> <span class="p">(</span><span class="mi">73</span><span class="p">,</span> <span class="mi">82</span><span class="p">),</span> <span class="p">(</span><span class="mi">82</span><span class="p">,</span> <span class="mi">85</span><span class="p">),</span> <span class="p">(</span><span class="mi">85</span><span class="p">,</span> <span class="mi">88</span><span class="p">),</span> <span class="p">(</span><span class="mi">88</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span> <span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span> <span class="p">(</span><span class="mi">92</span><span class="p">,</span> <span class="mi">94</span><span class="p">),</span> <span class="p">(</span><span class="mi">94</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span> <span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="mi">97</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">97</span><span class="p">,</span> <span class="mi">99</span><span class="p">),</span> <span class="p">(</span><span class="mi">99</span><span class="p">,</span> <span class="mi">103</span><span class="p">),</span> <span class="p">(</span><span class="mi">103</span><span class="p">,</span> <span class="mi">106</span><span class="p">),</span> <span class="p">(</span><span class="mi">106</span><span class="p">,</span> <span class="mi">107</span><span class="p">),</span> <span class="p">(</span><span class="mi">107</span><span class="p">,</span> <span class="mi">108</span><span class="p">),</span> <span class="p">(</span><span class="mi">108</span><span class="p">,</span> <span class="mi">109</span><span class="p">),</span> <span class="p">(</span><span class="mi">109</span><span class="p">,</span> <span class="mi">110</span><span class="p">),</span> <span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="mi">112</span><span class="p">),</span> <span class="p">(</span><span class="mi">112</span><span class="p">,</span> <span class="mi">114</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">114</span><span class="p">,</span> <span class="mi">115</span><span class="p">),</span> <span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">),</span> <span class="p">(</span><span class="mi">116</span><span class="p">,</span> <span class="mi">117</span><span class="p">),</span> <span class="p">(</span><span class="mi">117</span><span class="p">,</span> <span class="mi">119</span><span class="p">),</span> <span class="p">(</span><span class="mi">119</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">121</span><span class="p">),</span> <span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="mi">122</span><span class="p">),</span> <span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="mi">124</span><span class="p">),</span> <span class="p">(</span><span class="mi">124</span><span class="p">,</span> <span class="mi">126</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">126</span><span class="p">,</span> <span class="mi">127</span><span class="p">),</span> <span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">129</span><span class="p">),</span> <span class="p">(</span><span class="mi">129</span><span class="p">,</span> <span class="mi">130</span><span class="p">),</span> <span class="p">(</span><span class="mi">130</span><span class="p">,</span> <span class="mi">132</span><span class="p">),</span> <span class="p">(</span><span class="mi">132</span><span class="p">,</span> <span class="mi">133</span><span class="p">),</span> <span class="p">(</span><span class="mi">133</span><span class="p">,</span> <span class="mi">134</span><span class="p">),</span> <span class="p">(</span><span class="mi">134</span><span class="p">,</span> <span class="mi">135</span><span class="p">),</span> <span class="p">(</span><span class="mi">135</span><span class="p">,</span> <span class="mi">136</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">136</span><span class="p">,</span> <span class="mi">137</span><span class="p">),</span> <span class="p">(</span><span class="mi">137</span><span class="p">,</span> <span class="mi">138</span><span class="p">),</span> <span class="p">(</span><span class="mi">138</span><span class="p">,</span> <span class="mi">139</span><span class="p">),</span> <span class="p">(</span><span class="mi">139</span><span class="p">,</span> <span class="mi">140</span><span class="p">),</span> <span class="p">(</span><span class="mi">140</span><span class="p">,</span> <span class="mi">141</span><span class="p">),</span> <span class="p">(</span><span class="mi">141</span><span class="p">,</span> <span class="mi">142</span><span class="p">),</span> <span class="p">(</span><span class="mi">142</span><span class="p">,</span> <span class="mi">143</span><span class="p">),</span> <span class="p">(</span><span class="mi">143</span><span class="p">,</span> <span class="mi">144</span><span class="p">),</span> <span class="p">(</span><span class="mi">144</span><span class="p">,</span> <span class="mi">146</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">146</span><span class="p">,</span> <span class="mi">148</span><span class="p">),</span> <span class="p">(</span><span class="mi">148</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">151</span><span class="p">),</span> <span class="p">(</span><span class="mi">151</span><span class="p">,</span> <span class="mi">155</span><span class="p">),</span> <span class="p">(</span><span class="mi">155</span><span class="p">,</span> <span class="mi">156</span><span class="p">),</span> <span class="p">(</span><span class="mi">156</span><span class="p">,</span> <span class="mi">157</span><span class="p">),</span> <span class="p">(</span><span class="mi">157</span><span class="p">,</span> <span class="mi">162</span><span class="p">),</span> <span class="p">(</span><span class="mi">162</span><span class="p">,</span> <span class="mi">163</span><span class="p">),</span> <span class="p">(</span><span class="mi">163</span><span class="p">,</span> <span class="mi">164</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">164</span><span class="p">,</span> <span class="mi">165</span><span class="p">),</span> <span class="p">(</span><span class="mi">165</span><span class="p">,</span> <span class="mi">166</span><span class="p">),</span> <span class="p">(</span><span class="mi">166</span><span class="p">,</span> <span class="mi">167</span><span class="p">),</span> <span class="p">(</span><span class="mi">167</span><span class="p">,</span> <span class="mi">168</span><span class="p">),</span> <span class="p">(</span><span class="mi">168</span><span class="p">,</span> <span class="mi">170</span><span class="p">),</span> <span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">171</span><span class="p">),</span> <span class="p">(</span><span class="mi">171</span><span class="p">,</span> <span class="mi">172</span><span class="p">),</span> <span class="p">(</span><span class="mi">172</span><span class="p">,</span> <span class="mi">174</span><span class="p">),</span> <span class="p">(</span><span class="mi">174</span><span class="p">,</span> <span class="mi">176</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">176</span><span class="p">,</span> <span class="mi">177</span><span class="p">),</span> <span class="p">(</span><span class="mi">177</span><span class="p">,</span> <span class="mi">178</span><span class="p">),</span> <span class="p">(</span><span class="mi">178</span><span class="p">,</span> <span class="mi">179</span><span class="p">),</span> <span class="p">(</span><span class="mi">179</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span> <span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">181</span><span class="p">),</span> <span class="p">(</span><span class="mi">181</span><span class="p">,</span> <span class="mi">183</span><span class="p">),</span> <span class="p">(</span><span class="mi">183</span><span class="p">,</span> <span class="mi">185</span><span class="p">),</span> <span class="p">(</span><span class="mi">185</span><span class="p">,</span> <span class="mi">186</span><span class="p">),</span> <span class="p">(</span><span class="mi">186</span><span class="p">,</span> <span class="mi">187</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">187</span><span class="p">,</span> <span class="mi">188</span><span class="p">),</span> <span class="p">(</span><span class="mi">188</span><span class="p">,</span> <span class="mi">189</span><span class="p">),</span> <span class="p">(</span><span class="mi">189</span><span class="p">,</span> <span class="mi">190</span><span class="p">),</span> <span class="p">(</span><span class="mi">190</span><span class="p">,</span> <span class="mi">191</span><span class="p">),</span> <span class="p">(</span><span class="mi">191</span><span class="p">,</span> <span class="mi">192</span><span class="p">),</span> <span class="p">(</span><span class="mi">192</span><span class="p">,</span> <span class="mi">193</span><span class="p">),</span> <span class="p">(</span><span class="mi">193</span><span class="p">,</span> <span class="mi">194</span><span class="p">),</span> <span class="p">(</span><span class="mi">194</span><span class="p">,</span> <span class="mi">195</span><span class="p">),</span> <span class="p">(</span><span class="mi">195</span><span class="p">,</span> <span class="mi">196</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">196</span><span class="p">,</span> <span class="mi">197</span><span class="p">),</span> <span class="p">(</span><span class="mi">197</span><span class="p">,</span> <span class="mi">198</span><span class="p">),</span> <span class="p">(</span><span class="mi">198</span><span class="p">,</span> <span class="mi">199</span><span class="p">),</span> <span class="p">(</span><span class="mi">199</span><span class="p">,</span> <span class="mi">207</span><span class="p">),</span> <span class="p">(</span><span class="mi">207</span><span class="p">,</span> <span class="mi">208</span><span class="p">),</span> <span class="p">(</span><span class="mi">208</span><span class="p">,</span> <span class="mi">209</span><span class="p">),</span> <span class="p">(</span><span class="mi">209</span><span class="p">,</span> <span class="mi">217</span><span class="p">),</span> <span class="p">(</span><span class="mi">217</span><span class="p">,</span> <span class="mi">218</span><span class="p">),</span> <span class="p">(</span><span class="mi">218</span><span class="p">,</span> <span class="mi">219</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">219</span><span class="p">,</span> <span class="mi">220</span><span class="p">),</span> <span class="p">(</span><span class="mi">220</span><span class="p">,</span> <span class="mi">221</span><span class="p">),</span> <span class="p">(</span><span class="mi">221</span><span class="p">,</span> <span class="mi">222</span><span class="p">),</span> <span class="p">(</span><span class="mi">222</span><span class="p">,</span> <span class="mi">230</span><span class="p">),</span> <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">231</span><span class="p">),</span> <span class="p">(</span><span class="mi">231</span><span class="p">,</span> <span class="mi">232</span><span class="p">),</span> <span class="p">(</span><span class="mi">232</span><span class="p">,</span> <span class="mi">240</span><span class="p">),</span> <span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="mi">243</span><span class="p">),</span> <span class="p">(</span><span class="mi">243</span><span class="p">,</span> <span class="mi">246</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">246</span><span class="p">,</span> <span class="mi">247</span><span class="p">),</span> <span class="p">(</span><span class="mi">247</span><span class="p">,</span> <span class="mi">249</span><span class="p">),</span> <span class="p">(</span><span class="mi">249</span><span class="p">,</span> <span class="mi">251</span><span class="p">),</span> <span class="p">(</span><span class="mi">251</span><span class="p">,</span> <span class="mi">253</span><span class="p">),</span> <span class="p">(</span><span class="mi">253</span><span class="p">,</span> <span class="mi">257</span><span class="p">),</span> <span class="p">(</span><span class="mi">257</span><span class="p">,</span> <span class="mi">258</span><span class="p">),</span> <span class="p">(</span><span class="mi">258</span><span class="p">,</span> <span class="mi">259</span><span class="p">),</span> <span class="p">(</span><span class="mi">259</span><span class="p">,</span> <span class="mi">264</span><span class="p">),</span> <span class="p">(</span><span class="mi">264</span><span class="p">,</span> <span class="mi">265</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">265</span><span class="p">,</span> <span class="mi">266</span><span class="p">),</span> <span class="p">(</span><span class="mi">266</span><span class="p">,</span> <span class="mi">267</span><span class="p">),</span> <span class="p">(</span><span class="mi">267</span><span class="p">,</span> <span class="mi">268</span><span class="p">),</span> <span class="p">(</span><span class="mi">268</span><span class="p">,</span> <span class="mi">269</span><span class="p">),</span> <span class="p">(</span><span class="mi">269</span><span class="p">,</span> <span class="mi">270</span><span class="p">),</span> <span class="p">(</span><span class="mi">270</span><span class="p">,</span> <span class="mi">271</span><span class="p">),</span> <span class="p">(</span><span class="mi">271</span><span class="p">,</span> <span class="mi">272</span><span class="p">),</span> <span class="p">(</span><span class="mi">272</span><span class="p">,</span> <span class="mi">280</span><span class="p">),</span> <span class="p">(</span><span class="mi">280</span><span class="p">,</span> <span class="mi">281</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">281</span><span class="p">,</span> <span class="mi">282</span><span class="p">),</span> <span class="p">(</span><span class="mi">282</span><span class="p">,</span> <span class="mi">290</span><span class="p">),</span> <span class="p">(</span><span class="mi">290</span><span class="p">,</span> <span class="mi">291</span><span class="p">),</span> <span class="p">(</span><span class="mi">291</span><span class="p">,</span> <span class="mi">292</span><span class="p">),</span> <span class="p">(</span><span class="mi">292</span><span class="p">,</span> <span class="mi">293</span><span class="p">),</span> <span class="p">(</span><span class="mi">293</span><span class="p">,</span> <span class="mi">294</span><span class="p">),</span> <span class="p">(</span><span class="mi">294</span><span class="p">,</span> <span class="mi">295</span><span class="p">),</span> <span class="p">(</span><span class="mi">295</span><span class="p">,</span> <span class="mi">303</span><span class="p">),</span> <span class="p">(</span><span class="mi">303</span><span class="p">,</span> <span class="mi">304</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">304</span><span class="p">,</span> <span class="mi">305</span><span class="p">),</span> <span class="p">(</span><span class="mi">305</span><span class="p">,</span> <span class="mi">313</span><span class="p">),</span> <span class="p">(</span><span class="mi">313</span><span class="p">,</span> <span class="mi">316</span><span class="p">),</span> <span class="p">(</span><span class="mi">316</span><span class="p">,</span> <span class="mi">319</span><span class="p">),</span> <span class="p">(</span><span class="mi">319</span><span class="p">,</span> <span class="mi">320</span><span class="p">),</span> <span class="p">(</span><span class="mi">320</span><span class="p">,</span> <span class="mi">321</span><span class="p">),</span> <span class="p">(</span><span class="mi">321</span><span class="p">,</span> <span class="mi">322</span><span class="p">),</span> <span class="p">(</span><span class="mi">322</span><span class="p">,</span> <span class="mi">323</span><span class="p">),</span> <span class="p">(</span><span class="mi">323</span><span class="p">,</span> <span class="mi">331</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">331</span><span class="p">,</span> <span class="mi">332</span><span class="p">),</span> <span class="p">(</span><span class="mi">332</span><span class="p">,</span> <span class="mi">333</span><span class="p">),</span> <span class="p">(</span><span class="mi">333</span><span class="p">,</span> <span class="mi">341</span><span class="p">),</span> <span class="p">(</span><span class="mi">341</span><span class="p">,</span> <span class="mi">342</span><span class="p">),</span> <span class="p">(</span><span class="mi">342</span><span class="p">,</span> <span class="mi">343</span><span class="p">),</span> <span class="p">(</span><span class="mi">343</span><span class="p">,</span> <span class="mi">344</span><span class="p">),</span> <span class="p">(</span><span class="mi">344</span><span class="p">,</span> <span class="mi">345</span><span class="p">),</span> <span class="p">(</span><span class="mi">345</span><span class="p">,</span> <span class="mi">346</span><span class="p">),</span> <span class="p">(</span><span class="mi">346</span><span class="p">,</span> <span class="mi">347</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">347</span><span class="p">,</span> <span class="mi">355</span><span class="p">),</span> <span class="p">(</span><span class="mi">355</span><span class="p">,</span> <span class="mi">356</span><span class="p">),</span> <span class="p">(</span><span class="mi">356</span><span class="p">,</span> <span class="mi">357</span><span class="p">),</span> <span class="p">(</span><span class="mi">357</span><span class="p">,</span> <span class="mi">365</span><span class="p">),</span> <span class="p">(</span><span class="mi">365</span><span class="p">,</span> <span class="mi">368</span><span class="p">),</span> <span class="p">(</span><span class="mi">368</span><span class="p">,</span> <span class="mi">371</span><span class="p">),</span> <span class="p">(</span><span class="mi">371</span><span class="p">,</span> <span class="mi">372</span><span class="p">),</span> <span class="p">(</span><span class="mi">372</span><span class="p">,</span> <span class="mi">373</span><span class="p">),</span> <span class="p">(</span><span class="mi">373</span><span class="p">,</span> <span class="mi">374</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">374</span><span class="p">,</span> <span class="mi">375</span><span class="p">),</span> <span class="p">(</span><span class="mi">375</span><span class="p">,</span> <span class="mi">376</span><span class="p">),</span> <span class="p">(</span><span class="mi">376</span><span class="p">,</span> <span class="mi">378</span><span class="p">),</span> <span class="p">(</span><span class="mi">378</span><span class="p">,</span> <span class="mi">379</span><span class="p">),</span> <span class="p">(</span><span class="mi">379</span><span class="p">,</span> <span class="mi">380</span><span class="p">),</span> <span class="p">(</span><span class="mi">380</span><span class="p">,</span> <span class="mi">381</span><span class="p">),</span> <span class="p">(</span><span class="mi">381</span><span class="p">,</span> <span class="mi">383</span><span class="p">),</span> <span class="p">(</span><span class="mi">383</span><span class="p">,</span> <span class="mi">384</span><span class="p">),</span> <span class="p">(</span><span class="mi">384</span><span class="p">,</span> <span class="mi">386</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">386</span><span class="p">,</span> <span class="mi">387</span><span class="p">),</span> <span class="p">(</span><span class="mi">387</span><span class="p">,</span> <span class="mi">389</span><span class="p">),</span> <span class="p">(</span><span class="mi">389</span><span class="p">,</span> <span class="mi">391</span><span class="p">),</span> <span class="p">(</span><span class="mi">391</span><span class="p">,</span> <span class="mi">393</span><span class="p">),</span> <span class="p">(</span><span class="mi">393</span><span class="p">,</span> <span class="mi">394</span><span class="p">),</span> <span class="p">(</span><span class="mi">394</span><span class="p">,</span> <span class="mi">395</span><span class="p">),</span> <span class="p">(</span><span class="mi">395</span><span class="p">,</span> <span class="mi">396</span><span class="p">),</span> <span class="p">(</span><span class="mi">396</span><span class="p">,</span> <span class="mi">397</span><span class="p">),</span> <span class="p">(</span><span class="mi">397</span><span class="p">,</span> <span class="mi">399</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">399</span><span class="p">,</span> <span class="mi">401</span><span class="p">),</span> <span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="mi">402</span><span class="p">),</span> <span class="p">(</span><span class="mi">402</span><span class="p">,</span> <span class="mi">404</span><span class="p">),</span> <span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="mi">405</span><span class="p">),</span> <span class="p">(</span><span class="mi">405</span><span class="p">,</span> <span class="mi">407</span><span class="p">),</span> <span class="p">(</span><span class="mi">407</span><span class="p">,</span> <span class="mi">408</span><span class="p">),</span> <span class="p">(</span><span class="mi">408</span><span class="p">,</span> <span class="mi">409</span><span class="p">),</span> <span class="p">(</span><span class="mi">409</span><span class="p">,</span> <span class="mi">410</span><span class="p">),</span> <span class="p">(</span><span class="mi">410</span><span class="p">,</span> <span class="mi">411</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">411</span><span class="p">,</span> <span class="mi">412</span><span class="p">),</span> <span class="p">(</span><span class="mi">412</span><span class="p">,</span> <span class="mi">413</span><span class="p">),</span> <span class="p">(</span><span class="mi">413</span><span class="p">,</span> <span class="mi">414</span><span class="p">),</span> <span class="p">(</span><span class="mi">414</span><span class="p">,</span> <span class="mi">415</span><span class="p">),</span> <span class="p">(</span><span class="mi">415</span><span class="p">,</span> <span class="mi">416</span><span class="p">),</span> <span class="p">(</span><span class="mi">416</span><span class="p">,</span> <span class="mi">418</span><span class="p">),</span> <span class="p">(</span><span class="mi">418</span><span class="p">,</span> <span class="mi">420</span><span class="p">),</span> <span class="p">(</span><span class="mi">420</span><span class="p">,</span> <span class="mi">422</span><span class="p">),</span> <span class="p">(</span><span class="mi">422</span><span class="p">,</span> <span class="mi">423</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">423</span><span class="p">,</span> <span class="mi">424</span><span class="p">),</span> <span class="p">(</span><span class="mi">424</span><span class="p">,</span> <span class="mi">425</span><span class="p">),</span> <span class="p">(</span><span class="mi">425</span><span class="p">,</span> <span class="mi">426</span><span class="p">),</span> <span class="p">(</span><span class="mi">426</span><span class="p">,</span> <span class="mi">434</span><span class="p">),</span> <span class="p">(</span><span class="mi">434</span><span class="p">,</span> <span class="mi">442</span><span class="p">),</span> <span class="p">(</span><span class="mi">442</span><span class="p">,</span> <span class="mi">443</span><span class="p">),</span> <span class="p">(</span><span class="mi">443</span><span class="p">,</span> <span class="mi">451</span><span class="p">),</span> <span class="p">(</span><span class="mi">451</span><span class="p">,</span> <span class="mi">459</span><span class="p">),</span> <span class="p">(</span><span class="mi">459</span><span class="p">,</span> <span class="mi">460</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">460</span><span class="p">,</span> <span class="mi">461</span><span class="p">),</span> <span class="p">(</span><span class="mi">461</span><span class="p">,</span> <span class="mi">464</span><span class="p">),</span> <span class="p">(</span><span class="mi">464</span><span class="p">,</span> <span class="mi">467</span><span class="p">),</span> <span class="p">(</span><span class="mi">467</span><span class="p">,</span> <span class="mi">470</span><span class="p">),</span> <span class="p">(</span><span class="mi">470</span><span class="p">,</span> <span class="mi">473</span><span class="p">),</span> <span class="p">(</span><span class="mi">473</span><span class="p">,</span> <span class="mi">476</span><span class="p">),</span> <span class="p">(</span><span class="mi">476</span><span class="p">,</span> <span class="mi">477</span><span class="p">),</span> <span class="p">(</span><span class="mi">477</span><span class="p">,</span> <span class="mi">478</span><span class="p">),</span> <span class="p">(</span><span class="mi">478</span><span class="p">,</span> <span class="mi">493</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">493</span><span class="p">,</span> <span class="mi">508</span><span class="p">),</span> <span class="p">(</span><span class="mi">508</span><span class="p">,</span> <span class="mi">523</span><span class="p">),</span> <span class="p">(</span><span class="mi">523</span><span class="p">,</span> <span class="mi">538</span><span class="p">),</span> <span class="p">(</span><span class="mi">538</span><span class="p">,</span> <span class="mi">553</span><span class="p">),</span> <span class="p">(</span><span class="mi">553</span><span class="p">,</span> <span class="mi">568</span><span class="p">),</span> <span class="p">(</span><span class="mi">568</span><span class="p">,</span> <span class="mi">583</span><span class="p">),</span> <span class="p">(</span><span class="mi">583</span><span class="p">,</span> <span class="mi">598</span><span class="p">),</span> <span class="p">(</span><span class="mi">598</span><span class="p">,</span> <span class="mi">613</span><span class="p">),</span> <span class="p">(</span><span class="mi">613</span><span class="p">,</span> <span class="mi">628</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">628</span><span class="p">,</span> <span class="mi">643</span><span class="p">),</span> <span class="p">(</span><span class="mi">643</span><span class="p">,</span> <span class="mi">658</span><span class="p">),</span> <span class="p">(</span><span class="mi">658</span><span class="p">,</span> <span class="mi">673</span><span class="p">),</span> <span class="p">(</span><span class="mi">673</span><span class="p">,</span> <span class="mi">688</span><span class="p">),</span> <span class="p">(</span><span class="mi">688</span><span class="p">,</span> <span class="mi">703</span><span class="p">),</span> <span class="p">(</span><span class="mi">703</span><span class="p">,</span> <span class="mi">718</span><span class="p">),</span> <span class="p">(</span><span class="mi">718</span><span class="p">,</span> <span class="mi">733</span><span class="p">),</span> <span class="p">(</span><span class="mi">733</span><span class="p">,</span> <span class="mi">748</span><span class="p">),</span> <span class="p">(</span><span class="mi">748</span><span class="p">,</span> <span class="mi">763</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">763</span><span class="p">,</span> <span class="mi">778</span><span class="p">),</span> <span class="p">(</span><span class="mi">778</span><span class="p">,</span> <span class="mi">793</span><span class="p">),</span> <span class="p">(</span><span class="mi">793</span><span class="p">,</span> <span class="mi">808</span><span class="p">),</span> <span class="p">(</span><span class="mi">808</span><span class="p">,</span> <span class="mi">823</span><span class="p">),</span> <span class="p">(</span><span class="mi">823</span><span class="p">,</span> <span class="mi">838</span><span class="p">),</span> <span class="p">(</span><span class="mi">838</span><span class="p">,</span> <span class="mi">853</span><span class="p">),</span> <span class="p">(</span><span class="mi">853</span><span class="p">,</span> <span class="mi">868</span><span class="p">),</span> <span class="p">(</span><span class="mi">868</span><span class="p">,</span> <span class="mi">883</span><span class="p">),</span> <span class="p">(</span><span class="mi">883</span><span class="p">,</span> <span class="mi">898</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">898</span><span class="p">,</span> <span class="mi">913</span><span class="p">),</span> <span class="p">(</span><span class="mi">913</span><span class="p">,</span> <span class="mi">928</span><span class="p">),</span> <span class="p">(</span><span class="mi">928</span><span class="p">,</span> <span class="mi">943</span><span class="p">),</span> <span class="p">(</span><span class="mi">943</span><span class="p">,</span> <span class="mi">958</span><span class="p">),</span> <span class="p">(</span><span class="mi">958</span><span class="p">,</span> <span class="mi">973</span><span class="p">),</span> <span class="p">(</span><span class="mi">973</span><span class="p">,</span> <span class="mi">988</span><span class="p">),</span> <span class="p">(</span><span class="mi">988</span><span class="p">,</span> <span class="mi">1003</span><span class="p">),</span> <span class="p">(</span><span class="mi">1003</span><span class="p">,</span> <span class="mi">1018</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1018</span><span class="p">,</span> <span class="mi">1033</span><span class="p">),</span> <span class="p">(</span><span class="mi">1033</span><span class="p">,</span> <span class="mi">1048</span><span class="p">),</span> <span class="p">(</span><span class="mi">1048</span><span class="p">,</span> <span class="mi">1063</span><span class="p">),</span> <span class="p">(</span><span class="mi">1063</span><span class="p">,</span> <span class="mi">1078</span><span class="p">),</span> <span class="p">(</span><span class="mi">1078</span><span class="p">,</span> <span class="mi">1093</span><span class="p">),</span> <span class="p">(</span><span class="mi">1093</span><span class="p">,</span> <span class="mi">1108</span><span class="p">),</span> <span class="p">(</span><span class="mi">1108</span><span class="p">,</span> <span class="mi">1123</span><span class="p">),</span> <span class="p">(</span><span class="mi">1123</span><span class="p">,</span> <span class="mi">1138</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1138</span><span class="p">,</span> <span class="mi">1153</span><span class="p">),</span> <span class="p">(</span><span class="mi">1153</span><span class="p">,</span> <span class="mi">1168</span><span class="p">),</span> <span class="p">(</span><span class="mi">1168</span><span class="p">,</span> <span class="mi">1183</span><span class="p">),</span> <span class="p">(</span><span class="mi">1183</span><span class="p">,</span> <span class="mi">1198</span><span class="p">),</span> <span class="p">(</span><span class="mi">1198</span><span class="p">,</span> <span class="mi">1213</span><span class="p">),</span> <span class="p">(</span><span class="mi">1213</span><span class="p">,</span> <span class="mi">1228</span><span class="p">),</span> <span class="p">(</span><span class="mi">1228</span><span class="p">,</span> <span class="mi">1243</span><span class="p">),</span> <span class="p">(</span><span class="mi">1243</span><span class="p">,</span> <span class="mi">1258</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1258</span><span class="p">,</span> <span class="mi">1273</span><span class="p">),</span> <span class="p">(</span><span class="mi">1273</span><span class="p">,</span> <span class="mi">1288</span><span class="p">),</span> <span class="p">(</span><span class="mi">1288</span><span class="p">,</span> <span class="mi">1303</span><span class="p">),</span> <span class="p">(</span><span class="mi">1303</span><span class="p">,</span> <span class="mi">1318</span><span class="p">),</span> <span class="p">(</span><span class="mi">1318</span><span class="p">,</span> <span class="mi">1333</span><span class="p">),</span> <span class="p">(</span><span class="mi">1333</span><span class="p">,</span> <span class="mi">1348</span><span class="p">),</span> <span class="p">(</span><span class="mi">1348</span><span class="p">,</span> <span class="mi">1363</span><span class="p">),</span> <span class="p">(</span><span class="mi">1363</span><span class="p">,</span> <span class="mi">1378</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1378</span><span class="p">,</span> <span class="mi">1393</span><span class="p">),</span> <span class="p">(</span><span class="mi">1393</span><span class="p">,</span> <span class="mi">1408</span><span class="p">),</span> <span class="p">(</span><span class="mi">1408</span><span class="p">,</span> <span class="mi">1423</span><span class="p">),</span> <span class="p">(</span><span class="mi">1423</span><span class="p">,</span> <span class="mi">1438</span><span class="p">),</span> <span class="p">(</span><span class="mi">1438</span><span class="p">,</span> <span class="mi">1453</span><span class="p">),</span> <span class="p">(</span><span class="mi">1453</span><span class="p">,</span> <span class="mi">1468</span><span class="p">),</span> <span class="p">(</span><span class="mi">1468</span><span class="p">,</span> <span class="mi">1483</span><span class="p">),</span> <span class="p">(</span><span class="mi">1483</span><span class="p">,</span> <span class="mi">1498</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1498</span><span class="p">,</span> <span class="mi">1513</span><span class="p">),</span> <span class="p">(</span><span class="mi">1513</span><span class="p">,</span> <span class="mi">1528</span><span class="p">),</span> <span class="p">(</span><span class="mi">1528</span><span class="p">,</span> <span class="mi">1543</span><span class="p">),</span> <span class="p">(</span><span class="mi">1543</span><span class="p">,</span> <span class="mi">1558</span><span class="p">),</span> <span class="p">(</span><span class="mi">1558</span><span class="p">,</span> <span class="mi">1573</span><span class="p">),</span> <span class="p">(</span><span class="mi">1573</span><span class="p">,</span> <span class="mi">1588</span><span class="p">),</span> <span class="p">(</span><span class="mi">1588</span><span class="p">,</span> <span class="mi">1603</span><span class="p">),</span> <span class="p">(</span><span class="mi">1603</span><span class="p">,</span> <span class="mi">1618</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1618</span><span class="p">,</span> <span class="mi">1633</span><span class="p">),</span> <span class="p">(</span><span class="mi">1633</span><span class="p">,</span> <span class="mi">1648</span><span class="p">),</span> <span class="p">(</span><span class="mi">1648</span><span class="p">,</span> <span class="mi">1663</span><span class="p">),</span> <span class="p">(</span><span class="mi">1663</span><span class="p">,</span> <span class="mi">1678</span><span class="p">),</span> <span class="p">(</span><span class="mi">1678</span><span class="p">,</span> <span class="mi">1693</span><span class="p">),</span> <span class="p">(</span><span class="mi">1693</span><span class="p">,</span> <span class="mi">1708</span><span class="p">),</span> <span class="p">(</span><span class="mi">1708</span><span class="p">,</span> <span class="mi">1723</span><span class="p">),</span> <span class="p">(</span><span class="mi">1723</span><span class="p">,</span> <span class="mi">1738</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1738</span><span class="p">,</span> <span class="mi">1753</span><span class="p">),</span> <span class="p">(</span><span class="mi">1753</span><span class="p">,</span> <span class="mi">1768</span><span class="p">),</span> <span class="p">(</span><span class="mi">1768</span><span class="p">,</span> <span class="mi">1783</span><span class="p">),</span> <span class="p">(</span><span class="mi">1783</span><span class="p">,</span> <span class="mi">1798</span><span class="p">),</span> <span class="p">(</span><span class="mi">1798</span><span class="p">,</span> <span class="mi">1813</span><span class="p">),</span> <span class="p">(</span><span class="mi">1813</span><span class="p">,</span> <span class="mi">1828</span><span class="p">),</span> <span class="p">(</span><span class="mi">1828</span><span class="p">,</span> <span class="mi">1843</span><span class="p">),</span> <span class="p">(</span><span class="mi">1843</span><span class="p">,</span> <span class="mi">1858</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1858</span><span class="p">,</span> <span class="mi">1873</span><span class="p">),</span> <span class="p">(</span><span class="mi">1873</span><span class="p">,</span> <span class="mi">1888</span><span class="p">),</span> <span class="p">(</span><span class="mi">1888</span><span class="p">,</span> <span class="mi">1903</span><span class="p">),</span> <span class="p">(</span><span class="mi">1903</span><span class="p">,</span> <span class="mi">1918</span><span class="p">),</span> <span class="p">(</span><span class="mi">1918</span><span class="p">,</span> <span class="mi">1933</span><span class="p">),</span> <span class="p">(</span><span class="mi">1933</span><span class="p">,</span> <span class="mi">1948</span><span class="p">),</span> <span class="p">(</span><span class="mi">1948</span><span class="p">,</span> <span class="mi">1963</span><span class="p">),</span> <span class="p">(</span><span class="mi">1963</span><span class="p">,</span> <span class="mi">1978</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">1978</span><span class="p">,</span> <span class="mi">1993</span><span class="p">),</span> <span class="p">(</span><span class="mi">1993</span><span class="p">,</span> <span class="mi">2008</span><span class="p">),</span> <span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">2023</span><span class="p">),</span> <span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">2038</span><span class="p">),</span> <span class="p">(</span><span class="mi">2038</span><span class="p">,</span> <span class="mi">2053</span><span class="p">),</span> <span class="p">(</span><span class="mi">2053</span><span class="p">,</span> <span class="mi">2068</span><span class="p">),</span> <span class="p">(</span><span class="mi">2068</span><span class="p">,</span> <span class="mi">2083</span><span class="p">),</span> <span class="p">(</span><span class="mi">2083</span><span class="p">,</span> <span class="mi">2098</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2098</span><span class="p">,</span> <span class="mi">2113</span><span class="p">),</span> <span class="p">(</span><span class="mi">2113</span><span class="p">,</span> <span class="mi">2128</span><span class="p">),</span> <span class="p">(</span><span class="mi">2128</span><span class="p">,</span> <span class="mi">2143</span><span class="p">),</span> <span class="p">(</span><span class="mi">2143</span><span class="p">,</span> <span class="mi">2158</span><span class="p">),</span> <span class="p">(</span><span class="mi">2158</span><span class="p">,</span> <span class="mi">2173</span><span class="p">),</span> <span class="p">(</span><span class="mi">2173</span><span class="p">,</span> <span class="mi">2188</span><span class="p">),</span> <span class="p">(</span><span class="mi">2188</span><span class="p">,</span> <span class="mi">2203</span><span class="p">),</span> <span class="p">(</span><span class="mi">2203</span><span class="p">,</span> <span class="mi">2218</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2218</span><span class="p">,</span> <span class="mi">2233</span><span class="p">),</span> <span class="p">(</span><span class="mi">2233</span><span class="p">,</span> <span class="mi">2248</span><span class="p">),</span> <span class="p">(</span><span class="mi">2248</span><span class="p">,</span> <span class="mi">2263</span><span class="p">),</span> <span class="p">(</span><span class="mi">2263</span><span class="p">,</span> <span class="mi">2278</span><span class="p">),</span> <span class="p">(</span><span class="mi">2278</span><span class="p">,</span> <span class="mi">2293</span><span class="p">),</span> <span class="p">(</span><span class="mi">2293</span><span class="p">,</span> <span class="mi">2308</span><span class="p">),</span> <span class="p">(</span><span class="mi">2308</span><span class="p">,</span> <span class="mi">2323</span><span class="p">),</span> <span class="p">(</span><span class="mi">2323</span><span class="p">,</span> <span class="mi">2338</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2338</span><span class="p">,</span> <span class="mi">2353</span><span class="p">),</span> <span class="p">(</span><span class="mi">2353</span><span class="p">,</span> <span class="mi">2368</span><span class="p">),</span> <span class="p">(</span><span class="mi">2368</span><span class="p">,</span> <span class="mi">2383</span><span class="p">),</span> <span class="p">(</span><span class="mi">2383</span><span class="p">,</span> <span class="mi">2398</span><span class="p">),</span> <span class="p">(</span><span class="mi">2398</span><span class="p">,</span> <span class="mi">2413</span><span class="p">),</span> <span class="p">(</span><span class="mi">2413</span><span class="p">,</span> <span class="mi">2428</span><span class="p">),</span> <span class="p">(</span><span class="mi">2428</span><span class="p">,</span> <span class="mi">2443</span><span class="p">),</span> <span class="p">(</span><span class="mi">2443</span><span class="p">,</span> <span class="mi">2458</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2458</span><span class="p">,</span> <span class="mi">2473</span><span class="p">),</span> <span class="p">(</span><span class="mi">2473</span><span class="p">,</span> <span class="mi">2488</span><span class="p">),</span> <span class="p">(</span><span class="mi">2488</span><span class="p">,</span> <span class="mi">2503</span><span class="p">),</span> <span class="p">(</span><span class="mi">2503</span><span class="p">,</span> <span class="mi">2518</span><span class="p">),</span> <span class="p">(</span><span class="mi">2518</span><span class="p">,</span> <span class="mi">2533</span><span class="p">),</span> <span class="p">(</span><span class="mi">2533</span><span class="p">,</span> <span class="mi">2548</span><span class="p">),</span> <span class="p">(</span><span class="mi">2548</span><span class="p">,</span> <span class="mi">2563</span><span class="p">),</span> <span class="p">(</span><span class="mi">2563</span><span class="p">,</span> <span class="mi">2578</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2578</span><span class="p">,</span> <span class="mi">2593</span><span class="p">),</span> <span class="p">(</span><span class="mi">2593</span><span class="p">,</span> <span class="mi">2608</span><span class="p">),</span> <span class="p">(</span><span class="mi">2608</span><span class="p">,</span> <span class="mi">2623</span><span class="p">),</span> <span class="p">(</span><span class="mi">2623</span><span class="p">,</span> <span class="mi">2638</span><span class="p">),</span> <span class="p">(</span><span class="mi">2638</span><span class="p">,</span> <span class="mi">2653</span><span class="p">),</span> <span class="p">(</span><span class="mi">2653</span><span class="p">,</span> <span class="mi">2668</span><span class="p">),</span> <span class="p">(</span><span class="mi">2668</span><span class="p">,</span> <span class="mi">2683</span><span class="p">),</span> <span class="p">(</span><span class="mi">2683</span><span class="p">,</span> <span class="mi">2698</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2698</span><span class="p">,</span> <span class="mi">2713</span><span class="p">),</span> <span class="p">(</span><span class="mi">2713</span><span class="p">,</span> <span class="mi">2728</span><span class="p">),</span> <span class="p">(</span><span class="mi">2728</span><span class="p">,</span> <span class="mi">2743</span><span class="p">),</span> <span class="p">(</span><span class="mi">2743</span><span class="p">,</span> <span class="mi">2758</span><span class="p">),</span> <span class="p">(</span><span class="mi">2758</span><span class="p">,</span> <span class="mi">2773</span><span class="p">),</span> <span class="p">(</span><span class="mi">2773</span><span class="p">,</span> <span class="mi">2788</span><span class="p">),</span> <span class="p">(</span><span class="mi">2788</span><span class="p">,</span> <span class="mi">2803</span><span class="p">),</span> <span class="p">(</span><span class="mi">2803</span><span class="p">,</span> <span class="mi">2818</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2818</span><span class="p">,</span> <span class="mi">2833</span><span class="p">),</span> <span class="p">(</span><span class="mi">2833</span><span class="p">,</span> <span class="mi">2848</span><span class="p">),</span> <span class="p">(</span><span class="mi">2848</span><span class="p">,</span> <span class="mi">2863</span><span class="p">),</span> <span class="p">(</span><span class="mi">2863</span><span class="p">,</span> <span class="mi">2878</span><span class="p">),</span> <span class="p">(</span><span class="mi">2878</span><span class="p">,</span> <span class="mi">2893</span><span class="p">),</span> <span class="p">(</span><span class="mi">2893</span><span class="p">,</span> <span class="mi">2908</span><span class="p">),</span> <span class="p">(</span><span class="mi">2908</span><span class="p">,</span> <span class="mi">2923</span><span class="p">),</span> <span class="p">(</span><span class="mi">2923</span><span class="p">,</span> <span class="mi">2938</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">2938</span><span class="p">,</span> <span class="mi">2953</span><span class="p">),</span> <span class="p">(</span><span class="mi">2953</span><span class="p">,</span> <span class="mi">2968</span><span class="p">),</span> <span class="p">(</span><span class="mi">2968</span><span class="p">,</span> <span class="mi">2983</span><span class="p">),</span> <span class="p">(</span><span class="mi">2983</span><span class="p">,</span> <span class="mi">2998</span><span class="p">),</span> <span class="p">(</span><span class="mi">2998</span><span class="p">,</span> <span class="mi">3013</span><span class="p">),</span> <span class="p">(</span><span class="mi">3013</span><span class="p">,</span> <span class="mi">3028</span><span class="p">),</span> <span class="p">(</span><span class="mi">3028</span><span class="p">,</span> <span class="mi">3043</span><span class="p">),</span> <span class="p">(</span><span class="mi">3043</span><span class="p">,</span> <span class="mi">3058</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">3058</span><span class="p">,</span> <span class="mi">3073</span><span class="p">),</span> <span class="p">(</span><span class="mi">3073</span><span class="p">,</span> <span class="mi">3088</span><span class="p">),</span> <span class="p">(</span><span class="mi">3088</span><span class="p">,</span> <span class="mi">3103</span><span class="p">),</span> <span class="p">(</span><span class="mi">3103</span><span class="p">,</span> <span class="mi">3118</span><span class="p">),</span> <span class="p">(</span><span class="mi">3118</span><span class="p">,</span> <span class="mi">3133</span><span class="p">),</span> <span class="p">(</span><span class="mi">3133</span><span class="p">,</span> <span class="mi">3148</span><span class="p">),</span> <span class="p">(</span><span class="mi">3148</span><span class="p">,</span> <span class="mi">3163</span><span class="p">),</span> <span class="p">(</span><span class="mi">3163</span><span class="p">,</span> <span class="mi">3178</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">3178</span><span class="p">,</span> <span class="mi">3193</span><span class="p">),</span> <span class="p">(</span><span class="mi">3193</span><span class="p">,</span> <span class="mi">3208</span><span class="p">),</span> <span class="p">(</span><span class="mi">3208</span><span class="p">,</span> <span class="mi">3223</span><span class="p">),</span> <span class="p">(</span><span class="mi">3223</span><span class="p">,</span> <span class="mi">3238</span><span class="p">),</span> <span class="p">(</span><span class="mi">3238</span><span class="p">,</span> <span class="mi">3253</span><span class="p">),</span> <span class="p">(</span><span class="mi">3253</span><span class="p">,</span> <span class="mi">3268</span><span class="p">),</span> <span class="p">(</span><span class="mi">3268</span><span class="p">,</span> <span class="mi">3283</span><span class="p">),</span> <span class="p">(</span><span class="mi">3283</span><span class="p">,</span> <span class="mi">3298</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">3298</span><span class="p">,</span> <span class="mi">3313</span><span class="p">),</span> <span class="p">(</span><span class="mi">3313</span><span class="p">,</span> <span class="mi">3328</span><span class="p">),</span> <span class="p">(</span><span class="mi">3328</span><span class="p">,</span> <span class="mi">3343</span><span class="p">),</span> <span class="p">(</span><span class="mi">3343</span><span class="p">,</span> <span class="mi">3358</span><span class="p">),</span> <span class="p">(</span><span class="mi">3358</span><span class="p">,</span> <span class="mi">3373</span><span class="p">),</span> <span class="p">(</span><span class="mi">3373</span><span class="p">,</span> <span class="mi">3388</span><span class="p">),</span> <span class="p">(</span><span class="mi">3388</span><span class="p">,</span> <span class="mi">3403</span><span class="p">),</span> <span class="p">(</span><span class="mi">3403</span><span class="p">,</span> <span class="mi">3418</span><span class="p">),</span>
+         <span class="p">(</span><span class="mi">3418</span><span class="p">,</span> <span class="mi">3433</span><span class="p">),</span> <span class="p">(</span><span class="mi">3433</span><span class="p">,</span> <span class="mi">3448</span><span class="p">),</span> <span class="p">(</span><span class="mi">3448</span><span class="p">,</span> <span class="mi">3463</span><span class="p">),</span> <span class="p">(</span><span class="mi">3463</span><span class="p">,</span> <span class="mi">3478</span><span class="p">)]</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

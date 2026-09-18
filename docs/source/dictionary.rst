@@ -4,7 +4,7 @@ How to create a raw dictionary for data harmonization
 For data harmonization, it is **essential** to have a **raw dictionary** that defines the **structure** and **content** of the data. This dictionary serves as a reference for understanding the data fields, their types, and any transformations that may be necessary. In this section, we will outline the steps to create a **raw dictionary** for **data harmonization**.
 
 1. Retrieve dictionary from data sources
--------------------------------------
+----------------------------------------
 
 Data sources usually provide a dictionary that describes the data fields. These dictionaries can be in various formats, such as ``JSON``, ``XML``, or ``CSV``. The first step is to retrieve the dictionary from the data sources you are working with.
 
@@ -27,7 +27,7 @@ The CSV file contains two sheets, one with the variables and another with the ca
    Be aware that the columns may have **different names** and may appear in **different order** in the original dictionary, so you may need to adapt them accordingly.
 
 2. Create the raw dictionary
--------------------------
+----------------------------
 
 Once you have retrieved the dictionary from the data sources, the next step is, in a empty Excel (``xlx``) sheet, fill the first row with the following columns: ``question``, ``variable_name``, ``value``, ``description``, and ``possible_answers`` in the first row in the same order they appear in the provided data dictionary. **Include any additional columns that may be relevant for your specific use case**.
 In this case, the columns are in the following order:

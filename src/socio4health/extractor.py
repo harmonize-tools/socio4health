@@ -14,11 +14,13 @@ from typing import Optional, Union, Dict
 import appdirs
 import os
 import pandas as pd
-import geopandas as gpd
+from socio4health.utils.deps import import_optional
+import pyreadstat
 import dask.dataframe as dd
 from tqdm import tqdm
 import glob
-from socio4health.utils.extractor_utils import run_standard_spider, compressed2files, download_request
+from socio4health.utils.extractor_utils import compressed2files, download_request
+from importlib import import_module
 import logging
 
 
@@ -68,7 +70,7 @@ class Extractor:
     colspecs : list
         Column specifications for fixed-width files, defining the widths of each column. Required if ``is_fwf`` is ``True``.
     sep : str
-        The separator to use when reading ``CSV`` files. Defaults to ``','``.
+        The separator to use when reading ``CSV`` files. Defaults to ``,``.
     ddtype : Union[str, Dict]
         The data type to use when reading files. Can be a single type or a dictionary mapping column names to types. Defaults to ``object``.
     dtype : Union[str, Dict]
@@ -79,6 +81,10 @@ class Extractor:
         The name or index of the Excel sheet to read. Can also be a list to read multiple sheets or ``None`` to read all sheets. Defaults to the first sheet (``0``).
     geodriver : str
         The driver to use for reading geospatial files with ``geopandas.read_file()`` (e.g., ``'ESRI Shapefile'``, ``'KML'``, etc.). Optional.
+    delete_zip_after : bool
+        If True, delete zip/compressed files after extraction. Defaults to False.
+    on_bad_lines : str
+        How to handle bad lines when reading ``CSV`` files. Options are 'error', 'warn', or 'skip'. Defaults to 'warn'.
 
     Important
     ------
@@ -110,8 +116,10 @@ class Extractor:
             dtype: str = None,
             engine: str = None,
             sheet_name: str = None,
-            geodriver: str = None
-    ):
+            geodriver: str = None,
+            delete_zip_after: bool = False,
+            on_bad_lines: str = 'warn'
+        ):
         self.compressed_ext = ['.zip', '.7z', '.tar', '.gz', '.tgz']
         self.depth = depth
         self.down_ext = down_ext if down_ext is not None else []
@@ -135,7 +143,8 @@ class Extractor:
             '.json': self._read_json,
             '.geojson': self._read_geospatial,
             '.shp': self._read_geospatial,
-            '.kml': self._read_geospatial
+            '.kml': self._read_geospatial,
+            '.sav': self._read_sav
         }
         os.makedirs(self.output_path, exist_ok=True)
         self.ddtype = ddtype
@@ -143,6 +152,8 @@ class Extractor:
         self.engine = engine
         self.sheet_name = sheet_name
         self.geodriver = geodriver
+        self.delete_zip_after = delete_zip_after
+        self.on_bad_lines = on_bad_lines
         if not input_path:
             raise ValueError("input_path must be provided")
         if is_fwf and (not colnames or not colspecs):
@@ -233,6 +244,9 @@ class Extractor:
         # Step 1: Scrape for downloadable files
         try:
             logging.info(f"Scraping URL: {self.input_path} with depth {self.depth}")
+            # Import and run the spider only when needed (lazy)
+            extractor_utils = import_module('socio4health.utils.extractor_utils')
+            run_standard_spider = getattr(extractor_utils, 'run_standard_spider')
             run_standard_spider(self.input_path, self.depth, self.down_ext, self.key_words)
 
             # Read scraped links
@@ -244,8 +258,8 @@ class Extractor:
 
         # Step 2: Filter and confirm files to download
         if not links:
-            logging.error("No downloadable files found matching criteria")
-            raise ValueError("No files found matching the specified extensions and keywords")
+            logging.warning("No downloadable files found matching criteria. Returning empty extraction.")
+            return
 
         # Handle large number of files with user confirmation
         if len(links) > 30:
@@ -275,8 +289,8 @@ class Extractor:
                 failed_downloads.append((filename, str(e)))
 
         if not downloaded_files:
-            logging.error("No files were successfully downloaded")
-            raise ValueError("All download attempts failed")
+            logging.warning("No files were successfully downloaded. Returning empty extraction.")
+            return
 
         if failed_downloads:
             logging.warning(f"Failed to download {len(failed_downloads)} files")
@@ -291,27 +305,43 @@ class Extractor:
             logging.warning(f"Could not remove scrap file: {e}")
 
         if not self.dataframes:
-            logging.error("No valid data files found after processing")
-            raise ValueError("No data could be extracted from downloaded files")
+            logging.warning("No valid data files found after processing. Returning empty extraction.")
+            return
 
     def _process_downloaded_files(self, downloaded_files):
         """Process downloaded files using local mode logic"""
         files_to_process = []
+        zip_to_delete = []
 
         # Classify and extract compressed files
         for filepath in downloaded_files:
             if any(filepath.endswith(ext) for ext in self.compressed_ext):
+                base_name = os.path.splitext(os.path.basename(filepath))[0]
+                target_dir = os.path.join(self.output_path, base_name)
+                os.makedirs(target_dir, exist_ok=True)
+
                 extracted = compressed2files(
                     input_archive=filepath,
-                    target_directory=self.output_path,
+                    target_directory=target_dir,
                     down_ext=self.down_ext
                 )
                 files_to_process.extend(extracted)
+                if self.delete_zip_after:
+                    zip_to_delete.append(filepath)
             else:
                 files_to_process.append(filepath)
 
         # Process all files (both direct downloads and extracted files)
         self._process_files_locally(files_to_process)
+
+        # Delete zip files if requested
+        if self.delete_zip_after:
+            for zip_path in zip_to_delete:
+                try:
+                    os.remove(zip_path)
+                    logging.info(f"Deleted zip file after extraction: {zip_path}")
+                except Exception as e:
+                    logging.warning(f"Could not delete zip file {zip_path}: {e}")
 
     def _process_files_locally(self, files):
         """Shared local processing logic used by both modes"""
@@ -340,14 +370,17 @@ class Extractor:
         iter_ext = list(compressed_inter) + list(set(self.down_ext) - compressed_inter)
 
         extracted_files = []
+        zip_to_delete = []
 
         for ext in iter_ext:
-            full_pattern = os.path.join(self.input_path, f"*{ext}")
+            full_pattern = os.path.join(self.input_path, f"**/*{ext}")
             if ext in self.compressed_ext:
-                compressed_list.extend(glob.glob(full_pattern))
+                compressed_list.extend(glob.glob(full_pattern, recursive=True))
                 for filepath in compressed_list:
-                    # Use same directory as source if download_dir not specified
-                    target_dir = self.output_path if self.output_path else os.path.dirname(filepath)
+                    base_name = os.path.splitext(os.path.basename(filepath))[0]
+                    parent_dir = self.output_path if self.output_path else os.path.dirname(filepath)
+                    target_dir = os.path.join(parent_dir, base_name)
+                    os.makedirs(target_dir, exist_ok=True)
                     extracted_files.extend(
                         compressed2files(
                             input_archive=filepath,
@@ -355,10 +388,21 @@ class Extractor:
                             down_ext=self.down_ext
                         )
                     )
+                    if self.delete_zip_after:
+                        zip_to_delete.append(filepath)
             else:
-                files_list.extend(glob.glob(full_pattern))
+                files_list.extend(glob.glob(full_pattern, recursive=True))
         # Process all files using the shared method
         self._process_files_locally(files_list + extracted_files)
+
+        # Delete zip files if requested
+        if self.delete_zip_after:
+            for zip_path in zip_to_delete:
+                try:
+                    os.remove(zip_path)
+                    logging.info(f"Deleted zip file after extraction: {zip_path}")
+                except Exception as e:
+                    logging.warning(f"Could not delete zip file {zip_path}: {e}")
 
         if not self.dataframes:
             logging.warning("No files found matching the specified extensions.")
@@ -371,7 +415,7 @@ class Extractor:
             sep=self.sep if self.sep else ',',
             dtype=self.ddtype,
             assume_missing = True,
-            on_bad_lines='warn'
+            on_bad_lines=self.on_bad_lines
         )
         if len(df.columns) == 1:
             # Try different separator if we only got one column
@@ -381,7 +425,7 @@ class Extractor:
                 sep=',' if self.sep != ',' else ';',
                 dtype=self.ddtype,
                 assume_missing=True,
-                on_bad_lines='warn'
+                on_bad_lines=self.on_bad_lines
             )
         return df
 
@@ -399,11 +443,16 @@ class Extractor:
             return dd.from_pandas(json.load(f))
 
     def _read_geospatial(self, filepath):
+        gpd = import_optional('geopandas', extra='geo')
         return gpd.read_file(filepath)
     
     def _read_txt(self, filepath):
         return dd.read_csv(filepath, sep=self.sep or '\t', encoding=self.encoding, dtype=self.dtype or 'object')
 
+    def _read_sav(self, filepath):
+        df, meta = pyreadstat.read_sav(filepath, encoding=self.encoding)
+        return df
+    
     def _read_file(self, filepath):
         try:
             df = []

@@ -1,0 +1,23 @@
+{
+  "2001-2011": {
+    "V4105": "AREA",
+    "V0202": "H_TYPE",
+    "V0203": "H_WALLS",
+    "V0204": "H_ROOF",
+    "V0219": "H_ELECTRICITY",
+    "V0217": "H_SANITARY",
+    "V0218": "H_GARBAGE",
+    "V0212": "H_WATER",
+    "V0223": "H_COOK",
+    "V0207": "H_PROPERTY",
+    "V0601": "P_LITERACY",
+    "V0302": "P_SEX",
+    "V0404": "P_ETHNICITY",
+    "V8005": "P_AGE",
+    "V6007": "P_EDUCATION",
+    "V0102": "ID",
+    "UF": "ADMIN_DIVISION",
+    "V4611": "EXP_FACTOR",
+    "V4729": "EXP_FACTOR"
+  }
+}

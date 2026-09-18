@@ -133,6 +133,19 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 pip install socio4health
 ```
 
+## Optional extras
+
+Use the following extras to install optional dependencies:
+
+``` CMD
+pip install "socio4health[scraping]"
+pip install "socio4health[ml]"
+pip install "socio4health[geo]"
+pip install "socio4health[all]"
+pip install "socio4health[dev]"
+pip install "socio4health[test]"
+```
+
 ## How to Use it
 
 To use the socio4health package, follow these steps:

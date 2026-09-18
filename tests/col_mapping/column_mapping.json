@@ -1,0 +1,23 @@
+{
+  "2007-2025": {
+    "CLASE": "AREA",
+    "P4000": "H_TYPE",
+    "P4005": "H_TYPE",
+    "P4010": "H_WALLS",
+    "P4020": "H_FLOOR",
+    "P4030S1": "H_ELECTRICITY",
+    "P5020": "H_SANITARY",
+    "P5040": "H_GARBAGE",
+    "P5050": "H_WATER",
+    "P5080": "H_COOK",
+    "P5090": "H_PROPERTY",
+    "P6160": "P_LITERACY",
+    "P3271": "P_SEX",
+    "P6080": "P_ETHNICITY",
+    "P6040": "P_AGE",
+    "P3042": "P_EDUCATION",
+    "DIRECTORIO": "ID",
+    "DPTO": "ADMIN_DIVISION",
+    "FEX_C18": "EXP_FACTOR"
+  }
+}

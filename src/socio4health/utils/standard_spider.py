@@ -1,13 +1,26 @@
 import re
-import scrapy
 import json
 import os
 import logging
-from scrapy.exceptions import IgnoreRequest
 import copy
+from socio4health.utils.deps import import_optional
 
 
-class StandardSpider(scrapy.Spider):
+def _get_scrapy():
+    return import_optional('scrapy', extra='scraping')
+
+
+try:
+    scrapy = _get_scrapy()
+    SpiderBase = scrapy.Spider
+    IgnoreRequest = scrapy.exceptions.IgnoreRequest
+except ImportError:
+    scrapy = None
+    SpiderBase = object
+    IgnoreRequest = Exception
+
+
+class StandardSpider(SpiderBase):
     """A standard spider for scraping links from a given ``URL``.
 
     Attributes
@@ -33,6 +46,11 @@ class StandardSpider(scrapy.Spider):
 
     def __init__(self, url=None, depth=0, ext=None, key_words=None, *args, **kwargs):
         """Initialize the spider with parameters."""
+        if scrapy is None:
+            raise ImportError(
+                "Optional dependency 'scrapy' is required for StandardSpider. "
+                "Install it with: pip install 'socio4health[scraping]'"
+            )
         super().__init__(*args, **kwargs)
         if url is None:
             logging.warning("No URL provided. Please specify a URL.")
@@ -118,6 +136,23 @@ class StandardSpider(scrapy.Spider):
                 self.logger.warning("Request ignored due to robots.txt restriction.")
             except Exception as e:
                 self.logger.error(f"Spider failed due to an error: {e}", exc_info=True)
+
+    def parse_item(self, response):
+        """Extract a simple item from a response.
+
+        This method exists for API compatibility and documentation purposes.
+        It returns a minimal mapping with the response URL and title (when
+        available). Implementors can override this to yield richer items.
+        """
+        title = None
+        try:
+            title = response.css('title::text').get()
+        except Exception:
+            pass
+        return {
+            'url': getattr(response, 'url', None),
+            'title': title
+        }
 
     def closed(self, reason):
         """Handle actions to perform when the spider is closed.

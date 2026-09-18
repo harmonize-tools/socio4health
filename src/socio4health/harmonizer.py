@@ -25,8 +25,6 @@ class Harmonizer:
         ----------
         min_common_columns : int
             Minimum number of common columns required for vertical merge (default is 1).
-        similarity_threshold : float
-            Similarity threshold to consider for vertical merge (default is 0.8).
         nan_threshold : float
             Percentage threshold of ``NaN`` values to drop columns (default is 1.0).
         sample_frac : float or ``None``
@@ -58,7 +56,6 @@ class Harmonizer:
     """
     def __init__(self,
                  min_common_columns: int = 1,
-                 similarity_threshold: float = 1,
                  nan_threshold: float = 1.0,
                  sample_frac: Optional[float] = None,
                  column_mapping: Optional[Union[Type[Enum], Dict[str, Dict[str, str]], str, Path]] = None,
@@ -77,7 +74,6 @@ class Harmonizer:
         Initialize the Harmonizer class with default parameters.
         """
         self.min_common_columns = min_common_columns
-        self.similarity_threshold = similarity_threshold
         self.nan_threshold = nan_threshold
         self.sample_frac = sample_frac
         self.column_mapping = column_mapping
@@ -100,12 +96,7 @@ class Harmonizer:
     def min_common_columns(self) -> int:
         """Get the minimum number of common columns required for vertical merge."""
         return self._min_common_columns
-
-    @property
-    def similarity_threshold(self) -> float:
-        """Get the similarity threshold for vertical merge."""
-        return self._similarity_threshold
-
+    
     @property
     def nan_threshold(self) -> float:
         """Get the NaN threshold for column dropping."""
@@ -173,13 +164,6 @@ class Harmonizer:
         if not isinstance(value, int) or value < 0:
             raise ValueError("min_common_columns must be a non-negative integer")
         self._min_common_columns = value
-
-    @similarity_threshold.setter
-    def similarity_threshold(self, value: float):
-        """Set the similarity threshold for vertical merge."""
-        if not isinstance(value, (int, float)) or not 0 <= value <= 1:
-            raise ValueError("similarity_threshold must be a float between 0 and 1")
-        self._similarity_threshold = float(value)
 
     @nan_threshold.setter
     def nan_threshold(self, value: float):
@@ -257,7 +241,7 @@ class Harmonizer:
             raise ValueError("extra_cols must be a list of strings")
         self._extra_cols = value
 
-    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame]) -> List[dd.DataFrame]:
+    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame], overlap_threshold: float = 1, method: str = "union") -> List[dd.DataFrame]:
         """
         Merge a list of `Dask <https://docs.dask.org>`_ DataFrames vertically using instance parameters.
 
@@ -265,6 +249,12 @@ class Harmonizer:
         ----------
         ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
             List of `Dask <https://docs.dask.org>`_ DataFrames to be merged.
+        overlap_threshold : float, optional
+            Overlap coefficient (Szymkiewicz–Simpson coefficient) threshold to consider for vertical merge (default is 1).
+        method : str, optional
+            Method to use for merging (default is "union").
+                - "union": Merge all columns from all DataFrames, filling missing values with NaN.
+                - "intersection": Merge only columns that are common to all DataFrames.
 
         Returns
         -------
@@ -273,11 +263,14 @@ class Harmonizer:
 
         Notes
         -----
-        - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column similarity is above ``similarity_threshold``.
+        - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column overlap coefficient is above ``overlap_threshold``.
         - Only columns with matching data types are considered compatible for merging.
         """
         if not ddfs:
             return []
+
+        if not isinstance(overlap_threshold, (int, float)) or not 0 <= overlap_threshold <= 1:
+            raise ValueError("overlap_threshold must be a float between 0 and 1")
 
         groups = []
         used_indices = set()
@@ -286,6 +279,7 @@ class Harmonizer:
             if i in used_indices:
                 continue
 
+            df1 = df1.rename(columns=lambda x: str(x).upper().strip())
             cols1 = set(df1.columns)
             dtypes1 = {col: str(df1[col].dtype) for col in df1.columns}
             current_group = [i]
@@ -296,12 +290,14 @@ class Harmonizer:
                 if j_actual in used_indices:
                     continue
 
+                df2 = df2.rename(columns=lambda x: str(x).upper().strip())
                 cols2 = set(df2.columns)
                 common_cols = cols1 & cols2
-                similarity = len(common_cols) / max(len(cols1), len(cols2))
+                
+                overlap = len(common_cols) / min(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
 
                 if (len(common_cols) >= self.min_common_columns and
-                        similarity >= self.similarity_threshold):
+                        overlap >= overlap_threshold):
 
                     compatible = True
                     for col in common_cols:
@@ -325,16 +321,25 @@ class Harmonizer:
                 merged_dfs.append(ddfs[group_indices[0]])
             else:
                 group_dfs = [ddfs[i] for i in group_indices]
-                common_cols = set(group_dfs[0].columns)
-                for df in group_dfs[1:]:
-                    common_cols.intersection_update(df.columns)
-
-                aligned_dfs = []
-                for df in group_dfs:
-                    common_cols_ordered = [col for col in df.columns if col in common_cols]
-                    other_cols = [col for col in df.columns if col not in common_cols]
-                    aligned_dfs.append(df[common_cols_ordered + other_cols])
-
+                if method == "intersection":
+                    common_cols = set(group_dfs[0].columns)
+                    for df in group_dfs[1:]:
+                        common_cols.intersection_update(df.columns)
+                    aligned_dfs = [df[list(common_cols)] for df in group_dfs]
+                elif method == "union":
+                    import numpy as np
+                    all_cols = set()
+                    for df in group_dfs:
+                        all_cols.update(df.columns)
+                    all_cols = list(all_cols)
+                    aligned_dfs = []
+                    for df in group_dfs:
+                        missing_cols = [col for col in all_cols if col not in df.columns]
+                        for col in missing_cols:
+                            df[col] = np.nan
+                        aligned_dfs.append(df[all_cols])
+                else:
+                    raise ValueError("method must be 'union' or 'intersection'")
                 merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
                 merged_dfs.append(merged_df)
         if len(merged_dfs) > 1:
@@ -370,6 +375,8 @@ class Harmonizer:
             raise ValueError("Threshold must be between 0 and 1")
 
         def process_ddf(ddf):
+            ddf = ddf.rename(columns=lambda x: str(x).upper().strip())
+            #ddf = ddf.loc[:, ~ddf.columns.duplicated()]
             if self.sample_frac is not None:
                 if not 0 < self.sample_frac <= 1:
                     raise ValueError("sample_frac must be between 0 and 1")
@@ -391,6 +398,16 @@ class Harmonizer:
             return [process_ddf(ddf) for ddf in ddf_or_ddfs]
         else:
             return process_ddf(ddf_or_ddfs)
+
+    def s4h_drop_nan_columns(self, ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> Union[
+        dd.DataFrame, List[dd.DataFrame]]:
+        """
+        Compatibility wrapper for the legacy `s4h_drop_nan_columns` API.
+
+        This delegates to :meth:`drop_nan_columns` and preserves the old
+        public API expected by the documentation.
+        """
+        return self.drop_nan_columns(ddf_or_ddfs)
 
     @staticmethod
     def s4h_get_available_columns(df_or_dfs: Union[dd.DataFrame, pd.DataFrame, List[Union[dd.DataFrame, pd.DataFrame]]]) -> \
@@ -425,6 +442,8 @@ class Harmonizer:
         for df in df_or_dfs:
             if not isinstance(df, (dd.DataFrame, pd.DataFrame)):
                 raise TypeError("All elements in the list must be DataFrames (Dask or pandas)")
+            df = df.rename(columns=lambda x: str(x).upper().strip())
+            #sdf = df.loc[:, ~df.columns.duplicated()]
             unique_columns.update(df.columns)
 
         return sorted(unique_columns)
@@ -486,6 +505,9 @@ class Harmonizer:
 
         def process_dataframe(df: dd.DataFrame, country: str) -> dd.DataFrame:
             """Process a single dataframe"""
+            # Clean columns: uppercase, strip, deduplicate
+            df = df.rename(columns=lambda x: str(x).upper().strip())
+            df = df.loc[:, ~df.columns.duplicated()]
             # Get mappings for this country
             col_map = get_country_mapping(column_mapping, country)
             val_maps = get_country_mapping(value_mappings, country)
@@ -593,7 +615,8 @@ class Harmonizer:
 
         filtered_ddfs = []
         for ddf in ddfs:
-            ddf.columns = ddf.columns.str.upper()
+            ddf = ddf.rename(columns=lambda x: str(x).upper().strip())
+            ddf = ddf.loc[:, ~ddf.columns.duplicated()]
 
             if self.key_col and self.key_val:
                 if key_column_upper not in ddf.columns:
@@ -657,9 +680,22 @@ class Harmonizer:
             Merged DataFrame with duplicate columns removed.
         """
         pandas_dfs = [df.compute() for df in ddfs]
+        pandas_dfs = [df.rename(columns=lambda x: str(x).upper().strip()) for df in pandas_dfs]
+        pandas_dfs = [df.loc[:, ~df.columns.duplicated()] for df in pandas_dfs]
 
         def identify_primary_df(dfs):
             candidates = []
+
+            def _table_label(df, fallback_index):
+                if 'filename' in df.columns and not df['filename'].empty:
+                    source_name = str(df['filename'].dropna().iloc[0]).strip()
+                    if source_name:
+                        return Path(source_name).stem
+
+                if df.index.name:
+                    return str(df.index.name).strip()
+
+                return f"table_{fallback_index}"
 
             for i, df in enumerate(dfs):
                 if self.join_key not in df.columns:
@@ -669,7 +705,8 @@ class Harmonizer:
                 unique_rows = df[self.join_key].nunique()
                 uniqueness_ratio = unique_rows / total_rows
 
-                df[self.join_key].to_csv(f"data/directories_{df.index.name or 'index'}.csv", index=False)
+                table_label = _table_label(df, i)
+                df[self.join_key].to_csv(f"data/directories_{table_label}.csv", index=False)
                 logging.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
                 if uniqueness_ratio > 0.9:
                     candidates.append((i, df.copy(), uniqueness_ratio))

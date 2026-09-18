@@ -1,5 +1,17 @@
-from scrapy.crawler import CrawlerProcess
-from .standard_spider import StandardSpider
+
+import pyzipper
+import zipfile
+import shutil
+import tempfile
+import tarfile
+import py7zr
+import os
+import requests
+import hashlib
+import multiprocessing
+import logging
+from importlib import import_module
+from socio4health.utils.deps import import_optional
 import zipfile
 import shutil
 import tempfile
@@ -21,10 +33,17 @@ def _run_spider_in_process(url, depth, down_ext, key_words):
     logging.getLogger('scrapy').propagate = False
     logging.getLogger('scrapy').setLevel(logging.CRITICAL)
     logging.getLogger('urllib3').setLevel(logging.CRITICAL)
+    # Import scrapy only when running the spider (lazy)
+    scrapy = import_optional('scrapy', extra='scraping')
+    from scrapy.crawler import CrawlerProcess
+    # Import local spider class
+    spider_mod = import_module('socio4health.utils.standard_spider')
+    StandardSpider = getattr(spider_mod, 'StandardSpider')
 
     process = CrawlerProcess({
         'LOG_LEVEL': 'CRITICAL',
         'LOG_ENABLED': False,
+        'TWISTED_REACTOR_ENABLED': False,
         'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
     })
     process.crawl(StandardSpider, url=url, depth=depth, down_ext=down_ext, key_words=key_words)
@@ -145,8 +164,21 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
         try:
             # Extract the archive
             if zipfile.is_zipfile(input_archive):
-                with zipfile.ZipFile(input_archive, 'r') as zip_ref:
-                    zip_ref.extractall(temp_dir)
+                try:
+                    with zipfile.ZipFile(input_archive, 'r') as zip_ref:
+                        for zinfo in zip_ref.infolist():
+                            if getattr(zinfo, 'compress_type', None) == 9:
+                                logging.warning(f"Extracting Deflate64-compressed zip file: {input_archive}. This may take a while...")
+                                break
+                        zip_ref.extractall(temp_dir)
+                except NotImplementedError as e:
+                    logging.warning(f"zipfile failed for {input_archive}: {e}. Trying pyzipper fallback.")
+                    try:
+                        with pyzipper.ZipFile(input_archive, 'r') as zip_ref:
+                            zip_ref.extractall(temp_dir)
+                    except Exception as e2:
+                        logging.error(f"pyzipper extraction failed for {input_archive}: {e2}")
+                        return set()
             elif tarfile.is_tarfile(input_archive):
                 with tarfile.open(input_archive, 'r:*') as tar_ref:
                     tar_ref.extractall(temp_dir)
@@ -214,29 +246,28 @@ def create_unique_path(archive_path, filename, target_dir):
     return os.path.join(target_dir, unique_name)
 
 def s4h_parse_fwf_dict(dict_df):
-    """Parse a dictionary DataFrame to extract column names and fixed-width format specifications.
+    """Parse a fixed-width format dictionary stored in a pandas DataFrame.
+
+    The DataFrame must contain at least the following columns:
+    ``variable_name`` and ``initial_position``. Either ``size`` or
+    ``final_position`` must be present to compute column spans.
 
     Parameters
     ----------
     dict_df : pandas.DataFrame
-        A DataFrame containing the dictionary information with columns:
-        - 'variable_name': Column names
-        - 'initial_position': Starting position (1-based) of each column
-        - 'size': Width of each column or 'final_position': Ending position of each column
+        Dictionary table describing fixed-width columns.
 
     Returns
     -------
     tuple
-        A tuple containing:
-        - A list of column names.
-        - A list of tuples representing column specifications (start, end) where:
-          - start is 0-based starting position
-          - end is 0-based ending position (exclusive)
+        ``(colnames, colspecs)`` where ``colnames`` is a list of column
+        names and ``colspecs`` is a list of ``(start, end)`` integer tuples
+        suitable for use with ``pandas.read_fwf`` (0-based, end exclusive).
 
     Raises
     ------
     ValueError
-        If no column names or sizes are found in the dictionary DataFrame.
+        If required columns are missing.
     """
 
     if not 'variable_name' in dict_df.columns:

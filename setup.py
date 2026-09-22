@@ -81,7 +81,8 @@ setup(
             'torch>=2.0.0',
             'torchaudio>=2.0.0',
             'torchvision>=0.15.0',
-            'deep-translator>=1.11.4'
+            'sentencepiece>=0.2.0',
+            'sacremoses>=0.1.1'
         ],
         
         # Análisis geoespacial

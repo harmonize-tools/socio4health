@@ -165,9 +165,87 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
 
     return row
 
+_TRANSLATION_MODEL_NAME = "Helsinki-NLP/opus-mt-ROMANCE-en"
+_translation_runtime = None
+_translation_cache = {}
+
+
+def _get_translation_runtime():
+    """Load and cache the offline translation model and tokenizer."""
+    global _translation_runtime
+    if _translation_runtime is None:
+        torch = import_optional('torch', extra='ml')
+        transformers = import_optional('transformers', extra='ml')
+        import_optional('sentencepiece', extra='ml')
+        tokenizer = transformers.AutoTokenizer.from_pretrained(
+            _TRANSLATION_MODEL_NAME
+        )
+        model = transformers.AutoModelForSeq2SeqLM.from_pretrained(
+            _TRANSLATION_MODEL_NAME
+        )
+        device = torch.device(
+            'cuda' if getattr(torch, 'cuda', None) and torch.cuda.is_available() else 'cpu'
+        )
+        model.to(device)
+        model.eval()
+        _translation_runtime = torch, tokenizer, model, device
+    return _translation_runtime
+
+
+def _translate_texts(texts: list[str], batch_size: int = 32) -> list[str]:
+    """Translate Portuguese or Spanish texts to English in local inference batches."""
+    if not texts:
+        return []
+
+    torch, tokenizer, model, device = _get_translation_runtime()
+    max_source_tokens = min(
+        getattr(tokenizer, 'model_max_length', 512),
+        getattr(model.config, 'max_position_embeddings', 512),
+        512,
+    ) - 2
+
+    chunks = []
+    owners = []
+    for owner, text in enumerate(texts):
+        token_ids = tokenizer.encode(text, add_special_tokens=False)
+        if not token_ids:
+            chunks.append(text)
+            owners.append(owner)
+            continue
+        for start in range(0, len(token_ids), max_source_tokens):
+            chunk_ids = token_ids[start:start + max_source_tokens]
+            chunks.append(tokenizer.decode(chunk_ids, skip_special_tokens=True))
+            owners.append(owner)
+
+    translated_chunks = []
+    for start in range(0, len(chunks), batch_size):
+        batch = chunks[start:start + batch_size]
+        encoded = tokenizer(
+            batch,
+            return_tensors='pt',
+            padding=True,
+            truncation=True,
+            max_length=max_source_tokens,
+        )
+        encoded = {name: values.to(device) for name, values in encoded.items()}
+        with torch.inference_mode():
+            generated = model.generate(**encoded, max_length=512)
+        translated_chunks.extend(
+            tokenizer.batch_decode(generated, skip_special_tokens=True)
+        )
+
+    grouped = [[] for _ in texts]
+    for owner, translated in zip(owners, translated_chunks):
+        grouped[owner].append(translated.strip())
+    return [' '.join(parts).strip() for parts in grouped]
+
+
 def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> pd.DataFrame:
     """
-    Translates the content of selected columns in a DataFrame using Google Translate.
+    Translates Portuguese or Spanish content in a DataFrame to English using a local model.
+
+    The model is downloaded on first use and then reused from the local Hugging Face
+    cache. Repeated values are translated only once per Python process.
 
     Parameters
     ----------
@@ -178,11 +256,11 @@ def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') 
         Name of the column to translate.
 
     language : str
-        Target language code (default is ``en``).
+        Target language code. The bundled translation model currently supports
+        English (``en``) as its target language.
 
     Returns
     -------
-    `pd.DataFrame <https://pandas.pydata.org/docs/reference/frame.html>`_
         Original DataFrame with new column translated.
     """
 
@@ -197,23 +275,47 @@ def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') 
     
     if not isinstance(language, str) or len(language) != 2:
         raise ValueError("The 'language' parameter must be a 2-letter ISO 639-1 language code (e.g. 'en').")
-    
-    
-    def translate_text(text):
-        if pd.isna(text):
-            return text
-        if len(text) < 5000:
-            dt = import_optional('deep_translator', extra='ml')
-            return dt.GoogleTranslator(source='auto', target=language).translate(text)
-        else:
-            print("Rows with contents longer than 5000 characters are cut off")
-            dt = import_optional('deep_translator', extra='ml')
-            return dt.GoogleTranslator(source='auto', target=language).translate(text[:4500])
+
+    if language.lower() != 'en':
+        raise ValueError("The offline translation model only supports English ('en') as target language.")
 
     data = data.copy()
-
     new_col = f"{column}_{language}"
-    data[new_col] = data[column].apply(translate_text)
+
+    prepared = {}
+    truncated = False
+    for value in data[column]:
+        if pd.isna(value):
+            continue
+        text = str(value)
+        if len(text) >= 5000:
+            text = text[:4500]
+            truncated = True
+        prepared[value] = text
+
+    if truncated:
+        print("Rows with contents longer than 5000 characters are cut off")
+
+    pending = []
+    for text in dict.fromkeys(prepared.values()):
+        cache_key = (_TRANSLATION_MODEL_NAME, text)
+        if text.strip() and cache_key not in _translation_cache:
+            pending.append(text)
+
+    if pending:
+        translations = _translate_texts(pending)
+        for text, translation in zip(pending, translations):
+            _translation_cache[(_TRANSLATION_MODEL_NAME, text)] = translation
+
+    def translated_value(value):
+        if pd.isna(value):
+            return value
+        text = prepared[value]
+        if not text.strip():
+            return text
+        return _translation_cache[(_TRANSLATION_MODEL_NAME, text)]
+
+    data[new_col] = data[column].apply(translated_value)
     print(f"{column} translated")
 
     return data

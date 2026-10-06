@@ -29,7 +29,7 @@ except FileNotFoundError:
 
 setup( 
     name='socio4health',
-    version='1.0.8',
+    version='1.0.9',
     description='Socio4health is a Python package for gathering and consolidating socio-demographic data.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -81,7 +81,8 @@ setup(
             'torch>=2.0.0',
             'torchaudio>=2.0.0',
             'torchvision>=0.15.0',
-            'deep-translator>=1.11.4'
+            'sentencepiece>=0.2.0',
+            'sacremoses>=0.1.1'
         ],
         
         # Análisis geoespacial

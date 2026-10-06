@@ -120,7 +120,8 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 - <a href="https://requests.readthedocs.io/en/latest/">requests</a>
 - <a href="https://pypi.org/project/appdirs/">appdirs</a>
 - <a href="https://pypi.org/project/pyarrow/">pyarrow</a>
-- <a href="https://pypi.org/project/deep-translator/">deep_translator</a>
+- <a href="https://pypi.org/project/sentencepiece/">SentencePiece</a>
+- <a href="https://pypi.org/project/sacremoses/">Sacremoses</a>
 - <a href="https://pypi.org/project/transformers/">transformers</a>
 - <a href="https://pypi.org/project/pytest/">pytest</a>
 

@@ -6,7 +6,7 @@ OPTIONAL_EXTRAS = {
     'matplotlib': 'viz',
     'transformers': 'ml',
     'torch': 'ml',
-    'deep_translator': 'ml'
+    'sentencepiece': 'ml'
 }
 
 

@@ -636,7 +636,13 @@ class Harmonizer:
             if n_rows == 0:
                 logging.warning("No rows found matching key values in DataFrame")
 
-            dict_df_filtered = dict_df[dict_df[ColumnMappingEnum.CATEGORY.value].isin(self.categories)]
+            category_col = ColumnMappingEnum.CATEGORY.value
+            if category_col not in dict_df.columns:
+                raise KeyError(f"Column '{category_col}' not found in dictionary. "
+                             f"Ensure the dictionary has been classified using s4h_classify_rows(). "
+                             f"Available columns: {list(dict_df.columns)}")
+
+            dict_df_filtered = dict_df[dict_df[category_col].isin(self.categories)]
             columns_list = dict_df_filtered[ColumnMappingEnum.VARIABLE_NAME.value].dropna().unique().tolist()
 
             if self.extra_cols:

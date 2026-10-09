@@ -7,6 +7,10 @@ The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 - Prepare improvements and documentation updates.
 
+## [1.0.10] - 2026-09-10
+### Fixed
+ - Scrappy depencency
+
 ## [1.0.5] - 2026-03-03
 ### Fixed
  - Fix normalization of columns

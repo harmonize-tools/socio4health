@@ -29,7 +29,7 @@ except FileNotFoundError:
 
 setup( 
     name='socio4health',
-    version='1.0.9',
+    version='1.0.10',
     description='Socio4health is a Python package for gathering and consolidating socio-demographic data.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -72,7 +72,7 @@ setup(
     extras_require={
         # Scraping web
         'scraping': [
-            'Scrapy>=2.11.1',
+            'Scrapy==2.11.1',
         ],
         
         # Machine Learning y NLP

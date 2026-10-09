@@ -166,6 +166,7 @@ def _process_group(group: pd.DataFrame) -> pd.Series:
     return row
 
 _TRANSLATION_MODEL_NAME = "Helsinki-NLP/opus-mt-ROMANCE-en"
+_TRANSLATION_MAX_TARGET_TOKENS = 512
 _translation_runtime = None
 _translation_cache = {}
 
@@ -205,21 +206,28 @@ def _translate_texts(texts: list[str], batch_size: int = 32) -> list[str]:
     ) - 2
 
     chunks = []
+    chunk_lengths = []
     owners = []
     for owner, text in enumerate(texts):
         token_ids = tokenizer.encode(text, add_special_tokens=False)
         if not token_ids:
             chunks.append(text)
+            chunk_lengths.append(1)
             owners.append(owner)
             continue
         for start in range(0, len(token_ids), max_source_tokens):
             chunk_ids = token_ids[start:start + max_source_tokens]
             chunks.append(tokenizer.decode(chunk_ids, skip_special_tokens=True))
+            chunk_lengths.append(len(chunk_ids))
             owners.append(owner)
 
-    translated_chunks = []
-    for start in range(0, len(chunks), batch_size):
-        batch = chunks[start:start + batch_size]
+    # Similar lengths reduce padding and prevent short labels from inheriting the
+    # generation budget needed by a much longer text in the same batch.
+    sorted_indexes = sorted(range(len(chunks)), key=chunk_lengths.__getitem__)
+    translated_chunks = [None] * len(chunks)
+    for start in range(0, len(sorted_indexes), batch_size):
+        batch_indexes = sorted_indexes[start:start + batch_size]
+        batch = [chunks[index] for index in batch_indexes]
         encoded = tokenizer(
             batch,
             return_tensors='pt',
@@ -228,16 +236,45 @@ def _translate_texts(texts: list[str], batch_size: int = 32) -> list[str]:
             max_length=max_source_tokens,
         )
         encoded = {name: values.to(device) for name, values in encoded.items()}
-        with torch.inference_mode():
-            generated = model.generate(**encoded, max_length=512)
-        translated_chunks.extend(
-            tokenizer.batch_decode(generated, skip_special_tokens=True)
+        longest_source = int(encoded['attention_mask'].sum(dim=1).max().item())
+        max_target_tokens = min(
+            _TRANSLATION_MAX_TARGET_TOKENS,
+            max(32, longest_source * 2 + 16),
         )
+        with torch.inference_mode():
+            generated = model.generate(
+                **encoded,
+                max_length=max_target_tokens,
+                no_repeat_ngram_size=3,
+                repetition_penalty=1.1,
+                forced_eos_token_id=tokenizer.eos_token_id,
+            )
+        decoded = tokenizer.batch_decode(generated, skip_special_tokens=True)
+        for index, translated in zip(batch_indexes, decoded):
+            translated_chunks[index] = _clean_translation_output(translated)
+
+    if any(translated is None for translated in translated_chunks):
+        raise RuntimeError("The translation model did not return all requested texts.")
 
     grouped = [[] for _ in texts]
     for owner, translated in zip(owners, translated_chunks):
         grouped[owner].append(translated.strip())
     return [' '.join(parts).strip() for parts in grouped]
+
+
+def _clean_translation_output(text: str) -> str:
+    """Remove terminal repetition occasionally produced by sequence generation."""
+    text = text.strip()
+    text = re.sub(
+        r'(?i)\b([\w-]+)(?:(?:\s*,\s*|\s+)\1\b){2,}',
+        r'\1',
+        text,
+    )
+    return re.sub(
+        r'(?:\s*\.\s*){3,}$',
+        '.',
+        text,
+    ).strip()
 
 
 def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') -> pd.DataFrame:

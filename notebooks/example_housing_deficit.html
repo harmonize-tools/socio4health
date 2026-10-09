@@ -1,0 +1,1550 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hands-on with socio4health: preparing housing-deficit inputs from Colombia’s Quality of Life Survey &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/example_housing_deficit';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Hands-on with socio4health: preparing housing-deficit inputs from Colombia’s Quality of Life Survey</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="socio4health logo" height="100" width="100"/><section id="hands-on-with-socio4health-preparing-housing-deficit-inputs-from-colombia-s-quality-of-life-survey">
+<h1>Hands-on with socio4health: preparing housing-deficit inputs from Colombia’s Quality of Life Survey<a class="headerlink" href="#hands-on-with-socio4health-preparing-housing-deficit-inputs-from-colombia-s-quality-of-life-survey" title="Link to this heading">#</a></h1>
+<p><strong>Run the tutorial via free cloud platforms:</strong> <a class="reference external" href="https://mybinder.org/v2/gh/harmonize-tools/socio4health/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Fsource%2Fnotebooks%2Fexample_housing_deficit.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a> <a target="_blank" href="https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_housing_deficit.ipynb">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a></p>
+<p>This notebook provides a real-world example of how to use <strong>socio4health</strong> to <strong>retrieve</strong> and <strong>prepare</strong> housing and household microdata from Colombia’s Quality of Life Survey (<strong>ECV</strong>) for 2010–2017. The workflow creates annual input tables for the subsequent calculation of Colombia’s housing deficit. It was developed as part of the data-preparation exercise associated with the unpublished manuscript <em>An Aedes-borne Diseases Vulnerability Indicator: Encompassing Viral Suitability, Socioeconomic Sensitivity, and Lack of Health System Resilience in the Latin America and the Caribbean Region and Colombia</em> by Umaña-Caro, J, et. al. Because the manuscript has not yet been published, no journal citation or DOI is provided. This tutorial assumes an <strong>intermediate</strong> or <strong>advanced</strong> understanding of <strong>Python</strong> and data manipulation.</p>
+<section id="setting-up-the-environment">
+<h2>Setting up the environment<a class="headerlink" href="#setting-up-the-environment" title="Link to this heading">#</a></h2>
+<p>To run this notebook, you need to have the following prerequisite:</p>
+<ul class="simple">
+<li><p><strong>Python 3.10+</strong></p></li>
+</ul>
+<p>Install <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> with its scraping dependencies using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"socio4health[scraping]"</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="import-libraries">
+<h2>1. Import libraries<a class="headerlink" href="#import-libraries" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class from <strong>socio4health</strong> retrieves and reads the ECV files published by DANE. <code class="docutils literal notranslate"><span class="pre">pandas</span></code> is used to manipulate the resulting DataFrames, while <code class="docutils literal notranslate"><span class="pre">reduce</span></code> supports repeated merges by household directory identifier. <code class="docutils literal notranslate"><span class="pre">Path</span></code> and <code class="docutils literal notranslate"><span class="pre">uuid</span></code> are used to create a separate output directory for each run.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">socio4health</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="configure-the-ecv-data">
+<h2>2. Configure the ECV data<a class="headerlink" href="#configure-the-ecv-data" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ecv_data</span></code> dictionary maps each year from 2010 to 2017 to its corresponding DANE microdata download page. The <code class="docutils literal notranslate"><span class="pre">vivienda_cols</span></code> and <code class="docutils literal notranslate"><span class="pre">hogar_cols</span></code> lists define the identifiers, geographic fields, and housing- and household-level variables retained by this workflow.</p>
+<p>Two dictionaries, <code class="docutils literal notranslate"><span class="pre">dfs_vivienda_by_year</span></code> and <code class="docutils literal notranslate"><span class="pre">dfs_hogar_by_year</span></code>, are initialized to store the processed DataFrames separately for each year and unit of observation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ecv_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">2010</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2011</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2012</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2013</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2014</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2015</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2016</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata"</span><span class="p">,</span>
+    <span class="mi">2017</span><span class="p">:</span> <span class="s2">"https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata"</span>
+<span class="p">}</span>
+
+<span class="n">vivienda_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"DIRECTORIO"</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"CLASE"</span><span class="p">,</span> <span class="s2">"REGION"</span><span class="p">,</span> <span class="s2">"P1_DEPARTAMENTO"</span><span class="p">,</span> <span class="s2">"P1_MUNICIPIO"</span><span class="p">,</span>
+    <span class="s2">"P4000"</span><span class="p">,</span> <span class="s2">"P4005"</span><span class="p">,</span> <span class="s2">"P4015"</span><span class="p">,</span> <span class="s2">"P8520S1"</span><span class="p">,</span> <span class="s2">"P8520S3"</span><span class="p">,</span> <span class="s2">"P8520S4"</span><span class="p">,</span> <span class="s2">"P8520S5"</span><span class="p">,</span> <span class="s2">"P70"</span><span class="p">,</span> <span class="s2">"CANT_HOGARES_VIVIENDA"</span>
+<span class="p">]</span>
+
+<span class="n">hogar_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"DIRECTORIO"</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"CLASE"</span><span class="p">,</span> <span class="s2">"REGION"</span><span class="p">,</span> <span class="s2">"P1_DEPARTAMENTO"</span><span class="p">,</span> <span class="s2">"P1_MUNICIPIO"</span><span class="p">,</span>
+    <span class="s2">"P205"</span><span class="p">,</span> <span class="s2">"CANT_PERSONAS_HOGAR"</span><span class="p">,</span> <span class="s2">"P5010"</span><span class="p">,</span> <span class="s2">"P8526"</span><span class="p">,</span> <span class="s2">"P8530"</span><span class="p">,</span> <span class="s2">"P8532"</span><span class="p">,</span> <span class="s2">"P764"</span>
+<span class="p">]</span>
+
+<span class="n">dfs_vivienda_by_year</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">dfs_hogar_by_year</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-housing-and-household-data-by-year">
+<h2>3. Extract housing and household data by year<a class="headerlink" href="#extract-housing-and-household-data-by-year" title="Link to this heading">#</a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class to retrieve the <code class="docutils literal notranslate"><span class="pre">.sav</span></code> and <code class="docutils literal notranslate"><span class="pre">.zip</span></code> files required for every ECV edition. Because the archive names vary across years, year-specific regular expressions identify files related to housing identification, housing characteristics, household services, and household composition.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> is configured with the following parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_path</span></code>: the DANE microdata download page for the corresponding year.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">down_ext</span></code>: the file extensions accepted by the extraction process.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_path</span></code>: the local directory where the files for each year are downloaded and processed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key_words</span></code>: regular expressions used to select the relevant files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">depth</span></code>: the number of link levels traversed from the supplied page.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delete_zip_after</span></code>: whether downloaded ZIP files are removed after extraction.</p></li>
+</ul>
+<p>After extraction, column names are standardized to uppercase and known naming differences are reconciled. Each DataFrame is classified as housing- or household-level according to the variables it contains. Tables from the same year are then merged on <code class="docutils literal notranslate"><span class="pre">DIRECTORIO</span></code>, filtered to the configured columns, and stored for subsequent processing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">ecv_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">year</span> <span class="o">==</span> <span class="mi">2010</span><span class="p">:</span>
+            <span class="n">key_words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">"(?i)datos[\s_]+(?:de[\s_]+)?identificaci[oó]n"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)servicios[\s_]+(?:del[\s_]+)?hogar"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)composici[oó]n[\s_]+(?:del[\s_]+)?hogar"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)datos[\s_]+(?:de[\s_]+)?(?:la[\s_]+)?vivienda"</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="n">year</span> <span class="o">==</span> <span class="mi">2011</span><span class="p">:</span>
+            <span class="n">key_words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">"(?i)identificaci[oó]n.*vivienda"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)vivienda.*identificaci[oó]n"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)datos[\s_]+de[\s_]+identificaci[oó]n"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)datos[\s_]+de[\s_]+la[\s_]+vivienda"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)servicios[\s_]+(?:del[\s_]+)?hogar"</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key_words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">"(?i)datos[\s_]+(?:de[\s_]+)?identificaci[oó]n"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)servicios[\s_]+(?:del[\s_]+)?hogar"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)composici[oó]n[\s_]+(?:del[\s_]+)?hogar"</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">"(?i)datos[\s_]+(?:de[\s_]+)?(?:la[\s_]+)?vivienda"</span><span class="p">,</span>
+            <span class="p">]</span>
+        
+        <span class="n">extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span>
+            <span class="n">input_path</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">'.sav'</span><span class="p">,</span> <span class="s1">'.zip'</span><span class="p">],</span>
+            <span class="n">sep</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+            <span class="n">output_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"data/ECV/ECV_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">key_words</span><span class="o">=</span><span class="n">key_words</span><span class="p">,</span>
+            <span class="n">delete_zip_after</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="n">df_extracted</span> <span class="o">=</span> <span class="n">extractor</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">()</span>
+        
+        <span class="n">dfs_vivienda_year</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dfs_hogar_year</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">df_extracted</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="s1">'YEAR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+            
+            <span class="c1"># Normalizar nombres</span>
+            <span class="n">rename_map</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="s1">'CANT_HOGARES_VIVIENDA'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'CANT_HOG_COMPLETOS'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">rename_map</span><span class="p">[</span><span class="s1">'CANT_HOG_COMPLETOS'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'CANT_HOGARES_VIVIENDA'</span>
+            <span class="k">if</span> <span class="n">rename_map</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">rename_map</span><span class="p">)</span>
+            
+            <span class="c1"># Renombrar columnas</span>
+            <span class="k">if</span> <span class="s1">'DPTO'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'P1_DEPARTAMENTO'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'DPTO'</span><span class="p">:</span> <span class="s1">'P1_DEPARTAMENTO'</span><span class="p">})</span>
+            <span class="k">if</span> <span class="s1">'P3'</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'CLASE'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'P3'</span><span class="p">:</span> <span class="s1">'CLASE'</span><span class="p">})</span>
+            
+            <span class="c1"># Determinar si es tabla de vivienda o hogar</span>
+            <span class="n">has_vivienda_vars</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'P4000'</span><span class="p">,</span> <span class="s1">'P4005'</span><span class="p">,</span> <span class="s1">'P4015'</span><span class="p">,</span> <span class="s1">'P8520'</span><span class="p">])</span>
+            <span class="n">has_hogar_vars</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'P205'</span><span class="p">,</span> <span class="s1">'P5010'</span><span class="p">,</span> <span class="s1">'P8526'</span><span class="p">,</span> <span class="s1">'P8530'</span><span class="p">,</span> <span class="s1">'P8532'</span><span class="p">,</span> <span class="s1">'CANT_PERSONAS_HOGAR'</span><span class="p">])</span>
+            
+            <span class="k">if</span> <span class="s1">'DIRECTORIO'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">df</span><span class="p">[</span><span class="s1">'DIRECTORIO'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="k">continue</span>
+            
+            <span class="k">if</span> <span class="n">has_vivienda_vars</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">has_hogar_vars</span><span class="p">:</span>
+                <span class="n">dfs_vivienda_year</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">has_hogar_vars</span><span class="p">:</span>
+                <span class="n">dfs_hogar_year</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">has_vivienda_vars</span> <span class="ow">and</span> <span class="n">has_hogar_vars</span><span class="p">:</span>
+                <span class="n">dfs_vivienda_year</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        
+        <span class="c1"># Merge de tablas de vivienda del mismo año</span>
+        <span class="k">if</span> <span class="n">dfs_vivienda_year</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfs_vivienda_year</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">merged_vivienda</span> <span class="o">=</span> <span class="n">dfs_vivienda_year</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">common_cols</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dfs_vivienda_year</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs_vivienda_year</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                    <span class="n">common_cols</span> <span class="o">=</span> <span class="n">common_cols</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+                <span class="n">common_cols</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">'DIRECTORIO'</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfs_vivienda_year</span><span class="p">)):</span>
+                    <span class="n">cols_to_drop</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">common_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dfs_vivienda_year</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">cols_to_drop</span><span class="p">:</span>
+                        <span class="n">dfs_vivienda_year</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs_vivienda_year</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">cols_to_drop</span><span class="p">)</span>
+                
+                <span class="n">merged_vivienda</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'outer'</span><span class="p">),</span> 
+                    <span class="n">dfs_vivienda_year</span>
+                <span class="p">)</span>
+            
+            <span class="c1"># Filtrar solo columnas de vivienda</span>
+            <span class="n">merged_vivienda</span> <span class="o">=</span> <span class="n">merged_vivienda</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">vivienda_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">merged_vivienda</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span>
+            <span class="n">dfs_vivienda_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_vivienda</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Vivienda </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">merged_vivienda</span><span class="p">)</span><span class="si">}</span><span class="s2"> viviendas, columnas: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">merged_vivienda</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        
+        <span class="c1"># Merge de tablas de hogar del mismo año</span>
+        <span class="k">if</span> <span class="n">dfs_hogar_year</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfs_hogar_year</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">merged_hogar</span> <span class="o">=</span> <span class="n">dfs_hogar_year</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">common_cols</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dfs_hogar_year</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs_hogar_year</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                    <span class="n">common_cols</span> <span class="o">=</span> <span class="n">common_cols</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+                <span class="n">common_cols</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">'DIRECTORIO'</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfs_hogar_year</span><span class="p">)):</span>
+                    <span class="n">cols_to_drop</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">common_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dfs_hogar_year</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">cols_to_drop</span><span class="p">:</span>
+                        <span class="n">dfs_hogar_year</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dfs_hogar_year</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">cols_to_drop</span><span class="p">)</span>
+                
+                <span class="n">merged_hogar</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span>
+                    <span class="k">lambda</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'outer'</span><span class="p">),</span> 
+                    <span class="n">dfs_hogar_year</span>
+                <span class="p">)</span>
+            
+            <span class="c1"># Filtrar solo columnas de hogar</span>
+            <span class="n">merged_hogar</span> <span class="o">=</span> <span class="n">merged_hogar</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">hogar_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">merged_hogar</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span>
+            <span class="n">dfs_hogar_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_hogar</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Household </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">merged_hogar</span><span class="p">)</span><span class="si">}</span><span class="s2"> households, columns: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">merged_hogar</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:04,115 - INFO - ----------------------
+2026-10-06 19:05:04,115 - INFO - Starting data extraction...
+2026-10-06 19:05:04,115 - INFO - Extracting data in online mode...
+2026-10-06 19:05:04,116 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2010: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:06,149 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata
+2026-10-06 19:05:06,151 - INFO - Downloading files to: data/ECV/ECV_2010
+Downloading files:   0%|                                                                                                                              | 0/4 [00:00&lt;?, ?it/s]2026-10-06 19:05:06,531 - INFO - Successfully downloaded: Caracteristicas y Composicion del Hogar.zip
+Downloading files:  25%|█████████████████████████████▌                                                                                        | 1/4 [00:00&lt;00:01,  2.63it/s]2026-10-06 19:05:06,804 - INFO - Successfully downloaded: Datos de Identificacion.zip
+Downloading files:  50%|███████████████████████████████████████████████████████████                                                           | 2/4 [00:00&lt;00:00,  3.15it/s]2026-10-06 19:05:07,178 - INFO - Successfully downloaded: Datos de la Vivienda.zip
+Downloading files:  75%|████████████████████████████████████████████████████████████████████████████████████████▌                             | 3/4 [00:01&lt;00:00,  2.91it/s]2026-10-06 19:05:07,603 - INFO - Successfully downloaded: Servicios del Hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:01&lt;00:00,  2.75it/s]
+2026-10-06 19:05:07,606 - INFO - Processing (depth 0): Caracteristicas y Composicion del Hogar.zip
+2026-10-06 19:05:07,633 - INFO - Extracted: 45dc339a_Caracteristicas y Composición del Hogar_Dbfp_encv_547_1.sav
+2026-10-06 19:05:07,635 - INFO - Processing (depth 0): Datos de Identificacion.zip
+2026-10-06 19:05:07,646 - INFO - Extracted: bf00799c_Datos de Identificación_Dbfp_encv_545_1.sav
+2026-10-06 19:05:07,647 - INFO - Processing (depth 0): Datos de la Vivienda.zip
+2026-10-06 19:05:07,661 - INFO - Extracted: f8cc96cd_Datos de la Vivienda_Dbfp_encv_545_2.sav
+2026-10-06 19:05:07,663 - INFO - Processing (depth 0): Servicios del Hogar.zip
+2026-10-06 19:05:07,686 - INFO - Extracted: e735ac75_Servicios del Hogar_Dbfp_encv_546_1.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00&lt;00:00, 14.80it/s]
+2026-10-06 19:05:07,958 - INFO - Successfully processed 4/4 files
+2026-10-06 19:05:07,959 - INFO - Deleted zip file after extraction: data/ECV/ECV_2010\Caracteristicas y Composicion del Hogar.zip
+2026-10-06 19:05:07,960 - INFO - Deleted zip file after extraction: data/ECV/ECV_2010\Datos de Identificacion.zip
+2026-10-06 19:05:07,960 - INFO - Deleted zip file after extraction: data/ECV/ECV_2010\Datos de la Vivienda.zip
+2026-10-06 19:05:07,961 - INFO - Deleted zip file after extraction: data/ECV/ECV_2010\Servicios del Hogar.zip
+2026-10-06 19:05:07,961 - INFO - Extraction completed successfully.
+2026-10-06 19:05:07,966 - INFO - ----------------------
+2026-10-06 19:05:07,966 - INFO - Starting data extraction...
+2026-10-06 19:05:07,967 - INFO - Extracting data in online mode...
+2026-10-06 19:05:07,967 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2010: 14268 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'P4000', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'P70']
+  -&gt; Household 2010: 14801 households, columns: ['DIRECTORIO', 'YEAR', 'P205', 'P5010', 'P8526', 'P8530', 'P8532']
+
+2011: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:09,934 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata
+2026-10-06 19:05:09,937 - INFO - Downloading files to: data/ECV/ECV_2011
+Downloading files:   0%|                                                                                                                              | 0/2 [00:00&lt;?, ?it/s]2026-10-06 19:05:10,253 - INFO - Successfully downloaded: Datos de identificacion y de vivienda.zip
+Downloading files:  50%|███████████████████████████████████████████████████████████                                                           | 1/2 [00:00&lt;00:00,  3.16it/s]2026-10-06 19:05:10,661 - INFO - Successfully downloaded: Datos de Servicios del hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00&lt;00:00,  2.76it/s]
+2026-10-06 19:05:10,663 - INFO - Processing (depth 0): Datos de identificacion y de vivienda.zip
+2026-10-06 19:05:10,682 - INFO - Extracted: a4f12337_Datos de identificación y de vivienda_Dbfp_encv_550_1.sav
+2026-10-06 19:05:10,684 - INFO - Processing (depth 0): Datos de Servicios del hogar.zip
+2026-10-06 19:05:10,717 - INFO - Extracted: f6ab06fb_Datos de Servicios del hogar_Dbfp_encv_551_1.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:00&lt;00:00, 11.04it/s]
+2026-10-06 19:05:10,902 - INFO - Successfully processed 2/2 files
+2026-10-06 19:05:10,902 - INFO - Deleted zip file after extraction: data/ECV/ECV_2011\Datos de identificacion y de vivienda.zip
+2026-10-06 19:05:10,902 - INFO - Deleted zip file after extraction: data/ECV/ECV_2011\Datos de Servicios del hogar.zip
+2026-10-06 19:05:10,903 - INFO - Extraction completed successfully.
+2026-10-06 19:05:10,907 - INFO - ----------------------
+2026-10-06 19:05:10,908 - INFO - Starting data extraction...
+2026-10-06 19:05:10,908 - INFO - Extracting data in online mode...
+2026-10-06 19:05:10,908 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2011: 24557 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'REGION', 'P1_DEPARTAMENTO', 'P4000', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2011: 25364 households, columns: ['DIRECTORIO', 'YEAR', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8526', 'P8530', 'P8532']
+
+2012: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:12,861 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata
+2026-10-06 19:05:12,863 - INFO - Downloading files to: data/ECV/ECV_2012
+Downloading files:   0%|                                                                                                                              | 0/3 [00:00&lt;?, ?it/s]2026-10-06 19:05:13,322 - INFO - Successfully downloaded: Caracteristicas y composicion del hogar.zip
+Downloading files:  33%|███████████████████████████████████████▎                                                                              | 1/3 [00:00&lt;00:00,  2.18it/s]2026-10-06 19:05:13,673 - INFO - Successfully downloaded: Datos de vivienda.zip
+Downloading files:  67%|██████████████████████████████████████████████████████████████████████████████▋                                       | 2/3 [00:00&lt;00:00,  2.53it/s]2026-10-06 19:05:14,044 - INFO - Successfully downloaded: Servicios del hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:01&lt;00:00,  2.54it/s]
+2026-10-06 19:05:14,047 - INFO - Processing (depth 0): Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:14,084 - INFO - Extracted: 463f5a60_Caracteristicas y composición del hogar_Caracteristicas y composición del hogar.sav
+2026-10-06 19:05:14,087 - INFO - Processing (depth 0): Datos de vivienda.zip
+2026-10-06 19:05:14,103 - INFO - Extracted: 773d5334_Datos de vivienda_Datos de vivienda.sav
+2026-10-06 19:05:14,105 - INFO - Processing (depth 0): Servicios del hogar.zip
+2026-10-06 19:05:14,125 - INFO - Extracted: c50137f3_Servicios del hogar_Servicios del hogar.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00&lt;00:00,  9.94it/s]
+2026-10-06 19:05:14,430 - INFO - Successfully processed 3/3 files
+2026-10-06 19:05:14,430 - INFO - Deleted zip file after extraction: data/ECV/ECV_2012\Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:14,431 - INFO - Deleted zip file after extraction: data/ECV/ECV_2012\Datos de vivienda.zip
+2026-10-06 19:05:14,432 - INFO - Deleted zip file after extraction: data/ECV/ECV_2012\Servicios del hogar.zip
+2026-10-06 19:05:14,432 - INFO - Extraction completed successfully.
+2026-10-06 19:05:14,438 - INFO - ----------------------
+2026-10-06 19:05:14,438 - INFO - Starting data extraction...
+2026-10-06 19:05:14,439 - INFO - Extracting data in online mode...
+2026-10-06 19:05:14,439 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2012: 20698 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'REGION', 'P1_DEPARTAMENTO', 'P4000', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2012: 21383 households, columns: ['DIRECTORIO', 'YEAR', 'REGION', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8530', 'P8532']
+
+2013: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:16,385 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata
+2026-10-06 19:05:16,387 - INFO - Downloading files to: data/ECV/ECV_2013
+Downloading files:   0%|                                                                                                                              | 0/3 [00:00&lt;?, ?it/s]2026-10-06 19:05:16,685 - INFO - Successfully downloaded: Datos de la vivienda.zip
+Downloading files:  33%|███████████████████████████████████████▎                                                                              | 1/3 [00:00&lt;00:00,  3.36it/s]2026-10-06 19:05:17,051 - INFO - Successfully downloaded: Servicios del hogar.zip
+Downloading files:  67%|██████████████████████████████████████████████████████████████████████████████▋                                       | 2/3 [00:00&lt;00:00,  2.96it/s]2026-10-06 19:05:17,476 - INFO - Successfully downloaded: Caracteristicas y composicion del hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:01&lt;00:00,  2.75it/s]
+2026-10-06 19:05:17,479 - INFO - Processing (depth 0): Datos de la vivienda.zip
+2026-10-06 19:05:17,496 - INFO - Extracted: 6e7637d7_Datos de la vivienda.sav
+2026-10-06 19:05:17,499 - INFO - Processing (depth 0): Servicios del hogar.zip
+2026-10-06 19:05:17,520 - INFO - Extracted: f858f744_Servicios del Hogar.sav
+2026-10-06 19:05:17,522 - INFO - Processing (depth 0): Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:17,556 - INFO - Extracted: ac015196_Características y composición del hogar.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00&lt;00:00,  9.59it/s]
+2026-10-06 19:05:17,872 - INFO - Successfully processed 3/3 files
+2026-10-06 19:05:17,872 - INFO - Deleted zip file after extraction: data/ECV/ECV_2013\Datos de la vivienda.zip
+2026-10-06 19:05:17,873 - INFO - Deleted zip file after extraction: data/ECV/ECV_2013\Servicios del hogar.zip
+2026-10-06 19:05:17,874 - INFO - Deleted zip file after extraction: data/ECV/ECV_2013\Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:17,875 - INFO - Extraction completed successfully.
+2026-10-06 19:05:17,880 - INFO - ----------------------
+2026-10-06 19:05:17,880 - INFO - Starting data extraction...
+2026-10-06 19:05:17,880 - INFO - Extracting data in online mode...
+2026-10-06 19:05:17,881 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2013: 20878 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'REGION', 'P1_DEPARTAMENTO', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2013: 21565 households, columns: ['DIRECTORIO', 'YEAR', 'REGION', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8526', 'P8530', 'P764']
+
+2014: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:19,906 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata
+2026-10-06 19:05:19,909 - INFO - Downloading files to: data/ECV/ECV_2014
+Downloading files:   0%|                                                                                                                              | 0/3 [00:00&lt;?, ?it/s]2026-10-06 19:05:20,211 - INFO - Successfully downloaded: Datos de la vivienda.zip
+Downloading files:  33%|███████████████████████████████████████▎                                                                              | 1/3 [00:00&lt;00:00,  3.30it/s]2026-10-06 19:05:20,612 - INFO - Successfully downloaded: Servicios del Hogar.zip
+Downloading files:  67%|██████████████████████████████████████████████████████████████████████████████▋                                       | 2/3 [00:00&lt;00:00,  2.78it/s]2026-10-06 19:05:21,040 - INFO - Successfully downloaded: Caracteristicas y composicion del hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:01&lt;00:00,  2.65it/s]
+2026-10-06 19:05:21,042 - INFO - Processing (depth 0): Datos de la vivienda.zip
+2026-10-06 19:05:21,058 - INFO - Extracted: 314a8e7c_Datos de la vivienda.sav
+2026-10-06 19:05:21,061 - INFO - Processing (depth 0): Servicios del Hogar.zip
+2026-10-06 19:05:21,087 - INFO - Extracted: b2e3fabc_Servicios del Hogar.sav
+2026-10-06 19:05:21,088 - INFO - Processing (depth 0): Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:21,121 - INFO - Extracted: 780425fd_Características y composición del hogar.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00&lt;00:00,  8.67it/s]
+2026-10-06 19:05:21,470 - INFO - Successfully processed 3/3 files
+2026-10-06 19:05:21,470 - INFO - Deleted zip file after extraction: data/ECV/ECV_2014\Datos de la vivienda.zip
+2026-10-06 19:05:21,471 - INFO - Deleted zip file after extraction: data/ECV/ECV_2014\Servicios del Hogar.zip
+2026-10-06 19:05:21,472 - INFO - Deleted zip file after extraction: data/ECV/ECV_2014\Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:21,472 - INFO - Extraction completed successfully.
+2026-10-06 19:05:21,479 - INFO - ----------------------
+2026-10-06 19:05:21,480 - INFO - Starting data extraction...
+2026-10-06 19:05:21,480 - INFO - Extracting data in online mode...
+2026-10-06 19:05:21,480 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2014: 19710 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'P1_DEPARTAMENTO', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2014: 20141 households, columns: ['DIRECTORIO', 'YEAR', 'REGION', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8526', 'P8530', 'P764']
+
+2015: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:23,449 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata
+2026-10-06 19:05:23,451 - INFO - Downloading files to: data/ECV/ECV_2015
+Downloading files:   0%|                                                                                                                              | 0/3 [00:00&lt;?, ?it/s]2026-10-06 19:05:23,776 - INFO - Successfully downloaded: Datos de la vivienda.zip
+Downloading files:  33%|███████████████████████████████████████▎                                                                              | 1/3 [00:00&lt;00:00,  3.07it/s]2026-10-06 19:05:24,220 - INFO - Successfully downloaded: Servicios del hogar.zip
+Downloading files:  67%|██████████████████████████████████████████████████████████████████████████████▋                                       | 2/3 [00:00&lt;00:00,  2.53it/s]2026-10-06 19:05:24,710 - INFO - Successfully downloaded: Caracteristicas y composicion del hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:01&lt;00:00,  2.38it/s]
+2026-10-06 19:05:24,715 - INFO - Processing (depth 0): Datos de la vivienda.zip
+2026-10-06 19:05:24,732 - INFO - Extracted: c6a29c36_Datos de la vivienda.sav
+2026-10-06 19:05:24,733 - INFO - Processing (depth 0): Servicios del hogar.zip
+2026-10-06 19:05:24,757 - INFO - Extracted: 911b01dd_Servicios del hogar.sav
+2026-10-06 19:05:24,758 - INFO - Processing (depth 0): Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:24,793 - INFO - Extracted: 1fa5cd92_Características y composición del hogar.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00&lt;00:00,  7.88it/s]
+2026-10-06 19:05:25,177 - INFO - Successfully processed 3/3 files
+2026-10-06 19:05:25,178 - INFO - Deleted zip file after extraction: data/ECV/ECV_2015\Datos de la vivienda.zip
+2026-10-06 19:05:25,179 - INFO - Deleted zip file after extraction: data/ECV/ECV_2015\Servicios del hogar.zip
+2026-10-06 19:05:25,180 - INFO - Deleted zip file after extraction: data/ECV/ECV_2015\Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:25,180 - INFO - Extraction completed successfully.
+2026-10-06 19:05:25,187 - INFO - ----------------------
+2026-10-06 19:05:25,188 - INFO - Starting data extraction...
+2026-10-06 19:05:25,188 - INFO - Extracting data in online mode...
+2026-10-06 19:05:25,188 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2015: 22524 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'REGION', 'P1_DEPARTAMENTO', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2015: 23005 households, columns: ['DIRECTORIO', 'YEAR', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8526', 'P8530', 'P764']
+
+2016: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:27,132 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata
+2026-10-06 19:05:27,136 - INFO - Downloading files to: data/ECV/ECV_2016
+Downloading files:   0%|                                                                                                                              | 0/3 [00:00&lt;?, ?it/s]2026-10-06 19:05:27,472 - INFO - Successfully downloaded: Datos de la vivienda.zip
+Downloading files:  33%|███████████████████████████████████████▎                                                                              | 1/3 [00:00&lt;00:00,  2.97it/s]2026-10-06 19:05:27,861 - INFO - Successfully downloaded: Servicios del hogar.zip
+Downloading files:  67%|██████████████████████████████████████████████████████████████████████████████▋                                       | 2/3 [00:00&lt;00:00,  2.72it/s]2026-10-06 19:05:28,285 - INFO - Successfully downloaded: Caracteristicas y composicion del hogar.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:01&lt;00:00,  2.61it/s]
+2026-10-06 19:05:28,288 - INFO - Processing (depth 0): Datos de la vivienda.zip
+2026-10-06 19:05:28,306 - INFO - Extracted: eb1546ff_Datos de la vivienda.sav
+2026-10-06 19:05:28,309 - INFO - Processing (depth 0): Servicios del hogar.zip
+2026-10-06 19:05:28,332 - INFO - Extracted: e2cc05de_Servicios del hogar.sav
+2026-10-06 19:05:28,333 - INFO - Processing (depth 0): Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:28,370 - INFO - Extracted: 2a0c6f3c_Características y composición del hogar.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00&lt;00:00,  8.62it/s]
+2026-10-06 19:05:28,721 - INFO - Successfully processed 3/3 files
+2026-10-06 19:05:28,721 - INFO - Deleted zip file after extraction: data/ECV/ECV_2016\Datos de la vivienda.zip
+2026-10-06 19:05:28,722 - INFO - Deleted zip file after extraction: data/ECV/ECV_2016\Servicios del hogar.zip
+2026-10-06 19:05:28,723 - INFO - Deleted zip file after extraction: data/ECV/ECV_2016\Caracteristicas y composicion del hogar.zip
+2026-10-06 19:05:28,724 - INFO - Extraction completed successfully.
+2026-10-06 19:05:28,728 - INFO - ----------------------
+2026-10-06 19:05:28,729 - INFO - Starting data extraction...
+2026-10-06 19:05:28,729 - INFO - Extracting data in online mode...
+2026-10-06 19:05:28,730 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2016: 22454 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'REGION', 'P1_DEPARTAMENTO', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2016: 22893 households, columns: ['DIRECTORIO', 'YEAR', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8526', 'P8530', 'P764']
+
+2017: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:30,704 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata
+2026-10-06 19:05:30,706 - INFO - Downloading files to: data/ECV/ECV_2017
+Downloading files:   0%|                                                                                                                              | 0/3 [00:00&lt;?, ?it/s]2026-10-06 19:05:31,022 - INFO - Successfully downloaded: Servicios del hogar Actualizada.zip
+Downloading files:  33%|███████████████████████████████████████▎                                                                              | 1/3 [00:00&lt;00:00,  3.16it/s]2026-10-06 19:05:31,407 - INFO - Successfully downloaded: Caracteristicas y composicion del hogar Actualizada.zip
+Downloading files:  67%|██████████████████████████████████████████████████████████████████████████████▋                                       | 2/3 [00:00&lt;00:00,  2.81it/s]2026-10-06 19:05:31,706 - INFO - Successfully downloaded: Datos de la vivienda Actualizada.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:01&lt;00:00,  3.00it/s]
+2026-10-06 19:05:31,709 - INFO - Processing (depth 0): Servicios del hogar Actualizada.zip
+2026-10-06 19:05:31,728 - INFO - Extracted: ae52f600_Servicios del hogar Actualizada.sav
+2026-10-06 19:05:31,731 - INFO - Processing (depth 0): Caracteristicas y composicion del hogar Actualizada.zip
+2026-10-06 19:05:31,755 - INFO - Extracted: b7d33b2c_Caracteristicas y composicion del hogar Actualizada.sav
+2026-10-06 19:05:31,757 - INFO - Processing (depth 0): Datos de la vivienda Actualizada.zip
+2026-10-06 19:05:31,771 - INFO - Extracted: 11f2b128_Datos de la vivienda Actualizada.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:00&lt;00:00, 18.39it/s]
+2026-10-06 19:05:31,937 - INFO - Successfully processed 3/3 files
+2026-10-06 19:05:31,938 - INFO - Deleted zip file after extraction: data/ECV/ECV_2017\Servicios del hogar Actualizada.zip
+2026-10-06 19:05:31,939 - INFO - Deleted zip file after extraction: data/ECV/ECV_2017\Caracteristicas y composicion del hogar Actualizada.zip
+2026-10-06 19:05:31,939 - INFO - Deleted zip file after extraction: data/ECV/ECV_2017\Datos de la vivienda Actualizada.zip
+2026-10-06 19:05:31,940 - INFO - Extraction completed successfully.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; Vivienda 2017: 8501 viviendas, columnas: ['DIRECTORIO', 'YEAR', 'CLASE', 'P4005', 'P4015', 'P8520S1', 'P8520S3', 'P8520S4', 'P8520S5', 'CANT_HOGARES_VIVIENDA']
+  -&gt; Household 2017: 8612 households, columns: ['DIRECTORIO', 'YEAR', 'CANT_PERSONAS_HOGAR', 'P5010', 'P8526', 'P8530', 'P764']
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-expansion-factors">
+<h2>4. Extract expansion factors<a class="headerlink" href="#extract-expansion-factors" title="Link to this heading">#</a></h2>
+<p>Survey expansion factors are needed to produce population-level estimates from the sampled households. For each available year, this step searches for the file whose name identifies expansion factors based on the 2018 National Population and Housing Census (<strong>CNPV 2018</strong>).</p>
+<p>Only <code class="docutils literal notranslate"><span class="pre">DIRECTORIO</span></code> and <code class="docutils literal notranslate"><span class="pre">FEX_C_2018</span></code> are retained, with one expansion-factor record per directory identifier. If the expected file or columns are unavailable for a year, the exception is reported and the workflow continues with the remaining years.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs_fex_by_year</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">ecv_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="mi">2010</span> <span class="o">&lt;=</span> <span class="n">year</span> <span class="o">&lt;=</span> <span class="mi">2018</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: Extracting of Expansion Factors..."</span><span class="p">)</span>
+        <span class="n">key_words_fex_2018</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s2">"(?i)factores[\s_]+de[\s_]+expansi[oó]n[\s_]+(?:20)?[0-9]</span><span class="si">{2}</span><span class="s2">[\s_]+basados[\s_]+en[\s_]+el[\s_]+CNPV[\s_]+2018"</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">extractor_fex_2018</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span>
+            <span class="n">input_path</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">'.sav'</span><span class="p">,</span> <span class="s1">'.zip'</span><span class="p">],</span>
+            <span class="n">sep</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+            <span class="n">output_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"data/ECV/ECV_FEX_2018_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">key_words</span><span class="o">=</span><span class="n">key_words_fex_2018</span><span class="p">,</span>
+            <span class="n">delete_zip_after</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df_extracted_fex_2018</span> <span class="o">=</span> <span class="n">extractor_fex_2018</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">df_extracted_fex_2018</span><span class="p">:</span>
+                <span class="n">df_fex</span> <span class="o">=</span> <span class="n">df_extracted_fex_2018</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">df_fex</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df_fex</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">df_fex</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_fex</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="s1">'DIRECTORIO'</span> <span class="ow">in</span> <span class="n">df_fex</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'FEX_C_2018'</span> <span class="ow">in</span> <span class="n">df_fex</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="n">df_fex</span> <span class="o">=</span> <span class="n">df_fex</span><span class="p">[[</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> <span class="s1">'FEX_C_2018'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'DIRECTORIO'</span><span class="p">])</span>
+                    <span class="n">dfs_fex_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_fex</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; FEX </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_fex</span><span class="p">)</span><span class="si">}</span><span class="s2"> registers"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Skipping year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> for FEX_C_2018 extraction: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:52,447 - INFO - ----------------------
+2026-10-06 19:05:52,448 - INFO - Starting data extraction...
+2026-10-06 19:05:52,448 - INFO - Extracting data in online mode...
+2026-10-06 19:05:52,448 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2010: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:54,425 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata
+2026-10-06 19:05:54,427 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2010
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:05:54,715 - INFO - Successfully downloaded: Factores de expansion 2010 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.47it/s]
+2026-10-06 19:05:54,717 - INFO - Processing (depth 0): Factores de expansion 2010 basados en el CNPV 2018.zip
+2026-10-06 19:05:54,730 - INFO - Extracted: 04ae90c2_FACTORES_ECV_2010_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 39.94it/s]
+2026-10-06 19:05:54,758 - INFO - Successfully processed 1/1 files
+2026-10-06 19:05:54,759 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2010\Factores de expansion 2010 basados en el CNPV 2018.zip
+2026-10-06 19:05:54,759 - INFO - Extraction completed successfully.
+2026-10-06 19:05:54,763 - INFO - ----------------------
+2026-10-06 19:05:54,763 - INFO - Starting data extraction...
+2026-10-06 19:05:54,764 - INFO - Extracting data in online mode...
+2026-10-06 19:05:54,764 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2010: 14268 registers
+
+2011: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:05:56,673 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata
+2026-10-06 19:05:56,676 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2011
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:12,074 - INFO - Successfully downloaded: Factores de expansion 2011 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:15&lt;00:00, 15.40s/it]
+2026-10-06 19:06:12,077 - INFO - Processing (depth 0): Factores de expansion 2011 basados en el CNPV 2018.zip
+2026-10-06 19:06:12,092 - INFO - Extracted: 6bcca20b_FACTORES_ECV_2011_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 21.49it/s]
+2026-10-06 19:06:12,141 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:12,141 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2011\Factores de expansion 2011 basados en el CNPV 2018.zip
+2026-10-06 19:06:12,142 - INFO - Extraction completed successfully.
+2026-10-06 19:06:12,144 - INFO - ----------------------
+2026-10-06 19:06:12,146 - INFO - Starting data extraction...
+2026-10-06 19:06:12,146 - INFO - Extracting data in online mode...
+2026-10-06 19:06:12,147 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2011: 24557 registers
+
+2012: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:06:14,153 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata
+2026-10-06 19:06:14,156 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2012
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:14,455 - INFO - Successfully downloaded: Factores de expansion 2012 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.34it/s]
+2026-10-06 19:06:14,458 - INFO - Processing (depth 0): Factores de expansion 2012 basados en el CNPV 2018.zip
+2026-10-06 19:06:14,470 - INFO - Extracted: 503c3c88_FACTORES_ECV_2012_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 29.83it/s]
+2026-10-06 19:06:14,507 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:14,507 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2012\Factores de expansion 2012 basados en el CNPV 2018.zip
+2026-10-06 19:06:14,508 - INFO - Extraction completed successfully.
+2026-10-06 19:06:14,510 - INFO - ----------------------
+2026-10-06 19:06:14,510 - INFO - Starting data extraction...
+2026-10-06 19:06:14,510 - INFO - Extracting data in online mode...
+2026-10-06 19:06:14,511 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2012: 20698 registers
+
+2013: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:06:16,479 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata
+2026-10-06 19:06:16,481 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2013
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:23,857 - INFO - Successfully downloaded: Factores de expansion 2013 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:07&lt;00:00,  7.38s/it]
+2026-10-06 19:06:23,859 - INFO - Processing (depth 0): Factores de expansion 2013 basados en el CNPV 2018.zip
+2026-10-06 19:06:23,874 - INFO - Extracted: 5b6ab827_FACTORES_ECV_2013_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 27.00it/s]
+2026-10-06 19:06:23,914 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:23,915 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2013\Factores de expansion 2013 basados en el CNPV 2018.zip
+2026-10-06 19:06:23,915 - INFO - Extraction completed successfully.
+2026-10-06 19:06:23,917 - INFO - ----------------------
+2026-10-06 19:06:23,917 - INFO - Starting data extraction...
+2026-10-06 19:06:23,918 - INFO - Extracting data in online mode...
+2026-10-06 19:06:23,918 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2013: 20878 registers
+
+2014: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:06:25,872 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata
+2026-10-06 19:06:25,874 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2014
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:26,189 - INFO - Successfully downloaded: Factores de expansion 2014 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.17it/s]
+2026-10-06 19:06:26,192 - INFO - Processing (depth 0): Factores de expansion 2014 basados en el CNPV 2018.zip
+2026-10-06 19:06:26,204 - INFO - Extracted: 357529ea_FACTORES_ECV_2014_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 30.29it/s]
+2026-10-06 19:06:26,239 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:26,239 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2014\Factores de expansion 2014 basados en el CNPV 2018.zip
+2026-10-06 19:06:26,240 - INFO - Extraction completed successfully.
+2026-10-06 19:06:26,242 - INFO - ----------------------
+2026-10-06 19:06:26,242 - INFO - Starting data extraction...
+2026-10-06 19:06:26,243 - INFO - Extracting data in online mode...
+2026-10-06 19:06:26,243 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2014: 19710 registers
+
+2015: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:06:28,188 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata
+2026-10-06 19:06:28,190 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2015
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:28,488 - INFO - Successfully downloaded: Factores de expansion 2015 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.35it/s]
+2026-10-06 19:06:28,490 - INFO - Processing (depth 0): Factores de expansion 2015 basados en el CNPV 2018.zip
+2026-10-06 19:06:28,504 - INFO - Extracted: 7ec06075_FACTORES_ECV_2015_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 27.38it/s]
+2026-10-06 19:06:28,542 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:28,543 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2015\Factores de expansion 2015 basados en el CNPV 2018.zip
+2026-10-06 19:06:28,544 - INFO - Extraction completed successfully.
+2026-10-06 19:06:28,546 - INFO - ----------------------
+2026-10-06 19:06:28,546 - INFO - Starting data extraction...
+2026-10-06 19:06:28,547 - INFO - Extracting data in online mode...
+2026-10-06 19:06:28,547 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2015: 22524 registers
+
+2016: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:06:30,494 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata
+2026-10-06 19:06:30,497 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2016
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:30,813 - INFO - Successfully downloaded: Factores de expansion 2016 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.15it/s]
+2026-10-06 19:06:30,815 - INFO - Processing (depth 0): Factores de expansion 2016 basados en el CNPV 2018.zip
+2026-10-06 19:06:30,830 - INFO - Extracted: 4dd14e7d_FACTORES_ECV_2016_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 27.76it/s]
+2026-10-06 19:06:30,868 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:30,869 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2016\Factores de expansion 2016 basados en el CNPV 2018.zip
+2026-10-06 19:06:30,869 - INFO - Extraction completed successfully.
+2026-10-06 19:06:30,871 - INFO - ----------------------
+2026-10-06 19:06:30,872 - INFO - Starting data extraction...
+2026-10-06 19:06:30,872 - INFO - Extracting data in online mode...
+2026-10-06 19:06:30,872 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2016: 22454 registers
+
+2017: Extrayendo factores de expansion...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:06:32,781 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata
+2026-10-06 19:06:32,783 - INFO - Downloading files to: data/ECV/ECV_FEX_2018_2017
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:06:33,060 - INFO - Successfully downloaded: Factores de expansion 2017 basados en el CNPV 2018.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.60it/s]
+2026-10-06 19:06:33,063 - INFO - Processing (depth 0): Factores de expansion 2017 basados en el CNPV 2018.zip
+2026-10-06 19:06:33,073 - INFO - Extracted: 081be155_FACTORES_ECV_2017_CNPV2018.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 58.77it/s]
+2026-10-06 19:06:33,092 - INFO - Successfully processed 1/1 files
+2026-10-06 19:06:33,092 - INFO - Deleted zip file after extraction: data/ECV/ECV_FEX_2018_2017\Factores de expansion 2017 basados en el CNPV 2018.zip
+2026-10-06 19:06:33,093 - INFO - Extraction completed successfully.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; FEX 2017: 8501 registers
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-municipality-identifiers">
+<h2>5. Extract municipality identifiers<a class="headerlink" href="#extract-municipality-identifiers" title="Link to this heading">#</a></h2>
+<p>Some annual housing tables do not contain the municipality identifier directly. This step retrieves the ECV file describing the municipality where the survey was administered and retains the <code class="docutils literal notranslate"><span class="pre">DIRECTORIO</span></code>–<code class="docutils literal notranslate"><span class="pre">P1_MUNICIPIO</span></code> mapping. Duplicate directory identifiers are removed before the mapping is stored by year.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs_mpio_by_year</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">ecv_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: Extrancting Municipalities..."</span><span class="p">)</span>
+    <span class="n">extractor_mpio</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span>
+        <span class="n">input_path</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">'.sav'</span><span class="p">,</span> <span class="s1">'.zip'</span><span class="p">],</span>
+        <span class="n">sep</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"data/ECV/ECV_MPIO_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">key_words</span><span class="o">=</span><span class="p">[</span>
+            <span class="sa">r</span><span class="s2">"(?i)municipio[\s_]+de[\s_]+aplicaci[oó]n[\s_]+de[\s_]+la[\s_]+encuesta[\s_]+(?:20)?[0-9]</span><span class="si">{2}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">delete_zip_after</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">df_extracted_mpio</span> <span class="o">=</span> <span class="n">extractor_mpio</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">df_extracted_mpio</span><span class="p">:</span>
+            <span class="n">df_mpio</span> <span class="o">=</span> <span class="n">df_extracted_mpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">df_mpio</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df_mpio</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">df_mpio</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_mpio</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="s1">'DIRECTORIO'</span> <span class="ow">in</span> <span class="n">df_mpio</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'P1_MUNICIPIO'</span> <span class="ow">in</span> <span class="n">df_mpio</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df_mpio</span> <span class="o">=</span> <span class="n">df_mpio</span><span class="p">[[</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> <span class="s1">'P1_MUNICIPIO'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'DIRECTORIO'</span><span class="p">])</span>
+                <span class="n">dfs_mpio_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_mpio</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Municipalities </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_mpio</span><span class="p">)</span><span class="si">}</span><span class="s2"> registers"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Skipping year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> for municipio extraction: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:02,357 - INFO - ----------------------
+2026-10-06 19:08:02,357 - INFO - Starting data extraction...
+2026-10-06 19:08:02,357 - INFO - Extracting data in online mode...
+2026-10-06 19:08:02,358 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2010: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:04,435 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata
+2026-10-06 19:08:04,437 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:04,437 - INFO - Extraction completed successfully.
+2026-10-06 19:08:04,437 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:04,438 - INFO - ----------------------
+2026-10-06 19:08:04,438 - INFO - Starting data extraction...
+2026-10-06 19:08:04,439 - INFO - Extracting data in online mode...
+2026-10-06 19:08:04,439 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2011: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:06,401 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/196/get-microdata
+2026-10-06 19:08:06,402 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:06,402 - INFO - Extraction completed successfully.
+2026-10-06 19:08:06,402 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:06,404 - INFO - ----------------------
+2026-10-06 19:08:06,404 - INFO - Starting data extraction...
+2026-10-06 19:08:06,404 - INFO - Extracting data in online mode...
+2026-10-06 19:08:06,404 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2012: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:08,347 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/124/get-microdata
+2026-10-06 19:08:08,348 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:08,348 - INFO - Extraction completed successfully.
+2026-10-06 19:08:08,349 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:08,349 - INFO - ----------------------
+2026-10-06 19:08:08,350 - INFO - Starting data extraction...
+2026-10-06 19:08:08,350 - INFO - Extracting data in online mode...
+2026-10-06 19:08:08,350 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2013: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:10,243 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/213/get-microdata
+2026-10-06 19:08:10,244 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:10,244 - INFO - Extraction completed successfully.
+2026-10-06 19:08:10,245 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:10,245 - INFO - ----------------------
+2026-10-06 19:08:10,246 - INFO - Starting data extraction...
+2026-10-06 19:08:10,246 - INFO - Extracting data in online mode...
+2026-10-06 19:08:10,246 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2014: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:12,195 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/342/get-microdata
+2026-10-06 19:08:12,197 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:12,197 - INFO - Extraction completed successfully.
+2026-10-06 19:08:12,197 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:12,198 - INFO - ----------------------
+2026-10-06 19:08:12,199 - INFO - Starting data extraction...
+2026-10-06 19:08:12,199 - INFO - Extracting data in online mode...
+2026-10-06 19:08:12,199 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2015: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:14,160 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/419/get-microdata
+2026-10-06 19:08:14,162 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:14,162 - INFO - Extraction completed successfully.
+2026-10-06 19:08:14,162 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:14,163 - INFO - ----------------------
+2026-10-06 19:08:14,164 - INFO - Starting data extraction...
+2026-10-06 19:08:14,164 - INFO - Extracting data in online mode...
+2026-10-06 19:08:14,164 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2016: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:16,151 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/456/get-microdata
+2026-10-06 19:08:16,152 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:16,153 - INFO - Extraction completed successfully.
+2026-10-06 19:08:16,153 - WARNING - No data was extracted. The extraction process returned an empty result.
+2026-10-06 19:08:16,154 - INFO - ----------------------
+2026-10-06 19:08:16,154 - INFO - Starting data extraction...
+2026-10-06 19:08:16,155 - INFO - Extracting data in online mode...
+2026-10-06 19:08:16,155 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2017: Extrancting Municipalities...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:08:18,146 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/544/get-microdata
+2026-10-06 19:08:18,147 - WARNING - No downloadable files found matching criteria. Returning empty extraction.
+2026-10-06 19:08:18,147 - INFO - Extraction completed successfully.
+2026-10-06 19:08:18,147 - WARNING - No data was extracted. The extraction process returned an empty result.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-additional-2010-identification-fields">
+<h2>6. Extract additional 2010 identification fields<a class="headerlink" href="#extract-additional-2010-identification-fields" title="Link to this heading">#</a></h2>
+<p>The 2010 ECV archive requires an additional extraction because its identification fields are distributed differently from those in later editions. The configured identification file is retrieved separately, and its column names are standardized so that department, area class, and region can be incorporated during consolidation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs_2010_id</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">ecv_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="mi">2010</span> <span class="o">==</span> <span class="n">year</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: Extracting &lt;&lt;identificacion-final&gt;&gt;..."</span><span class="p">)</span>
+        <span class="n">key_words_2010_id</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Datos de idenrificacion-final"</span><span class="p">]</span>
+        <span class="n">extractor_2010_id</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span>
+            <span class="n">input_path</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">'.sav'</span><span class="p">,</span> <span class="s1">'.zip'</span><span class="p">],</span>
+            <span class="n">sep</span><span class="o">=</span><span class="s1">' '</span><span class="p">,</span>
+            <span class="n">output_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"data/ECV/ECV_2010_ID_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">key_words</span><span class="o">=</span><span class="n">key_words_2010_id</span><span class="p">,</span>
+            <span class="n">delete_zip_after</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dfs_2010_id</span> <span class="o">=</span> <span class="n">extractor_2010_id</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs_2010_id</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Skipping year </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2"> for 2010_ID extraction: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:09:05,268 - INFO - ----------------------
+2026-10-06 19:09:05,269 - INFO - Starting data extraction...
+2026-10-06 19:09:05,269 - INFO - Extracting data in online mode...
+2026-10-06 19:09:05,270 - INFO - Scraping URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata with depth 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2010: Extracting &lt;&lt;identificacion-final&gt;&gt;...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:09:07,269 - INFO - Spider completed successfully for URL: https://microdatos.dane.gov.co/index.php/catalog/201/get-microdata
+2026-10-06 19:09:07,272 - INFO - Downloading files to: data/ECV/ECV_2010_ID_2010
+Downloading files:   0%|                                                                                                                              | 0/1 [00:00&lt;?, ?it/s]2026-10-06 19:09:07,561 - INFO - Successfully downloaded: Datos de idenrificacion-final.zip
+Downloading files: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  3.44it/s]
+2026-10-06 19:09:07,564 - INFO - Processing (depth 0): Datos de idenrificacion-final.zip
+2026-10-06 19:09:07,579 - INFO - Extracted: 5fcda8a9_Datos de idenrificación-final_Dbfp_encv_545_1.sav
+Processing files: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00, 57.12it/s]
+2026-10-06 19:09:07,599 - INFO - Successfully processed 1/1 files
+2026-10-06 19:09:07,599 - INFO - Deleted zip file after extraction: data/ECV/ECV_2010_ID_2010\Datos de idenrificacion-final.zip
+2026-10-06 19:09:07,600 - INFO - Extraction completed successfully.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="consolidate-the-annual-datasets">
+<h2>7. Consolidate the annual datasets<a class="headerlink" href="#consolidate-the-annual-datasets" title="Link to this heading">#</a></h2>
+<p>For each year, merge the expansion factor into the household table using <code class="docutils literal notranslate"><span class="pre">DIRECTORIO</span></code>. When the municipality is absent from the housing table, add it from the annual municipality mapping. For 2010, use the separately extracted identification table to complete <code class="docutils literal notranslate"><span class="pre">P1_DEPARTAMENTO</span></code>, <code class="docutils literal notranslate"><span class="pre">CLASE</span></code>, and <code class="docutils literal notranslate"><span class="pre">REGION</span></code> where those fields are available.</p>
+<p>All merges in this step preserve the housing or household records already assembled for the year and add only the supporting fields needed for the final annual files.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">ecv_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Processing </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+        
+        <span class="c1"># Merge with expansion factor (only in df_hogar)</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">dfs_hogar_by_year</span> <span class="ow">and</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">dfs_fex_by_year</span><span class="p">:</span>
+            <span class="n">df_hogar</span> <span class="o">=</span> <span class="n">dfs_hogar_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span>
+            <span class="n">df_fex</span> <span class="o">=</span> <span class="n">dfs_fex_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span>
+            
+            <span class="n">df_hogar</span> <span class="o">=</span> <span class="n">df_hogar</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_fex</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+            <span class="n">dfs_hogar_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_hogar</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Merge FEX_C_2018 finished in df_hogar"</span><span class="p">)</span>
+        
+        <span class="c1"># Merge with municipality</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">dfs_vivienda_by_year</span> <span class="ow">and</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">dfs_mpio_by_year</span><span class="p">:</span>
+            <span class="n">df_vivienda</span> <span class="o">=</span> <span class="n">dfs_vivienda_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span>
+            <span class="n">df_mpio</span> <span class="o">=</span> <span class="n">dfs_mpio_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="s1">'P1_MUNICIPIO'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">df_vivienda</span><span class="p">[</span><span class="s1">'P1_MUNICIPIO'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="n">df_vivienda</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_mpio</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+                <span class="n">dfs_vivienda_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_vivienda</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Merge P1_MUNICIPIO finished"</span><span class="p">)</span>
+        
+        <span class="c1"># Merge with identification 2010</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="o">==</span> <span class="mi">2010</span> <span class="ow">and</span> <span class="n">dfs_2010_id</span><span class="p">:</span>
+            <span class="n">df_2010_id</span> <span class="o">=</span> <span class="n">dfs_2010_id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="s1">'P3'</span> <span class="ow">in</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'CLASE'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df_2010_id</span> <span class="o">=</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'P3'</span><span class="p">:</span> <span class="s1">'CLASE'</span><span class="p">})</span>
+            
+            <span class="n">rename_map</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="s1">'P1_DEPARTAMENTO'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">'DEPARTAMENTO'</span> <span class="ow">in</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">rename_map</span><span class="p">[</span><span class="s1">'DEPARTAMENTO'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'P1_DEPARTAMENTO'</span>
+            <span class="k">if</span> <span class="n">rename_map</span><span class="p">:</span>
+                <span class="n">df_2010_id</span> <span class="o">=</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">rename_map</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="s1">'DIRECTORIO'</span> <span class="ow">in</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df_2010_id</span> <span class="o">=</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'DIRECTORIO'</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s1">'first'</span><span class="p">)</span>
+                
+                <span class="n">cols_to_merge</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'DIRECTORIO'</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'P1_DEPARTAMENTO'</span><span class="p">,</span> <span class="s1">'CLASE'</span><span class="p">,</span> <span class="s1">'REGION'</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_2010_id</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">cols_to_merge</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols_to_merge</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">dfs_vivienda_by_year</span><span class="p">:</span>
+                    <span class="n">df_vivienda</span> <span class="o">=</span> <span class="n">dfs_vivienda_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span>
+                    
+                    <span class="n">df_vivienda</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                        <span class="n">df_2010_id</span><span class="p">[</span><span class="n">cols_to_merge</span><span class="p">],</span> 
+                        <span class="n">on</span><span class="o">=</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span> 
+                        <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span> 
+                        <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="s1">'_2010'</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    
+                    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'P1_DEPARTAMENTO'</span><span class="p">,</span> <span class="s1">'CLASE'</span><span class="p">,</span> <span class="s1">'REGION'</span><span class="p">]:</span>
+                        <span class="n">col_2010</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">_2010'</span>
+                        <span class="k">if</span> <span class="n">col_2010</span> <span class="ow">in</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                                <span class="n">df_vivienda</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">df_vivienda</span><span class="p">[</span><span class="n">col_2010</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">df_vivienda</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="p">[</span><span class="n">col_2010</span><span class="p">]</span>
+                            <span class="n">df_vivienda</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">col_2010</span><span class="p">])</span>
+                    
+                    <span class="n">dfs_vivienda_by_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_vivienda</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; Merge identificacion 2010 finished"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing 2010...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+  -&gt; Merge identificacion 2010 finished
+
+Processing 2011...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+
+Processing 2012...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+
+Processing 2013...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+
+Processing 2014...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+
+Processing 2015...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+
+Processing 2016...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+
+Processing 2017...
+  -&gt; Merge FEX_C_2018 finished in df_hogar
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="save-the-annual-csv-files">
+<h2>8. Save the annual CSV files<a class="headerlink" href="#save-the-annual-csv-files" title="Link to this heading">#</a></h2>
+<p>Create a unique run directory under <code class="docutils literal notranslate"><span class="pre">data/dfs</span></code> so that a new execution does not overwrite previous results. Housing and household tables are combined with an outer merge on <code class="docutils literal notranslate"><span class="pre">DIRECTORIO</span></code>, the duplicated year fields are reconciled, and numeric columns are converted to appropriate pandas numeric types.</p>
+<p>One file named <code class="docutils literal notranslate"><span class="pre">df_ecv_&lt;year&gt;.csv</span></code> is written for each successfully processed year. After the outputs are saved, the temporary ECV download directory is removed with <code class="docutils literal notranslate"><span class="pre">s4h_delete_download_folder</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/dfs"</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"run_</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+<span class="n">run_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_dtypes</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">converted</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">'coerce'</span><span class="p">)</span>
+        <span class="n">non_null</span> <span class="o">=</span> <span class="n">converted</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_null</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">non_null</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">converted</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"Int64"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">converted</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+<span class="n">years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">dfs_vivienda_by_year</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">dfs_hogar_by_year</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+    <span class="n">df_vivienda</span> <span class="o">=</span> <span class="n">dfs_vivienda_by_year</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">df_hogar</span> <span class="o">=</span> <span class="n">dfs_hogar_by_year</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">df_vivienda</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">df_hogar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df_joined</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">df_hogar</span><span class="p">,</span>
+            <span class="n">on</span><span class="o">=</span><span class="s1">'DIRECTORIO'</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s1">'outer'</span><span class="p">,</span>
+            <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">'_vivienda'</span><span class="p">,</span> <span class="s1">'_hogar'</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">'YEAR_vivienda'</span> <span class="ow">in</span> <span class="n">df_joined</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df_joined</span> <span class="o">=</span> <span class="n">df_joined</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'YEAR_vivienda'</span><span class="p">:</span> <span class="s1">'YEAR'</span><span class="p">})</span>
+        <span class="k">if</span> <span class="s1">'YEAR_hogar'</span> <span class="ow">in</span> <span class="n">df_joined</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">'YEAR'</span> <span class="ow">in</span> <span class="n">df_joined</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df_joined</span><span class="p">[</span><span class="s1">'YEAR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_joined</span><span class="p">[</span><span class="s1">'YEAR'</span><span class="p">]</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">df_joined</span><span class="p">[</span><span class="s1">'YEAR_hogar'</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df_joined</span> <span class="o">=</span> <span class="n">df_joined</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'YEAR_hogar'</span><span class="p">:</span> <span class="s1">'YEAR'</span><span class="p">})</span>
+            <span class="n">df_joined</span> <span class="o">=</span> <span class="n">df_joined</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'YEAR_hogar'</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">df_vivienda</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df_joined</span> <span class="o">=</span> <span class="n">df_vivienda</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">df_hogar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df_joined</span> <span class="o">=</span> <span class="n">df_hogar</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+    <span class="n">df_joined</span> <span class="o">=</span> <span class="n">convert_dtypes</span><span class="p">(</span><span class="n">df_joined</span><span class="p">)</span>
+
+    <span class="n">output_file</span> <span class="o">=</span> <span class="n">run_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"df_ecv_</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.csv"</span>
+    <span class="n">df_joined</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_joined</span><span class="p">)</span><span class="si">}</span><span class="s2"> filas guardadas en </span><span class="si">{</span><span class="n">output_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Process completed. Files available at: </span><span class="si">{</span><span class="n">run_dir</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">extractor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">extractor</span><span class="o">.</span><span class="n">s4h_delete_download_folder</span><span class="p">(</span><span class="n">folder_path</span><span class="o">=</span><span class="s2">"data/ECV"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; 2010: 14801 filas guardadas en df_ecv_2010.csv
+  -&gt; 2011: 25364 filas guardadas en df_ecv_2011.csv
+  -&gt; 2012: 21383 filas guardadas en df_ecv_2012.csv
+  -&gt; 2013: 21565 filas guardadas en df_ecv_2013.csv
+  -&gt; 2014: 20141 filas guardadas en df_ecv_2014.csv
+  -&gt; 2015: 23005 filas guardadas en df_ecv_2015.csv
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 19:13:34,977 - INFO - Deleting folder: data\ECV
+2026-10-06 19:13:34,996 - INFO - Folder deleted successfully
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  -&gt; 2016: 22893 filas guardadas en df_ecv_2016.csv
+  -&gt; 2017: 8612 filas guardadas en df_ecv_2017.csv
+
+Process completed. Files available at: data\dfs\run_78ce89c5
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="output-and-scope">
+<h2>Output and scope<a class="headerlink" href="#output-and-scope" title="Link to this heading">#</a></h2>
+<p>The generated annual CSV files provide the prepared housing and household inputs for downstream housing-deficit calculations. This notebook does not calculate the housing deficit, construct the vulnerability indicator, or reproduce analytical results from the unpublished manuscript.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-environment">Setting up the environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-libraries">1. Import libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-the-ecv-data">2. Configure the ECV data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-housing-and-household-data-by-year">3. Extract housing and household data by year</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-expansion-factors">4. Extract expansion factors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-municipality-identifiers">5. Extract municipality identifiers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-additional-2010-identification-fields">6. Extract additional 2010 identification fields</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consolidate-the-annual-datasets">7. Consolidate the annual datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#save-the-annual-csv-files">8. Save the annual CSV files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-and-scope">Output and scope</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/example_housing_deficit.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

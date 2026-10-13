@@ -12,24 +12,20 @@ from glob import glob
 
 here = path.abspath(path.dirname(__file__))
 
-# Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-# Optionally append the changelog to the long description so PyPI shows it
 changelog_path = path.join(here, 'CHANGELOG.md')
 try:
     with open(changelog_path, encoding='utf-8') as f:
         changelog = f.read()
-    # Separate README and changelog with a horizontal rule for readability
     long_description = long_description + "\n\n---\n\n" + changelog
 except FileNotFoundError:
-    # If changelog is missing, continue without it
     changelog = None
 
 setup( 
     name='socio4health',
-    version='1.0.11',
+    version='1.0.12',
     description='Socio4health is a Python package for gathering and consolidating socio-demographic data.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -53,9 +49,9 @@ setup(
     packages=['socio4health', 'socio4health.enums', 'socio4health.utils'],
     python_requires='>=3.10, <4',
 
-    # DEPENDENCIAS ESENCIALES - Solo lo mínimo para que funcione el ETL básico
+    # Mandatory Dependencies
     install_requires=[
-        "pandas>=2.0.0",
+        "pandas>=2.0.0,<3.0.0",
         "requests>=2.31.0",
         "tqdm>=4.66.1",
         "pyreadstat>=1.2.6",
@@ -68,11 +64,11 @@ setup(
         "dask>=2023.0.0"
     ],
 
-    # DEPENDENCIAS OPCIONALES - Organizadas por funcionalidad
+    # Optional Dependencies
     extras_require={
         # Scraping web
         'scraping': [
-            'Scrapy==2.11.1',
+            'Scrapy==2.14.1',
         ],
         
         # Machine Learning y NLP
@@ -85,7 +81,7 @@ setup(
             'sacremoses>=0.1.1'
         ],
         
-        # Análisis geoespacial
+        # Geoespatial Analysis
         'geo': [
             'geopandas>=0.14.0',
         ],
@@ -93,19 +89,7 @@ setup(
         # ALL
         'all': [
             'socio4health[scraping,ml,geo]',
-        ],
-        
-        # Desarrollo y testing
-        'dev': [
-            'check-manifest',
-            'pytest',
-            'black',
-            'flake8',
-        ],
-        'test': [
-            'coverage',
-            'pytest-cov',
-        ],
+        ]
     },
 
     package_data={

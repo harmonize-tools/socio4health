@@ -1,0 +1,1716 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hands-on with socio4health: effects of hydrometeorologigcal hazards and urbanization on dengue risk in Brazil &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/example_brazil';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia" href="example_colombia.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../API_reference.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.html">socio4health.Extractor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.extractor.s4h_get_default_data_dir.html">socio4health.extractor.s4h_get_default_data_dir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.s4h_extract.html">socio4health.Extractor.s4h_extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Extractor.s4h_delete_download_folder.html">socio4health.Extractor.s4h_delete_download_folder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.html">socio4health.Harmonizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_vertical_merge.html">socio4health.Harmonizer.s4h_vertical_merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_drop_nan_columns.html">socio4health.Harmonizer.s4h_drop_nan_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_get_available_columns.html">socio4health.Harmonizer.s4h_get_available_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_harmonize_dataframes.html">socio4health.Harmonizer.s4h_harmonize_dataframes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_data_selector.html">socio4health.Harmonizer.s4h_data_selector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_compare_with_dict.html">socio4health.Harmonizer.s4h_compare_with_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.Harmonizer.s4h_join_data.html">socio4health.Harmonizer.s4h_join_data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.compressed2files.html">socio4health.utils.extractor_utils.compressed2files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.download_request.html">socio4health.utils.extractor_utils.download_request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.s4h_parse_fwf_dict.html">socio4health.utils.extractor_utils.s4h_parse_fwf_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.extractor_utils.run_standard_spider.html">socio4health.utils.extractor_utils.run_standard_spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_classify_rows.html">socio4health.utils.harmonizer_utils.s4h_classify_rows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_get_classifier.html">socio4health.utils.harmonizer_utils.s4h_get_classifier</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_standardize_dict.html">socio4health.utils.harmonizer_utils.s4h_standardize_dict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.harmonizer_utils.s4h_translate_column.html">socio4health.utils.harmonizer_utils.s4h_translate_column</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.html">socio4health.utils.standard_spider.StandardSpider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.parse.html">socio4health.utils.standard_spider.StandardSpider.parse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.utils.standard_spider.StandardSpider.parse_item.html">socio4health.utils.standard_spider.StandardSpider.parse_item</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.html">socio4health.enums.data_info_enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.BraColspecsEnum.html">socio4health.enums.data_info_enum.BraColspecsEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.CountryEnum.html">socio4health.enums.data_info_enum.CountryEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.data_info_enum.NameEnum.html">socio4health.enums.data_info_enum.NameEnum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../socio4health.enums.dict_enum.ColumnMappingEnum.html">socio4health.enums.dict_enum.ColumnMappingEnum</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../user_interface.html">How to use socio4health GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extractor.html">Extraction of Colombia, Brazil and Peru online data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harmonization.html">Harmonization of data (Brazil)</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../dictionary.html">How to create a raw dictionary for data harmonization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="example_colombia.html">Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Hands-on with socio4health: effects of hydrometeorological hazards and urbanization on dengue risk in Brazil</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Hands-on with socio4health: effects of hydrometeorologigcal hazards and urbanization on dengue risk in Brazil</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <img src="https://raw.githubusercontent.com/harmonize-tools/socio4health/main/docs/source/_static/image.png" alt="image info" height="100" width="100"/>
+<section id="hands-on-with-socio4health-effects-of-hydrometeorologigcal-hazards-and-urbanization-on-dengue-risk-in-brazil">
+<h1>Hands-on with socio4health: effects of hydrometeorologigcal hazards and urbanization on dengue risk in Brazil<a class="headerlink" href="#hands-on-with-socio4health-effects-of-hydrometeorologigcal-hazards-and-urbanization-on-dengue-risk-in-brazil" title="Link to this heading">#</a></h1>
+<p><strong>Run the tutorial via free cloud platforms:</strong>  <a class="reference external" href="https://mybinder.org/v2/gh/harmonize-tools/socio4health/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Fsource%2Fnotebooks%2Fexample_brazil.ipynb"><img alt="Binder" src="https://mybinder.org/badge_logo.svg" /></a> <a target="_blank" href="https://colab.research.google.com/github/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_brazil.ipynb">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a></p>
+<p>This notebook provides a real-world example of how to use <strong>socio4health</strong> to <strong>retrieve</strong>, <strong>harmonize</strong> and <strong>analyze</strong> <strong>socioeconomic and demographic</strong>  variables, such as the level of urbanization and access to water supply in Brazil, to recreate the dataset used in the publication <em>Combined effects of hydrometeorological hazards and urbanisation on dengue risk in Brazil: a spatiotemporal modelling study</em> by Lowe et al., published in <em>The Lancet Planetary Health</em> in 2021 (<a class="reference external" href="https://doi.org/10.1016/S2542-5196(20)30292-8">DOI</a>). The study evaluated how the association between hydrometeorological events and <strong>dengue</strong> risk varies with these variables. This tutorial assumes an <strong>intermediate</strong> or <strong>advanced</strong> understanding of <strong>Python</strong> and data manipulation.</p>
+<section id="setting-up-the-environment">
+<h2>Setting up the environment<a class="headerlink" href="#setting-up-the-environment" title="Link to this heading">#</a></h2>
+<p>To run this notebook, you need to have the following prerequisites:</p>
+<ul class="simple">
+<li><p><strong>Python 3.10+</strong></p></li>
+</ul>
+<p>Additionally, you need to install the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> and <code class="docutils literal notranslate"><span class="pre">pandas</span></code> package, which can be done using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>socio4health<span class="w"> </span>pandas<span class="w"> </span>-q
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="import-libraries">
+<h2>Import Libraries<a class="headerlink" href="#import-libraries" title="Link to this heading">#</a></h2>
+<p>To perform the data extraction, the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> library provides the <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class for data extraction, and the <code class="docutils literal notranslate"><span class="pre">Harmonizer</span></code> class for data harmonization of the retrieved date. <code class="docutils literal notranslate"><span class="pre">pandas</span></code> will be used for data manipulation. Additionally, we will use some utility functions from the <code class="docutils literal notranslate"><span class="pre">socio4health.utils.harmonizer_utils</span></code> module to <strong>standardize</strong> and <strong>translate</strong> the dictionary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dask.dataframe</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">FuncFormatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.harmonizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harmonizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">harmonizer_utils</span><span class="p">,</span> <span class="n">extractor_utils</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-and-standardize-the-dictionary">
+<h2>1. Load and standardize the dictionary<a class="headerlink" href="#load-and-standardize-the-dictionary" title="Link to this heading">#</a></h2>
+<p>To harmonize the data, provide a dictionary that describes the variables in the dataset. The study retrieved data from the 2010 census, from Instituto Brasileiro de Geografia e Estatística (<strong>IBGE</strong>). The dictionary for the census data can be found <a class="reference external" href="https://ftp.ibge.gov.br/Censos/Censo_Demografico_2010/Resultados_Gerais_da_Amostra/Microdados/Documentacao.zip">here</a>. Follow the steps in the tutorial <a class="reference external" href="https://harmonize-tools.github.io/socio4health/dictionary.html">“How to Create a Raw Dictionary for Data Harmonization”</a> to create a raw dictionary in Excel format.</p>
+<p>This dictionary must be standardized and translated to English. The <code class="docutils literal notranslate"><span class="pre">socio4health.utils.harmonizer_utils</span></code> module provides utility functions to perform these tasks. Additionally, the <code class="docutils literal notranslate"><span class="pre">socio4health.utils.extractor_utils</span></code> module provides utility functions to parse fixed-width file (FWF) dictionaries, which is the format used in the <strong>IBGE</strong> census data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_dic</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">"raw_dictionary_br_2010.xlsx"</span><span class="p">)</span>
+<span class="n">dic</span><span class="o">=</span><span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_standardize_dict</span><span class="p">(</span><span class="n">raw_dic</span><span class="p">)</span>
+<span class="n">colnames</span><span class="p">,</span> <span class="n">colspecs</span> <span class="o">=</span><span class="n">extractor_utils</span><span class="o">.</span><span class="n">s4h_parse_fwf_dict</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is how the standardized dictionary looks:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>value</th>
+      <th>initial_position</th>
+      <th>final_position</th>
+      <th>size</th>
+      <th>dec</th>
+      <th>type</th>
+      <th>possible_answers</th>
+      <th>question</th>
+      <th>variable_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 9.0</td>
+      <td>107.0</td>
+      <td>107.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>apenas um morador; mais de um morador; ignorado</td>
+      <td>a responsabilidade pelo domicílio é de:</td>
+      <td>V0402</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 3.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>sim, em pelo menos um cômodo; sim, só na propr...</td>
+      <td>abastecimento de água, canalização:</td>
+      <td>V0209</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 3.0; 4.0; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0</td>
+      <td>88.0</td>
+      <td>89.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>rede geral de distribuição; poço ou nascente n...</td>
+      <td>abastecimento de água, forma:</td>
+      <td>V0208</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 3.0</td>
+      <td>144.0</td>
+      <td>144.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>adequada; semi-adequada; inadequada</td>
+      <td>adequação da moradia</td>
+      <td>V6210</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>1.0; 2.0</td>
+      <td>104.0</td>
+      <td>104.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>sim; não</td>
+      <td>alguma pessoa que morava com você(s) estava mo...</td>
+      <td>V0301</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>NaN</td>
+      <td>1.0; 2.0</td>
+      <td>95.0</td>
+      <td>95.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>sim; não</td>
+      <td>televisão, existência:</td>
+      <td>V0214</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>NaN</td>
+      <td>11.0; 12.0; 13.0; 14.0; 15.0; 51.0; 52.0; 53.0...</td>
+      <td>56.0</td>
+      <td>57.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>C\n</td>
+      <td>casa; casa de vila ou em condomínio; apartamen...</td>
+      <td>tipo de espécie:</td>
+      <td>V4002</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>NaN</td>
+      <td>11.0; 12.0; 13.0; 14.0; 15.0; 16.0; 17.0; 21.0...</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>A</td>
+      <td>rondônia; acre; amazonas; roraima; pará; amapá...</td>
+      <td>unidade da federação:</td>
+      <td>V0001</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>59.0</td>
+      <td>64.0</td>
+      <td>6.0</td>
+      <td>NaN</td>
+      <td>N</td>
+      <td>NaN</td>
+      <td>valor do aluguel (em reais)</td>
+      <td>V2011</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>8.0</td>
+      <td>20.0</td>
+      <td>13.0</td>
+      <td>NaN</td>
+      <td>A</td>
+      <td>NaN</td>
+      <td>área de ponderação</td>
+      <td>V0011</td>
+    </tr>
+  </tbody>
+</table>
+<p>76 rows × 10 columns</p>
+</div></div></div>
+</div>
+<p>The classification model used in this tutorial is a <strong>BERT model</strong> fine-tuned for the task of classifying survey questions into categories. You can use your own model by providing the path to the model in the <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">harmonizer_utils.s4h_classify_rows</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">"question"</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">"en"</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">"en"</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_translate_column</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">"possible_answers"</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">"en"</span><span class="p">)</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">harmonizer_utils</span><span class="o">.</span><span class="n">s4h_classify_rows</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="s2">"question_en"</span><span class="p">,</span> <span class="s2">"description_en"</span><span class="p">,</span> <span class="s2">"possible_answers_en"</span><span class="p">,</span>
+                                        <span class="n">new_column_name</span><span class="o">=</span><span class="s2">"category"</span><span class="p">,</span>
+                                        <span class="n">MODEL_PATH</span><span class="o">=</span><span class="s2">"dirreno/harmonize_bert_finetuned_classifier"</span><span class="p">)</span>
+<span class="n">dic</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 14:38:04,909 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-06 14:38:04,924 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Helsinki-NLP/opus-mt-ROMANCE-en/e9ca9975e3972afd80732f08ce01d3a1339f47f8/config.json "HTTP/1.1 200 OK"
+2026-10-06 14:38:05,024 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-06 14:38:05,025 - WARNING - Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-06 14:38:05,039 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Helsinki-NLP/opus-mt-ROMANCE-en/e9ca9975e3972afd80732f08ce01d3a1339f47f8/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-10-06 14:38:05,138 - INFO - HTTP Request: GET https://huggingface.co/api/models/Helsinki-NLP/opus-mt-ROMANCE-en/tree/main/additional_chat_templates?recursive=false&amp;expand=false "HTTP/1.1 404 Not Found"
+2026-10-06 14:38:05,234 - INFO - HTTP Request: GET https://huggingface.co/api/models/Helsinki-NLP/opus-mt-ROMANCE-en/tree/main?recursive=true&amp;expand=false "HTTP/1.1 200 OK"
+F:\Users\EQUIPO\AppData\Local\Programs\Python\Python312\Lib\site-packages\transformers\models\marian\tokenization_marian.py:176: UserWarning: Recommended: pip install sacremoses.
+  warnings.warn("Recommended: pip install sacremoses.")
+2026-10-06 14:38:05,423 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-06 14:38:05,436 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Helsinki-NLP/opus-mt-ROMANCE-en/e9ca9975e3972afd80732f08ce01d3a1339f47f8/config.json "HTTP/1.1 200 OK"
+2026-10-06 14:38:05,844 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-10-06 14:38:05,963 - INFO - HTTP Request: GET https://huggingface.co/api/models/Helsinki-NLP/opus-mt-ROMANCE-en "HTTP/1.1 200 OK"
+2026-10-06 14:38:06,486 - INFO - HTTP Request: GET https://huggingface.co/api/models/Helsinki-NLP/opus-mt-ROMANCE-en/commits/main "HTTP/1.1 200 OK"
+2026-10-06 14:38:06,592 - INFO - HTTP Request: GET https://huggingface.co/api/models/Helsinki-NLP/opus-mt-ROMANCE-en/discussions?p=0 "HTTP/1.1 200 OK"
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9ad8a3645ea34d598b8fd169bc6983bd", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 14:38:06,746 - INFO - HTTP Request: GET https://huggingface.co/api/models/Helsinki-NLP/opus-mt-ROMANCE-en/commits/refs%2Fpr%2F6 "HTTP/1.1 200 OK"
+The tied weights mapping and config for this model specifies to tie model.shared.weight to model.decoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+The tied weights mapping and config for this model specifies to tie model.shared.weight to model.encoder.embed_tokens.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+2026-10-06 14:38:07,316 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/refs%2Fpr%2F6/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-10-06 14:38:07,335 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-06 14:38:07,351 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/Helsinki-NLP/opus-mt-ROMANCE-en/e9ca9975e3972afd80732f08ce01d3a1339f47f8/generation_config.json "HTTP/1.1 200 OK"
+2026-10-06 14:38:07,424 - INFO - HTTP Request: HEAD https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/resolve/refs%2Fpr%2F6/model.safetensors "HTTP/1.1 302 Found"
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>question translated
+description translated
+possible_answers translated
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 14:38:25,253 - INFO - HTTP Request: HEAD https://huggingface.co/dirreno/harmonize_bert_finetuned_classifier/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-10-06 14:38:25,268 - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dirreno/harmonize_bert_finetuned_classifier/04a378f831c207100f9f6bf0f367a114c62d9c8a/config.json "HTTP/1.1 200 OK"
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "57fb79c7d6184944a88fc2132c23b1a7", "version_major": 2, "version_minor": 0}</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 14:38:25,562 - INFO - HTTP Request: GET https://huggingface.co/api/models/dirreno/harmonize_bert_finetuned_classifier/tree/main/additional_chat_templates?recursive=false&amp;expand=false "HTTP/1.1 404 Not Found"
+2026-10-06 14:38:25,677 - INFO - HTTP Request: GET https://huggingface.co/api/models/dirreno/harmonize_bert_finetuned_classifier/tree/main?recursive=true&amp;expand=false "HTTP/1.1 200 OK"
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>value</th>
+      <th>initial_position</th>
+      <th>final_position</th>
+      <th>size</th>
+      <th>dec</th>
+      <th>type</th>
+      <th>possible_answers</th>
+      <th>question</th>
+      <th>variable_name</th>
+      <th>question_en</th>
+      <th>description_en</th>
+      <th>possible_answers_en</th>
+      <th>category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 9.0</td>
+      <td>107.0</td>
+      <td>107.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>apenas um morador; mais de um morador; ignorado</td>
+      <td>a responsabilidade pelo domicílio é de:</td>
+      <td>V0402</td>
+      <td>the responsibility for the household is:</td>
+      <td>NaN</td>
+      <td>only one resident; more than one resident; ign...</td>
+      <td>Housing</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 3.0</td>
+      <td>90.0</td>
+      <td>90.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>sim, em pelo menos um cômodo; sim, só na propr...</td>
+      <td>abastecimento de água, canalização:</td>
+      <td>V0209</td>
+      <td>water supply, pipeline:</td>
+      <td>NaN</td>
+      <td>yes, in at least one room; yes, only in proper...</td>
+      <td>Housing</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 3.0; 4.0; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0</td>
+      <td>88.0</td>
+      <td>89.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>rede geral de distribuição; poço ou nascente n...</td>
+      <td>abastecimento de água, forma:</td>
+      <td>V0208</td>
+      <td>water supply, shape:</td>
+      <td>NaN</td>
+      <td>general distribution network; well or spring o...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>1.0; 2.0; 3.0</td>
+      <td>144.0</td>
+      <td>144.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>adequada; semi-adequada; inadequada</td>
+      <td>adequação da moradia</td>
+      <td>V6210</td>
+      <td>adequacy of housing</td>
+      <td>NaN</td>
+      <td>adequate; semi-adequate; inadequate</td>
+      <td>Housing</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>1.0; 2.0</td>
+      <td>104.0</td>
+      <td>104.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>sim; não</td>
+      <td>alguma pessoa que morava com você(s) estava mo...</td>
+      <td>V0301</td>
+      <td>someone who lived with you was living in anoth...</td>
+      <td>NaN</td>
+      <td>Yes; no</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>NaN</td>
+      <td>1.0; 2.0</td>
+      <td>95.0</td>
+      <td>95.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>C</td>
+      <td>sim; não</td>
+      <td>televisão, existência:</td>
+      <td>V0214</td>
+      <td>television, existence:</td>
+      <td>NaN</td>
+      <td>Yes; no</td>
+      <td>Identification</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>NaN</td>
+      <td>11.0; 12.0; 13.0; 14.0; 15.0; 51.0; 52.0; 53.0...</td>
+      <td>56.0</td>
+      <td>57.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>C\n</td>
+      <td>casa; casa de vila ou em condomínio; apartamen...</td>
+      <td>tipo de espécie:</td>
+      <td>V4002</td>
+      <td>type of species:</td>
+      <td>NaN</td>
+      <td>house; town house or condominium; apartment; d...</td>
+      <td>Housing</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>NaN</td>
+      <td>11.0; 12.0; 13.0; 14.0; 15.0; 16.0; 17.0; 21.0...</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>A</td>
+      <td>rondônia; acre; amazonas; roraima; pará; amapá...</td>
+      <td>unidade da federação:</td>
+      <td>V0001</td>
+      <td>Federation unit:</td>
+      <td>NaN</td>
+      <td>rondônia; acre; amazon; roraima; pará; amapá; ...</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>59.0</td>
+      <td>64.0</td>
+      <td>6.0</td>
+      <td>NaN</td>
+      <td>N</td>
+      <td>NaN</td>
+      <td>valor do aluguel (em reais)</td>
+      <td>V2011</td>
+      <td>value of rent (in reals)</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Business</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>8.0</td>
+      <td>20.0</td>
+      <td>13.0</td>
+      <td>NaN</td>
+      <td>A</td>
+      <td>NaN</td>
+      <td>área de ponderação</td>
+      <td>V0011</td>
+      <td>weighting area</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Housing</td>
+    </tr>
+  </tbody>
+</table>
+<p>76 rows × 14 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="extract-data-from-brazil-census-2010">
+<h2>2. Extract data from Brazil Census 2010<a class="headerlink" href="#extract-data-from-brazil-census-2010" title="Link to this heading">#</a></h2>
+<p>To extract data, use the <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class from the <code class="docutils literal notranslate"><span class="pre">socio4health</span></code> library. As in the publication, extract the Brazil Census 2010 dataset from the Brazilian Institute of Geography and Statistics (<strong>IBGE</strong>) website or from a local copy. The dataset is available <a class="reference external" href="https://www.ibge.gov.br/estatisticas/sociais/saude/9662-censo-demografico-2010.html?=&amp;t=microdados">here</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Extractor</span></code> class requires the following parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_path</span></code>: The <code class="docutils literal notranslate"><span class="pre">URL</span></code> or local path to the data source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">down_ext</span></code>: A list of file extensions to download. This can include <code class="docutils literal notranslate"><span class="pre">.txt</span></code>,<code class="docutils literal notranslate"><span class="pre">.zip</span></code>, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_path</span></code>: The local path where the extracted data will be saved.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key_words</span></code>: A list of keywords to filter the files to be downloaded. In this case, a regular expression is used to select only the files with a <code class="docutils literal notranslate"><span class="pre">.zip</span></code> extension that contain uppercase letters in their names.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">depth</span></code>: The depth of the directory structure to traverse when downloading files. A depth of <code class="docutils literal notranslate"><span class="pre">0</span></code> means only the files in the specified directory will be downloaded.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_fwf</span></code>: A boolean indicating whether the files are in fixed-width format (FWF). In this case, the files are in FWF format, so this parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colnames</span></code>: A list of column names for the FWF files, extracted from the standardized dictionary.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colspecs</span></code>: A list of tuples indicating the start and end positions of each column in the FWF files, extracted from the standardized dictionary.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bra_online_extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="s2">"https://ftp.ibge.gov.br/Censos/Censo_Demografico_2010/Resultados_Gerais_da_Amostra/Microdados/"</span><span class="p">,</span>
+                                 <span class="n">down_ext</span><span class="o">=</span><span class="p">[</span><span class="s1">'.txt'</span><span class="p">,</span><span class="s1">'.zip'</span><span class="p">],</span>
+                                 <span class="n">output_path</span><span class="o">=</span><span class="s2">"IBGE_2010_"</span><span class="p">,</span>
+                                 <span class="n">key_words</span><span class="o">=</span><span class="p">[</span><span class="sa">r</span><span class="s2">"^[A-Z0-9_]+\.zip$"</span><span class="p">],</span>
+                                 <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">is_fwf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colnames</span><span class="o">=</span><span class="n">colnames</span><span class="p">,</span> <span class="n">colspecs</span><span class="o">=</span><span class="n">colspecs</span><span class="p">)</span>
+<span class="n">bra_Censo_2010</span> <span class="o">=</span> <span class="n">bra_online_extractor</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 14:38:28,420 - INFO - ----------------------
+2026-10-06 14:38:28,420 - INFO - Starting data extraction...
+2026-10-06 14:38:28,420 - INFO - Extracting data in online mode...
+2026-10-06 14:38:28,421 - INFO - Scraping URL: https://ftp.ibge.gov.br/Censos/Censo_Demografico_2010/Resultados_Gerais_da_Amostra/Microdados/ with depth 0
+2026-10-06 14:38:31,523 - INFO - Spider completed successfully for URL: https://ftp.ibge.gov.br/Censos/Censo_Demografico_2010/Resultados_Gerais_da_Amostra/Microdados/
+2026-10-06 14:38:31,525 - INFO - Downloading files to: IBGE_2010_
+Downloading files:   0%|         | 0/28 [00:00&lt;?, ?it/s]2026-10-06 14:38:33,824 - INFO - Successfully downloaded: AC.zip
+Downloading files:   4%| | 1/28 [00:02&lt;01:02,  2.30s/it]2026-10-06 14:38:36,689 - INFO - Successfully downloaded: AL.zip
+Downloading files:   7%| | 2/28 [00:05&lt;01:08,  2.63s/it]2026-10-06 14:38:39,996 - INFO - Successfully downloaded: AM.zip
+Downloading files:  11%| | 3/28 [00:08&lt;01:13,  2.94s/it]2026-10-06 14:38:42,202 - INFO - Successfully downloaded: AP.zip
+Downloading files:  14%|▏| 4/28 [00:10&lt;01:03,  2.65s/it]2026-10-06 14:38:49,304 - INFO - Successfully downloaded: BA.zip
+Downloading files:  18%|▏| 5/28 [00:17&lt;01:37,  4.26s/it]2026-10-06 14:38:53,744 - INFO - Successfully downloaded: CE.zip
+Downloading files:  21%|▏| 6/28 [00:22&lt;01:34,  4.32s/it]2026-10-06 14:38:56,261 - INFO - Successfully downloaded: DF.zip
+Downloading files:  25%|▎| 7/28 [00:24&lt;01:18,  3.73s/it]2026-10-06 14:38:59,794 - INFO - Successfully downloaded: ES.zip
+Downloading files:  29%|▎| 8/28 [00:28&lt;01:13,  3.67s/it]2026-10-06 14:39:04,260 - INFO - Successfully downloaded: GO.zip
+Downloading files:  32%|▎| 9/28 [00:32&lt;01:14,  3.92s/it]2026-10-06 14:39:08,595 - INFO - Successfully downloaded: MA.zip
+Downloading files:  36%|▎| 10/28 [00:37&lt;01:12,  4.05s/it2026-10-06 14:39:18,268 - INFO - Successfully downloaded: MG.zip
+Downloading files:  39%|▍| 11/28 [00:46&lt;01:38,  5.77s/it2026-10-06 14:39:21,067 - INFO - Successfully downloaded: MS.zip
+Downloading files:  43%|▍| 12/28 [00:49&lt;01:17,  4.86s/it2026-10-06 14:39:24,228 - INFO - Successfully downloaded: MT.zip
+Downloading files:  46%|▍| 13/28 [00:52&lt;01:05,  4.35s/it2026-10-06 14:39:28,202 - INFO - Successfully downloaded: PA.zip
+Downloading files:  50%|▌| 14/28 [00:56&lt;00:59,  4.24s/it2026-10-06 14:39:32,202 - INFO - Successfully downloaded: PB.zip
+Downloading files:  54%|▌| 15/28 [01:00&lt;00:54,  4.16s/it2026-10-06 14:39:37,320 - INFO - Successfully downloaded: PE.zip
+Downloading files:  57%|▌| 16/28 [01:05&lt;00:53,  4.45s/it2026-10-06 14:39:40,908 - INFO - Successfully downloaded: PI.zip
+Downloading files:  61%|▌| 17/28 [01:09&lt;00:46,  4.19s/it2026-10-06 14:39:47,050 - INFO - Successfully downloaded: PR.zip
+Downloading files:  64%|▋| 18/28 [01:15&lt;00:47,  4.78s/it2026-10-06 14:39:52,941 - INFO - Successfully downloaded: RJ.zip
+Downloading files:  68%|▋| 19/28 [01:21&lt;00:46,  5.11s/it2026-10-06 14:39:56,603 - INFO - Successfully downloaded: RN.zip
+Downloading files:  71%|▋| 20/28 [01:25&lt;00:37,  4.68s/it2026-10-06 14:39:59,753 - INFO - Successfully downloaded: RO.zip
+Downloading files:  75%|▊| 21/28 [01:28&lt;00:29,  4.22s/it2026-10-06 14:40:01,832 - INFO - Successfully downloaded: RR.zip
+Downloading files:  79%|▊| 22/28 [01:30&lt;00:21,  3.58s/it2026-10-06 14:40:08,281 - INFO - Successfully downloaded: RS.zip
+Downloading files:  82%|▊| 23/28 [01:36&lt;00:22,  4.44s/it2026-10-06 14:40:15,222 - INFO - Successfully downloaded: SC.zip
+Downloading files:  86%|▊| 24/28 [01:43&lt;00:20,  5.19s/it2026-10-06 14:40:18,038 - INFO - Successfully downloaded: SE.zip
+Downloading files:  89%|▉| 25/28 [01:46&lt;00:13,  4.48s/it2026-10-06 14:40:28,203 - INFO - Successfully downloaded: SP1.zip
+Downloading files:  93%|▉| 26/28 [01:56&lt;00:12,  6.18s/it2026-10-06 14:40:34,063 - INFO - Successfully downloaded: SP2_RM.zip
+Downloading files:  96%|▉| 27/28 [02:02&lt;00:06,  6.09s/it2026-10-06 14:40:37,100 - INFO - Successfully downloaded: TO.zip
+Downloading files: 100%|█| 28/28 [02:05&lt;00:00,  4.48s/it
+2026-10-06 14:40:37,104 - INFO - Processing (depth 0): AC.zip
+2026-10-06 14:40:37,223 - INFO - Extracted: b65dc3a4_AC_Amostra_Domicilios_12.txt
+2026-10-06 14:40:37,225 - INFO - Extracted: b65dc3a4_AC_Amostra_Emigracao_12.txt
+2026-10-06 14:40:37,227 - INFO - Extracted: b65dc3a4_AC_Amostra_Mortalidade_12.txt
+2026-10-06 14:40:37,244 - INFO - Extracted: b65dc3a4_AC_Amostra_Pessoas_12.txt
+2026-10-06 14:40:37,245 - INFO - Processing (depth 0): AL.zip
+2026-10-06 14:40:37,612 - INFO - Extracted: 64f17b23_AL_Amostra_Domicilios_27.txt
+2026-10-06 14:40:37,614 - INFO - Extracted: 64f17b23_AL_Amostra_Emigracao_27.txt
+2026-10-06 14:40:37,615 - INFO - Extracted: 64f17b23_AL_Amostra_Mortalidade_27.txt
+2026-10-06 14:40:37,666 - INFO - Extracted: 64f17b23_AL_Amostra_Pessoas_27.txt
+2026-10-06 14:40:37,667 - INFO - Processing (depth 0): AM.zip
+2026-10-06 14:40:37,949 - INFO - Extracted: 0e0ac84f_AM_Amostra_Domicilios_13.txt
+2026-10-06 14:40:37,951 - INFO - Extracted: 0e0ac84f_AM_Amostra_Emigracao_13.txt
+2026-10-06 14:40:37,952 - INFO - Extracted: 0e0ac84f_AM_Amostra_Mortalidade_13.txt
+2026-10-06 14:40:37,997 - INFO - Extracted: 0e0ac84f_AM_Amostra_Pessoas_13.txt
+2026-10-06 14:40:37,999 - INFO - Processing (depth 0): AP.zip
+2026-10-06 14:40:38,080 - INFO - Extracted: 17c498d0_AP_Amostra_Domicilios_16.txt
+2026-10-06 14:40:38,081 - INFO - Extracted: 17c498d0_AP_Amostra_Emigracao_16.txt
+2026-10-06 14:40:38,083 - INFO - Extracted: 17c498d0_AP_Amostra_Mortalidade_16.txt
+2026-10-06 14:40:38,096 - INFO - Extracted: 17c498d0_AP_Amostra_Pessoas_16.txt
+2026-10-06 14:40:38,098 - INFO - Processing (depth 0): BA.zip
+2026-10-06 14:40:39,572 - INFO - Extracted: 690b165a_BA_Amostra_Domicilios_29.txt
+2026-10-06 14:40:39,574 - INFO - Extracted: 690b165a_BA_Amostra_Emigracao_29.txt
+2026-10-06 14:40:39,576 - INFO - Extracted: 690b165a_BA_Amostra_Mortalidade_29.txt
+2026-10-06 14:40:39,809 - INFO - Extracted: 690b165a_BA_Amostra_Pessoas_29.txt
+2026-10-06 14:40:39,811 - INFO - Processing (depth 0): CE.zip
+2026-10-06 14:40:40,614 - INFO - Extracted: 75e1f45b_CE_Amostra_Domicilios_23.txt
+2026-10-06 14:40:40,616 - INFO - Extracted: 75e1f45b_CE_Amostra_Emigracao_23.txt
+2026-10-06 14:40:40,617 - INFO - Extracted: 75e1f45b_CE_Amostra_Mortalidade_23.txt
+2026-10-06 14:40:40,748 - INFO - Extracted: 75e1f45b_CE_Amostra_Pessoas_23.txt
+2026-10-06 14:40:40,750 - INFO - Processing (depth 0): DF.zip
+2026-10-06 14:40:40,879 - INFO - Extracted: a7bbca77_DF_Amostra_Domicilios_53.txt
+2026-10-06 14:40:40,882 - INFO - Extracted: a7bbca77_DF_Amostra_Emigracao_53.txt
+2026-10-06 14:40:40,883 - INFO - Extracted: a7bbca77_DF_Amostra_Mortalidade_53.txt
+2026-10-06 14:40:40,902 - INFO - Extracted: a7bbca77_DF_Amostra_Pessoas_53.txt
+2026-10-06 14:40:40,904 - INFO - Processing (depth 0): ES.zip
+2026-10-06 14:40:41,304 - INFO - Extracted: 6eb433bd_ES_Amostra_Domicilios_32.txt
+2026-10-06 14:40:41,306 - INFO - Extracted: 6eb433bd_ES_Amostra_Emigracao_32.txt
+2026-10-06 14:40:41,307 - INFO - Extracted: 6eb433bd_ES_Amostra_Mortalidade_32.txt
+2026-10-06 14:40:41,372 - INFO - Extracted: 6eb433bd_ES_Amostra_Pessoas_32.txt
+2026-10-06 14:40:41,374 - INFO - Processing (depth 0): GO.zip
+2026-10-06 14:40:42,075 - INFO - Extracted: fecb282b_GO_Amostra_Domicilios_52.txt
+2026-10-06 14:40:42,077 - INFO - Extracted: fecb282b_GO_Amostra_Emigracao_52.txt
+2026-10-06 14:40:42,079 - INFO - Extracted: fecb282b_GO_Amostra_Mortalidade_52.txt
+2026-10-06 14:40:42,186 - INFO - Extracted: fecb282b_GO_Amostra_Pessoas_52.txt
+2026-10-06 14:40:42,187 - INFO - Processing (depth 0): MA.zip
+2026-10-06 14:40:42,943 - INFO - Extracted: e8ee0d2c_MA_Amostra_Domicilios_21.txt
+2026-10-06 14:40:42,945 - INFO - Extracted: e8ee0d2c_MA_Amostra_Emigracao_21.txt
+2026-10-06 14:40:42,947 - INFO - Extracted: e8ee0d2c_MA_Amostra_Mortalidade_21.txt
+2026-10-06 14:40:43,067 - INFO - Extracted: e8ee0d2c_MA_Amostra_Pessoas_21.txt
+2026-10-06 14:40:43,068 - INFO - Processing (depth 0): MG.zip
+2026-10-06 14:40:45,484 - INFO - Extracted: 858e1e59_MG_Amostra_Domicilios_31.txt
+2026-10-06 14:40:45,486 - INFO - Extracted: 858e1e59_MG_Amostra_Emigracao_31.txt
+2026-10-06 14:40:45,488 - INFO - Extracted: 858e1e59_MG_Amostra_Mortalidade_31.txt
+2026-10-06 14:40:45,873 - INFO - Extracted: 858e1e59_MG_Amostra_Pessoas_31.txt
+2026-10-06 14:40:45,875 - INFO - Processing (depth 0): MS.zip
+2026-10-06 14:40:46,173 - INFO - Extracted: 1658c49d_MS_Amostra_Domicilios_50.txt
+2026-10-06 14:40:46,175 - INFO - Extracted: 1658c49d_MS_Amostra_Emigracao_50.txt
+2026-10-06 14:40:46,176 - INFO - Extracted: 1658c49d_MS_Amostra_Mortalidade_50.txt
+2026-10-06 14:40:46,217 - INFO - Extracted: 1658c49d_MS_Amostra_Pessoas_50.txt
+2026-10-06 14:40:46,219 - INFO - Processing (depth 0): MT.zip
+2026-10-06 14:40:46,602 - INFO - Extracted: 08aef50b_MT_Amostra_Domicilios_51.txt
+2026-10-06 14:40:46,603 - INFO - Extracted: 08aef50b_MT_Amostra_Emigracao_51.txt
+2026-10-06 14:40:46,605 - INFO - Extracted: 08aef50b_MT_Amostra_Mortalidade_51.txt
+2026-10-06 14:40:46,660 - INFO - Extracted: 08aef50b_MT_Amostra_Pessoas_51.txt
+2026-10-06 14:40:46,662 - INFO - Processing (depth 0): PA.zip
+2026-10-06 14:40:47,346 - INFO - Extracted: 9019ff5b_PA_Amostra_Domicilios_15.txt
+2026-10-06 14:40:47,348 - INFO - Extracted: 9019ff5b_PA_Amostra_Emigracao_15.txt
+2026-10-06 14:40:47,350 - INFO - Extracted: 9019ff5b_PA_Amostra_Mortalidade_15.txt
+2026-10-06 14:40:47,451 - INFO - Extracted: 9019ff5b_PA_Amostra_Pessoas_15.txt
+2026-10-06 14:40:47,453 - INFO - Processing (depth 0): PB.zip
+2026-10-06 14:40:48,045 - INFO - Extracted: bc0861e3_PB_Amostra_Domicilios_25.txt
+2026-10-06 14:40:48,047 - INFO - Extracted: bc0861e3_PB_Amostra_Emigracao_25.txt
+2026-10-06 14:40:48,049 - INFO - Extracted: bc0861e3_PB_Amostra_Mortalidade_25.txt
+2026-10-06 14:40:48,143 - INFO - Extracted: bc0861e3_PB_Amostra_Pessoas_25.txt
+2026-10-06 14:40:48,145 - INFO - Processing (depth 0): PE.zip
+2026-10-06 14:40:49,012 - INFO - Extracted: a8df366c_PE_Amostra_Domicilios_26.txt
+2026-10-06 14:40:49,014 - INFO - Extracted: a8df366c_PE_Amostra_Emigracao_26.txt
+2026-10-06 14:40:49,015 - INFO - Extracted: a8df366c_PE_Amostra_Mortalidade_26.txt
+2026-10-06 14:40:49,145 - INFO - Extracted: a8df366c_PE_Amostra_Pessoas_26.txt
+2026-10-06 14:40:49,147 - INFO - Processing (depth 0): PI.zip
+2026-10-06 14:40:49,618 - INFO - Extracted: a089c57e_PI_Amostra_Domicilios_22.txt
+2026-10-06 14:40:49,621 - INFO - Extracted: a089c57e_PI_Amostra_Emigracao_22.txt
+2026-10-06 14:40:49,622 - INFO - Extracted: a089c57e_PI_Amostra_Mortalidade_22.txt
+2026-10-06 14:40:49,695 - INFO - Extracted: a089c57e_PI_Amostra_Pessoas_22.txt
+2026-10-06 14:40:49,696 - INFO - Processing (depth 0): PR.zip
+2026-10-06 14:40:50,957 - INFO - Extracted: 68798eb0_PR_Amostra_Domicilios_41.txt
+2026-10-06 14:40:50,959 - INFO - Extracted: 68798eb0_PR_Amostra_Emigracao_41.txt
+2026-10-06 14:40:50,960 - INFO - Extracted: 68798eb0_PR_Amostra_Mortalidade_41.txt
+2026-10-06 14:40:51,135 - INFO - Extracted: 68798eb0_PR_Amostra_Pessoas_41.txt
+2026-10-06 14:40:51,137 - INFO - Processing (depth 0): RJ.zip
+2026-10-06 14:40:52,244 - INFO - Extracted: 64edc784_RJ_Amostra_Domicilios_33.txt
+2026-10-06 14:40:52,246 - INFO - Extracted: 64edc784_RJ_Amostra_Emigracao_33.txt
+2026-10-06 14:40:52,247 - INFO - Extracted: 64edc784_RJ_Amostra_Mortalidade_33.txt
+2026-10-06 14:40:52,396 - INFO - Extracted: 64edc784_RJ_Amostra_Pessoas_33.txt
+2026-10-06 14:40:52,398 - INFO - Processing (depth 0): RN.zip
+2026-10-06 14:40:52,821 - INFO - Extracted: 6769ac16_RN_Amostra_Domicilios_24.txt
+2026-10-06 14:40:52,823 - INFO - Extracted: 6769ac16_RN_Amostra_Emigracao_24.txt
+2026-10-06 14:40:52,825 - INFO - Extracted: 6769ac16_RN_Amostra_Mortalidade_24.txt
+2026-10-06 14:40:52,893 - INFO - Extracted: 6769ac16_RN_Amostra_Pessoas_24.txt
+2026-10-06 14:40:52,894 - INFO - Processing (depth 0): RO.zip
+2026-10-06 14:40:53,108 - INFO - Extracted: a9f49b63_RO_Amostra_Domicilios_11.txt
+2026-10-06 14:40:53,110 - INFO - Extracted: a9f49b63_RO_Amostra_Emigracao_11.txt
+2026-10-06 14:40:53,111 - INFO - Extracted: a9f49b63_RO_Amostra_Mortalidade_11.txt
+2026-10-06 14:40:53,140 - INFO - Extracted: a9f49b63_RO_Amostra_Pessoas_11.txt
+2026-10-06 14:40:53,142 - INFO - Processing (depth 0): RR.zip
+2026-10-06 14:40:53,209 - INFO - Extracted: 29e3bef5_RR_Amostra_Domicilios_14.txt
+2026-10-06 14:40:53,210 - INFO - Extracted: 29e3bef5_RR_Amostra_Emigracao_14.txt
+2026-10-06 14:40:53,212 - INFO - Extracted: 29e3bef5_RR_Amostra_Mortalidade_14.txt
+2026-10-06 14:40:53,223 - INFO - Extracted: 29e3bef5_RR_Amostra_Pessoas_14.txt
+2026-10-06 14:40:53,225 - INFO - Processing (depth 0): RS.zip
+2026-10-06 14:40:54,564 - INFO - Extracted: 711a9252_RS_Amostra_Domicilios_43.txt
+2026-10-06 14:40:54,566 - INFO - Extracted: 711a9252_RS_Amostra_Emigracao_43.txt
+2026-10-06 14:40:54,567 - INFO - Extracted: 711a9252_RS_Amostra_Mortalidade_43.txt
+2026-10-06 14:40:54,758 - INFO - Extracted: 711a9252_RS_Amostra_Pessoas_43.txt
+2026-10-06 14:40:54,759 - INFO - Processing (depth 0): SC.zip
+2026-10-06 14:40:55,613 - INFO - Extracted: 3c1ce293_SC_Amostra_Domicilios_42.txt
+2026-10-06 14:40:55,615 - INFO - Extracted: 3c1ce293_SC_Amostra_Emigracao_42.txt
+2026-10-06 14:40:55,616 - INFO - Extracted: 3c1ce293_SC_Amostra_Mortalidade_42.txt
+2026-10-06 14:40:55,727 - INFO - Extracted: 3c1ce293_SC_Amostra_Pessoas_42.txt
+2026-10-06 14:40:55,730 - INFO - Processing (depth 0): SE.zip
+2026-10-06 14:40:55,975 - INFO - Extracted: c7e763c0_SE_Amostra_Domicilios_28.txt
+2026-10-06 14:40:55,977 - INFO - Extracted: c7e763c0_SE_Amostra_Emigracao_28.txt
+2026-10-06 14:40:55,978 - INFO - Extracted: c7e763c0_SE_Amostra_Mortalidade_28.txt
+2026-10-06 14:40:56,010 - INFO - Extracted: c7e763c0_SE_Amostra_Pessoas_28.txt
+2026-10-06 14:40:56,012 - INFO - Processing (depth 0): SP1.zip
+2026-10-06 14:40:58,342 - INFO - Extracted: 2fa85af7_SP1_Amostra_Domicilios_35_outras.txt
+2026-10-06 14:40:58,344 - INFO - Extracted: 2fa85af7_SP1_Amostra_Emigracao_35_outras.txt
+2026-10-06 14:40:58,346 - INFO - Extracted: 2fa85af7_SP1_Amostra_Mortalidade_35_outras.txt
+2026-10-06 14:40:58,669 - INFO - Extracted: 2fa85af7_SP1_Amostra_Pessoas_35_outras.txt
+2026-10-06 14:40:58,671 - INFO - Processing (depth 0): SP2_RM.zip
+2026-10-06 14:40:59,834 - INFO - Extracted: cbe54e68_SP2-RM_Amostra_Domicilios_35_RMSP.txt
+2026-10-06 14:40:59,836 - INFO - Extracted: cbe54e68_SP2-RM_Amostra_Emigracao_35_RMSP.txt
+2026-10-06 14:40:59,838 - INFO - Extracted: cbe54e68_SP2-RM_Amostra_Mortalidade_35_RMSP.txt
+2026-10-06 14:40:59,998 - INFO - Extracted: cbe54e68_SP2-RM_Amostra_Pessoas_35_RMSP.txt
+2026-10-06 14:40:59,999 - INFO - Processing (depth 0): TO.zip
+2026-10-06 14:41:00,262 - INFO - Extracted: e91b8629_TO_Amostra_Domicilios_17.txt
+2026-10-06 14:41:00,264 - INFO - Extracted: e91b8629_TO_Amostra_Emigracao_17.txt
+2026-10-06 14:41:00,266 - INFO - Extracted: e91b8629_TO_Amostra_Mortalidade_17.txt
+2026-10-06 14:41:00,300 - INFO - Extracted: e91b8629_TO_Amostra_Pessoas_17.txt
+Processing files: 100%|█| 112/112 [05:05&lt;00:00,  2.72s/i
+2026-10-06 14:46:05,335 - INFO - Successfully processed 112/112 files
+2026-10-06 14:46:05,336 - INFO - Extraction completed successfully.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="harmonize-the-data">
+<h2>3. Harmonize the data<a class="headerlink" href="#harmonize-the-data" title="Link to this heading">#</a></h2>
+<p>Use the Harmonizer class from the <strong>socio4health</strong> library to harmonize the data. First, set the similarity threshold to <code class="docutils literal notranslate"><span class="pre">0.9</span></code>, meaning that only variables with a similarity score of <code class="docutils literal notranslate"><span class="pre">0.9</span></code> or higher will be considered for harmonization. Next, use the <code class="docutils literal notranslate"><span class="pre">s4h_vertical_merge</span></code> method to merge the dataframes vertically.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="p">()</span>
+<span class="n">har</span><span class="o">.</span><span class="n">similarity_threshold</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="n">dfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">s4h_vertical_merge</span><span class="p">(</span><span class="n">bra_Censo_2010</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grouping DataFrames: 100%|█| 112/112 [00:00&lt;00:00, 137.4
+Merging groups: 100%|█████| 1/1 [00:00&lt;00:00,  1.88it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<p>After merging the dataframes, set the dictionary and the categories of interest. In this case, we are interested in the <code class="docutils literal notranslate"><span class="pre">&quot;Business&quot;</span></code> category. Then, use the <code class="docutils literal notranslate"><span class="pre">s4h_data_selector</span></code> method to filter the dataframes based on the dictionary, categories, and a key column (in this case <code class="docutils literal notranslate"><span class="pre">'V0001'</span></code>, which represents the state code). The <code class="docutils literal notranslate"><span class="pre">s4h_data_selector</span></code> method returns a list of <strong>filtered dataframes</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">har</span><span class="o">.</span><span class="n">dict_df</span> <span class="o">=</span> <span class="n">dic</span>
+<span class="n">har</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Business"</span><span class="p">]</span>
+<span class="n">har</span><span class="o">.</span><span class="n">key_col</span> <span class="o">=</span> <span class="s1">'V0001'</span>
+<span class="n">filtered_ddfs</span> <span class="o">=</span> <span class="n">har</span><span class="o">.</span><span class="n">s4h_data_selector</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-10-06 14:46:06,702 - WARNING - key_col or key_val not defined, row-wise size will not be reduced
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_ddfs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filtered_ddfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>V0001</th>
+      <th>V0208</th>
+      <th>V0301</th>
+      <th>V0222</th>
+      <th>V0701</th>
+      <th>V0211</th>
+      <th>V0212</th>
+      <th>M0201</th>
+      <th>M0202</th>
+      <th>M0203</th>
+      <th>...</th>
+      <th>M2011</th>
+      <th>V0202</th>
+      <th>V0221</th>
+      <th>V0401</th>
+      <th>V6531</th>
+      <th>V6532</th>
+      <th>V6530</th>
+      <th>V6529</th>
+      <th>V1005</th>
+      <th>V2011</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>12</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>201080</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>12</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>&lt;NA&gt;</td>
+      <td>8</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>200480</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>12</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>200780</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>12</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>&lt;NA&gt;</td>
+      <td>8</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>200880</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>12</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>201080</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>133867</th>
+      <td>17</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>3</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>042042</td>
+    </tr>
+    <tr>
+      <th>133868</th>
+      <td>17</td>
+      <td>0</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>3</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>2</td>
+      <td>3</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>046046</td>
+    </tr>
+    <tr>
+      <th>133869</th>
+      <td>17</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>3</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>037037</td>
+    </tr>
+    <tr>
+      <th>133870</th>
+      <td>17</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>1</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>018018</td>
+    </tr>
+    <tr>
+      <th>133871</th>
+      <td>17</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>3</td>
+      <td>&lt;NA&gt;</td>
+      <td>...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>&lt;NA&gt;</td>
+      <td>041041</td>
+    </tr>
+  </tbody>
+</table>
+<p>26993136 rows × 43 columns</p>
+</div></div></div>
+</div>
+<p>Finally, we can perform some <strong>analysis</strong> on the harmonized data. In this case, we will calculate the total population by state (<code class="docutils literal notranslate"><span class="pre">V0001</span></code>) using the variable <code class="docutils literal notranslate"><span class="pre">V0401</span></code>, which represents the total population in each census tract. We will then create a horizontal bar plot to visualize the population distribution across states using <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ddf</span> <span class="o">=</span> <span class="n">filtered_ddfs</span><span class="p">[</span><span class="mi">0</span><span class="p">][[</span><span class="s2">"V0001"</span><span class="p">,</span> <span class="s2">"V0401"</span><span class="p">]]</span>
+
+<span class="n">ddf</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+    <span class="n">V0001</span> <span class="o">=</span> <span class="n">ddf</span><span class="p">[</span><span class="s2">"V0001"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"category"</span><span class="p">),</span>
+    <span class="n">V0401</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">ddf</span><span class="p">[</span><span class="s2">"V0401"</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float64"</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">categorize</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"V0001"</span><span class="p">])</span>
+
+<span class="n">pop</span> <span class="o">=</span> <span class="n">ddf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"V0001"</span><span class="p">)[</span><span class="s2">"V0401"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">split_out</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">pop</span><span class="p">[</span><span class="n">pop</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">row</span> <span class="o">=</span> <span class="n">dic</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dic</span><span class="p">[</span><span class="s2">"variable_name"</span><span class="p">]</span><span class="o">==</span><span class="s2">"V0001"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"value"</span><span class="p">,</span><span class="s2">"possible_answers"</span><span class="p">]]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\s*;\s*"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"value"</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">" ;"</span><span class="p">))</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
+<span class="n">labs</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\s*;\s*"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"possible_answers"</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">" ;"</span><span class="p">))</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">index</span>
+<span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_integer_dtype</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">]</span>
+<span class="k">elif</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_float_dtype</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labs</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Misalignment: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="si">}</span><span class="s2"> codes vs </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">labs</span><span class="p">)</span><span class="si">}</span><span class="s2"> names"</span><span class="p">)</span>
+<span class="n">code2name</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">labs</span><span class="p">))</span>
+
+<span class="n">pop_named</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">code2name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top</span> <span class="o">=</span> <span class="n">pop_named</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+<span class="n">top_titled</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">top_titled</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">top</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">130</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">top_titled</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">top_titled</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">"top"</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">"right"</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Population by State"</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Population"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"State"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> M"</span><span class="p">))</span>
+
+<span class="n">total</span> <span class="o">=</span> <span class="n">pop_named</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">top_titled</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> M  (</span><span class="si">{</span><span class="n">v</span><span class="o">/</span><span class="n">total</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"left"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">margins</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.03</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a5429bc47503101d06249c3f9a8fa5c0177ec756c0690f70a5a7badeb3fc7cd1.png" src="../_images/a5429bc47503101d06249c3f9a8fa5c0177ec756c0690f70a5a7badeb3fc7cd1.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_colombia.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-environment">Setting up the environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-libraries">Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#load-and-standardize-the-dictionary">1. Load and standardize the dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-data-from-brazil-census-2010">2. Extract data from Brazil Census 2010</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#harmonize-the-data">3. Harmonize the data</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/example_brazil.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

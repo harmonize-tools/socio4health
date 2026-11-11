@@ -130,22 +130,28 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 **socio4health** can be installed via pip from [PyPI](https://pypi.org/project/socio4health/).
 
 ``` CMD
-# Install using pip
+# Full installation (scraping, machine learning and geospatial support included)
 pip install socio4health
 ```
 
-## Optional extras
+## Basic or custom installation
 
-Use the following extras to install optional dependencies:
+If you don't need every feature, install `socio4health-core`. It provides the same
+`socio4health` package (same imports) with only the basic dependencies, and you can
+add the features you need as extras:
 
 ``` CMD
-pip install "socio4health[scraping]"
-pip install "socio4health[ml]"
-pip install "socio4health[geo]"
-pip install "socio4health[all]"
-pip install "socio4health[dev]"
-pip install "socio4health[test]"
+pip install socio4health-core                  # basic: no scraping, ml or geo
+pip install "socio4health-core[scraping]"      # + web scraping (Scrapy)
+pip install "socio4health-core[ml]"            # + translation/classification (torch, transformers)
+pip install "socio4health-core[geo]"           # + geospatial files (geopandas)
+pip install "socio4health-core[geo,scraping]"  # any combination
+pip install "socio4health-core[all]"           # same as `pip install socio4health`
 ```
+
+> **Upgrading from socio4health 1.0.12 or earlier:** run `pip uninstall -y socio4health` before
+> installing the new version, so that the old package does not remove files from
+> `socio4health-core` during the upgrade.
 
 ## How to Use it
 

@@ -23,8 +23,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - name: Build distribution
-        run: python -m build
+      # socio4health-core: code + basic dependencies (+ extras scraping/ml/geo/all)
+      - name: Build socio4health-core
+        run: python -m build --outdir dist/
+
+      # socio4health: meta-package that depends on socio4health-core[all]
+      # (--sdist --wheel builds both from the source folder so it can read the version from src/)
+      - name: Build socio4health (full meta-package)
+        run: python -m build meta --sdist --wheel --outdir dist/
 
       - name: Publish to PyPI
         run: python -m twine upload dist/*

@@ -7,6 +7,12 @@ The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 - Prepare improvements and documentation updates.
 
+## [1.0.13] - 2026-11-10
+### Changed
+ - `pip install socio4health` now installs everything (scraping, ml and geo).
+ - New `socio4health-core` package for a basic install, with optional extras: `pip install "socio4health-core[geo]"`.
+ - If upgrading from 1.0.12 or earlier, run `pip uninstall socio4health` first.
+
 ## [1.0.12] - 2026-09-10
 ### Fixed
  - Pandas, And Scrappy dependencies fix

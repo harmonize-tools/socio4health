@@ -3,14 +3,27 @@
 See:
 https://packaging.python.org/guides/distributing-packages-using-setuptools/
 https://github.com/pypa/sampleproject
+
+Este setup construye la distribucion ``socio4health-core``: contiene todo el
+codigo del paquete y solo las dependencias basicas. Las funcionalidades pesadas
+(scraping, ml, geo) se instalan como extras.
+
+La distribucion ``socio4health`` (carpeta ``meta/``) es un meta-paquete que
+depende de ``socio4health-core[all]``, de modo que ``pip install socio4health``
+instala todo automaticamente.
 """
 
+import re
 from setuptools import setup
 from os import path
 from glob import glob
 
 
 here = path.abspath(path.dirname(__file__))
+
+# Version unica: se lee de src/socio4health/__init__.py
+with open(path.join(here, 'src', 'socio4health', '__init__.py'), encoding='utf-8') as f:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]+)[\'"]', f.read(), re.M).group(1)
 
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
@@ -24,8 +37,8 @@ except FileNotFoundError:
     changelog = None
 
 setup( 
-    name='socio4health',
-    version='1.0.12',
+    name='socio4health-core',
+    version=version,
     description='Socio4health is a Python package for gathering and consolidating socio-demographic data.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -88,7 +101,7 @@ setup(
         
         # ALL
         'all': [
-            'socio4health[scraping,ml,geo]',
+            'socio4health-core[scraping,ml,geo]',
         ]
     },
 

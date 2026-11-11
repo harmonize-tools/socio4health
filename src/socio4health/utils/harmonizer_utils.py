@@ -93,10 +93,15 @@ def s4h_standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
 
     df.drop_duplicates(inplace=True)
     df['variable_name'] = df['variable_name'].str.upper()
-    grouped_df = df.groupby(['question', 'variable_name'], group_keys=False)\
+    group_cols = ['question', 'variable_name']
+    # Select only the non-grouping columns: pandas no longer passes the grouping columns to apply().
+    # _process_group restores 'question' and 'variable_name' from group.name.
+    value_cols = [c for c in df.columns if c not in group_cols]
+    grouped_df = df.groupby(group_cols, group_keys=False)[value_cols]\
                .apply(_process_group)\
                .reset_index(drop=True)
-    return grouped_df
+    column_order = list(df.columns) + [c for c in grouped_df.columns if c not in df.columns]
+    return grouped_df[column_order]
 
 def _process_group(group: pd.DataFrame) -> pd.Series:
     """

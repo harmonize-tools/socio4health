@@ -6,6 +6,21 @@ The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 - Prepare improvements and documentation updates.
+## [1.0.14] - 2026-11-10
+### Added
+ - `Extractor(cache_parquet=True)`: converts text files to Parquet once, so later reads are much faster.
+ - `Extractor(file_pattern=...)`: only read the extracted files whose name matches a regex.
+ - `s4h_set_log_level()`: choose how much socio4health prints (`"DEBUG"`, `"INFO"`, `"WARNING"`...).
+### Changed
+ - Cleaner logs: one line per step instead of one per file, and progress bars are no longer broken by log messages.
+ - Info messages no longer appear in red in notebooks (only warnings and errors do).
+ - `down_ext` is case-insensitive: `['.csv', '.zip']` also matches `.CSV` and `.ZIP` files.
+ - Archives are much faster to extract: only files with the requested extensions are unpacked, and files already extracted are skipped.
+### Fixed
+ - Extraction no longer reads every file completely just to check that it is not empty.
+ - Downloads no longer hang forever: they have a timeout and are retried 3 times. A failed download no longer crashes the extraction.
+ - Files that were already fully downloaded are not downloaded again.
+ - Brazil example: only reads household files (`Domicilios`), which match the dictionary.
 
 ## [1.0.13] - 2026-11-10
 ### Changed

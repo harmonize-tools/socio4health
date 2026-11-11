@@ -2,6 +2,7 @@ import re
 import json
 import os
 import logging
+from socio4health.utils.log import logger
 import copy
 from socio4health.utils.deps import import_optional
 
@@ -53,12 +54,13 @@ class StandardSpider(SpiderBase):
             )
         super().__init__(*args, **kwargs)
         if url is None:
-            logging.warning("No URL provided. Please specify a URL.")
+            logger.warning("No URL provided. Please specify a URL.")
             return
         self.start_urls = [url]
         self.depth = depth
         self.links = {}
-        self.ext = ext if ext is not None else ['.csv', '.xls', '.xlsx', '.zip']
+        # Extensions are compared case-insensitively ('.csv' also matches 'DATA.CSV')
+        self.ext = [e.lower() for e in (ext if ext is not None else ['.csv', '.xls', '.xlsx', '.zip'])]
         self.key_words = key_words if key_words is not None else []
 
         if self.key_words and not hasattr(self, "_compiled_key_words"):
@@ -98,7 +100,7 @@ class StandardSpider(SpiderBase):
                     full_url = response.urljoin(enlace)
                     if "Registro-de-activos-de-informacion" in full_url:
                         continue
-                    if any(enlace.endswith(extension) for extension in self.ext):
+                    if enlace.lower().endswith(tuple(self.ext)):
                         nombre_archivo = os.path.basename(enlace)
 
                         if self.key_words:  # Ensure key_words is not empty or None
@@ -108,7 +110,7 @@ class StandardSpider(SpiderBase):
                             self.links[nombre_archivo] = full_url
                     elif 'title' in elemento.attrib:
                         for extension in self.ext:
-                            if elemento.attrib['title'].endswith(extension):
+                            if elemento.attrib['title'].lower().endswith(extension):
                                 nombre_archivo = os.path.basename(enlace + extension)
                                 if self.key_words:  # Ensure key_words is not empty or None
                                     if any(p.search(nombre_archivo) for p in self._compiled_key_words):

@@ -68,7 +68,7 @@ To use the **socio4health** package, follow these steps:
 
    .. code-block:: python
 
-      extractor = Extractor(input_path='path/to/input', down_ext=['.CSV'],sep=',', output_path='path/to/output')
+      extractor = Extractor(input_path='path/to/input', down_ext=['.csv'],sep=',', output_path='path/to/output')
       harmonizer = Harmonizer()
 
 

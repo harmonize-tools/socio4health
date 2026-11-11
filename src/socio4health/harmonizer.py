@@ -9,12 +9,10 @@ from pathlib import Path
 from typing import Optional, Dict, Union, Type, List
 import dask.dataframe as dd
 import pandas as pd
-from tqdm import tqdm
-import logging
+from socio4health.utils.log import logger, progress
 
 from socio4health.enums.dict_enum import ColumnMappingEnum
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class Harmonizer:
@@ -275,7 +273,7 @@ class Harmonizer:
         groups = []
         used_indices = set()
 
-        for i, df1 in enumerate(tqdm(ddfs, desc="Grouping DataFrames")):
+        for i, df1 in enumerate(progress(ddfs, desc="Grouping DataFrames", total=len(ddfs), unit="df")):
             if i in used_indices:
                 continue
 
@@ -316,7 +314,7 @@ class Harmonizer:
             groups.append(current_group)
 
         merged_dfs = []
-        for group_indices in tqdm(groups, desc="Merging groups"):
+        for group_indices in progress(groups, desc="Merging groups", total=len(groups), unit="group"):
             if len(group_indices) == 1:
                 merged_dfs.append(ddfs[group_indices[0]])
             else:
@@ -343,7 +341,7 @@ class Harmonizer:
                 merged_df = dd.concat(aligned_dfs, axis=0, ignore_index=True)
                 merged_dfs.append(merged_df)
         if len(merged_dfs) > 1:
-            logging.warning("Dataframes that do not have the same columns could not be merged.")
+            logger.warning("Dataframes that do not have the same columns could not be merged.")
 
         return merged_dfs
 
@@ -369,7 +367,7 @@ class Harmonizer:
         ValueError
             If ``nan_threshold`` is not between 0 and 1, or if ``sample_frac`` is not ``None`` or a float between 0 and 1.
         """
-        logging.info("Dropping columns with majority NaN values...")
+        logger.info("Dropping columns with majority NaN values...")
 
         if not 0 <= self.nan_threshold <= 1:
             raise ValueError("Threshold must be between 0 and 1")
@@ -388,10 +386,10 @@ class Harmonizer:
             columns_to_drop = nan_percentages[nan_percentages > self.nan_threshold].index.tolist()
 
             if columns_to_drop:
-                logging.info(f"Dropping columns with >{self.nan_threshold * 100:.0f}% NaN values: {columns_to_drop}")
+                logger.info(f"Dropping columns with >{self.nan_threshold * 100:.0f}% NaN values: {columns_to_drop}")
                 return ddf.drop(columns=columns_to_drop)
             else:
-                logging.info("No columns with majority NaN values found")
+                logger.info("No columns with majority NaN values found")
                 return ddf
 
         if isinstance(ddf_or_ddfs, list):
@@ -653,10 +651,10 @@ class Harmonizer:
                 final_columns = list(dict.fromkeys(final_columns))
 
                 if len(final_columns) == 1:
-                    logging.warning("Only key column found in the filtered DataFrame. Use compare_with_dict() for more information.")
+                    logger.warning("Only key column found in the filtered DataFrame. Use compare_with_dict() for more information.")
                 selected_ddf = ddf[final_columns]
             else:
-                logging.warning("No columns found matching the specified categories. Use compare_with_dict() for more information.")
+                logger.warning("No columns found matching the specified categories. Use compare_with_dict() for more information.")
                 selected_ddf = ddf[[key_column_upper]] if key_column_upper else ddf
 
             if self.key_col and self.key_val:
@@ -666,7 +664,7 @@ class Harmonizer:
                     )
                 ]
             else:
-                logging.warning("key_col or key_val not defined, row-wise size will not be reduced")
+                logger.warning("key_col or key_val not defined, row-wise size will not be reduced")
                 filtered_ddf = selected_ddf
 
             filtered_ddfs.append(filtered_ddf)
@@ -715,12 +713,12 @@ class Harmonizer:
 
                 table_label = _table_label(df, i)
                 df[self.join_key].to_csv(f"data/directories_{table_label}.csv", index=False)
-                logging.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
+                logger.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
                 if uniqueness_ratio > 0.9:
                     candidates.append((i, df.copy(), uniqueness_ratio))
 
             if not candidates:
-                logging.error("No table with nearly-unique key found")
+                logger.error("No table with nearly-unique key found")
 
             candidates.sort(key=lambda x: x[2], reverse=True)
             original_index, primary_df, _ = candidates[0]

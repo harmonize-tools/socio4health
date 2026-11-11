@@ -7,9 +7,11 @@ import tarfile
 import py7zr
 import os
 import requests
+import time
 import hashlib
 import multiprocessing
 import logging
+from socio4health.utils.log import logger
 from importlib import import_module
 from socio4health.utils.deps import import_optional
 import zipfile
@@ -24,7 +26,6 @@ import multiprocessing
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def _run_spider_in_process(url, depth, down_ext, key_words):
@@ -81,20 +82,30 @@ def run_standard_spider(url, depth, down_ext, key_words):
 
         # Check if process completed successfully
         if spider_process.exitcode == 0:
-            logging.info(f"Spider completed successfully for URL: {url}")
+            logger.debug(f"Spider completed successfully for URL: {url}")
             return True
         else:
-            logging.error(f"Spider process failed with exit code: {spider_process.exitcode}")
+            logger.error(f"Spider process failed with exit code: {spider_process.exitcode}")
             return False
 
     except Exception as e:
-        logging.error(f"Error running spider: {str(e)}")
+        logger.error(f"Error running spider: {str(e)}")
         return False
 
 
-def download_request(url, filename, download_dir):
+DOWNLOAD_TIMEOUT = (15, 60)  # seconds: (connect, max wait between two chunks of data)
+DOWNLOAD_RETRIES = 3
+_CHUNK_SIZE = 1 << 20  # 1 MiB
+
+
+def download_request(url, filename, download_dir, on_progress=None, retries=DOWNLOAD_RETRIES,
+                     timeout=DOWNLOAD_TIMEOUT):
     """Download a file from the specified ``URL`` and save it to the given directory.
-    
+
+    The file is written as ``<filename>.part`` and renamed only when complete, so an interrupted
+    download never leaves a truncated file behind. If the file already exists with the size reported
+    by the server, it is not downloaded again.
+
     Parameters
     ----------
     url : str
@@ -103,33 +114,76 @@ def download_request(url, filename, download_dir):
         The name to save the downloaded file.
     download_dir : str
         The directory where the file will be saved.
-    
+    on_progress : callable, optional
+        Called as ``on_progress(bytes_done, bytes_total)`` while downloading (``bytes_total`` may be ``None``).
+    retries : int, optional
+        Number of attempts before giving up. Default is 3.
+    timeout : tuple, optional
+        ``(connect, read)`` timeouts in seconds. The download fails if the server sends nothing for
+        ``read`` seconds, instead of waiting forever.
+
     Returns
     -------
     str
         The path to the downloaded file, or ``None`` if the download failed.
 
     """
-    try:
-        # Request to download
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
+    filepath = os.path.join(download_dir, filename)
+    part_path = filepath + ".part"
+    last_error = None
 
-        filepath = os.path.join(download_dir, filename)
-        # Save file to the directory
-        with open(filepath, 'wb') as file:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:
-                    file.write(chunk)
-        logging.info(f"Successfully downloaded: {filename}")
-        return filepath
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error downloading {filename} from {url}: {e}")
-        return None
+    for attempt in range(1, retries + 1):
+        try:
+            with requests.get(url, stream=True, timeout=timeout) as response:
+                response.raise_for_status()
+                total = int(response.headers.get("Content-Length", 0)) or None
+
+                if total and os.path.exists(filepath) and os.path.getsize(filepath) == total:
+                    logger.debug(f"Already downloaded, skipping: {filename}")
+                    if on_progress:
+                        on_progress(total, total)
+                    return filepath
+
+                done = 0
+                with open(part_path, 'wb') as file:
+                    for chunk in response.iter_content(chunk_size=_CHUNK_SIZE):
+                        if chunk:
+                            file.write(chunk)
+                            done += len(chunk)
+                            if on_progress:
+                                on_progress(done, total)
+
+            if total and done != total:
+                raise requests.exceptions.ContentDecodingError(
+                    f"incomplete download ({done} of {total} bytes)")
+            os.replace(part_path, filepath)
+            logger.debug(f"Successfully downloaded: {filename}")
+            return filepath
+
+        except (requests.exceptions.RequestException, OSError) as e:
+            last_error = e
+            if os.path.exists(part_path):
+                try:
+                    os.remove(part_path)
+                except OSError:
+                    pass
+            if attempt < retries:
+                wait = 2 ** attempt
+                logger.warning(f"Download of {filename} failed (attempt {attempt}/{retries}): {e}. "
+                               f"Retrying in {wait}s...")
+                time.sleep(wait)
+
+    logger.error(f"Error downloading {filename} from {url} after {retries} attempts: {last_error}")
+    return None
 
 
-def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=5, found_files=set()):
+def compressed2files(input_archive, target_directory, down_ext, current_depth=0, max_depth=5, found_files=None,
+                     _archive_key=None):
     """Extract files from a compressed archive and return the paths of the extracted files.
+
+    Only the members whose extension is in ``down_ext`` (and nested archives) are extracted; other
+    members, such as the same data in other formats, are never written to disk. Members that were
+    already extracted with the same size are not extracted again.
 
     Parameters
     ----------
@@ -152,91 +206,118 @@ def compressed2files(input_archive, target_directory, down_ext, current_depth=0,
         A ``set`` containing the paths of the extracted files that match the specified extensions.
     """
 
-    logging.info(f"Processing (depth {current_depth}): {os.path.basename(input_archive)}")
+    logger.debug(f"Processing (depth {current_depth}): {os.path.basename(input_archive)}")
 
     if current_depth > max_depth:
-        logging.warning(f"Max depth {max_depth} reached")
+        logger.warning(f"Max depth {max_depth} reached")
         return set()
 
+    # Name prefix of the extracted files. For nested archives it is derived from the outer archive and
+    # the member name (not from the temporary path), so names stay the same between runs.
+    archive_key = _archive_key or input_archive
+    archive_hash = hashlib.md5(archive_key.encode()).hexdigest()[:8]
+    wanted_ext = {ext.lower() for ext in down_ext}
     found_files = set()
+    all_members = []
+
+    def is_nested(name):
+        return name.lower().endswith(_NESTED_ARCHIVE_EXT)
+
+    def is_wanted(name):
+        return is_nested(name) or os.path.splitext(name)[1].lower() in wanted_ext
+
+    def destination(member_name):
+        return os.path.join(target_directory, f"{archive_hash}_{member_name.strip('/').replace('/', '_')}")
+
+    def handle_member(name, size, open_member, temp_dir):
+        """Extract a single member, unless it is not wanted or it is already extracted."""
+        if is_nested(name):
+            nested_path = os.path.join(temp_dir, os.path.basename(name))
+            with open_member() as src, open(nested_path, 'wb') as out:
+                shutil.copyfileobj(src, out, _CHUNK_SIZE)
+            found_files.update(compressed2files(nested_path, target_directory, down_ext, current_depth + 1,
+                                                max_depth, _archive_key=f"{archive_key}/{name}"))
+            os.remove(nested_path)
+            return
+        dest_path = destination(name)
+        if os.path.exists(dest_path) and os.path.getsize(dest_path) == size:
+            logger.debug(f"Already extracted, skipping: {os.path.basename(dest_path)}")
+        else:
+            os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+            part_path = dest_path + ".part"
+            with open_member() as src, open(part_path, 'wb') as out:
+                shutil.copyfileobj(src, out, _CHUNK_SIZE)
+            os.replace(part_path, dest_path)
+            logger.debug(f"Extracted: {os.path.basename(dest_path)}")
+        found_files.add(dest_path)
 
     with tempfile.TemporaryDirectory() as temp_dir:
         try:
-            # Extract the archive
             if zipfile.is_zipfile(input_archive):
                 try:
-                    with zipfile.ZipFile(input_archive, 'r') as zip_ref:
-                        for zinfo in zip_ref.infolist():
-                            if getattr(zinfo, 'compress_type', None) == 9:
-                                logging.warning(f"Extracting Deflate64-compressed zip file: {input_archive}. This may take a while...")
-                                break
-                        zip_ref.extractall(temp_dir)
+                    _extract_zip_members(zipfile.ZipFile, input_archive, is_wanted, handle_member, temp_dir,
+                                         all_members)
                 except NotImplementedError as e:
-                    logging.warning(f"zipfile failed for {input_archive}: {e}. Trying pyzipper fallback.")
+                    # e.g. Deflate64, which the standard library cannot decompress
+                    logger.warning(f"zipfile failed for {input_archive}: {e}. Trying pyzipper fallback.")
                     try:
-                        with pyzipper.ZipFile(input_archive, 'r') as zip_ref:
-                            zip_ref.extractall(temp_dir)
+                        all_members.clear()
+                        _extract_zip_members(pyzipper.ZipFile, input_archive, is_wanted, handle_member, temp_dir,
+                                             all_members)
                     except Exception as e2:
-                        logging.error(f"pyzipper extraction failed for {input_archive}: {e2}")
+                        logger.error(f"pyzipper extraction failed for {input_archive}: {e2}")
                         return set()
             elif tarfile.is_tarfile(input_archive):
                 with tarfile.open(input_archive, 'r:*') as tar_ref:
-                    tar_ref.extractall(temp_dir)
+                    for member in tar_ref.getmembers():
+                        if not member.isfile():
+                            continue
+                        all_members.append(member.name)
+                        if is_wanted(member.name):
+                            handle_member(member.name, member.size,
+                                          lambda m=member: tar_ref.extractfile(m), temp_dir)
             elif input_archive.endswith('.7z'):
                 with py7zr.SevenZipFile(input_archive, mode='r') as z_ref:
-                    z_ref.extractall(temp_dir)
+                    entries = [e for e in z_ref.list() if not e.is_directory]
+                all_members.extend(e.filename for e in entries)
+                targets = [e.filename for e in entries if is_wanted(e.filename)
+                           and (is_nested(e.filename) or not (os.path.exists(destination(e.filename))
+                                and os.path.getsize(destination(e.filename)) == e.uncompressed))]
+                if targets:
+                    with py7zr.SevenZipFile(input_archive, mode='r') as z_ref:
+                        z_ref.extract(path=temp_dir, targets=targets)
+                for e in entries:
+                    if is_wanted(e.filename):
+                        extracted = os.path.join(temp_dir, e.filename)
+                        handle_member(e.filename, e.uncompressed,
+                                      lambda p=extracted: open(p, 'rb'), temp_dir)
             else:
-                logging.error(f"Unsupported format: {input_archive}")
+                logger.error(f"Unsupported format: {input_archive}")
                 return set()
 
-            # Process all extracted items
-            for root, dirs, files in os.walk(temp_dir):
-                for name in files:
-                    item_path = os.path.join(root, name)
-                    rel_path = os.path.relpath(item_path, temp_dir)
-
-                    # Handle nested archives
-                    if any(item_path.endswith(ext) for ext in ['.zip', '.7z', '.tar', '.gz']):
-                        found_files.update(compressed2files(
-                            item_path,
-                            target_directory,
-                            down_ext,
-                            current_depth + 1,
-                            max_depth
-                        ))
-
-                    # Handle regular files with matching extensions
-                    else:
-                        file_ext = os.path.splitext(name)[1].lower()
-                        if any(file_ext == ext.lower() for ext in down_ext):
-                            # Create unique filename with archive path hash
-                            archive_hash = hashlib.md5(input_archive.encode()).hexdigest()[:8]
-                            parent_folders = rel_path.replace(os.path.sep, '_')
-                            unique_name = f"{archive_hash}_{parent_folders}"
-                            dest_path = os.path.join(target_directory, unique_name)
-
-                            # Ensure parent directory exists
-                            os.makedirs(os.path.dirname(dest_path), exist_ok=True)
-
-                            # Always move the file (no duplicate checking)
-                            shutil.move(item_path, dest_path)
-                            found_files.add(dest_path)
-                            logging.info(f"Extracted: {unique_name}")
-
         except Exception as e:
-            logging.error(f"Failed to process {input_archive}: {str(e)}", exc_info=True)
+            logger.error(f"Failed to process {input_archive}: {str(e)}", exc_info=True)
             return set()
 
     if not found_files:
-        logging.warning(f"No matches in {os.path.basename(input_archive)}. Contents:")
-        for root, dirs, files in os.walk(temp_dir):
-            for f in files:
-                logging.info(f"  Found: {os.path.relpath(os.path.join(root, f), temp_dir)}")
-
-    if not found_files:
-            logging.warning("No files found matching the specified extensions.")
+        logger.warning(f"No files matching {sorted(wanted_ext)} in {os.path.basename(input_archive)}")
+        for name in all_members:
+            logger.debug(f"  Found: {name}")
 
     return found_files
+
+
+_NESTED_ARCHIVE_EXT = ('.zip', '.7z', '.tar', '.gz', '.tgz')
+
+
+def _extract_zip_members(zip_class, input_archive, is_wanted, handle_member, temp_dir, all_members):
+    with zip_class(input_archive, 'r') as zip_ref:
+        for info in zip_ref.infolist():
+            if info.is_dir():
+                continue
+            all_members.append(info.filename)
+            if is_wanted(info.filename):
+                handle_member(info.filename, info.file_size, lambda i=info: zip_ref.open(i), temp_dir)
 
 def create_unique_path(archive_path, filename, target_dir):
     """Generate unique destination path"""

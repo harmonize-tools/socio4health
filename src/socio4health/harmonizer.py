@@ -602,6 +602,11 @@ class Harmonizer:
         list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
             List of filtered Dask DataFrames according to the ``key_col``, ``key_val``, ``categories``, and ``extra_cols``.
 
+        Notes
+        -----
+        Filtering and column selection remain lazy. The returned DataFrames are not computed
+        here; check for empty results when computing them downstream.
+
         Raises
         ------
         KeyError
@@ -611,7 +616,23 @@ class Harmonizer:
         dict_df = self.dict_df.copy()
         dict_df['variable_name'] = dict_df['variable_name'].str.upper()
 
-        key_column_upper = self.key_col.upper() if self.key_col else None
+        category_col = ColumnMappingEnum.CATEGORY.value
+        if category_col not in dict_df.columns:
+            raise KeyError(f"Column '{category_col}' not found in dictionary. "
+                           f"Ensure the dictionary has been classified using s4h_classify_rows(). "
+                           f"Available columns: {list(dict_df.columns)}")
+
+        dict_df_filtered = dict_df[dict_df[category_col].isin(self.categories)]
+        columns_list = dict_df_filtered[ColumnMappingEnum.VARIABLE_NAME.value].dropna().unique().tolist()
+
+        if self.extra_cols:
+            columns_list.extend(col.upper() for col in self.extra_cols if col.upper() not in columns_list)
+
+        join_key_upper = self.join_key.upper().strip() if self.join_key else None
+        if join_key_upper and join_key_upper not in columns_list:
+            columns_list.append(join_key_upper)
+
+        key_column_upper = self.key_col.upper().strip() if self.key_col else None
 
         filtered_ddfs = []
         for ddf in ddfs:
@@ -622,37 +643,8 @@ class Harmonizer:
                 if key_column_upper not in ddf.columns:
                     raise KeyError(f"Key column '{self.key_col}' not found in DataFrame")
 
-                filtered_ddf = ddf[ddf[key_column_upper].isin([val.upper() if isinstance(val, str) else val
-                                                               for val in self.key_val])]
-            else:
-                logging.warning("key_col or key_val not defined, row-wise size will not be reduced")
-                filtered_ddf = ddf
-
-            if isinstance(filtered_ddf, dd.DataFrame):
-                n_rows = filtered_ddf.shape[0].compute()
-            else:
-                n_rows = filtered_ddf.shape[0]
-
-            if n_rows == 0:
-                logging.warning("No rows found matching key values in DataFrame")
-
-            category_col = ColumnMappingEnum.CATEGORY.value
-            if category_col not in dict_df.columns:
-                raise KeyError(f"Column '{category_col}' not found in dictionary. "
-                             f"Ensure the dictionary has been classified using s4h_classify_rows(). "
-                             f"Available columns: {list(dict_df.columns)}")
-
-            dict_df_filtered = dict_df[dict_df[category_col].isin(self.categories)]
-            columns_list = dict_df_filtered[ColumnMappingEnum.VARIABLE_NAME.value].dropna().unique().tolist()
-
-            if self.extra_cols:
-                columns_list.extend(col.upper() for col in self.extra_cols if col.upper() not in columns_list)
-
-            if self.join_key:
-                columns_list.extend(col.upper() for col in filtered_ddf.columns if col.upper() == self.join_key)
-
             if columns_list:
-                existing_columns = [col for col in columns_list if col in filtered_ddf.columns]
+                existing_columns = [col for col in columns_list if col in ddf.columns]
 
                 final_columns = []
                 if key_column_upper:
@@ -662,10 +654,20 @@ class Harmonizer:
 
                 if len(final_columns) == 1:
                     logging.warning("Only key column found in the filtered DataFrame. Use compare_with_dict() for more information.")
-                filtered_ddf = filtered_ddf[final_columns]
+                selected_ddf = ddf[final_columns]
             else:
                 logging.warning("No columns found matching the specified categories. Use compare_with_dict() for more information.")
-                filtered_ddf = filtered_ddf[[key_column_upper]] if key_column_upper else filtered_ddf
+                selected_ddf = ddf[[key_column_upper]] if key_column_upper else ddf
+
+            if self.key_col and self.key_val:
+                filtered_ddf = selected_ddf[
+                    selected_ddf[key_column_upper].isin(
+                        [val.upper() if isinstance(val, str) else val for val in self.key_val]
+                    )
+                ]
+            else:
+                logging.warning("key_col or key_val not defined, row-wise size will not be reduced")
+                filtered_ddf = selected_ddf
 
             filtered_ddfs.append(filtered_ddf)
 

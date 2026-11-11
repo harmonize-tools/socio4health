@@ -27,7 +27,8 @@ def import_optional(module_name: str, extra: str | None = None):
         if extra_name:
             msg = (
                 f"Optional dependency '{module_name}' is required for this feature. "
-                f"Install it with: pip install 'socio4health[{extra_name}]'"
+                f"Install it with: pip install 'socio4health-core[{extra_name}]' "
+                f"(or install everything with: pip install socio4health)"
             )
         else:
             msg = f"Optional dependency '{module_name}' is required for this feature. Install it manually."

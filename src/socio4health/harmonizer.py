@@ -263,12 +263,16 @@ class Harmonizer:
         -----
         - DataFrames are grouped and merged if they share at least ``min_common_columns`` columns and their column overlap coefficient is above ``overlap_threshold``.
         - Only columns with matching data types are considered compatible for merging.
+        - The input DataFrames are not modified, so calling the method again on the same list gives the same result.
+        - Columns of each merged DataFrame keep the order in which they first appear in its group.
         """
         if not ddfs:
             return []
 
         if not isinstance(overlap_threshold, (int, float)) or not 0 <= overlap_threshold <= 1:
             raise ValueError("overlap_threshold must be a float between 0 and 1")
+        if method not in ("union", "intersection"):
+            raise ValueError("method must be 'union' or 'intersection'")
 
         groups = []
         used_indices = set()
@@ -319,22 +323,23 @@ class Harmonizer:
                 merged_dfs.append(ddfs[group_indices[0]])
             else:
                 group_dfs = [ddfs[i] for i in group_indices]
+                # Column order: order of first appearance in the group. (Using a set made the order change
+                # between Python runs, because string hashing is randomized.)
                 if method == "intersection":
-                    common_cols = set(group_dfs[0].columns)
+                    shared = set(group_dfs[0].columns)
                     for df in group_dfs[1:]:
-                        common_cols.intersection_update(df.columns)
-                    aligned_dfs = [df[list(common_cols)] for df in group_dfs]
+                        shared.intersection_update(df.columns)
+                    common_cols = [col for col in group_dfs[0].columns if col in shared]
+                    aligned_dfs = [df[common_cols] for df in group_dfs]
                 elif method == "union":
                     import numpy as np
-                    all_cols = set()
-                    for df in group_dfs:
-                        all_cols.update(df.columns)
-                    all_cols = list(all_cols)
+                    all_cols = list(dict.fromkeys(col for df in group_dfs for col in df.columns))
                     aligned_dfs = []
                     for df in group_dfs:
                         missing_cols = [col for col in all_cols if col not in df.columns]
-                        for col in missing_cols:
-                            df[col] = np.nan
+                        # assign() returns a new DataFrame: the caller's DataFrames are never modified
+                        if missing_cols:
+                            df = df.assign(**{col: np.nan for col in missing_cols})
                         aligned_dfs.append(df[all_cols])
                 else:
                     raise ValueError("method must be 'union' or 'intersection'")

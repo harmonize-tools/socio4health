@@ -39,6 +39,17 @@ Harmonizer
    Harmonizer.s4h_compare_with_dict
    Harmonizer.s4h_join_data
 
+Loader
+~~~~~~
+
+**Functions**
+
+.. autosummary::
+   :toctree:
+   :nosignatures:
+
+   s4h_export
+
 Utils
 ~~~~~~~~~~
 **Extractor**

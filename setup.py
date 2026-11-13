@@ -99,9 +99,14 @@ setup(
             'geopandas>=0.14.0',
         ],
         
+        # DuckDB export (s4h_export(format="duckdb"))
+        'duckdb': [
+            'duckdb>=1.0.0',
+        ],
+
         # ALL
         'all': [
-            'socio4health-core[scraping,ml,geo]',
+            'socio4health-core[scraping,ml,geo,duckdb]',
         ]
     },
 

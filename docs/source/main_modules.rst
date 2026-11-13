@@ -21,3 +21,11 @@ Harmonizer
    :members:
    :show-inheritance:
    :undoc-members:
+
+
+Loader
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: socio4health.loader
+   :members: s4h_export
+

@@ -4,8 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 
+
 ## [Unreleased]
-- Prepare improvements and documentation updates.
+### Added
+ - `s4h_export()`: the load step. Saves extracted or harmonized DataFrames as Parquet, CSV or tables in a DuckDB database, writing large data partition by partition. Accepts a DataFrame, a list, or a dict keyed by country.
+ - New `duckdb` extra: `pip install "socio4health-core[duckdb]"` (included in `pip install socio4health`).
+### Fixed
+ - `s4h_vertical_merge` no longer modifies the DataFrames it receives: calling it twice on the same list gives the same result.
+ - `s4h_vertical_merge` keeps the column order of the input tables (it used to change between runs).
+ - `s4h_vertical_merge` rejects an invalid `method` right away instead of ignoring it when there is nothing to merge.
+
 ## [1.0.14] - 2026-11-10
 ### Added
  - `Extractor(cache_parquet=True)`: converts text files to Parquet once, so later reads are much faster.

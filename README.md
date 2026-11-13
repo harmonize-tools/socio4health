@@ -8,11 +8,12 @@
 </a>
 
 # socio4health
-                                                             
+
 <!-- badges: start -->
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![PyPI](https://img.shields.io/pypi/v/socio4health)](https://pypi.org/project/socio4health/)
 [![MIT
 license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/harmonize-tools/socio4health/blob/main/LICENSE.md/)
 [![GitHub
@@ -20,167 +21,103 @@ contributors](https://img.shields.io/github/contributors/harmonize-tools/socio4h
 ![commits](https://img.shields.io/github/commit-activity/t/harmonize-tools/socio4health)
 <!-- badges: end -->
 
-## Overview  
-<p style="font-family: Arial, sans-serif; font-size: 14px;">
-  Package socio4health is an extraction, transformation and loading (ETL)  classification tool designed to simplify the intricate process of collecting and merging data from multiple sources, focusing on sociodemographic and census datasets from Colombia, Brazil, and Peru, into a harmonized dataset.
-</p>
+**socio4health** is a Python ETL toolkit for Latin American census and household survey microdata. It downloads files straight from national statistics offices (DANE, IBGE, INEI, ...), reads them whatever their format, turns surveys from different countries and years into one harmonized dataset, and saves it as Parquet, CSV or a DuckDB database, ready for health and climate research.
 
-- Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-- Support for various data formats, including `.csv`, `.xlsx`, `.xls`, `.txt`, `.sav`, fixed-width files and geospatial files, ensuring versatility in sourcing information.
-- Consolidating extracted data into a pandas (or dask) DataFrame.
+## Why socio4health?
 
+Working with microdata from several countries usually means dealing with a different portal, file format, variable naming scheme and language for each one. Tools that exist tend to cover a single country (e.g. R packages for Brazil's PNAD) or deliver already-harmonized data that you cannot extend (IPUMS, IDB). socio4health covers the whole pipeline, in Python, across countries:
 
+| Step | What socio4health does |
+|---|---|
+| **Extract** | Crawls a statistics office page and downloads the files you ask for (filtered by extension and keywords), or reads a local folder. |
+| **Read** | Unpacks `.zip`, `.7z`, `.tar`, `.gz` and reads `.csv`, `.txt`, fixed-width, `.xls/.xlsx`, `.sav` (SPSS), `.parquet`, `.json` and geospatial files (`.shp`, `.geojson`, `.kml`). |
+| **Scale** | Returns [Dask](https://www.dask.org/) DataFrames, so full censuses and multi-year surveys can be processed without fitting in memory. An optional Parquet cache makes re-reading large text files much faster. |
+| **Understand** | Standardizes raw data dictionaries, translates questions and answers to English, and classifies each variable into a theme (e.g. *Housing*, *Business*) with a fine-tuned BERT model. |
+| **Harmonize** | Stacks files from different periods (`s4h_vertical_merge`), renames columns and recodes categorical values per country from a mapping (`s4h_harmonize_dataframes`), drops empty columns, selects variables by theme and filters by geography or any key (`s4h_data_selector`), and joins tables (`s4h_join_data`). |
+| **Load** | Saves the result with `s4h_export` as Parquet (optionally partitioned, e.g. by year), CSV or tables in a DuckDB database, one table per DataFrame or per country. Data larger than memory is written partition by partition. |
 
-## Dependencies
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://www.dask.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/17131925?s=200&v=4" height="50" alt="pandas logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Dask</strong><br>
-     Dask is a flexible parallel computing library for analytics.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://pandas.pydata.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/21206976?s=280&v=4" height="50" alt="pandas logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Pandas</strong><br>
-      Pandas is a well-known open source data analysis and manipulation tool.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://geopandas.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/8130715?s=48&v=4" height="50" alt="pandas logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Geopandas</strong><br>
-     Python tools for geographic data.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://numpy.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/288276?s=48&v=4" height="50" alt="numpy logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Numpy</strong><br>
-      The fundamental package for scientific computing with Python.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://scrapy.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/733635?s=48&v=4" height="50" alt="scrapy logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Scrapy</strong><br>
-      Framework for extracting the data you need from websites.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://matplotlib.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/215947?s=48&v=4" height="50" alt="scrapy logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Matplotlib</strong><br>
-      Library for creating static, animated, and interactive visualizations in Python.<br>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://pytorch.org/" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/21003710?s=48&v=4" height="50" alt="scrapy logo">
-      </a>
-    </td>
-    <td align="left">
-      <strong>Torch</strong><br>
-      Python package for tensor computation and deep neural networks.<br>
-    </td>
-  </tr>
-</table>
-
-- <a href="https://openpyxl.readthedocs.io/en/stable/">openpyxl</a>
-- <a href="https://py7zr.readthedocs.io/en/latest/">py7zr</a>
-- <a href="https://pypi.org/project/pyreadstat/">pyreadstat</a>
-- <a href="https://tqdm.github.io/">tqdm</a>
-- <a href="https://requests.readthedocs.io/en/latest/">requests</a>
-- <a href="https://pypi.org/project/appdirs/">appdirs</a>
-- <a href="https://pypi.org/project/pyarrow/">pyarrow</a>
-- <a href="https://pypi.org/project/sentencepiece/">SentencePiece</a>
-- <a href="https://pypi.org/project/sacremoses/">Sacremoses</a>
-- <a href="https://pypi.org/project/transformers/">transformers</a>
-- <a href="https://pypi.org/project/pytest/">pytest</a>
+Built-in column specifications are included for Brazil's PNAD Contínua, and the example notebooks pull data from Colombia (DANE), Brazil (IBGE) and Peru (INEI).
 
 ## Installation
 
-**socio4health** can be installed via pip from [PyPI](https://pypi.org/project/socio4health/).
+Install the full package from [PyPI](https://pypi.org/project/socio4health/) (includes web scraping, machine learning and geospatial support):
 
-``` CMD
-# Full installation (scraping, machine learning and geospatial support included)
+```bash
 pip install socio4health
 ```
 
-## Basic or custom installation
+If you don't need every feature, install `socio4health-core`. It provides the same `socio4health` package (same imports) with only the basic dependencies, and you add the features you need as extras:
 
-If you don't need every feature, install `socio4health-core`. It provides the same
-`socio4health` package (same imports) with only the basic dependencies, and you can
-add the features you need as extras:
-
-``` CMD
+```bash
 pip install socio4health-core                  # basic: no scraping, ml or geo
 pip install "socio4health-core[scraping]"      # + web scraping (Scrapy)
 pip install "socio4health-core[ml]"            # + translation/classification (torch, transformers)
 pip install "socio4health-core[geo]"           # + geospatial files (geopandas)
+pip install "socio4health-core[duckdb]"        # + export to DuckDB
 pip install "socio4health-core[geo,scraping]"  # any combination
 pip install "socio4health-core[all]"           # same as `pip install socio4health`
 ```
 
-> **Upgrading from socio4health 1.0.12 or earlier:** run `pip uninstall -y socio4health` before
-> installing the new version, so that the old package does not remove files from
-> `socio4health-core` during the upgrade.
+Requires Python 3.10 or newer.
 
-## How to Use it
+> **Upgrading from socio4health 1.0.12 or earlier:** run `pip uninstall -y socio4health` before installing the new version, so that the old package does not remove files from `socio4health-core` during the upgrade.
 
-To use the socio4health package, follow these steps:
+## Quick start
 
-1. Import the package in your Python script:
+The example below downloads Brazil's 2024 PNAD Contínua, builds a categorized English dictionary of its variables, keeps only the *Business* variables for one state, and saves the result.
 
-   ```python
-   from socio4health import Extractor()
-   from socio4health import Harmonizer
-   
-   ```
-2. Create an instance of the `Extractor` class:
+```python
+import pandas as pd
+from socio4health import Extractor, Harmonizer, s4h_export
+from socio4health.enums.data_info_enum import BraColnamesEnum, BraColspecsEnum
+from socio4health.utils import harmonizer_utils
 
-   ```python
-   extractor = Extractor()
-   ```
+# 1. Extract: crawl the IBGE page and read the fixed-width files as Dask DataFrames
+extractor = Extractor(
+    input_path="https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Trimestral/Microdados/2024/",
+    down_ext=[".txt", ".zip"],
+    is_fwf=True,
+    colnames=BraColnamesEnum.PNADC.value,
+    colspecs=BraColspecsEnum.PNADC.value,
+    output_path="data",
+    cache_parquet=True,
+    depth=0,
+)
+dfs = extractor.s4h_extract()
 
-3. Extract data from online sources and create a list of data information:
+# 2. Understand: standardize, translate and classify the data dictionary
+dic = harmonizer_utils.s4h_standardize_dict(pd.read_excel("raw_dictionary.xlsx"))
+for col in ["question", "description", "possible_answers"]:
+    dic = harmonizer_utils.s4h_translate_column(dic, col, language="en")
+dic = harmonizer_utils.s4h_classify_rows(
+    dic, "question_en", "description_en", "possible_answers_en",
+    new_column_name="category",
+    MODEL_PATH="dirreno/harmonize_bert_finetuned_classifier",
+)
 
-   ```python
-   url = 'https://www.example.com'
-   depth = 0
-   ext = 'csv'
-   list_datainfo = extractor.s4h_extract(url=url, depth=depth, ext=ext)
-   harmonizer = Harmonizer()
-   ```
+# 3. Harmonize: stack the quarters and select variables by theme and state
+har = Harmonizer(dict_df=dic, categories=["Business"], key_col="UF", key_val=["14"])
+dfs = har.s4h_vertical_merge(dfs)
+selected = har.s4h_data_selector(dfs)
 
-For more detailed examples and use cases, please refer to the [socio4health documentation](https://harmonize-tools.github.io/socio4health/).
+# 4. Load: write the harmonized table (Dask reads the data only now)
+s4h_export(selected, "data/clean", format="parquet", names=["pnadc_2024"])
+# or: format="csv", or format="duckdb" with path="data/surveys.duckdb"
+```
+
+To work with files you already have, pass a local folder as `input_path`. For logging, use `socio4health.s4h_set_log_level`.
+
+More complete walkthroughs are available as notebooks:
+
+- [Extractor](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb): online and local extraction options
+- [Harmonization](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/harmonization.ipynb): the full pipeline on PNAD Contínua
+- [Colombia](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_colombia.ipynb): DANE census with geospatial data and maps
+- [Brazil](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_brazil.ipynb)
+- [Housing deficit](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_housing_deficit.ipynb): a multi-country use case
+
+## Built on
+
+[pandas](https://pandas.pydata.org/), [Dask](https://www.dask.org/), [PyArrow](https://arrow.apache.org/docs/python/), [pyreadstat](https://pypi.org/project/pyreadstat/), [openpyxl](https://openpyxl.readthedocs.io/), [py7zr](https://py7zr.readthedocs.io/) and [requests](https://requests.readthedocs.io/). Optional extras add [Scrapy](https://scrapy.org/) (scraping), [GeoPandas](https://geopandas.org/) (geospatial), [DuckDB](https://duckdb.org/) (export) and [PyTorch](https://pytorch.org/) + [Transformers](https://huggingface.co/docs/transformers) (translation and classification).
 
 ## Resources
 
@@ -189,7 +126,7 @@ For more detailed examples and use cases, please refer to the [socio4health docu
 Package Website
 </summary>
 
-The [socio4health website](https://harmonize-tools.github.io/socio4health/) package website includes **API reference**, **user guide**, and **examples**. The site mainly concerns the release version, but you can also find documentation for the latest development version.
+The [socio4health website](https://harmonize-tools.github.io/socio4health/) includes the **API reference**, **user guide** and **examples**. It mainly documents the release version, but you can also find documentation for the latest development version.
 
 </details>
 <details>
@@ -202,6 +139,10 @@ Organisation Website
 The project consists of resources and [tools](https://harmonize-tools.github.io/) developed in conjunction with different teams from Brazil, Colombia, Dominican Republic, Peru, and Spain.
 
 </details>
+
+## Contributing
+
+Bug reports and feature requests are welcome in the [issue tracker](https://github.com/harmonize-tools/socio4health/issues). Please read the [Code of Conduct](https://github.com/harmonize-tools/socio4health/blob/main/CODE_OF_CONDUCT.md) before contributing. Changes between versions are listed in the [changelog](https://github.com/harmonize-tools/socio4health/blob/main/CHANGELOG.md).
 
 ## Organizations
 
@@ -223,7 +164,7 @@ The project consists of resources and [tools](https://harmonize-tools.github.io/
 
 ## Authors / Contact information
 
-Here is the contact information of authors/contributors in case users have questions or feedback.
+Contact the authors and contributors if you have questions or feedback.
 </br>
 </br>
 <a href="https://github.com/dirreno">

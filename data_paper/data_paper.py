@@ -28,14 +28,26 @@ def _clean_column_name(name):
 
 
 def divide_columns_to_the_right(csv_path, fex_column):
+	"""Turn weighted sums into shares by dividing every column right of ``fex_column`` by it.
+
+	Only needed for outputs written by older versions of ``group_and_onehot_encode``, which kept the
+	``<factor>_sum`` column. Current versions already return shares and drop it, so the function does
+	nothing when the column is not there. It also drops ``fex_column`` after dividing, so running it
+	twice no longer divides the data twice.
+	"""
 	csv_path = Path(csv_path)
+	if not csv_path.exists():
+		print(f"Skipped: {csv_path} does not exist")
+		return
+
 	df = pd.read_csv(csv_path)
 
 	cleaned_columns = [_clean_column_name(col) for col in df.columns]
 	cleaned_target = _clean_column_name(fex_column)
 
 	if cleaned_target not in cleaned_columns:
-		raise ValueError(f"Column '{fex_column}' was not found in {csv_path}")
+		print(f"Skipped: '{fex_column}' is not in {csv_path} (the file already holds shares)")
+		return
 
 	fex_index = cleaned_columns.index(cleaned_target)
 	right_columns = list(df.columns[fex_index + 1 :])
@@ -50,6 +62,7 @@ def divide_columns_to_the_right(csv_path, fex_column):
 		numeric_values = pd.to_numeric(df[column], errors="coerce")
 		df[column] = numeric_values.divide(factor)
 
+	df = df.drop(columns=df.columns[fex_index])
 	df.to_csv(csv_path, index=False)
 	print(f"Updated {csv_path}")
 

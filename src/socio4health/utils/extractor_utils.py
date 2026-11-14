@@ -374,3 +374,47 @@ def s4h_parse_fwf_dict(dict_df):
             colspecs.append((start, end))
 
     return colnames, colspecs
+
+
+def s4h_parse_ibge_layout(dictionary, variables=None):
+    """Read the column layout of a fixed-width file from an IBGE dictionary (PNAD, PNAD Contínua).
+
+    IBGE dictionaries (``dicionario_PNADC_microdados_<year>_visita1.xls`` and similar) list each variable
+    on a row as ``initial position | size | code | question | description | categories...``. The
+    layout changes between years, so read the dictionary published with each year's file instead of
+    reusing one layout for every year.
+
+    Parameters
+    ----------
+    dictionary : str, Path or pandas.DataFrame
+        Path to the dictionary (``.xls``/``.xlsx``; ``.xls`` needs ``xlrd``) or its first sheet read with
+        ``header=None``.
+    variables : iterable of str, optional
+        Only return these variables (case-insensitive). Reading fewer columns is much faster.
+
+    Returns
+    -------
+    tuple
+        ``(colnames, colspecs)`` for ``Extractor(is_fwf=True, ...)`` / ``pandas.read_fwf``: variable codes
+        and ``(start, end)`` tuples (0-based, end exclusive).
+    """
+    import re
+    import pandas as pd
+
+    df = dictionary if isinstance(dictionary, pd.DataFrame) else pd.read_excel(dictionary, header=None, dtype=str)
+    wanted = {str(v).strip().upper() for v in variables} if variables is not None else None
+    colnames, colspecs, seen = [], [], set()
+    for row in df.fillna("").astype(str).itertuples(index=False):
+        cells = [c.strip() for c in row]
+        for j in range(len(cells) - 2):
+            start, size, code = cells[j], cells[j + 1], cells[j + 2]
+            if start.isdigit() and size.isdigit() and re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{1,11}", code):
+                key = code.upper()
+                if key not in seen and (wanted is None or key in wanted):
+                    seen.add(key)
+                    colnames.append(code)
+                    colspecs.append((int(start) - 1, int(start) - 1 + int(size)))
+                break
+    if not colnames:
+        raise ValueError("No variables found in the IBGE dictionary.")
+    return colnames, colspecs

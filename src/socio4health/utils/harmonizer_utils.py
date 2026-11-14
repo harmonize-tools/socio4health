@@ -471,22 +471,22 @@ def _clean_column_name(name):
 
 
 def _normalize_columns(df):
-    rename_map = {}
+    """Clean column names and keep only the first column of each cleaned name.
+
+    Duplicates are removed by position: dropping them by name removed every copy, so a column such as
+    ``AREA`` disappeared completely when two columns ended up with that name.
+    """
+    normalized = [_clean_column_name(col) for col in df.columns]
+    keep = []
     seen = set()
-    drop_cols = []
+    for i, name in enumerate(normalized):
+        if name not in seen:
+            seen.add(name)
+            keep.append(i)
 
-    for col in df.columns:
-        normalized = _clean_column_name(col)
-        if normalized in seen:
-            drop_cols.append(col)
-        else:
-            seen.add(normalized)
-            rename_map[col] = normalized
-
-    if drop_cols:
-        df = df.drop(columns=drop_cols)
-
-    return df.rename(columns=rename_map)
+    df = df.iloc[:, keep]  # new object, so renaming below never changes the caller's DataFrame
+    df.columns = [normalized[i] for i in keep]
+    return df
 
 
 def _resolve_year_mapping(mapping, year):
@@ -516,10 +516,13 @@ def _normalize_value_token(value):
     if text in {'_', '.', '-'}:
         return '0'
 
+    # Integer codes are compared as numbers: "02", "2", "2.0" and 2 are the same code. Fixed-width files
+    # keep leading zeros ("02") while JSON mappings loaded with int keys lose them (2), so without this
+    # they never matched.
     if re.fullmatch(r'[-+]?\d+\.0+', text):
-        return text.split('.', 1)[0]
+        return str(int(text.split('.', 1)[0]))
     if re.fullmatch(r'[-+]?\d+', text):
-        return text
+        return str(int(text))
 
     lowered = text.lower()
     if lowered in {'na', 'n/a', 'nan', 'none', 'null'}:
@@ -573,7 +576,8 @@ def _lookup_label(values_map, token_clean):
     return None
 
 
-def extract_and_prepare_data(year, path, ext, sep=None, output_path=None, colnames=None, colspecs=None, on_bad_lines='warn'):
+def extract_and_prepare_data(year, path, ext, sep=None, output_path=None, colnames=None, colspecs=None,
+                             on_bad_lines='warn', cache_parquet=False):
     from ..extractor import Extractor
 
     print(f"{year}: {path}")
@@ -585,6 +589,7 @@ def extract_and_prepare_data(year, path, ext, sep=None, output_path=None, colnam
         colnames=colnames,
         colspecs=colspecs,
         on_bad_lines=on_bad_lines,
+        cache_parquet=cache_parquet,
     )
     dfs_extracted = extractor.s4h_extract()
     for df in dfs_extracted:
@@ -592,34 +597,65 @@ def extract_and_prepare_data(year, path, ext, sep=None, output_path=None, colnam
     return dfs_extracted
 
 
-def merge_factor(dfs, factor_col, id_col):
+def merge_factor(dfs, factor_col, id_col, fallback_col=None):
+    """Give the expansion factor to the tables that do not have it, joining on an ID.
+
+    Parameters
+    ----------
+    dfs : list of DataFrames
+        Tables of one survey year (Dask DataFrames are computed).
+    factor_col : str
+        Expansion factor column (e.g. ``FEX_C18``).
+    id_col : str or list of str
+        Column(s) that identify the unit the factor belongs to (e.g. ``DIRECTORIO``, or
+        ``["CONGLOME", "VIVIENDA", "HOGAR"]`` when no single column is unique).
+    fallback_col : str, optional
+        Factor used for rows that still have no ``factor_col`` (e.g. ``FEX_C`` in GEIH 2020: the CNPV
+        2018 projection file that gives ``FEX_C18`` does not cover the departments added that year).
+
+    Returns
+    -------
+    list of pandas.DataFrame
+        The tables with normalized column names. Tables that already have ``factor_col`` keep their own
+        values; the others get it from every table that has both the ID and the factor.
+
+    Note
+    ----
+    Earlier versions took the factor from the first table only and replaced the factor of every other
+    table with it, so rows from other files (e.g. other months) lost their weight.
+    """
     if id_col is None:
         return dfs
 
     factor_col = _clean_column_name(factor_col)
-    id_col = _clean_column_name(id_col)
+    id_cols = [id_col] if isinstance(id_col, str) else list(id_col)
+    id_cols = [_clean_column_name(c) for c in id_cols]
 
-    pos = None
-    for i, df in enumerate(dfs):
-        if hasattr(df, 'compute'):
-            df = df.compute()
-        df = _normalize_columns(df)
-        dfs[i] = df
-        if factor_col in df.columns:
-            pos = i
-            break
+    dfs = [_normalize_columns(df.compute() if hasattr(df, 'compute') else df) for df in dfs]
 
-    if pos is not None and len(dfs) > pos and factor_col in dfs[pos].columns and id_col in dfs[pos].columns:
-        factor_df = dfs[pos][[id_col, factor_col]].drop_duplicates(id_col)
-        for i, df in enumerate(dfs):
-            df = _normalize_columns(df)
-            if id_col in df.columns:
+    sources = [df[id_cols + [factor_col]] for df in dfs
+               if factor_col in df.columns and all(c in df.columns for c in id_cols)]
+    out = dfs
+    if sources:
+        lookup = pd.concat(sources, ignore_index=True).dropna(subset=[factor_col]).drop_duplicates(id_cols)
+        out = []
+        for df in dfs:
+            if factor_col not in df.columns and all(c in df.columns for c in id_cols):
+                df = df.merge(lookup, on=id_cols, how='left')
+            out.append(df)
+
+    if fallback_col is not None:
+        fallback_col = _clean_column_name(fallback_col)
+        filled = []
+        for df in out:
+            if fallback_col in df.columns:
                 if factor_col in df.columns:
-                    df = df.drop(columns=[factor_col])
-                df = df.merge(factor_df, on=id_col, how='left')
-                dfs[i] = df
-
-    return dfs
+                    df = df.assign(**{factor_col: df[factor_col].where(df[factor_col].notna(), df[fallback_col])})
+                else:
+                    df = df.assign(**{factor_col: df[fallback_col]})
+            filled.append(df)
+        out = filled
+    return out
 
 
 def select_and_filter_columns(dfs, col_cols, num_cols_threshold):
@@ -639,6 +675,111 @@ def select_and_filter_columns(dfs, col_cols, num_cols_threshold):
     dfs = normalized_dfs
     dfs = [df for df in dfs if len(df.columns) > num_cols_threshold]
     return dfs
+
+
+def use_person_factor(dfs, factor_col, person_factor_col, person_id_col):
+    """Weight person-level tables with the person (population) factor instead of the household one.
+
+    Some surveys publish a household factor and a separate person factor calibrated to the population
+    (ENAHO: ``FACTOR07`` and ``FACPOB07``, the latter only in the household-members module). Person
+    variables should use the person factor. This gives ``person_factor_col`` to every table that has the
+    person key (joined from the tables that have it) and stores it in ``factor_col``, so the rest of the
+    pipeline keeps using a single weight column. Tables without the person key (households) keep their
+    own ``factor_col``. Persons without a person factor (e.g. non-residents) are left without weight.
+
+    Parameters
+    ----------
+    dfs : list of DataFrames
+    factor_col : str
+        Weight column used by the pipeline (e.g. ``FACTOR07``).
+    person_factor_col : str
+        Person factor (e.g. ``FACPOB07``).
+    person_id_col : list of str
+        Columns identifying a person (e.g. ``["CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO"]``).
+
+    Returns
+    -------
+    list of pandas.DataFrame
+    """
+    factor_col = _clean_column_name(factor_col)
+    person_factor_col = _clean_column_name(person_factor_col)
+    id_cols = [_clean_column_name(c) for c in ([person_id_col] if isinstance(person_id_col, str) else person_id_col)]
+    dfs = [_normalize_columns(df.compute() if hasattr(df, 'compute') else df) for df in dfs]
+
+    is_person = [all(c in df.columns for c in id_cols) for df in dfs]
+    persons = merge_factor([df for df, p in zip(dfs, is_person) if p], person_factor_col, id_cols)
+    persons = iter(persons)
+
+    out = []
+    for df, p in zip(dfs, is_person):
+        if p:
+            df = next(persons)
+            df = df.drop(columns=[c for c in (factor_col,) if c in df.columns])
+            if person_factor_col in df.columns:
+                df = df.rename(columns={person_factor_col: factor_col})
+            else:
+                df = df.assign(**{factor_col: pd.NA})
+        out.append(df)
+    return out
+
+
+def prune_columns(dfs, keep):
+    """Keep only the given columns (compared by cleaned name) in each table, without computing anything.
+
+    Survey files have hundreds of columns while harmonization uses a few. Pruning Dask DataFrames before
+    they are computed means the other columns are never loaded. Call it after
+    :meth:`Harmonizer.s4h_vertical_merge`, which needs the full column lists to recognise each table.
+
+    Parameters
+    ----------
+    dfs : list of DataFrames
+    keep : iterable of str
+        Column names to keep: raw names of the mapped variables, IDs, weights, ``YEAR``...
+
+    Returns
+    -------
+    list of DataFrames
+        The tables with only the kept columns. Tables left with nothing but ``YEAR`` are removed.
+    """
+    keep = {_clean_column_name(c) for c in keep}
+    out = []
+    for df in dfs:
+        cols = [c for c in df.columns if _clean_column_name(c) in keep]
+        if any(_clean_column_name(c) != 'YEAR' for c in cols):
+            out.append(df[cols])
+    return out
+
+
+def keep_variable_in_largest_table(dfs, keys=()):
+    """Keep each column in one table only: the one with the most rows.
+
+    Survey modules often repeat a variable (e.g. age in the general and the labour-force tables) for
+    different populations. Aggregating it in each table and then taking the first non-missing value per
+    column mixed categories computed on different populations, so the shares no longer added up to 1.
+
+    Parameters
+    ----------
+    dfs : list of pandas.DataFrame
+    keys : iterable of str
+        Columns kept in every table (unit, year, weight, IDs).
+
+    Returns
+    -------
+    list of pandas.DataFrame
+        Same tables; tables left with only ``keys`` columns are removed.
+    """
+    keys = set(keys)
+    order = sorted(range(len(dfs)), key=lambda i: -len(dfs[i]))
+    owner = {}
+    for i in order:
+        for col in dfs[i].columns:
+            owner.setdefault(col, i)
+    out = []
+    for i, df in enumerate(dfs):
+        df = df.drop(columns=[c for c in df.columns if c not in keys and owner[c] != i])
+        if any(c not in keys for c in df.columns):
+            out.append(df)
+    return out
 
 
 def group_and_onehot_encode(dfs, group_col, weight_col, id_col, value_labels_by_column=None):
@@ -742,9 +883,11 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col, value_labels_by_
                 df_grouped = df_grouped.rename(columns={weight_col: f'{weight_col}_sum'})
 
                 if dummy_cols:
-                    total_weight = df_grouped[f'{weight_col}_sum'].replace(0, pd.NA)
+                    # A unit without weights has no data: its shares are missing, not 0.
+                    total_weight = pd.to_numeric(df_grouped[f'{weight_col}_sum'], errors='coerce')
+                    total_weight = total_weight.where(total_weight > 0)
                     for col in dummy_cols:
-                        df_grouped[col] = df_grouped[col].div(total_weight).fillna(0)
+                        df_grouped[col] = df_grouped[col].div(total_weight)
 
                 df_grouped = df_grouped.drop(columns=[f'{weight_col}_sum'])
                 if 'YEAR' in df_grouped.columns:
@@ -762,7 +905,102 @@ def group_and_onehot_encode(dfs, group_col, weight_col, id_col, value_labels_by_
     return grouped_dfs
 
 
+COALESCE_SEPARATOR = '|'
+
+
+def mapping_source_columns(column_mapping):
+    """Raw columns used by a column mapping, splitting coalesce keys (``"WS2|WS1"`` -> ``WS2``, ``WS1``)."""
+    columns = []
+    for key in column_mapping:
+        for col in str(key).split(COALESCE_SEPARATOR):
+            if col and col not in columns:
+                columns.append(col)
+    return columns
+
+
+def s4h_coalesce_columns(df, sources, target, keep=()):
+    """Create ``target`` from several columns: the first non-empty value, in the order of ``sources``.
+
+    Useful when a question was asked in two forms, e.g. MICS asks the household-use water source
+    (``WS2``) only when drinking water is bottled; the other households keep the drinking-water
+    source (``WS1``). Empty strings count as missing. The source columns are dropped.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+    sources : list of str
+        Columns in priority order (compared by cleaned name); missing ones are ignored.
+    target : str
+        Name of the new column.
+    keep : iterable of str
+        Source columns to keep (e.g. because another mapping uses them); the others are dropped.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A copy with ``target`` added, or the DataFrame unchanged if none of the sources exists.
+    """
+    keep = {_clean_column_name(c) for c in keep}
+    present = []
+    for src in sources:
+        col = next((c for c in df.columns if _clean_column_name(c) == _clean_column_name(src)), None)
+        if col is not None and col not in present:
+            present.append(col)
+    if not present:
+        return df
+    values = None
+    for col in present:
+        s = df[col]
+        if s.dtype == object or str(s.dtype).startswith('string'):
+            s = s.where(s.astype('string').str.strip().ne('').fillna(False))
+        values = s if values is None else values.where(values.notna(), s)
+    return df.drop(columns=[c for c in present if _clean_column_name(c) not in keep]).assign(**{target: values})
+
+
+def s4h_code_from_flags(df, flags, target, flag_value="1"):
+    """Create ``target`` with the code of the only yes/no column that is "yes".
+
+    Some questionnaires ask "which of these do you use?" as one yes/no question per option, and ask for
+    the main option only when more than one is "yes" (e.g. PNAD Continua cooking fuel: ``S01016A1``-``A5``,
+    then ``S01016B``). For records with exactly one "yes", ``target`` gets that option's code; otherwise it
+    is empty. Combine it with the main-option question with a coalesce key (``"S01016B|<target>"``).
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+    flags : dict
+        ``{column: code}``, the code each yes/no column stands for.
+    target : str
+        Name of the new column.
+    flag_value : str
+        Value meaning "yes" (compared as text, ``"1"`` by default).
+
+    Returns
+    -------
+    pandas.DataFrame
+        A copy with ``target`` added, or the DataFrame unchanged if none of the flag columns exists.
+    """
+    present = {}
+    for col, code in flags.items():
+        match = next((c for c in df.columns if _clean_column_name(c) == _clean_column_name(col)), None)
+        if match is not None:
+            present[match] = str(code)
+    if not present:
+        return df
+    yes = pd.DataFrame({col: df[col].astype('string').str.strip().str.replace(r'\.0+$', '', regex=True).eq(str(flag_value))
+                        for col in present}).fillna(False)
+    single = yes.sum(axis=1) == 1
+    codes = yes.idxmax(axis=1).map(present).where(single)
+    return df.assign(**{target: codes})
+
+
 def harmonize_columns_by_year(dfs, year, year_mappings):
+    """Rename raw columns to harmonized names using the mapping of the given year.
+
+    A mapping key may list several raw columns separated by ``|`` (e.g. ``"WS2|WS1": "H_WATER"``): the
+    harmonized column takes the first non-empty value among them, in that order (see
+    :func:`s4h_coalesce_columns`). Use the same key in the value mapping.
+    """
     rename_map = _resolve_year_mapping(year_mappings, year)
 
     if not rename_map:
@@ -776,11 +1014,32 @@ def harmonize_columns_by_year(dfs, year, year_mappings):
 
         df = _normalize_columns(df)
 
-        applicable_rename = {}
         for orig_col, harm_col in rename_map.items():
+            if COALESCE_SEPARATOR in str(orig_col):
+                sources = [_clean_column_name(c) for c in str(orig_col).split(COALESCE_SEPARATOR) if c]
+                if any(c in df.columns for c in sources):
+                    # raw columns that other mapping keys still need are kept (e.g. P301A: education, and
+                    # literacy when P302 was not asked)
+                    used_elsewhere = {_clean_column_name(c) for k in rename_map if k != orig_col
+                                      for c in str(k).split(COALESCE_SEPARATOR)}
+                    df = s4h_coalesce_columns(df, sources, _clean_column_name(harm_col), keep=used_elsewhere)
+                    print(f"Coalesced {sources} into {harm_col} for year {year}")
+        rename_map_simple = {k: v for k, v in rename_map.items() if COALESCE_SEPARATOR not in str(k)}
+
+        applicable_rename = {}
+        for orig_col, harm_col in rename_map_simple.items():
             orig_col_normalized = _clean_column_name(orig_col)
             if orig_col_normalized in df.columns:
                 applicable_rename[orig_col_normalized] = harm_col
+
+        # A raw column can already carry a harmonized name (GEIH has its own AREA, the metropolitan area
+        # code, while CLASE is mapped to AREA). The mapped column wins: drop the raw one so the rename
+        # does not create two columns with the same name.
+        targets = {_clean_column_name(t) for t in applicable_rename.values()}
+        clashing = [c for c in df.columns if c in targets and c not in applicable_rename]
+        if clashing:
+            df = df.drop(columns=clashing)
+            print(f"Dropped raw columns replaced by mapped ones for year {year}: {clashing}")
 
         if applicable_rename:
             df = df.rename(columns=applicable_rename)
@@ -848,6 +1107,12 @@ __all__ = [
     'merge_factor',
     'select_and_filter_columns',
     'group_and_onehot_encode',
+    'keep_variable_in_largest_table',
+    'prune_columns',
+    'use_person_factor',
     'harmonize_columns_by_year',
+    'mapping_source_columns',
+    's4h_coalesce_columns',
+    's4h_code_from_flags',
     'apply_value_mappings',
 ]

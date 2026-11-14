@@ -14,7 +14,7 @@
     "P207": "P_SEX",
     "P558C": "P_ETHNICITY",
     "P208A": "P_AGE",
-    "P301_01": "P_EDUCATION",
+    "P301A": "P_EDUCATION",
     "VIVIENDA": "ID",
     "UBIGEO": "ADMIN_DIVISION",
     "FACTOR07": "EXP_FACTOR"

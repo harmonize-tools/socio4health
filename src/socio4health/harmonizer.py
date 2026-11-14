@@ -239,7 +239,8 @@ class Harmonizer:
             raise ValueError("extra_cols must be a list of strings")
         self._extra_cols = value
 
-    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame], overlap_threshold: float = 1, method: str = "union") -> List[dd.DataFrame]:
+    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame], overlap_threshold: float = 1, method: str = "union",
+                           overlap_basis: str = "smaller") -> List[dd.DataFrame]:
         """
         Merge a list of `Dask <https://docs.dask.org>`_ DataFrames vertically using instance parameters.
 
@@ -253,6 +254,13 @@ class Harmonizer:
             Method to use for merging (default is "union").
                 - "union": Merge all columns from all DataFrames, filling missing values with NaN.
                 - "intersection": Merge only columns that are common to all DataFrames.
+        overlap_basis : str, optional
+            What the shared columns are compared with (default is "smaller").
+                - "smaller": shared columns / columns of the smaller table (overlap coefficient). A small table
+                  whose columns are almost all in a larger one is merged into it, even if it is another table.
+                - "larger": shared columns / columns of the larger table. Only tables with nearly the same
+                  columns are merged. Use it for survey files where several modules share the household
+                  keys: with "smaller", a module made mostly of keys is stacked into the person table.
 
         Returns
         -------
@@ -273,6 +281,9 @@ class Harmonizer:
             raise ValueError("overlap_threshold must be a float between 0 and 1")
         if method not in ("union", "intersection"):
             raise ValueError("method must be 'union' or 'intersection'")
+        if overlap_basis not in ("smaller", "larger"):
+            raise ValueError("overlap_basis must be 'smaller' or 'larger'")
+        size = min if overlap_basis == "smaller" else max
 
         groups = []
         used_indices = set()
@@ -296,7 +307,7 @@ class Harmonizer:
                 cols2 = set(df2.columns)
                 common_cols = cols1 & cols2
                 
-                overlap = len(common_cols) / min(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
+                overlap = len(common_cols) / size(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
 
                 if (len(common_cols) >= self.min_common_columns and
                         overlap >= overlap_threshold):
@@ -322,7 +333,16 @@ class Harmonizer:
             if len(group_indices) == 1:
                 merged_dfs.append(ddfs[group_indices[0]])
             else:
-                group_dfs = [ddfs[i] for i in group_indices]
+                # Tables are grouped by upper-cased names, so they must be stacked with those names too:
+                # otherwise "Secuencia_p" and "SECUENCIA_P" stay two columns, each empty for the other
+                # files' rows.
+                group_dfs = []
+                for i in group_indices:
+                    df = ddfs[i]
+                    names = [str(c).upper().strip() for c in df.columns]
+                    keep = [pos for pos, name in enumerate(names) if name not in names[:pos]]
+                    df = df.iloc[:, keep] if len(keep) < len(names) else df
+                    group_dfs.append(df.rename(columns=dict(zip(df.columns, [names[pos] for pos in keep]))))
                 # Column order: order of first appearance in the group. (Using a set made the order change
                 # between Python runs, because string hashing is randomized.)
                 if method == "intersection":

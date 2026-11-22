@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 
 
-## [Unreleased]
+## [1.1.0]
 ### Added
  - `Schema`: reads a harmonized mapping (table, type and labels of each variable) and builds its codebook with `Schema.codebook()`.
  - `Survey` / `s4h_load_surveys()`: describe surveys (files, keys, weights, rules) in a JSON file. `s4h_harmonize_records()` turns a survey year into household and person records; `s4h_build_records()` does every year, in parallel with `workers=`, and skips the ones that are up to date.

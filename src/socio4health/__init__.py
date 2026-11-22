@@ -1,4 +1,4 @@
-__version__ = "1.0.14"
+__version__ = "1.1.0"
 
 from socio4health.utils.log import s4h_set_log_level
 from socio4health.harmonizer import Harmonizer

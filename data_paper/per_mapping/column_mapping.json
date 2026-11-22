@@ -12,7 +12,7 @@
     "P105A": "H_PROPERTY",
     "P302": "P_LITERACY",
     "P207": "P_SEX",
-    "P558C": "P_ETHNICITY",
+    "P558C": "P_ETHNIC",
     "P208A": "P_AGE",
     "P301A": "P_EDUCATION",
     "VIVIENDA": "ID",

@@ -319,13 +319,6 @@ def _extract_zip_members(zip_class, input_archive, is_wanted, handle_member, tem
             if is_wanted(info.filename):
                 handle_member(info.filename, info.file_size, lambda i=info: zip_ref.open(i), temp_dir)
 
-def create_unique_path(archive_path, filename, target_dir):
-    """Generate unique destination path"""
-    archive_name = os.path.splitext(os.path.basename(archive_path))[0]
-    base, ext = os.path.splitext(filename)
-    unique_name = f"{archive_name}_{base}{ext}"
-    return os.path.join(target_dir, unique_name)
-
 def s4h_parse_fwf_dict(dict_df):
     """Parse a fixed-width format dictionary stored in a pandas DataFrame.
 

@@ -29,7 +29,7 @@ The CSV file contains two sheets, one with the variables and another with the ca
 2. Create the raw dictionary
 ----------------------------
 
-Once you have retrieved the dictionary from the data sources, the next step is, in a empty Excel (``xlx``) sheet, fill the first row with the following columns: ``question``, ``variable_name``, ``value``, ``description``, and ``possible_answers`` in the first row in the same order they appear in the provided data dictionary. **Include any additional columns that may be relevant for your specific use case**.
+Once you have retrieved the dictionary from the data sources, the next step is, in an empty Excel (``xlsx``) sheet, fill the first row with the following columns: ``question``, ``variable_name``, ``value``, ``description``, and ``possible_answers`` in the first row in the same order they appear in the provided data dictionary. **Include any additional columns that may be relevant for your specific use case**.
 In this case, the columns are in the following order:
 
 .. image:: ../img/raw_dictionary.png

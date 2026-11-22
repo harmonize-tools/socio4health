@@ -50,35 +50,32 @@ Welcome to the official documentation site for **socio4health**\! This site serv
 Introduction
 ------------
 
-The Python package **socio4health** is an **extraction**, **transformation**,and **loading** tool designed to simplify the process of collecting and merging data from multiple sources into a unified database structure.
+The Python package **socio4health** is an **extraction**, **transformation**, and **loading** tool designed to simplify the process of collecting and merging data from multiple sources into a unified database structure.
 
 Features
 --------
 
 * **Extraction:**
 
-  * Seamlessly retrieve data from online data sources through web scraping, as well as from local files.
-  * Support for various data formats, including ``.csv``, ``.xlsx``, ``.xls``, ``.txt``, ``.sav``, and compressed files.
+  * Retrieve data from statistics office websites through web scraping (filtered by extension and keywords), as well as from local files.
+  * Read ``.csv``, ``.txt``, fixed-width, ``.xls``/``.xlsx``, ``.sav`` (SPSS), ``.parquet``, ``.json`` and geospatial files (``.shp``, ``.geojson``, ``.kml``), and unpack ``.zip``, ``.7z``, ``.tar`` and ``.gz`` archives.
 
 * **Transformation:**
 
-  * Consolidate extracted data into Dask DataFrames.
-  * Optimize the transformation process for large files (parallel processing, efficient data structures).
-  * Effectively manage data inconsistencies and discrepancies using anomaly detection algorithms.
+  * Consolidate extracted data into Dask DataFrames, so data larger than memory can be processed; an optional Parquet cache makes re-reading large text files much faster.
+  * Standardize, translate and classify raw data dictionaries by theme.
+  * Stack files from different periods, rename columns and recode values from mappings, and select variables by theme and records by geography or any key.
+  * Build harmonized household and person records from surveys of several countries and years, and weighted shares per subnational unit.
 
 * **Load:**
 
-  * Consolidate transformed data into a cohesive database.
-
-* **Query:**
-
-  * Conduct precise queries and apply transformations to meet specific criteria.
+  * Save the results as Parquet, CSV or tables in a DuckDB database.
 
 
 Who should use socio4health?
 ----------------------------
 
-**socio4health** is ideal for **data analysts**, **scientists**, and **researchers** who frequently handle large volumes of data from varied sources and are looking for a streamlined way to **consolidate**, **query**, and **visualize** their data. It is also a great tool for **developers** working on projects that require the integration of disparate data sets into a single, manageable format. **Business intelligence professionals** and **decision-makers** will find **socio4health** invaluable for generating insights through natural language queries and visualizations, making complex data more accessible and actionable. In essence, anyone looking to simplify their data workflows, from extraction to visualization, and leverage AI for natural language querying will benefit greatly from using **socio4health**.
+**socio4health** is ideal for **data analysts**, **scientists**, and **researchers** who work with census and household survey microdata from several countries or years and are looking for a streamlined way to **extract**, **harmonize** and **consolidate** it, for instance for health and climate research. It is also a great tool for **developers** working on projects that require the integration of disparate data sets into a single, manageable format.
 
 About the Project
 -----------------
@@ -90,7 +87,7 @@ Documentation maintained by `Ingrid Mora <https://github.com/ingridvmoras>`_
 License
 -------
 
-**socio4health** is distributed under the `MIT License <_MIT License: https://opensource.org/licenses/MIT>`_. Feel free to use, modify, and distribute this project in accordance with the terms of the license.
+**socio4health** is distributed under the `MIT License <https://opensource.org/licenses/MIT>`_. Feel free to use, modify, and distribute this project in accordance with the terms of the license.
 
 Contributing
 ------------

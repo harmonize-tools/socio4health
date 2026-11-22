@@ -5,7 +5,6 @@ from socio4health.utils.harmonizer_utils import (
     _normalize_columns,
     harmonize_columns_by_year,
     merge_factor,
-    select_and_filter_columns,
 )
 
 
@@ -60,36 +59,7 @@ def test_mapped_column_replaces_raw_column_with_same_name():
     df = pd.DataFrame({"CLASE": ["1", "2"], "AREA": ["05", "11"], "DPTO": ["5", "11"]})
     out = harmonize_columns_by_year([df], 2025, {"CLASE": "AREA", "DPTO": "ADMIN_DIVISION"})[0]
     assert out["AREA"].tolist() == ["1", "2"]
-    kept = select_and_filter_columns([out], ["AREA", "ADMIN_DIVISION"], num_cols_threshold=1)[0]
-    assert list(kept.columns) == ["AREA", "ADMIN_DIVISION"]
-
-
-# ---------- group_and_onehot_encode / keep_variable_in_largest_table ----------
-
-from socio4health.utils.harmonizer_utils import group_and_onehot_encode, keep_variable_in_largest_table
-
-
-def test_unit_without_weight_has_missing_shares_not_zero():
-    df = pd.DataFrame({"ADMIN": ["1", "1", "2"], "W": [1.0, 3.0, None], "SEX": ["1", "2", "1"]})
-    out = group_and_onehot_encode([df], "ADMIN", "W", None)[0].set_index("ADMIN")
-    assert out.loc[1, ["SEX_1", "SEX_2"]].tolist() == [0.25, 0.75]
-    assert out.loc[2, ["SEX_1", "SEX_2"]].isna().all()
-
-
-def test_variable_kept_only_in_largest_table():
-    everyone = pd.DataFrame({"ADMIN": ["1"] * 4, "W": [1.0] * 4, "AGE": ["5", "20", "30", "70"], "SEX": ["1"] * 4})
-    workers = pd.DataFrame({"ADMIN": ["1"] * 2, "W": [1.0] * 2, "AGE": ["20", "30"], "JOB": ["a", "b"]})
-    out = keep_variable_in_largest_table([workers, everyone], keys=["ADMIN", "W"])
-    assert [list(d.columns) for d in out] == [["ADMIN", "W", "JOB"], ["ADMIN", "W", "AGE", "SEX"]]
-    grouped = group_and_onehot_encode(out, "ADMIN", "W", None)
-    age = pd.concat(grouped).groupby("ADMIN").first().filter(like="AGE_")
-    assert age.sum(axis=1).tolist() == [1.0]
-
-
-def test_tables_left_with_only_keys_are_dropped():
-    a = pd.DataFrame({"ADMIN": ["1", "1"], "W": [1.0, 1.0], "AGE": ["1", "2"]})
-    b = pd.DataFrame({"ADMIN": ["1"], "W": [1.0], "AGE": ["1"]})
-    assert len(keep_variable_in_largest_table([a, b], keys=["ADMIN", "W"])) == 1
+    assert list(out.columns) == ["AREA", "ADMIN_DIVISION"]
 
 
 # ---------- prune_columns ----------

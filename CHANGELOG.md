@@ -7,16 +7,24 @@ The format is based on "Keep a Changelog" (https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 ### Added
+ - `Schema`: reads a harmonized mapping (table, type and labels of each variable) and builds its codebook with `Schema.codebook()`.
+ - `Survey` / `s4h_load_surveys()`: describe surveys (files, keys, weights, rules) in a JSON file. `s4h_harmonize_records()` turns a survey year into household and person records; `s4h_build_records()` does every year, in parallel with `workers=`, and skips the ones that are up to date.
+ - `s4h_shares()`: weighted share of each category per unit, from household and person records. `s4h_check_records()`: duplicate IDs, missing weights and codes not in the schema.
  - `s4h_export()`: the load step. Saves extracted or harmonized DataFrames as Parquet, CSV or tables in a DuckDB database, writing large data partition by partition. Accepts a DataFrame, a list, or a dict keyed by country.
  - New `duckdb` extra: `pip install "socio4health-core[duckdb]"` (included in `pip install socio4health`).
  - `prune_columns()`: keep only the columns you need before the data is loaded, so large surveys use much less memory and time.
- - `keep_variable_in_largest_table()`: when several tables repeat a variable (e.g. age), keep it only in the table that covers the whole population.
- - `extract_and_prepare_data(cache_parquet=True)` passes the Parquet cache option to `Extractor`.
  - `extractor_utils.s4h_parse_ibge_layout()`: read the fixed-width layout of a PNAD / PNAD Contínua file from the IBGE dictionary published with it, optionally only for some variables.
  - `s4h_vertical_merge(overlap_basis="larger")`: only merge tables with nearly the same columns. With the default (`"smaller"`), a small table whose columns are almost all in a larger one is stacked into it, e.g. a survey module made of household keys stacked into the person table.
+### Changed
+ - `apply_value_mappings` normalizes each distinct value once: much faster on large surveys.
+ - `s4h_drop_nan_columns` always drops columns that are entirely `NaN`; with the default `nan_threshold=1.0` it used to drop nothing.
+ - `harmonizer_utils` messages go through the socio4health logger (`s4h_set_log_level()`) instead of `print`.
+### Removed
+ - `group_and_onehot_encode`, `select_and_filter_columns`, `extract_and_prepare_data` and the `mapping_utils` module: replaced by `s4h_shares()`, `Schema` and `s4h_harmonize_records()`.
+ - `Harmonizer.s4h_join_data` and `Harmonizer(aux_key=...)`: `s4h_harmonize_records()` joins the modules of a survey by household and person.
+ - Unused `CountryEnum`, `NameEnum`, `extractor_utils.create_unique_path` and `StandardSpider.parse_item`. `Harmonizer.drop_nan_columns`: use `s4h_drop_nan_columns`.
 ### Fixed
  - `s4h_vertical_merge` stacks the tables of a group with the same upper-case column names it uses to group them. Columns that differ only in case (`Secuencia_p` / `SECUENCIA_P`) used to stay separate, each empty for the other files' rows.
- - `group_and_onehot_encode`: units without any weight now get missing shares instead of 0.
  - `merge_factor` no longer replaces the expansion factor of every table with the one of the first table. Rows from other files (e.g. other months) used to lose their weight. Tables keep their own factor and the others get it from every table that has it.
  - Column mappings can build a variable from several raw columns: a key like `"WS2|WS1": "H_WATER"` takes the first non-empty value, in that order (`harmonize_columns_by_year`; also `s4h_coalesce_columns()` and `mapping_source_columns()`). Use the same key in the value mapping.
  - `s4h_code_from_flags()`: build a categorical code from yes/no columns (one per option), for questions where the main option is only asked when several are "yes".

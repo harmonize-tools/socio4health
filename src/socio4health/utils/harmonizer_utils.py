@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from typing import Any
 from .deps import import_optional
+from .log import logger
 
 
 def s4h_standardize_dict(raw_dict: pd.DataFrame) -> pd.DataFrame:
@@ -336,7 +337,7 @@ def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') 
         prepared[value] = text
 
     if truncated:
-        print("Rows with contents longer than 5000 characters are cut off")
+        logger.warning("Rows with contents longer than 5000 characters are cut off")
 
     pending = []
     for text in dict.fromkeys(prepared.values()):
@@ -358,7 +359,7 @@ def s4h_translate_column(data: pd.DataFrame, column: str, language: str = 'en') 
         return _translation_cache[(_TRANSLATION_MODEL_NAME, text)]
 
     data[new_col] = data[column].apply(translated_value)
-    print(f"{column} translated")
+    logger.info(f"{column} translated")
 
     return data
 
@@ -531,72 +532,6 @@ def _normalize_value_token(value):
     return text
 
 
-def _sanitize_suffix(value, fallback='Missing'):
-    cleaned = re.sub(r'\W+', '_', str(value)).strip('_')
-    return cleaned or fallback
-
-
-def _resolve_value_map(value_labels_by_column, column_name):
-    if not isinstance(value_labels_by_column, dict):
-        return {}
-
-    candidates = [_clean_column_name(column_name), str(column_name)]
-    for candidate in candidates:
-        if candidate in value_labels_by_column:
-            entry = value_labels_by_column[candidate]
-            if isinstance(entry, dict) and 'VALUES' in entry and isinstance(entry['VALUES'], dict):
-                return entry['VALUES']
-            if isinstance(entry, dict):
-                return entry
-            return {}
-
-    return {}
-
-
-def _lookup_label(values_map, token_clean):
-    if not values_map:
-        return None
-
-    normalized_value_map = {}
-    for key, mapped_value in values_map.items():
-        norm_key = _normalize_value_token(key)
-        if norm_key is not None:
-            normalized_value_map[norm_key] = mapped_value
-
-    keys_to_try = [token_clean]
-    if token_clean.isdigit():
-        keys_to_try.append(int(token_clean))
-        keys_to_try.append(float(token_clean))
-
-    for key in keys_to_try:
-        norm_key = _normalize_value_token(key)
-        if norm_key in normalized_value_map:
-            return normalized_value_map[norm_key]
-
-    return None
-
-
-def extract_and_prepare_data(year, path, ext, sep=None, output_path=None, colnames=None, colspecs=None,
-                             on_bad_lines='warn', cache_parquet=False):
-    from ..extractor import Extractor
-
-    print(f"{year}: {path}")
-    extractor = Extractor(
-        input_path=path,
-        down_ext=[ext],
-        sep=sep,
-        output_path=output_path,
-        colnames=colnames,
-        colspecs=colspecs,
-        on_bad_lines=on_bad_lines,
-        cache_parquet=cache_parquet,
-    )
-    dfs_extracted = extractor.s4h_extract()
-    for df in dfs_extracted:
-        df['YEAR'] = year
-    return dfs_extracted
-
-
 def merge_factor(dfs, factor_col, id_col, fallback_col=None):
     """Give the expansion factor to the tables that do not have it, joining on an ID.
 
@@ -656,25 +591,6 @@ def merge_factor(dfs, factor_col, id_col, fallback_col=None):
             filled.append(df)
         out = filled
     return out
-
-
-def select_and_filter_columns(dfs, col_cols, num_cols_threshold):
-    normalized_cols = []
-    seen = set()
-    for col in col_cols:
-        normalized = _clean_column_name(col)
-        if normalized not in seen:
-            seen.add(normalized)
-            normalized_cols.append(normalized)
-
-    normalized_dfs = []
-    for df in dfs:
-        df = _normalize_columns(df)
-        normalized_dfs.append(df[[col for col in normalized_cols if col in df.columns]])
-
-    dfs = normalized_dfs
-    dfs = [df for df in dfs if len(df.columns) > num_cols_threshold]
-    return dfs
 
 
 def use_person_factor(dfs, factor_col, person_factor_col, person_id_col):
@@ -748,161 +664,6 @@ def prune_columns(dfs, keep):
         if any(_clean_column_name(c) != 'YEAR' for c in cols):
             out.append(df[cols])
     return out
-
-
-def keep_variable_in_largest_table(dfs, keys=()):
-    """Keep each column in one table only: the one with the most rows.
-
-    Survey modules often repeat a variable (e.g. age in the general and the labour-force tables) for
-    different populations. Aggregating it in each table and then taking the first non-missing value per
-    column mixed categories computed on different populations, so the shares no longer added up to 1.
-
-    Parameters
-    ----------
-    dfs : list of pandas.DataFrame
-    keys : iterable of str
-        Columns kept in every table (unit, year, weight, IDs).
-
-    Returns
-    -------
-    list of pandas.DataFrame
-        Same tables; tables left with only ``keys`` columns are removed.
-    """
-    keys = set(keys)
-    order = sorted(range(len(dfs)), key=lambda i: -len(dfs[i]))
-    owner = {}
-    for i in order:
-        for col in dfs[i].columns:
-            owner.setdefault(col, i)
-    out = []
-    for i, df in enumerate(dfs):
-        df = df.drop(columns=[c for c in df.columns if c not in keys and owner[c] != i])
-        if any(c not in keys for c in df.columns):
-            out.append(df)
-    return out
-
-
-def group_and_onehot_encode(dfs, group_col, weight_col, id_col, value_labels_by_column=None):
-    grouped_dfs = []
-    group_col = _clean_column_name(group_col)
-    weight_col = _clean_column_name(weight_col)
-    if id_col is not None:
-        id_col = _clean_column_name(id_col)
-
-    for i, df in enumerate(dfs):
-        if hasattr(df, 'compute'):
-            df = df.compute()
-        df = _normalize_columns(df)
-
-        if group_col in df.columns:
-            def _keep_int_part(val):
-                if pd.isna(val):
-                    return val
-                s = str(val).strip()
-                m = re.match(r'([+-]?\d+)', s)
-                if m:
-                    try:
-                        return int(m.group(1))
-                    except Exception:
-                        return s
-                if '.' in s:
-                    left = s.split('.', 1)[0]
-                    if re.fullmatch(r'[+-]?\d+', left):
-                        return int(left)
-                return s
-
-            df[group_col] = df[group_col].map(_keep_int_part)
-
-        if group_col in df.columns and weight_col in df.columns:
-            df = df.drop(columns=[id_col], errors='ignore')
-            df[weight_col] = pd.to_numeric(df[weight_col], errors='coerce')
-
-            df = df.dropna(subset=[group_col])
-            df = df[df[group_col].astype(str).str.strip() != '']
-
-            group_cols = [group_col]
-            if 'YEAR' in df.columns:
-                group_cols.append('YEAR')
-            cat_cols = [col for col in df.columns if col not in [group_col, weight_col, 'YEAR']]
-            dummies = [pd.get_dummies(df[col], prefix=col) for col in cat_cols]
-
-            if dummies:
-                dummies_df = pd.concat(dummies, axis=1)
-                dummies_df.columns = [c.replace('.0', '') for c in dummies_df.columns]
-
-                rename_map = {}
-                for colname in dummies_df.columns:
-                    if '_' not in colname:
-                        continue
-
-                    prefix, token = colname.rsplit('_', 1)
-                    clean_prefix = _clean_column_name(prefix)
-                    token_clean = str(token).strip().replace('.0', '')
-
-                    values_map = _resolve_value_map(value_labels_by_column, clean_prefix)
-                    label = _lookup_label(values_map, token_clean)
-
-                    if values_map and label is not None and str(label).strip() != '':
-                        new_name = f'{prefix}_{_sanitize_suffix(label)}'
-                    elif values_map:
-                        new_name = f'{prefix}_Missing'
-                    else:
-                        new_name = f'{prefix}_{_sanitize_suffix(token_clean)}'
-                        if new_name == f'{prefix}_':
-                            new_name = f'{prefix}_Missing'
-
-                    if new_name != colname:
-                        rename_map[colname] = new_name
-
-                if rename_map:
-                    dummies_df = dummies_df.rename(columns=rename_map)
-
-                clean_dummy_cols = {}
-                for col in dummies_df.columns:
-                    if re.search(r'_\s*$', col) or re.search(r'_(nan|none)$', col, re.IGNORECASE):
-                        prefix = col.rsplit('_', 1)[0]
-                        clean_dummy_cols[col] = f'{prefix}_Missing'
-
-                if clean_dummy_cols:
-                    dummies_df = dummies_df.rename(columns=clean_dummy_cols)
-
-                dummies_df = dummies_df.multiply(df[weight_col], axis=0)
-                cols_to_concat = [df[[group_col, weight_col]]]
-                if 'YEAR' in df.columns:
-                    cols_to_concat.insert(1, df[['YEAR']])
-                cols_to_concat.append(dummies_df)
-                df_onehot = pd.concat(cols_to_concat, axis=1)
-                df_grouped = df_onehot.groupby(group_cols).sum(numeric_only=True).reset_index()
-
-                if df_grouped.columns.duplicated().any():
-                    group_cols_frame = df_grouped[group_cols]
-                    numeric_cols = df_grouped.drop(columns=group_cols).T.groupby(level=0).sum().T
-                    df_grouped = pd.concat([group_cols_frame, numeric_cols], axis=1)
-
-                dummy_cols = [col for col in df_grouped.columns if col not in group_cols + [weight_col]]
-                df_grouped = df_grouped.rename(columns={weight_col: f'{weight_col}_sum'})
-
-                if dummy_cols:
-                    # A unit without weights has no data: its shares are missing, not 0.
-                    total_weight = pd.to_numeric(df_grouped[f'{weight_col}_sum'], errors='coerce')
-                    total_weight = total_weight.where(total_weight > 0)
-                    for col in dummy_cols:
-                        df_grouped[col] = df_grouped[col].div(total_weight)
-
-                df_grouped = df_grouped.drop(columns=[f'{weight_col}_sum'])
-                if 'YEAR' in df_grouped.columns:
-                    cols = ['YEAR'] + [col for col in df_grouped.columns if col != 'YEAR']
-                    df_grouped = df_grouped[cols]
-
-                grouped_dfs.append(df_grouped)
-                print(f"One-hot grouped DataFrame {i} by {group_cols} (proportions by total {weight_col}):")
-                print(df_grouped.head())
-            else:
-                print(f"DataFrame {i} no tiene columnas categóricas para one-hot encoding.")
-        else:
-            print(f"DataFrame {i} does not have '{group_col}' or '{weight_col}', skipping group.")
-
-    return grouped_dfs
 
 
 COALESCE_SEPARATOR = '|'
@@ -1004,7 +765,7 @@ def harmonize_columns_by_year(dfs, year, year_mappings):
     rename_map = _resolve_year_mapping(year_mappings, year)
 
     if not rename_map:
-        print(f"No mappings found for year {year}")
+        logger.warning(f"No mappings found for year {year}")
         return dfs
 
     harmonized_dfs = []
@@ -1023,7 +784,7 @@ def harmonize_columns_by_year(dfs, year, year_mappings):
                     used_elsewhere = {_clean_column_name(c) for k in rename_map if k != orig_col
                                       for c in str(k).split(COALESCE_SEPARATOR)}
                     df = s4h_coalesce_columns(df, sources, _clean_column_name(harm_col), keep=used_elsewhere)
-                    print(f"Coalesced {sources} into {harm_col} for year {year}")
+                    logger.info(f"Coalesced {sources} into {harm_col} for year {year}")
         rename_map_simple = {k: v for k, v in rename_map.items() if COALESCE_SEPARATOR not in str(k)}
 
         applicable_rename = {}
@@ -1039,15 +800,35 @@ def harmonize_columns_by_year(dfs, year, year_mappings):
         clashing = [c for c in df.columns if c in targets and c not in applicable_rename]
         if clashing:
             df = df.drop(columns=clashing)
-            print(f"Dropped raw columns replaced by mapped ones for year {year}: {clashing}")
+            logger.info(f"Dropped raw columns replaced by mapped ones for year {year}: {clashing}")
 
         if applicable_rename:
             df = df.rename(columns=applicable_rename)
-            print(f"Renamed columns for year {year}: {applicable_rename}")
+            logger.info(f"Renamed columns for year {year}: {applicable_rename}")
 
         harmonized_dfs.append(df)
 
     return harmonized_dfs
+
+
+def _memoized(func):
+    """``func`` computed once per distinct value: a column has millions of values but few distinct codes."""
+    cache = {}
+
+    def wrapper(value):
+        if value is None or value is pd.NA or (isinstance(value, float) and value != value):
+            key = ('missing', type(value))
+        else:
+            key = (type(value), value)   # 1, 1.0 and True compare equal but may give different results
+        try:
+            return cache[key]
+        except KeyError:
+            cache[key] = result = func(value)
+            return result
+        except TypeError:   # unhashable value
+            return func(value)
+
+    return wrapper
 
 
 def apply_value_mappings(dfs, year, value_mappings, column_aliases=None):
@@ -1055,7 +836,7 @@ def apply_value_mappings(dfs, year, value_mappings, column_aliases=None):
     year_column_map = _resolve_year_mapping(column_aliases, year)
 
     if not year_value_map:
-        print(f"No value mappings found for year {year}")
+        logger.warning(f"No value mappings found for year {year}")
         return dfs
 
     mapped_dfs = []
@@ -1078,7 +859,7 @@ def apply_value_mappings(dfs, year, value_mappings, column_aliases=None):
                     break
 
             if col_match and isinstance(value_map, dict):
-                normalized_series = df[col_match].map(_normalize_value_token)
+                normalized_series = df[col_match].map(_memoized(_normalize_value_token))
 
                 normalized_value_map = {}
                 for key, mapped_value in value_map.items():
@@ -1093,7 +874,7 @@ def apply_value_mappings(dfs, year, value_mappings, column_aliases=None):
                 mapped_series = normalized_series.map(lambda x: normalized_value_map.get(x, x))
                 mapped_series = mapped_series.fillna('0')
                 df[col_match] = mapped_series
-                print(f"Applied value mapping for {col_match} in year {year}")
+                logger.info(f"Applied value mapping for {col_match} in year {year}")
 
         mapped_dfs.append(df)
 
@@ -1103,11 +884,7 @@ def apply_value_mappings(dfs, year, value_mappings, column_aliases=None):
 __all__ = [
     '_clean_column_name',
     '_normalize_columns',
-    'extract_and_prepare_data',
     'merge_factor',
-    'select_and_filter_columns',
-    'group_and_onehot_encode',
-    'keep_variable_in_largest_table',
     'prune_columns',
     'use_person_factor',
     'harmonize_columns_by_year',

@@ -33,7 +33,8 @@ Working with microdata from several countries usually means dealing with a diffe
 | **Read** | Unpacks `.zip`, `.7z`, `.tar`, `.gz` and reads `.csv`, `.txt`, fixed-width, `.xls/.xlsx`, `.sav` (SPSS), `.parquet`, `.json` and geospatial files (`.shp`, `.geojson`, `.kml`). |
 | **Scale** | Returns [Dask](https://www.dask.org/) DataFrames, so full censuses and multi-year surveys can be processed without fitting in memory. An optional Parquet cache makes re-reading large text files much faster. |
 | **Understand** | Standardizes raw data dictionaries, translates questions and answers to English, and classifies each variable into a theme (e.g. *Housing*, *Business*) with a fine-tuned BERT model. |
-| **Harmonize** | Stacks files from different periods (`s4h_vertical_merge`), renames columns and recodes categorical values per country from a mapping (`s4h_harmonize_dataframes`), drops empty columns, selects variables by theme and filters by geography or any key (`s4h_data_selector`), and joins tables (`s4h_join_data`). |
+| **Harmonize** | Stacks files from different periods (`s4h_vertical_merge`), renames columns and recodes categorical values per country from a mapping (`s4h_harmonize_dataframes`), drops empty columns, selects variables by theme and filters by geography or any key (`s4h_data_selector`). |
+| **Records & shares** | From JSON descriptions of the harmonized variables and of each survey (files, keys, weights, rules), builds one table of households and one of persons per survey year with an expansion factor (`s4h_build_records`, in parallel and skipping years that are up to date), and the weighted share of each category per subnational unit (`s4h_shares`). |
 | **Load** | Saves the result with `s4h_export` as Parquet (optionally partitioned, e.g. by year), CSV or tables in a DuckDB database, one table per DataFrame or per country. Data larger than memory is written partition by partition. |
 
 Built-in column specifications are included for Brazil's PNAD Contínua, and the example notebooks pull data from Colombia (DANE), Brazil (IBGE) and Peru (INEI).
@@ -107,13 +108,35 @@ s4h_export(selected, "data/clean", format="parquet", names=["pnadc_2024"])
 
 To work with files you already have, pass a local folder as `input_path`. For logging, use `socio4health.s4h_set_log_level`.
 
+### Harmonized records and shares
+
+For household surveys of several countries and years, describe the harmonized variables (`harmonized_mapping.json`: the table, type and labels of each one) and the surveys (`surveys.json`: files, mappings, household and person keys, weights and rules), then build the records of each year and summarize them per unit:
+
+```python
+import pandas as pd
+from socio4health import Schema, s4h_build_records, s4h_export, s4h_load_surveys, s4h_shares
+
+if __name__ == "__main__":   # needed for workers > 1 on Windows and macOS
+    schema = Schema.from_json("harmonized_mapping.json")
+    surveys = s4h_load_surveys("surveys.json", data_root="data/raw")
+
+    # data/records/households/<year>/ and data/records/persons/<year>/; years already done are skipped
+    report = s4h_build_records(surveys["GEIH"], schema, "data/records", workers=2)
+
+    tables = {level: pd.read_parquet(f"data/records/{level}/2024") for level in ("households", "persons")}
+    shares = s4h_shares(tables, schema, by=["YEAR", "ADMIN_DIVISION"])
+    s4h_export({"shares": shares, "codebook": schema.codebook()}, "data/clean", format="csv")
+```
+
+The JSON formats are described in the [Getting Started](https://harmonize-tools.github.io/socio4health/getting_started.html) guide.
+
 More complete walkthroughs are available as notebooks:
 
-- [Extractor](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/extractor.ipynb): online and local extraction options
-- [Harmonization](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/harmonization.ipynb): the full pipeline on PNAD Contínua
-- [Colombia](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_colombia.ipynb): DANE census with geospatial data and maps
-- [Brazil](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_brazil.ipynb)
-- [Housing deficit](https://github.com/harmonize-tools/socio4health/blob/main/docs/source/notebooks/example_housing_deficit.ipynb): a multi-country use case
+- [Extractor](https://github.com/harmonize-tools/socio4health/blob/main/notebooks/extractor.ipynb): online and local extraction options
+- [Harmonization](https://github.com/harmonize-tools/socio4health/blob/main/notebooks/harmonization.ipynb): the full pipeline on PNAD Contínua
+- [Colombia](https://github.com/harmonize-tools/socio4health/blob/main/notebooks/example_colombia.ipynb): DANE census with geospatial data and maps
+- [Brazil](https://github.com/harmonize-tools/socio4health/blob/main/notebooks/example_brazil.ipynb)
+- [Housing deficit](https://github.com/harmonize-tools/socio4health/blob/main/notebooks/example_housing_deficit.ipynb): a multi-country use case
 
 ## Built on
 

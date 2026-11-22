@@ -10,6 +10,4 @@
    
       BraColnamesEnum
       BraColspecsEnum
-      CountryEnum
-      NameEnum
    

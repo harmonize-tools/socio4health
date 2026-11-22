@@ -80,7 +80,7 @@ Who should use socio4health?
 About the Project
 -----------------
 
-Developed by `Erick Lozano <https://github.com/Ersebreck>`_, `Diego Irreño <https://github.com/dirreno>`_ and `Juan Montenegro <https://github.com/Juanmontenegro99>`_ © 2025
+Developed by `Diego Irreño <https://github.com/dirreno>`_, `Juan Montenegro <https://github.com/Juanmontenegro99>`_ and `Erick Lozano <https://github.com/Ersebreck>`_ © 2025
 
 Documentation maintained by `Ingrid Mora <https://github.com/ingridvmoras>`_
 

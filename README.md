@@ -197,18 +197,18 @@ Contact the authors and contributors if you have questions or feedback.
   <strong>Diego Irreño</strong> (developer)
 </span>
 </br>
-<a href="https://github.com/Ersebreck">
-  <img src="https://avatars.githubusercontent.com/u/81669194?v=4" style="width: 50px; height: auto;" />
-</a>
-<span style="display: flex; align-items: center; margin-left: 10px;">
-  <strong>Erick Lozano</strong> (developer)
-</span>
-</br>
 <a href="https://github.com/Juanmontenegro99">
   <img src="https://avatars.githubusercontent.com/u/60274234?v=4" style="width: 50px; height: auto;" />
 </a>
 <span style="display: flex; align-items: center; margin-left: 10px;">
   <strong>Juan Montenegro</strong> (developer)
+</span>
+</br>
+<a href="https://github.com/Ersebreck">
+  <img src="https://avatars.githubusercontent.com/u/81669194?v=4" style="width: 50px; height: auto;" />
+</a>
+<span style="display: flex; align-items: center; margin-left: 10px;">
+  <strong>Erick Lozano</strong> (developer)
 </span>
 </br>
 <a href="https://github.com/ingridvmoras">

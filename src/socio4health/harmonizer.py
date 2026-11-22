@@ -24,7 +24,8 @@ class Harmonizer:
         min_common_columns : int
             Minimum number of common columns required for vertical merge (default is 1).
         nan_threshold : float
-            Percentage threshold of ``NaN`` values to drop columns (default is 1.0).
+            Share of ``NaN`` values above which :meth:`s4h_drop_nan_columns` drops a column (default is 1.0: only
+            columns that are entirely ``NaN``).
         sample_frac : float or ``None``
             Fraction of rows to sample for NaN detection (default is ``None``).
         column_mapping : ``Enum``, dict, str or ``Path``
@@ -48,9 +49,7 @@ class Harmonizer:
         extra_cols : list of str
             Extra columns for data selection (default is an empty list).
         join_key : str
-            Key column for joining DataFrames (default is ``None``).
-        aux_key : str
-            Auxiliary key column for joining DataFrames (default is ``None``).
+            Key column always kept by :meth:`s4h_data_selector` (default is ``None``).
     """
     def __init__(self,
                  min_common_columns: int = 1,
@@ -66,8 +65,7 @@ class Harmonizer:
                  key_col: Optional[str] = None,
                  key_val: Optional[List[Union[str, int, float]]] = None,
                  extra_cols: Optional[List[str]] = None,
-                 join_key: str = None,
-                 aux_key: Optional[str] = None):
+                 join_key: Optional[str] = None):
         """
         Initialize the Harmonizer class with default parameters.
         """
@@ -85,7 +83,6 @@ class Harmonizer:
         self.key_val = key_val or []
         self.extra_cols = extra_cols or []
         self.join_key = join_key
-        self.aux_key = aux_key
 
 
 
@@ -239,7 +236,8 @@ class Harmonizer:
             raise ValueError("extra_cols must be a list of strings")
         self._extra_cols = value
 
-    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame], overlap_threshold: float = 1, method: str = "union") -> List[dd.DataFrame]:
+    def s4h_vertical_merge(self, ddfs: List[dd.DataFrame], overlap_threshold: float = 1, method: str = "union",
+                           overlap_basis: str = "smaller") -> List[dd.DataFrame]:
         """
         Merge a list of `Dask <https://docs.dask.org>`_ DataFrames vertically using instance parameters.
 
@@ -253,6 +251,13 @@ class Harmonizer:
             Method to use for merging (default is "union").
                 - "union": Merge all columns from all DataFrames, filling missing values with NaN.
                 - "intersection": Merge only columns that are common to all DataFrames.
+        overlap_basis : str, optional
+            What the shared columns are compared with (default is "smaller").
+                - "smaller": shared columns / columns of the smaller table (overlap coefficient). A small table
+                  whose columns are almost all in a larger one is merged into it, even if it is another table.
+                - "larger": shared columns / columns of the larger table. Only tables with nearly the same
+                  columns are merged. Use it for survey files where several modules share the household
+                  keys: with "smaller", a module made mostly of keys is stacked into the person table.
 
         Returns
         -------
@@ -273,6 +278,9 @@ class Harmonizer:
             raise ValueError("overlap_threshold must be a float between 0 and 1")
         if method not in ("union", "intersection"):
             raise ValueError("method must be 'union' or 'intersection'")
+        if overlap_basis not in ("smaller", "larger"):
+            raise ValueError("overlap_basis must be 'smaller' or 'larger'")
+        size = min if overlap_basis == "smaller" else max
 
         groups = []
         used_indices = set()
@@ -296,7 +304,7 @@ class Harmonizer:
                 cols2 = set(df2.columns)
                 common_cols = cols1 & cols2
                 
-                overlap = len(common_cols) / min(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
+                overlap = len(common_cols) / size(len(cols1), len(cols2)) if min(len(cols1), len(cols2)) > 0 else 0
 
                 if (len(common_cols) >= self.min_common_columns and
                         overlap >= overlap_threshold):
@@ -322,7 +330,16 @@ class Harmonizer:
             if len(group_indices) == 1:
                 merged_dfs.append(ddfs[group_indices[0]])
             else:
-                group_dfs = [ddfs[i] for i in group_indices]
+                # Tables are grouped by upper-cased names, so they must be stacked with those names too:
+                # otherwise "Secuencia_p" and "SECUENCIA_P" stay two columns, each empty for the other
+                # files' rows.
+                group_dfs = []
+                for i in group_indices:
+                    df = ddfs[i]
+                    names = [str(c).upper().strip() for c in df.columns]
+                    keep = [pos for pos, name in enumerate(names) if name not in names[:pos]]
+                    df = df.iloc[:, keep] if len(keep) < len(names) else df
+                    group_dfs.append(df.rename(columns=dict(zip(df.columns, [names[pos] for pos in keep]))))
                 # Column order: order of first appearance in the group. (Using a set made the order change
                 # between Python runs, because string hashing is randomized.)
                 if method == "intersection":
@@ -350,12 +367,10 @@ class Harmonizer:
 
         return merged_dfs
 
-    def drop_nan_columns(self, ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> Union[
+    def s4h_drop_nan_columns(self, ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> Union[
         dd.DataFrame, List[dd.DataFrame]]:
         """
-
         Drop columns where the majority of values are ``NaN`` using instance parameters.
-
 
         Parameters
         ----------
@@ -365,7 +380,8 @@ class Harmonizer:
         Returns
         -------
         `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_ or list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            The DataFrame(s) with columns dropped where the proportion of ``NaN`` values is greater than nan_threshold.
+            The DataFrame(s) without the columns whose proportion of ``NaN`` values is greater than ``nan_threshold``
+            and without the columns that are entirely ``NaN``.
 
         Raises
         ------
@@ -388,7 +404,8 @@ class Harmonizer:
             else:
                 nan_percentages = ddf.isna().mean().compute()
 
-            columns_to_drop = nan_percentages[nan_percentages > self.nan_threshold].index.tolist()
+            # Columns with no values at all are always dropped, whatever the threshold
+            columns_to_drop = nan_percentages[(nan_percentages > self.nan_threshold) | (nan_percentages == 1)].index.tolist()
 
             if columns_to_drop:
                 logger.info(f"Dropping columns with >{self.nan_threshold * 100:.0f}% NaN values: {columns_to_drop}")
@@ -401,16 +418,6 @@ class Harmonizer:
             return [process_ddf(ddf) for ddf in ddf_or_ddfs]
         else:
             return process_ddf(ddf_or_ddfs)
-
-    def s4h_drop_nan_columns(self, ddf_or_ddfs: Union[dd.DataFrame, List[dd.DataFrame]]) -> Union[
-        dd.DataFrame, List[dd.DataFrame]]:
-        """
-        Compatibility wrapper for the legacy `s4h_drop_nan_columns` API.
-
-        This delegates to :meth:`drop_nan_columns` and preserves the old
-        public API expected by the documentation.
-        """
-        return self.drop_nan_columns(ddf_or_ddfs)
 
     @staticmethod
     def s4h_get_available_columns(df_or_dfs: Union[dd.DataFrame, pd.DataFrame, List[Union[dd.DataFrame, pd.DataFrame]]]) -> \
@@ -675,95 +682,3 @@ class Harmonizer:
             filtered_ddfs.append(filtered_ddf)
 
         return filtered_ddfs
-
-    def s4h_join_data(self, ddfs: List[dd.DataFrame]) -> pd.DataFrame:
-        """
-        Join multiple `Dask <https://docs.dask.org>`_ DataFrames on a specified ``key_col``, removing duplicate columns.
-
-        Parameters
-        ----------
-        ddfs : list of `dask.dataframe.DataFrame <https://docs.dask.org/en/stable/generated/dask.dataframe.DataFrame.html>`_
-            List of Dask DataFrames to join.
-
-        Returns
-        -------
-        pandas.DataFrame
-            Merged DataFrame with duplicate columns removed.
-        """
-        pandas_dfs = [df.compute() for df in ddfs]
-        pandas_dfs = [df.rename(columns=lambda x: str(x).upper().strip()) for df in pandas_dfs]
-        pandas_dfs = [df.loc[:, ~df.columns.duplicated()] for df in pandas_dfs]
-
-        def identify_primary_df(dfs):
-            candidates = []
-
-            def _table_label(df, fallback_index):
-                if 'filename' in df.columns and not df['filename'].empty:
-                    source_name = str(df['filename'].dropna().iloc[0]).strip()
-                    if source_name:
-                        return Path(source_name).stem
-
-                if df.index.name:
-                    return str(df.index.name).strip()
-
-                return f"table_{fallback_index}"
-
-            for i, df in enumerate(dfs):
-                if self.join_key not in df.columns:
-                    continue
-
-                total_rows = len(df)
-                unique_rows = df[self.join_key].nunique()
-                uniqueness_ratio = unique_rows / total_rows
-
-                table_label = _table_label(df, i)
-                df[self.join_key].to_csv(f"data/directories_{table_label}.csv", index=False)
-                logger.debug(f"DataFrame {i} has {unique_rows} unique rows out of {total_rows} total rows. Uniqueness ratio: {uniqueness_ratio:.2f}")
-                if uniqueness_ratio > 0.9:
-                    candidates.append((i, df.copy(), uniqueness_ratio))
-
-            if not candidates:
-                logger.error("No table with nearly-unique key found")
-
-            candidates.sort(key=lambda x: x[2], reverse=True)
-            original_index, primary_df, _ = candidates[0]
-
-            primary_df = primary_df.drop_duplicates(subset=[self.join_key], keep='first')
-            dfs.pop(original_index)
-            dfs.insert(0, primary_df)
-
-            return dfs
-
-        ordered_dfs = identify_primary_df(pandas_dfs)
-
-        merged_df = pd.merge(ordered_dfs[0], ordered_dfs[1],
-                             on=self.join_key,
-                             how='outer',
-                             suffixes=('', '_dup'))
-
-        dup_cols = [col for col in merged_df.columns if col.endswith('_dup')]
-        merged_df = merged_df.drop(columns=dup_cols)
-
-        for df in ordered_dfs[2:]:
-            if self.join_key not in df.columns:
-                raise KeyError(f"Join key '{self.join_key}' not found in DataFrame")
-
-            original_cols = set(merged_df.columns)
-
-            if self.aux_key is not None and self.aux_key in df.columns:
-                merged_df = pd.merge(merged_df, df,
-                                     on=[self.join_key, self.aux_key],
-                                     how='outer',
-                                     suffixes=('', '_dup'))
-            else:
-                merged_df = pd.merge(merged_df, df,
-                                     on=self.join_key,
-                                     how='outer',
-                                     suffixes=('', '_dup'))
-
-            new_dup_cols = [col for col in merged_df.columns
-                            if col.endswith('_dup') and
-                            col.replace('_dup', '') in original_cols]
-            merged_df = merged_df.drop(columns=new_dup_cols)
-
-        return merged_df

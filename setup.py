@@ -43,7 +43,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/harmonize-tools/socio4health',
-    author='Erick Lozano, Diego Irreño, Juan Montenegro, Ingrid Mora',
+    author='Diego Irreño, Juan Montenegro, Erick Lozano, Ingrid Mora',
     author_email='',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

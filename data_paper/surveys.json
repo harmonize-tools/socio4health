@@ -1,0 +1,102 @@
+{
+  "GEIH": {
+    "country": "COL",
+    "years": [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "parts": [{"path": "GEIH/{year}"}],
+    "reader": {"down_ext": [".csv"], "sep": ";", "on_bad_lines": "skip"},
+    "file_groups": [
+      {"pattern": "(?i)[._]csv_\\s*Cabecera\\s*-", "assign": {"CLASE": "1"}},
+      {"pattern": "(?i)[._]csv_\\s*Resto\\s*-", "assign": {"CLASE": "2"}},
+      {"pattern": "(?i)^(?!.*[._]csv_\\s*(Cabecera|Resto|.rea)\\s*-)"}
+    ],
+    "unify_columns": ["DIRECTORIO"],
+    "column_mapping": "col_mapping/column_mapping.json",
+    "value_mapping": "col_mapping/geih_mapping.json",
+    "factor": {"factor_col": "FEX_C18", "id_col": "DIRECTORIO", "fallback_col": "FEX_C"},
+    "household_key": [["DIRECTORIO", "SECUENCIA_P", "MES"], ["DIRECTORIO", "SECUENCIA_P"]],
+    "person_key": [["ORDEN"]],
+    "periods_per_year": 12,
+    "group_col": "ADMIN_DIVISION",
+    "notes": {
+      "file_groups": "2007-2019 files are split by area and the area is only in the file name: Cabecera = municipal seats (urban), Resto = rural. Files not split are read as they are; 'Área' files duplicate Cabecera and are skipped.",
+      "unify_columns": "Some files spell the household ID differently (BOM, lowercase).",
+      "factor": "FEX_C18 (CNPV 2018 projection). In 2020 a separate projection file misses 8 new departments: FEX_C there.",
+      "periods_per_year": "Each monthly sample is expanded to the whole population."
+    }
+  },
+  "ENAHO": {
+    "country": "PER",
+    "years": [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+    "parts": [{"path": "ENAHO/{year}"}],
+    "reader": {"down_ext": [".sav"]},
+    "column_mapping": "per_mapping/column_mapping.json",
+    "value_mapping": "per_mapping/enaho_mapping.json",
+    "factor": {"factor_col": "FACTOR07", "id_col": ["CONGLOME", "VIVIENDA", "HOGAR"]},
+    "person_factor": {"factor_col": "FACPOB07", "id_col": ["CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO"]},
+    "keep_rows": {"RESULT": [1, 2]},
+    "keep_rows_any": [{"P204": [1], "P205": [2]}, {"P204": [2], "P206": [1]}],
+    "fill_missing": {"P302": {"from": "P301A", "values": [4, 5, 6, 7, 8, 9, 10, 11]}},
+    "household_key": [["CONGLOME", "VIVIENDA", "HOGAR"]],
+    "person_key": [["CODPERSO"]],
+    "group_col": "ADMIN_DIVISION",
+    "notes": {
+      "keep_rows": "Only completed or partly completed interviews (RESULT 1-2), as INEI does: refusals, absences and empty dwellings have no data.",
+      "keep_rows_any": "Usual residents only, as INEI does: members not away 30+ days (P204 = 1, P205 = 2) and non-members present 30+ days (P204 = 2, P206 = 1). Every person module carries P204-P206.",
+      "fill_missing": "Literacy (P302) is only asked below completed primary: in the table that asks it, the people who were not asked and completed primary or more (P301A 4-11) take that level, which the value mapping counts as literate. Other blanks (e.g. 2020 phone interviews) stay Missing."
+    }
+  },
+  "PNAD": {
+    "country": "BRA",
+    "years": [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2011],
+    "parts": [
+      {"path": "PNAD/dom/{year}", "ibge_dictionary": "PNAD/original/{year}/Dicion*/*domic*.xls"},
+      {"path": "PNAD/pes/{year}", "ibge_dictionary": "PNAD/original/{year}/Dicion*/*pessoas*.xls"}
+    ],
+    "reader": {"down_ext": [".txt"]},
+    "column_mapping": "pnad_mapping/column_mapping.json",
+    "value_mapping": "pnad_mapping/pnad_mapping.json",
+    "household_key": [["V0102", "V0103"]],
+    "person_key": [["V0301"]],
+    "vertical_merge": false,
+    "group_col": "ADMIN_DIVISION",
+    "notes": {"parts": "Households (dom) and persons (pes) are separate fixed-width files."}
+  },
+  "PNADC": {
+    "country": "BRA",
+    "years": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+    "parts": [{"path": "PNADC/{year}", "ibge_dictionary": "PNADC/{year}/dicionario*.xls",
+               "shared_dictionary": "PNADC/dicionario*_a_*.xls"}],
+    "reader": {"down_ext": [".txt"]},
+    "column_mapping": "pnadc_mapping/column_mapping.json",
+    "value_mapping": "pnadc_mapping/pnadc_mapping.json",
+    "household_key": [["UPA", "V1008", "V1014"]],
+    "person_key": [["V2003"]],
+    "derive_from_flags": {"S01016F": {"S01016A1": 1, "S01016A2": 2, "S01016A3": 3, "S01016A4": 4, "S01016A5": 5}},
+    "group_col": "ADMIN_DIVISION_2",
+    "notes": {
+      "derive_from_flags": "Cooking fuel: S01016B ('most used') is only asked when 2+ fuels are used; otherwise the fuel is the only 'yes' among S01016A1-A5. S01016F holds it, and the mapping uses 'S01016B|S01016F'."
+    }
+  },
+  "ENHOGAR": {
+    "country": "DOM",
+    "years": [2006, 2007, 2008, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2024],
+    "parts": [{"path": "ENHOGAR/{year}"}],
+    "reader": {"down_ext": [".csv"], "sep": ","},
+    "column_mapping": "rd_mappings/column_mapping.json",
+    "value_mapping": "rd_mappings/enhogar{year}_mapping.json",
+    "vertical_merge": false,
+    "household_key": [["HH1", "HH2"], ["UPM", "HVIVIEN", "HHOGAR"], ["HHUPM", "HHVIV", "HHOGAR"]],
+    "person_key": [["HL1"], ["LN"], ["HLINEA"]],
+    "row_ids_without_key": true,
+    "map_columns": [{"years": [2006], "source": "ADMIN_DIVISION_2", "target": "ADMIN_DIVISION",
+                     "mapping": "rd_mappings/region_mapping.json"}],
+    "relative_weight_years": {"households": [2006, 2008, 2010, 2011, 2012, 2014, 2019],
+                              "persons": [2006, 2008, 2010, 2014, 2019]},
+    "group_col": "ADMIN_DIVISION",
+    "notes": {
+      "row_ids_without_key": "The 2006-2013 public files have no identifiers: rows get their own ID and persons are not linked to households.",
+      "map_columns": "ENHOGAR 2006 has provinces (ADMIN_DIVISION_2) but not regions.",
+      "relative_weight_years": "These years only have relative (normalized) weights, which average 1: shares are right but their sums are not population totals, so POPULATION / HOUSEHOLDS are left empty in the shares."
+    }
+  }
+}

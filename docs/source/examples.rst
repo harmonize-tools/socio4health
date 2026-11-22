@@ -1,7 +1,7 @@
 Examples
 ========
 
-This section provides examples of how to use the **socio4health** library for **data extraction**, **transformation**, **loading**, and **AI-assisted querying and visualization**. These examples cover a variety of use cases to help you get started with the library.
+This section provides examples of how to use the **socio4health** library for **data extraction**, **transformation** and **loading**. These examples cover a variety of use cases to help you get started with the library.
 
 .. toctree::
    :maxdepth: 1
@@ -13,4 +13,5 @@ This section provides examples of how to use the **socio4health** library for **
    How to create a raw dictionary for data harmonization <dictionary>
    Hands-on with socio4health: socioeconomic and demographic variables on dengue incidence in Colombia <notebooks/example_colombia>
    Hands-on with socio4health: effects of hydrometeorological hazards and urbanization on dengue risk in Brazil <notebooks/example_brazil>
+   Hands-on with socio4health: preparing housing-deficit inputs from Colombia's Quality of Life Survey <notebooks/example_housing_deficit>
 

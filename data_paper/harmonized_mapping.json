@@ -1,6 +1,7 @@
 {
   "AREA": {
     "DESCRIPTION": "Housing area type",
+    "LEVEL": ["households", "persons"],
     "VALUES": {
       "1": "Urban",
       "2": "Rural",
@@ -139,6 +140,8 @@
   },
   "P_AGE": {
     "DESCRIPTION": "Age in years as of the person's last birthday",
+    "TYPE": "numeric",
+    "UNIT": "years",
     "VALUES": {
       "0": 0,
       "1": 1,
@@ -243,6 +246,7 @@
   },
   "P_EDUCATION": {
     "DESCRIPTION": "Records the last educational attainment in terms of the level of schooling",
+    "UNIVERSE": {"P_AGE": [25, null]},
     "VALUES": {
       "1": "Less than primary completed",
       "2": "Primary completed",

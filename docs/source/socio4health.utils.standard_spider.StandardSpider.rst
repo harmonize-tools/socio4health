@@ -13,39 +13,9 @@
 
    .. autosummary::
    
-      ~StandardSpider.__delattr__
-      ~StandardSpider.__dir__
-      ~StandardSpider.__eq__
-      ~StandardSpider.__format__
-      ~StandardSpider.__ge__
-      ~StandardSpider.__getattribute__
-      ~StandardSpider.__getstate__
-      ~StandardSpider.__gt__
-      ~StandardSpider.__hash__
       ~StandardSpider.__init__
-      ~StandardSpider.__init_subclass__
-      ~StandardSpider.__le__
-      ~StandardSpider.__lt__
-      ~StandardSpider.__ne__
-      ~StandardSpider.__new__
-      ~StandardSpider.__reduce__
-      ~StandardSpider.__reduce_ex__
-      ~StandardSpider.__repr__
-      ~StandardSpider.__setattr__
-      ~StandardSpider.__sizeof__
-      ~StandardSpider.__str__
-      ~StandardSpider.__subclasshook__
-      ~StandardSpider._parse
-      ~StandardSpider._set_crawler
-      ~StandardSpider.close
       ~StandardSpider.closed
-      ~StandardSpider.from_crawler
-      ~StandardSpider.handles_request
-      ~StandardSpider.log
       ~StandardSpider.parse
-      ~StandardSpider.parse_item
-      ~StandardSpider.start_requests
-      ~StandardSpider.update_settings
    
    
 
@@ -55,13 +25,6 @@
 
    .. autosummary::
    
-      ~StandardSpider.__annotations__
-      ~StandardSpider.__dict__
-      ~StandardSpider.__doc__
-      ~StandardSpider.__module__
-      ~StandardSpider.__slots__
-      ~StandardSpider.__weakref__
-      ~StandardSpider.custom_settings
       ~StandardSpider.name
    
    

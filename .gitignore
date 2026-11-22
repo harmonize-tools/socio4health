@@ -180,11 +180,8 @@ _site/
 vendor/
 *.png
 /cache
-/docs/source/notebooks/files/
 docs/source/data
-docs/source/notebooks/CNPV2018
 /docs/source/IBGE2010_
-docs/source/notebooks/files
 docs/source/CNVP2018
 /docs/source/data
 docs/source/CNVP2018
@@ -193,4 +190,7 @@ docs/source/CNVP2018
 docs/source/_build/
 docs/_build/
 _build/
-/docs/source/notebooks/IBGE_2010_
+
+# Example notebooks: copies made by docs/source/conf.py for each build
+/docs/source/notebooks/
+# (what the notebooks download and produce goes to notebooks/data/, ignored by the data/ rule)

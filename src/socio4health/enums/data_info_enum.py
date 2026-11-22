@@ -1,19 +1,6 @@
 from enum import Enum
 
 
-class CountryEnum(Enum):
-    COLOMBIA = 'COL'
-    PERU = 'PER'
-    BRAZIL = 'BRA'
-    DOMINICAN_REPUBLIC = 'DOM'
-
-class NameEnum(Enum):
-    PNAD = 'PNAD'
-    PNADC = 'PNADC'
-    ENAHO = 'ENAHO'
-    GEIH = 'GEIH'
-    ENHOGAR = 'ENHOGAR'
-
 class BraColnamesEnum(Enum):
     PNADC = [
         "Ano", "Trimestre", "UF", "Capital", "RM_RIDE", "UPA", "Estrato", "V1008", "V1014", "V1016",

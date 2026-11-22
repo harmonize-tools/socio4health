@@ -1,7 +1,6 @@
 import re
 import json
 import os
-import logging
 from socio4health.utils.log import logger
 import copy
 from socio4health.utils.deps import import_optional
@@ -138,23 +137,6 @@ class StandardSpider(SpiderBase):
                 self.logger.warning("Request ignored due to robots.txt restriction.")
             except Exception as e:
                 self.logger.error(f"Spider failed due to an error: {e}", exc_info=True)
-
-    def parse_item(self, response):
-        """Extract a simple item from a response.
-
-        This method exists for API compatibility and documentation purposes.
-        It returns a minimal mapping with the response URL and title (when
-        available). Implementors can override this to yield richer items.
-        """
-        title = None
-        try:
-            title = response.css('title::text').get()
-        except Exception:
-            pass
-        return {
-            'url': getattr(response, 'url', None),
-            'title': title
-        }
 
     def closed(self, reason):
         """Handle actions to perform when the spider is closed.

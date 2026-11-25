@@ -1,0 +1,829 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>socio4health.records &#8212; socio4health</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/socio4health/records';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/image.png" class="logo__image only-light" alt=""/>
+    <img src="" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">socio4health</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../API_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/harmonize-tools/socio4health" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">socio4health.records</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for socio4health.records</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""</span>
+<span class="sd">Record-level harmonization: one table of households and one of persons per survey year.</span>
+
+<span class="sd">:func:`s4h_harmonize_records` turns the raw files of a :class:`~socio4health.survey.Survey` year into</span>
+<span class="sd">``households`` (one row per household) and ``persons`` (one row per person) with the harmonized variables of a</span>
+<span class="sd">:class:`~socio4health.Schema`, IDs and an annual weight. :func:`s4h_build_records` does it for every year of a</span>
+<span class="sd">survey, writing each year as soon as it is done and skipping, on later runs, the years whose inputs did not</span>
+<span class="sd">change.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.extractor</span><span class="w"> </span><span class="kn">import</span> <span class="n">Extractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.harmonizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harmonizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">s4h_export</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">Schema</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.survey</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoDataError</span><span class="p">,</span> <span class="n">Survey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">extractor_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">s4h_set_log_level</span> <span class="k">as</span> <span class="n">set_log_level</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">socio4health.utils.harmonizer_utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_clean_column_name</span><span class="p">,</span> <span class="n">_normalize_columns</span><span class="p">,</span> <span class="n">apply_value_mappings</span><span class="p">,</span> <span class="n">harmonize_columns_by_year</span><span class="p">,</span> <span class="n">merge_factor</span><span class="p">,</span>
+    <span class="n">prune_columns</span><span class="p">,</span> <span class="n">s4h_code_from_flags</span><span class="p">,</span> <span class="n">s4h_code_from_rules</span><span class="p">,</span> <span class="n">use_person_factor</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">LEVELS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"households"</span><span class="p">:</span> <span class="s2">"HOUSEHOLD_ID"</span><span class="p">,</span> <span class="s2">"persons"</span><span class="p">:</span> <span class="s2">"PERSON_ID"</span><span class="p">}</span>
+<span class="n">ADMIN_COLS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ADMIN_DIVISION"</span><span class="p">,</span> <span class="s2">"ADMIN_DIVISION_2"</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">s4h_clean_codes</span><span class="p">(</span><span class="n">series</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Codes as text without spaces, leading zeros or decimals: ``"01"``, ``"1.0"`` and ``1`` become ``"1"``."""</span>
+    <span class="c1"># Each distinct value is cleaned once: a column has millions of values but far fewer distinct ones</span>
+    <span class="n">codes</span><span class="p">,</span> <span class="n">uniques</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">uniques</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"string"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\.0+$"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^0+(?=\d)"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="n">allow_fill</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">series</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">series</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">next</span><span class="p">((</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">_clean_column_name</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="n">name</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract</span><span class="p">(</span><span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">scratch_dir</span><span class="p">,</span> <span class="n">cache_parquet</span><span class="p">):</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">parts</span><span class="p">:</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">survey</span><span class="o">.</span><span class="n">data_root</span><span class="p">)</span> <span class="o">/</span> <span class="n">part</span><span class="p">[</span><span class="s2">"path"</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">NoDataError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Folder not found: </span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">survey</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"ibge_dictionary"</span> <span class="ow">in</span> <span class="n">part</span><span class="p">:</span>
+            <span class="n">colnames</span><span class="p">,</span> <span class="n">colspecs</span> <span class="o">=</span> <span class="n">extractor_utils</span><span class="o">.</span><span class="n">s4h_parse_ibge_layout</span><span class="p">(</span><span class="n">survey</span><span class="o">.</span><span class="n">ibge_dictionary</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">year</span><span class="p">),</span> <span class="n">variables</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">reader</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">is_fwf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colnames</span><span class="o">=</span><span class="n">colnames</span><span class="p">,</span> <span class="n">colspecs</span><span class="o">=</span><span class="n">colspecs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">file_groups</span><span class="p">:</span>
+            <span class="n">extractor</span> <span class="o">=</span> <span class="n">Extractor</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">),</span> <span class="n">output_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">scratch_dir</span><span class="p">),</span> <span class="n">cache_parquet</span><span class="o">=</span><span class="n">cache_parquet</span><span class="p">,</span>
+                                  <span class="n">file_pattern</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pattern"</span><span class="p">),</span> <span class="o">**</span><span class="n">reader</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">extractor</span><span class="o">.</span><span class="n">s4h_extract</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"assign"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>   <span class="c1"># e.g. the area, only in the file name</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">_clean_column_name</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="n">col</span><span class="p">])</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+                <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">unify_columns</span><span class="p">:</span>
+                    <span class="n">variants</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">_clean_column_name</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">!=</span> <span class="n">name</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+                        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">name</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">variants</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">name</span><span class="p">})</span>
+                <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dfs</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_ids</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">):</span>
+    <span class="c1"># HOUSEHOLD_ID from the household key and the raw person key (_PKEY), before columns are renamed. Tables</span>
+    <span class="c1"># without any key get row IDs when the survey allows it (_ROWID: persons are not linked to households).</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dfs</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">_normalize_columns</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">"compute"</span><span class="p">)</span> <span class="k">else</span> <span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">hkey</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">household_key</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">k</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hkey</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">]</span> <span class="o">=</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">hkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"-"</span><span class="p">)</span>
+            <span class="n">pkey</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">person_key</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">k</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pkey</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">"_PKEY"</span><span class="p">]</span> <span class="o">=</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">pkey</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pkey</span><span class="p">[</span><span class="mi">1</span><span class="p">:]],</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"-"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">survey</span><span class="o">.</span><span class="n">row_ids_without_key</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"t</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">-r"</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">"_ROWID"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_in</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">series</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">])</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply_rules</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">):</span>
+    <span class="c1"># Rules on raw records: rows to keep, values filled from another column, codes built from yes/no flags or</span>
+    <span class="c1"># from conditions on several columns</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">keep_rows</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">_is_in</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">match</span><span class="p">],</span> <span class="n">values</span><span class="p">)]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">_clean_column_name</span><span class="p">(</span><span class="n">c</span><span class="p">):</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">}</span>
+        <span class="n">rules</span> <span class="o">=</span> <span class="n">survey</span><span class="o">.</span><span class="n">keep_rows_any</span>
+        <span class="k">if</span> <span class="n">rules</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">):</span>   <span class="c1"># only tables with every column</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">:</span>   <span class="c1"># a row is kept when it meets every condition of at least one rule</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">rule</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">match</span> <span class="o">&amp;=</span> <span class="n">_is_in</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">col</span><span class="p">]],</span> <span class="n">values</span><span class="p">)</span>
+                <span class="n">keep</span> <span class="o">|=</span> <span class="n">match</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">target</span><span class="p">,</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">fill_missing</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">target</span><span class="p">),</span> <span class="n">_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"from"</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># only in tables that ask the question</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"values"</span><span class="p">]]))</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">t</span><span class="p">:</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">t</span><span class="p">])</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">source</span><span class="p">)})</span>
+        <span class="k">for</span> <span class="n">target</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">derive_from_flags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">s4h_code_from_flags</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">target</span><span class="p">,</span> <span class="n">rules</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">derive_from_rules</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">s4h_code_from_rules</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_map_columns</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="c1"># Fill a column from another one with a mapping (e.g. regions from provinces)</span>
+    <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">map_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"years"</span><span class="p">]:</span>
+            <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">survey</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">rule</span><span class="p">[</span><span class="s2">"mapping"</span><span class="p">])</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">rule</span><span class="p">[</span><span class="s2">"target"</span><span class="p">]:</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">rule</span><span class="p">[</span><span class="s2">"source"</span><span class="p">]])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">mapping</span><span class="p">)})</span>
+                   <span class="k">if</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"source"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">rule</span><span class="p">[</span><span class="s2">"target"</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">df</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">dfs</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_assemble</span><span class="p">(</span><span class="n">tables</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">shared</span><span class="p">,</span> <span class="n">person_vars</span><span class="p">):</span>
+    <span class="c1"># One row per household or person. Every table holding these variables is stacked (a module can be split</span>
+    <span class="c1"># over several tables, e.g. months with slightly different columns) and each ID keeps, for each column, the</span>
+    <span class="c1"># first non-empty value, larger tables first. Households come from tables without person variables when</span>
+    <span class="c1"># there are any (a members file may repeat the housing variables on every person).</span>
+    <span class="n">id_col</span> <span class="o">=</span> <span class="n">LEVELS</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+    <span class="n">own</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">shared</span><span class="p">]</span>   <span class="c1"># AREA alone does not make a household table</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"HOUSEHOLD_ID"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s2">"EXP_FACTOR"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">own</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"persons"</span><span class="p">:</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"-#"</span> <span class="o">+</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">)</span><span class="o">.</span><span class="n">cumcount</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="c1"># line number when there is one; otherwise (or when it is empty) the order within the household</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">PERSON_ID</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"-"</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">"_PKEY"</span><span class="p">])</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="k">if</span> <span class="s2">"_PKEY"</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">order</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">"_ROWID"</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>   <span class="c1"># no key: the row ID is not a household</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">HOUSEHOLD_ID</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">)</span>
+        <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"households"</span><span class="p">:</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">candidates</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">person_vars</span><span class="p">)]</span> <span class="ow">or</span> <span class="n">candidates</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">candidates</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"YEAR"</span><span class="p">,</span> <span class="s2">"HOUSEHOLD_ID"</span><span class="p">,</span> <span class="s2">"PERSON_ID"</span><span class="p">,</span> <span class="o">*</span><span class="n">ADMIN_COLS</span><span class="p">,</span> <span class="s2">"EXP_FACTOR"</span><span class="p">,</span> <span class="o">*</span><span class="n">variables</span><span class="p">]</span>
+    <span class="n">stacked</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">[[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stacked</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">id_col</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_finalize</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+    <span class="c1"># Annual weight and its type, codes as numbers, harmonized column order</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"EXP_FACTOR"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"string"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">"."</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">"WEIGHT"</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">survey</span><span class="o">.</span><span class="n">periods_per_year</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">v</span><span class="p">]),</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"coerce"</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"Int16"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ADMIN_COLS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="c1"># integer part of the unit code: ENHOGAR 2024 households use "10.2" (region 10, sub-region 2)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">s4h_clean_codes</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^(\d+)\.\d+$"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"\1"</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">"YEAR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"YEAR"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"Int16"</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">"WEIGHT_TYPE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">survey</span><span class="o">.</span><span class="n">weight_type</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"YEAR"</span><span class="p">,</span> <span class="o">*</span><span class="n">ADMIN_COLS</span><span class="p">,</span> <span class="s2">"HOUSEHOLD_ID"</span><span class="p">,</span> <span class="s2">"PERSON_ID"</span><span class="p">,</span> <span class="s2">"WEIGHT"</span><span class="p">,</span> <span class="s2">"WEIGHT_TYPE"</span><span class="p">]</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">first</span> <span class="o">+</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="s4h_harmonize_records">
+<a class="viewcode-back" href="../../socio4health.s4h_harmonize_records.html#socio4health.s4h_harmonize_records">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">s4h_harmonize_records</span><span class="p">(</span><span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Schema</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scratch_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+                          <span class="n">cache_parquet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Harmonized household and person records of one survey year.</span>
+
+<span class="sd">    Steps: read the raw files, stack tables with nearly the same columns, keep the columns used, attach</span>
+<span class="sd">    weights, build IDs, apply the survey rules, rename columns and map codes (column and value mappings of the</span>
+<span class="sd">    year), then build one row per household and per person. Persons take their household's value of the</span>
+<span class="sd">    variables of both tables (e.g. ``AREA``) when theirs is missing.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    survey : Survey</span>
+<span class="sd">    schema : Schema</span>
+<span class="sd">        Harmonized variables and the table each one belongs to.</span>
+<span class="sd">    year : int</span>
+<span class="sd">    scratch_dir : str or Path</span>
+<span class="sd">        Folder for files extracted from archives.</span>
+<span class="sd">    cache_parquet : bool</span>
+<span class="sd">        Convert text files to Parquet once (see :class:`~socio4health.Extractor`).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        ``{"households": DataFrame or None, "persons": DataFrame or None}`` with ``YEAR``, the unit columns, IDs,</span>
+<span class="sd">        ``WEIGHT`` (households or persons represented in the year), ``WEIGHT_TYPE`` and the variables (codes as</span>
+<span class="sd">        ``Int16``).</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NoDataError</span>
+<span class="sd">        If the year has no folder, files, mapping or usable table.</span>
+<span class="sd">    """</span>
+    <span class="n">column_map</span> <span class="o">=</span> <span class="n">survey</span><span class="o">.</span><span class="n">column_map</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">raw_columns</span> <span class="o">=</span> <span class="n">survey</span><span class="o">.</span><span class="n">raw_columns</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="n">_extract</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">raw_columns</span><span class="p">,</span> <span class="n">scratch_dir</span><span class="p">,</span> <span class="n">cache_parquet</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dfs</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NoDataError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No </span><span class="si">{</span><span class="n">survey</span><span class="o">.</span><span class="n">reader</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'down_ext'</span><span class="p">)</span><span class="si">}</span><span class="s2"> files for </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">"YEAR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+
+    <span class="k">if</span> <span class="n">survey</span><span class="o">.</span><span class="n">vertical_merge</span><span class="p">:</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="p">()</span><span class="o">.</span><span class="n">s4h_vertical_merge</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">overlap_threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"union"</span><span class="p">,</span> <span class="n">overlap_basis</span><span class="o">=</span><span class="s2">"larger"</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="n">prune_columns</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="p">[</span><span class="o">*</span><span class="n">raw_columns</span><span class="p">,</span> <span class="s2">"YEAR"</span><span class="p">])</span>
+    <span class="n">factor</span><span class="p">,</span> <span class="n">person</span> <span class="o">=</span> <span class="n">survey</span><span class="o">.</span><span class="n">factor</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">person_factor</span>
+    <span class="k">if</span> <span class="n">person</span><span class="p">:</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="n">use_person_factor</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">factor</span><span class="p">[</span><span class="s2">"factor_col"</span><span class="p">],</span> <span class="n">person</span><span class="p">[</span><span class="s2">"factor_col"</span><span class="p">],</span> <span class="n">person</span><span class="p">[</span><span class="s2">"id_col"</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">factor</span><span class="p">:</span>
+        <span class="n">dfs</span> <span class="o">=</span> <span class="n">merge_factor</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">factor</span><span class="p">[</span><span class="s2">"factor_col"</span><span class="p">],</span> <span class="n">factor</span><span class="p">[</span><span class="s2">"id_col"</span><span class="p">],</span> <span class="n">fallback_col</span><span class="o">=</span><span class="n">factor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fallback_col"</span><span class="p">))</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="n">_apply_rules</span><span class="p">(</span><span class="n">_add_ids</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">survey</span><span class="p">),</span> <span class="n">survey</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="n">harmonize_columns_by_year</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">column_map</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="n">apply_value_mappings</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">value_map</span><span class="p">(</span><span class="n">year</span><span class="p">),</span> <span class="n">column_aliases</span><span class="o">=</span><span class="n">column_map</span><span class="p">)</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="n">_map_columns</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">survey</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+
+    <span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="n">level</span><span class="p">:</span> <span class="n">schema</span><span class="o">.</span><span class="n">variables_of</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">LEVELS</span><span class="p">}</span>
+    <span class="n">shared</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">[</span><span class="s2">"households"</span><span class="p">]</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">[</span><span class="s2">"persons"</span><span class="p">]]</span>
+    <span class="n">person_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">[</span><span class="s2">"persons"</span><span class="p">]</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">shared</span><span class="p">]</span>
+    <span class="n">tables</span> <span class="o">=</span> <span class="p">{</span><span class="n">level</span><span class="p">:</span> <span class="n">_assemble</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">variables</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">level</span><span class="p">,</span> <span class="n">shared</span><span class="p">,</span> <span class="n">person_vars</span><span class="p">)</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">LEVELS</span><span class="p">}</span>
+    <span class="n">households</span><span class="p">,</span> <span class="n">persons</span> <span class="o">=</span> <span class="n">tables</span><span class="p">[</span><span class="s2">"households"</span><span class="p">],</span> <span class="n">tables</span><span class="p">[</span><span class="s2">"persons"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">households</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">persons</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NoDataError</span><span class="p">(</span><span class="s2">"No table has a household key, a weight and harmonized variables"</span><span class="p">)</span>
+    <span class="c1"># Persons keep their own value of the shared variables; their household's value fills the gaps</span>
+    <span class="k">if</span> <span class="n">persons</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">households</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">shared</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">households</span><span class="o">.</span><span class="n">columns</span><span class="p">]:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">households</span><span class="p">[[</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">,</span> <span class="n">v</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="s2">"_FILL"</span><span class="p">})</span>
+            <span class="n">persons</span> <span class="o">=</span> <span class="n">persons</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"HOUSEHOLD_ID"</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
+            <span class="n">filler</span> <span class="o">=</span> <span class="n">persons</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"_FILL"</span><span class="p">)</span>
+            <span class="n">persons</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">persons</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">filler</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">persons</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">filler</span>
+    <span class="n">tables</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"households"</span><span class="p">:</span> <span class="n">households</span><span class="p">,</span> <span class="s2">"persons"</span><span class="p">:</span> <span class="n">persons</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">level</span><span class="p">:</span> <span class="n">_finalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">survey</span><span class="p">,</span> <span class="n">variables</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">level</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span> <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">tables</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+
+<span class="n">_PIPELINE_FILES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"records.py"</span><span class="p">,</span> <span class="s2">"survey.py"</span><span class="p">,</span> <span class="s2">"schema.py"</span><span class="p">,</span> <span class="s2">"harmonizer.py"</span><span class="p">,</span> <span class="s2">"utils/harmonizer_utils.py"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="s4h_fingerprint">
+<a class="viewcode-back" href="../../socio4health.s4h_fingerprint.html#socio4health.s4h_fingerprint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">s4h_fingerprint</span><span class="p">(</span><span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Schema</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Short hash of everything a survey's records depend on: its rules, the schema, its mapping files and IBGE</span>
+<span class="sd">    dictionaries, and the pipeline code. :func:`s4h_build_records` recomputes the years whose fingerprint changed.</span>
+<span class="sd">    """</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">survey</span><span class="o">.</span><span class="n">rules</span><span class="p">(),</span> <span class="n">schema</span><span class="o">.</span><span class="n">variables</span><span class="p">],</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+    <span class="n">package</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="p">(</span><span class="n">package</span> <span class="o">/</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_PIPELINE_FILES</span><span class="p">),</span> <span class="o">*</span><span class="n">survey</span><span class="o">.</span><span class="n">input_files</span><span class="p">()]:</span>
+        <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">12</span><span class="p">]</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_year</span><span class="p">(</span><span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Schema</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">cache_parquet</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">log_level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># One year: harmonize, write its tables and report. Runs in the main process or in a worker process.</span>
+    <span class="n">set_log_level</span><span class="p">(</span><span class="n">log_level</span><span class="p">)</span>
+    <span class="n">row</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"survey"</span><span class="p">:</span> <span class="n">survey</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">:</span> <span class="n">year</span><span class="p">},</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"logs"</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">.log"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">,</span> \
+                <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">log</span><span class="p">),</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stderr</span><span class="p">(</span><span class="n">log</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tables</span> <span class="o">=</span> <span class="n">s4h_harmonize_records</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"_extractor"</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">),</span> <span class="n">cache_parquet</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">tables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="n">level</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"ADMIN_LEVEL"</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">group_col</span><span class="p">)</span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"SURVEY"</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"COUNTRY"</span><span class="p">,</span> <span class="n">survey</span><span class="o">.</span><span class="n">country</span><span class="p">)</span>
+                        <span class="n">s4h_export</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="n">level</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)],</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">row</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+                <span class="k">raise</span>
+        <span class="n">row</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"ok"</span>
+    <span class="k">except</span> <span class="n">NoDataError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">row</span><span class="p">[</span><span class="s2">"status"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"error"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"no data"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">row</span><span class="p">[</span><span class="s2">"status"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"error"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"failed"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">row</span><span class="p">[</span><span class="s2">"seconds"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">row</span>
+
+
+<div class="viewcode-block" id="s4h_build_records">
+<a class="viewcode-back" href="../../socio4health.s4h_build_records.html#socio4health.s4h_build_records">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">s4h_build_records</span><span class="p">(</span><span class="n">survey</span><span class="p">:</span> <span class="n">Survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Schema</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">years</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">resume</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cache_parquet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Harmonize the years of a survey into ``&lt;output_dir&gt;/households/&lt;year&gt;/`` and ``&lt;output_dir&gt;/persons/&lt;year&gt;/``.</span>
+
+<span class="sd">    Each year is written (Parquet, with ``COUNTRY``, ``SURVEY`` and ``ADMIN_LEVEL`` columns) as soon as it is</span>
+<span class="sd">    done; what it prints goes to ``&lt;output_dir&gt;/logs/&lt;year&gt;.log``. With ``resume``, years written with the same</span>
+<span class="sd">    :func:`s4h_fingerprint` are skipped. A year that fails is reported and the others go on.</span>
+
+<span class="sd">    With ``workers &gt; 1`` several years are processed at the same time, each in its own process. Each process</span>
+<span class="sd">    holds one year in memory, so the memory needed grows with ``workers``. On Windows and macOS, call it from</span>
+<span class="sd">    a script under ``if __name__ == "__main__":``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    survey : Survey</span>
+<span class="sd">    schema : Schema</span>
+<span class="sd">    output_dir : str or Path</span>
+<span class="sd">    years : list of int, optional</span>
+<span class="sd">        Defaults to ``survey.years``.</span>
+<span class="sd">    resume : bool</span>
+<span class="sd">        Skip the years that are up to date (default ``True``).</span>
+<span class="sd">    cache_parquet : bool</span>
+<span class="sd">        Convert text files to Parquet once (see :class:`~socio4health.Extractor`).</span>
+<span class="sd">    workers : int</span>
+<span class="sd">        Years processed at the same time (default 1: one after the other).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        One row per year: ``status`` (``ok``, ``up to date``, ``no data``, ``failed``), rows written, seconds and</span>
+<span class="sd">        error. Also saved as ``&lt;output_dir&gt;/run_report.csv``.</span>
+<span class="sd">    """</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"logs"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">stamp_file</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"fingerprints.json"</span>
+    <span class="n">stamps</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">stamp_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span> <span class="k">if</span> <span class="n">stamp_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="n">s4h_fingerprint</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+    <span class="n">years</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">survey</span><span class="o">.</span><span class="n">years</span> <span class="k">if</span> <span class="n">years</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">years</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resume</span> <span class="ow">and</span> <span class="n">stamps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">))</span> <span class="o">==</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">rows</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"survey"</span><span class="p">:</span> <span class="n">survey</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">:</span> <span class="n">year</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"up to date"</span><span class="p">}</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">survey</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: up to date"</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">done</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="n">rows</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">"year"</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span>
+        <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"ok"</span><span class="p">:</span>   <span class="c1"># stamps are written by this process only, one year at a time</span>
+            <span class="n">stamps</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"year"</span><span class="p">])]</span> <span class="o">=</span> <span class="n">current</span>
+            <span class="n">stamp_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">stamps</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">survey</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'year'</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'households'</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2"> households, "</span>
+              <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'persons'</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2"> persons, </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">'seconds'</span><span class="p">]</span><span class="si">}</span><span class="s2"> s) </span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">pending</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">years</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+    <span class="n">rest</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">cache_parquet</span><span class="p">,</span> <span class="n">logger</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">workers</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">pending</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">workers</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pending</span><span class="p">)))</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">([</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_build_year</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">)</span> <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">pending</span><span class="p">]):</span>
+                <span class="n">done</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">pending</span><span class="p">:</span>
+            <span class="n">done</span><span class="p">(</span><span class="n">_build_year</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">))</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">rows</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">years</span><span class="p">])</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"run_report.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Harmonize.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

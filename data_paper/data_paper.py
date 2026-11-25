@@ -28,12 +28,13 @@ details go to ``<output>/<SURVEY>/logs/<year>.log``; ``run_report.csv`` summariz
   weights; empty when the survey only published relative weights) and P_AGE_mean. Each variable is summarized
   on the records of its UNIVERSE (education: people aged 25 or over).
 - ``codebook.csv`` and ``record_checks.csv``.
-- ``socio4health_records.duckdb``: tables households, persons (all surveys and years), shares, codebook and
-  record_checks.
+- ``socio4health_records.duckdb``: tables households, persons (all surveys and years, after the record checks:
+  codes not in the codebook are 0, Missing, as in the shares), shares, codebook and record_checks.
 """
 import argparse
 import json
 import os
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -75,13 +76,16 @@ def build_records(output, surveys=(), years=None, force=False, workers=1):
     return report
 
 
-def year_shares(root, survey, year, checks):
-    """Shares of one survey year; appends the checks of its record tables to ``checks``."""
+def year_shares(root, survey, year, checks, checked):
+    """Shares of one survey year; appends the checks of its record tables to ``checks`` and writes the checked
+    records to ``checked/<level>/<survey>_<year>.parquet``."""
     tables = {}
     for level, ids in IDS.items():
         folder = root / survey / level / str(year)
         if folder.exists():
             tables[level], summary = s4h_check_records(pd.read_parquet(folder), SCHEMA, ids)
+            (checked / level).mkdir(parents=True, exist_ok=True)
+            tables[level].to_parquet(checked / level / f"{survey}_{year}.parquet", index=False)
             invalid = summary.pop("codes not in codebook")
             checks.append({"survey": survey, "year": year, "table": level, **summary,
                            "without weight": round(summary["without weight"], 4),
@@ -97,35 +101,39 @@ def build_shares(root):
     print("surveys found:", surveys)
 
     shares, checks = [], []
-    for survey in surveys:
-        years = sorted({int(p.name) for level in IDS for p in (root / survey / level).glob("*") if p.name.isdigit()})
-        for year in years:
-            shares.append(year_shares(root, survey, year, checks))
-            print(f"{survey} {year}: shares for {len(shares[-1])} units")
+    # Checked records of each year, one Parquet file per survey year, read by DuckDB at the end
+    with tempfile.TemporaryDirectory(prefix="checked_records_", dir=root) as tmp:
+        checked = Path(tmp)
+        for survey in surveys:
+            years = sorted({int(p.name) for level in IDS for p in (root / survey / level).glob("*") if p.name.isdigit()})
+            for year in years:
+                shares.append(year_shares(root, survey, year, checks, checked))
+                print(f"{survey} {year}: shares for {len(shares[-1])} units")
 
-    shares = pd.concat(shares, ignore_index=True)
-    shares = shares[KEY_COLS + sorted(c for c in shares if c not in KEY_COLS)]
-    for c in ["COUNTRY", "SURVEY", "ADMIN_LEVEL", "ADMIN_DIVISION"]:
-        shares[c] = shares[c].astype("string")
-    checks = pd.DataFrame(checks)
-    book = SCHEMA.codebook(RECORD_COLUMNS)
+        shares = pd.concat(shares, ignore_index=True)
+        shares = shares[KEY_COLS + sorted(c for c in shares if c not in KEY_COLS)]
+        for c in ["COUNTRY", "SURVEY", "ADMIN_LEVEL", "ADMIN_DIVISION"]:
+            shares[c] = shares[c].astype("string")
+        checks = pd.DataFrame(checks)
+        book = SCHEMA.codebook(RECORD_COLUMNS)
 
-    s4h_export({"shares": shares, "codebook": book, "record_checks": checks}, root, format="csv", overwrite=True)
-    s4h_export({"shares": shares}, root, format="parquet", overwrite=True)
+        s4h_export({"shares": shares, "codebook": book, "record_checks": checks}, root, format="csv", overwrite=True)
+        s4h_export({"shares": shares}, root, format="parquet", overwrite=True)
 
-    # One database with every record: DuckDB reads the yearly Parquet files directly
-    db = root / "socio4health_records.duckdb"
-    if db.exists():
-        db.unlink()
-    with duckdb.connect(str(db)) as con:
-        for level in IDS:
-            files = [str(f).replace("\\", "/") for s in surveys for f in sorted((root / s / level).glob("*/*.parquet"))]
-            con.execute(f"CREATE TABLE {level} AS SELECT * FROM read_parquet({files!r}, union_by_name = true)")
-        for name, df in {"shares": shares, "codebook": book, "record_checks": checks}.items():
-            con.register("_df", df)
-            con.execute(f"CREATE TABLE {name} AS SELECT * FROM _df")
-            con.unregister("_df")
-        sizes = {t: con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0] for t in ("households", "persons", "shares", "codebook")}
+        # One database with every checked record (the same records the shares are computed on)
+        db = root / "socio4health_records.duckdb"
+        if db.exists():
+            db.unlink()
+        with duckdb.connect(str(db)) as con:
+            for level in IDS:
+                files = [f.as_posix() for f in sorted((checked / level).glob("*.parquet"))]
+                con.execute(f"CREATE TABLE {level} AS SELECT * FROM read_parquet({files!r}, union_by_name = true)")
+            for name, df in {"shares": shares, "codebook": book, "record_checks": checks}.items():
+                con.register("_df", df)
+                con.execute(f"CREATE TABLE {name} AS SELECT * FROM _df")
+                con.unregister("_df")
+            sizes = {t: con.execute(f"SELECT COUNT(*) FROM {t}").fetchall()[0][0]
+                     for t in ("households", "persons", "shares", "codebook")}
 
     (root / "shares_metadata.json").write_text(json.dumps({
         "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),

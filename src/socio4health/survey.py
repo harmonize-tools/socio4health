@@ -87,6 +87,10 @@ class Survey:
     derive_from_flags : dict
         ``{column: {flag column: code}}``: code of the only yes/no flag that is yes
         (:func:`~socio4health.utils.harmonizer_utils.s4h_code_from_flags`).
+    derive_from_rules : dict
+        ``{column: [{"when": {column: [codes]}, "code": code}, ...]}``: code of the first rule whose conditions a
+        record meets, for variables built from several columns, e.g. completed education from level, grade and
+        title (:func:`~socio4health.utils.harmonizer_utils.s4h_code_from_rules`).
     map_columns : list of dict
         ``{"years", "source", "target", "mapping"}``: fill ``target`` from ``source`` with a JSON mapping when a
         table has the source but not the target (e.g. regions from provinces).
@@ -117,6 +121,7 @@ class Survey:
     keep_rows_any: List[dict] = field(default_factory=list)
     fill_missing: Dict[str, dict] = field(default_factory=dict)
     derive_from_flags: Dict[str, dict] = field(default_factory=dict)
+    derive_from_rules: Dict[str, list] = field(default_factory=dict)
     map_columns: List[dict] = field(default_factory=list)
     row_ids_without_key: bool = False
     relative_weight_years: Dict[str, List[int]] = field(default_factory=dict)
@@ -151,6 +156,7 @@ class Survey:
         cols |= {c for rule in self.keep_rows_any for c in rule} | set(self.keep_rows)
         cols |= {c for target, rule in self.fill_missing.items() for c in (target, rule["from"])}
         cols |= {c for flags in self.derive_from_flags.values() for c in flags}
+        cols |= {c for rules in self.derive_from_rules.values() for rule in rules for c in rule["when"]}
         return [*mapping_source_columns(self.column_map(year)), *sorted(cols)]
 
     def ibge_dictionary(self, part: dict, year: int) -> Path:

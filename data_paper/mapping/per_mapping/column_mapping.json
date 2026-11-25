@@ -1,0 +1,41 @@
+{
+  "2004-2011": {
+    "ESTRATO": "AREA",
+    "P101": "H_TYPE",
+    "P102": "H_WALLS",
+    "P103": "H_FLOOR",
+    "P103A": "H_ROOF",
+    "P1121": "H_ELECTRICITY",
+    "P111": "H_SANITARY",
+    "P110": "H_WATER",
+    "P113A": "H_COOK",
+    "P105A": "H_PROPERTY",
+    "P302": "P_LITERACY",
+    "P207": "P_SEX",
+    "P208A": "P_AGE",
+    "P301A": "P_EDUCATION",
+    "VIVIENDA": "ID",
+    "UBIGEO": "ADMIN_DIVISION_2",
+    "FACTOR07": "EXP_FACTOR"
+  },
+  "2012-2024": {
+    "ESTRATO": "AREA",
+    "P101": "H_TYPE",
+    "P102": "H_WALLS",
+    "P103": "H_FLOOR",
+    "P103A": "H_ROOF",
+    "P1121": "H_ELECTRICITY",
+    "P111A": "H_SANITARY",
+    "P110": "H_WATER",
+    "P113A": "H_COOK",
+    "P105A": "H_PROPERTY",
+    "P302": "P_LITERACY",
+    "P207": "P_SEX",
+    "P558C": "P_ETHNIC",
+    "P208A": "P_AGE",
+    "P301A": "P_EDUCATION",
+    "VIVIENDA": "ID",
+    "UBIGEO": "ADMIN_DIVISION_2",
+    "FACTOR07": "EXP_FACTOR"
+  }
+}

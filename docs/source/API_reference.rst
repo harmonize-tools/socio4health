@@ -1,4 +1,4 @@
-API Reference
+﻿API Reference
 =============
 
 This section contains the Documentation of the Application Programming
@@ -123,6 +123,7 @@ Utils
    utils.harmonizer_utils.apply_value_mappings
    utils.harmonizer_utils.s4h_coalesce_columns
    utils.harmonizer_utils.s4h_code_from_flags
+   utils.harmonizer_utils.s4h_code_from_rules
 
 **Spider**
 

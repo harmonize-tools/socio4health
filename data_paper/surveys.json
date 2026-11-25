@@ -10,18 +10,37 @@
       {"pattern": "(?i)^(?!.*[._]csv_\\s*(Cabecera|Resto|.rea)\\s*-)"}
     ],
     "unify_columns": ["DIRECTORIO"],
-    "column_mapping": "col_mapping/column_mapping.json",
-    "value_mapping": "col_mapping/geih_mapping.json",
+    "column_mapping": "mapping/col_mapping/column_mapping.json",
+    "value_mapping": "mapping/col_mapping/geih_mapping.json",
     "factor": {"factor_col": "FEX_C18", "id_col": "DIRECTORIO", "fallback_col": "FEX_C"},
     "household_key": [["DIRECTORIO", "SECUENCIA_P", "MES"], ["DIRECTORIO", "SECUENCIA_P"]],
     "person_key": [["ORDEN"]],
     "periods_per_year": 12,
     "group_col": "ADMIN_DIVISION",
+    "derive_from_flags": {"P4030S5F": {"P4030S5": 1}},
+    "derive_from_rules": {
+      "P6210C": [
+      {"when": {"P6220": [3, 4, 5]}, "code": 4},
+      {"when": {"P6220": [2]}, "code": 3},
+      {"when": {"P6210": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13]}, "code": 2},
+      {"when": {"P6210": [3], "P6210S1": [5]}, "code": 2},
+      {"when": {"P6210": [1, 2, 3]}, "code": 1}
+      ],
+      "P3042C": [
+      {"when": {"P3043": [4, 5, 6, 7, 8, 9, 10]}, "code": 4},
+      {"when": {"P3043": [2, 3]}, "code": 3},
+      {"when": {"P3042": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13]}, "code": 2},
+      {"when": {"P3042": [3], "P3042S1": [5]}, "code": 2},
+      {"when": {"P3042": [1, 2, 3]}, "code": 1}
+      ]
+    },
     "notes": {
-      "file_groups": "2007-2019 files are split by area and the area is only in the file name: Cabecera = municipal seats (urban), Resto = rural. Files not split are read as they are; 'Área' files duplicate Cabecera and are skipped.",
+      "file_groups": "2007-2019 files are split by area and the area is only in the file name: Cabecera -> CLASE 1 (urban), Resto -> CLASE 2 (rural). 'Área' files repeat Cabecera households and are skipped.",
       "unify_columns": "Some files spell the household ID differently (BOM, lowercase).",
-      "factor": "FEX_C18 (CNPV 2018 projection). In 2020 a separate projection file misses 8 new departments: FEX_C there.",
-      "periods_per_year": "Each monthly sample is expanded to the whole population."
+      "factor": "FEX_C18 (CNPV 2018 projection); FEX_C where FEX_C18 is missing (8 departments in 2020).",
+      "periods_per_year": "Each monthly sample is expanded to the whole population: weights are divided by 12.",
+      "derive_from_flags": "P4030S5F = 1 (aqueduct) when the dwelling has the aqueduct service (P4030S5 = 1). H_WATER takes P4030S5F, else the drinking-water source P5050 ('P4030S5F|P5050').",
+      "derive_from_rules": "Completed education, first rule met (P6210C up to 2020, P3042C from 2021): tertiary title (P6220 3-5 / P3043 4-10) -> 4; bachiller title (P6220 2 / P3043 2-3) -> 3; secundaria or a higher level, or primaria with 5th grade approved (P6210S1 / P3042S1 = 5) -> 2; none, preschool or primaria -> 1."
     }
   },
   "ENAHO": {
@@ -29,8 +48,8 @@
     "years": [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
     "parts": [{"path": "ENAHO/{year}"}],
     "reader": {"down_ext": [".sav"]},
-    "column_mapping": "per_mapping/column_mapping.json",
-    "value_mapping": "per_mapping/enaho_mapping.json",
+    "column_mapping": "mapping/per_mapping/column_mapping.json",
+    "value_mapping": "mapping/per_mapping/enaho_mapping.json",
     "factor": {"factor_col": "FACTOR07", "id_col": ["CONGLOME", "VIVIENDA", "HOGAR"]},
     "person_factor": {"factor_col": "FACPOB07", "id_col": ["CONGLOME", "VIVIENDA", "HOGAR", "CODPERSO"]},
     "keep_rows": {"RESULT": [1, 2]},
@@ -38,11 +57,17 @@
     "fill_missing": {"P302": {"from": "P301A", "values": [4, 5, 6, 7, 8, 9, 10, 11]}},
     "household_key": [["CONGLOME", "VIVIENDA", "HOGAR"]],
     "person_key": [["CODPERSO"]],
+    "map_columns": [{"years": [2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018,
+                               2019, 2020, 2021, 2022, 2023, 2024],
+                     "source": "ADMIN_DIVISION_2", "target": "ADMIN_DIVISION",
+                     "mapping": "mapping/per_mapping/ubigeo_department.json"}],
     "group_col": "ADMIN_DIVISION",
     "notes": {
-      "keep_rows": "Only completed or partly completed interviews (RESULT 1-2), as INEI does: refusals, absences and empty dwellings have no data.",
-      "keep_rows_any": "Usual residents only, as INEI does: members not away 30+ days (P204 = 1, P205 = 2) and non-members present 30+ days (P204 = 2, P206 = 1). Every person module carries P204-P206.",
-      "fill_missing": "Literacy (P302) is only asked below completed primary: in the table that asks it, the people who were not asked and completed primary or more (P301A 4-11) take that level, which the value mapping counts as literate. Other blanks (e.g. 2020 phone interviews) stay Missing."
+      "keep_rows": "Only completed or partly completed interviews (RESULT 1-2).",
+      "keep_rows_any": "Only usual residents: members not away 30+ days (P204 = 1, P205 = 2) and non-members present 30+ days (P204 = 2, P206 = 1).",
+      "person_factor": "Persons use the population factor FACPOB07 of module 200, joined by CONGLOME, VIVIENDA, HOGAR and CODPERSO.",
+      "map_columns": "ADMIN_DIVISION is the department, the first two digits of the district UBIGEO (ADMIN_DIVISION_2): ENAHO is representative by department, so shares are computed by department.",
+      "fill_missing": "P302 (literacy) is only asked below completed primary: where it is empty, people with P301A 4-11 take that code, which the value mapping counts as literate."
     }
   },
   "PNAD": {
@@ -53,13 +78,29 @@
       {"path": "PNAD/pes/{year}", "ibge_dictionary": "PNAD/original/{year}/Dicion*/*pessoas*.xls"}
     ],
     "reader": {"down_ext": [".txt"]},
-    "column_mapping": "pnad_mapping/column_mapping.json",
-    "value_mapping": "pnad_mapping/pnad_mapping.json",
+    "column_mapping": "mapping/pnad_mapping/column_mapping.json",
+    "value_mapping": "mapping/pnad_mapping/pnad_mapping.json",
+    "keep_rows": {"V0104": [1]},
     "household_key": [["V0102", "V0103"]],
     "person_key": [["V0301"]],
     "vertical_merge": false,
     "group_col": "ADMIN_DIVISION",
-    "notes": {"parts": "Households (dom) and persons (pes) are separate fixed-width files."}
+    "derive_from_flags": {"V0213F": {"V0213": 2}},
+    "derive_from_rules": {
+      "V4745C": [
+      {"when": {"V4745": [7]}, "code": 4},
+      {"when": {"V4745": [5, 6]}, "code": 3},
+      {"when": {"V4803": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}, "code": 2},
+      {"when": {"V4745": [3, 4]}, "code": 2},
+      {"when": {"V4745": [1, 2]}, "code": 1}
+      ]
+    },
+    "notes": {
+      "parts": "Households (dom) and persons (pes) are separate fixed-width files.",
+      "keep_rows": "Only interviewed dwellings (V0104 = 1).",
+      "derive_from_flags": "V0213F = 2 (piped outside the dwelling) when the plot gets piped network water (V0213 = 1). H_WATER takes V0213F, else V0211 ('V0213F|V0211').",
+      "derive_from_rules": "Completed education 2007-2011 (V4745C), first rule met: superior completo (V4745 7) -> 4; médio completo or superior incompleto (5-6) -> 3; 4+ years of study (V4803 5+) or fundamental completo / médio incompleto (3-4) -> 2; less -> 1."
+    }
   },
   "PNADC": {
     "country": "BRA",
@@ -67,14 +108,27 @@
     "parts": [{"path": "PNADC/{year}", "ibge_dictionary": "PNADC/{year}/dicionario*.xls",
                "shared_dictionary": "PNADC/dicionario*_a_*.xls"}],
     "reader": {"down_ext": [".txt"]},
-    "column_mapping": "pnadc_mapping/column_mapping.json",
-    "value_mapping": "pnadc_mapping/pnadc_mapping.json",
+    "column_mapping": "mapping/pnadc_mapping/column_mapping.json",
+    "value_mapping": "mapping/pnadc_mapping/pnadc_mapping.json",
     "household_key": [["UPA", "V1008", "V1014"]],
     "person_key": [["V2003"]],
-    "derive_from_flags": {"S01016F": {"S01016A1": 1, "S01016A2": 2, "S01016A3": 3, "S01016A4": 4, "S01016A5": 5}},
-    "group_col": "ADMIN_DIVISION_2",
+    "derive_from_flags": {"S01016F": {"S01016A1": 1, "S01016A2": 2, "S01016A3": 3, "S01016A4": 4, "S01016A5": 5},
+                          "S010161F": {"S010161": 1}, "S010162F": {"S010162": 3},
+                          "S010163F": {"S010163": 4}, "S010164F": {"S010164": 5}},
+    "group_col": "ADMIN_DIVISION",
+    "derive_from_rules": {
+      "VD3004C": [
+      {"when": {"VD3004": [7]}, "code": 4},
+      {"when": {"VD3004": [5, 6]}, "code": 3},
+      {"when": {"VD3005": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}, "code": 2},
+      {"when": {"VD3004": [3, 4]}, "code": 2},
+      {"when": {"VD3004": [1, 2]}, "code": 1}
+      ]
+    },
     "notes": {
-      "derive_from_flags": "Cooking fuel: S01016B ('most used') is only asked when 2+ fuels are used; otherwise the fuel is the only 'yes' among S01016A1-A5. S01016F holds it, and the mapping uses 'S01016B|S01016F'."
+      "parts": "Visit 1 files (visit 5 in 2020-2021, without the housing module); housing variables start in 2016.",
+      "derive_from_flags": "Cooking fuel. From 2019: S01016F = the only fuel marked 'yes' among S01016A1-A5; H_COOK takes the most used fuel S01016B, else S01016F ('S01016B|S01016F'). 2016-2018 (no 'most used' question): one column per fuel (S010161F gas, S010162F wood, S010163F electricity, S010164F other); H_COOK takes the first one marked in that order.",
+      "derive_from_rules": "Completed education (VD3004C), first rule met: superior completo (VD3004 7) -> 4; médio completo or superior incompleto (5-6) -> 3; 5+ years of study (VD3005) or fundamental completo / médio incompleto (3-4) -> 2; less -> 1."
     }
   },
   "ENHOGAR": {
@@ -82,21 +136,172 @@
     "years": [2006, 2007, 2008, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2024],
     "parts": [{"path": "ENHOGAR/{year}"}],
     "reader": {"down_ext": [".csv"], "sep": ","},
-    "column_mapping": "rd_mappings/column_mapping.json",
-    "value_mapping": "rd_mappings/enhogar{year}_mapping.json",
+    "column_mapping": "mapping/rd_mappings/column_mapping.json",
+    "value_mapping": "mapping/rd_mappings/enhogar{year}_mapping.json",
     "vertical_merge": false,
     "household_key": [["HH1", "HH2"], ["UPM", "HVIVIEN", "HHOGAR"], ["HHUPM", "HHVIV", "HHOGAR"]],
     "person_key": [["HL1"], ["LN"], ["HLINEA"]],
     "row_ids_without_key": true,
-    "map_columns": [{"years": [2006], "source": "ADMIN_DIVISION_2", "target": "ADMIN_DIVISION",
-                     "mapping": "rd_mappings/region_mapping.json"}],
+    "keep_rows": {"HRESUL": [1], "HRESULT": [1], "HH46": [1]},
+    "map_columns": [{"years": [2006, 2008], "source": "ADMIN_DIVISION_2", "target": "ADMIN_DIVISION",
+                     "mapping": "mapping/rd_mappings/region_mapping.json"}],
     "relative_weight_years": {"households": [2006, 2008, 2010, 2011, 2012, 2014, 2019],
                               "persons": [2006, 2008, 2010, 2014, 2019]},
     "group_col": "ADMIN_DIVISION",
+    "derive_from_rules": {
+      "P2017C": [
+      {"when": {"P2017": [4]}, "code": 4},
+      {"when": {"P2017": [3], "P2016": [5, 6, 7, 8, 9]}, "code": 4},
+      {"when": {"P2017": [3], "P2016": [4], "P2018": [1]}, "code": 4},
+      {"when": {"P2017": [3]}, "code": 3},
+      {"when": {"P2017": [2], "P2016": [5, 6, 7, 8, 9]}, "code": 3},
+      {"when": {"P2017": [2], "P2016": [4], "P2018": [1]}, "code": 3},
+      {"when": {"P2017": [2]}, "code": 2},
+      {"when": {"P2017": [1], "P2016": [7, 8, 9]}, "code": 2},
+      {"when": {"P2017": [1], "P2016": [6], "P2018": [1]}, "code": 2},
+      {"when": {"P2017": [0, 1]}, "code": 1},
+      {"when": {"P2015": [2]}, "code": 1}
+      ],
+      "H3011BC": [
+      {"when": {"H3011B": [5]}, "code": 4},
+      {"when": {"H3011B": [4], "H3011A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H3011B": [4]}, "code": 3},
+      {"when": {"H3011B": [3], "H3011A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H3011B": [3]}, "code": 2},
+      {"when": {"H3011B": [2], "H3011A": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H3011B": [0, 1, 2]}, "code": 1}
+      ],
+      "H3027BC": [
+      {"when": {"H3027B": [5]}, "code": 4},
+      {"when": {"H3027B": [4], "H3027A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H3027B": [4]}, "code": 3},
+      {"when": {"H3027B": [3], "H3027A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H3027B": [3]}, "code": 2},
+      {"when": {"H3027B": [2], "H3027A": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H3027B": [1, 6, 2]}, "code": 1}
+      ],
+      "ED6AC": [
+      {"when": {"ED6A": [4]}, "code": 4},
+      {"when": {"ED6A": [3], "ED6B": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"ED6A": [3]}, "code": 3},
+      {"when": {"ED6A": [2], "ED6B": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"ED6A": [2]}, "code": 2},
+      {"when": {"ED6A": [1], "ED6B": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"ED6A": [0, 1]}, "code": 1}
+      ],
+      "H214BC": [
+      {"when": {"H214B": [4]}, "code": 4},
+      {"when": {"H214B": [3], "H214A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H214B": [3]}, "code": 3},
+      {"when": {"H214B": [2], "H214A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H214B": [2]}, "code": 2},
+      {"when": {"H214B": [1], "H214A": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H214B": [0, 1]}, "code": 1},
+      {"when": {"H213": [3, 8]}, "code": 1}
+      ],
+      "H327BC": [
+      {"when": {"H327B": [4]}, "code": 4},
+      {"when": {"H327B": [3], "H327A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H327B": [3]}, "code": 3},
+      {"when": {"H327B": [2], "H327A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H327B": [2]}, "code": 2},
+      {"when": {"H327B": [1], "H327A": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H327B": [0, 1]}, "code": 1},
+      {"when": {"H326": [3]}, "code": 1}
+      ],
+      "H215BC": [
+      {"when": {"H215B": [4]}, "code": 4},
+      {"when": {"H215B": [3], "H215A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H215B": [3]}, "code": 3},
+      {"when": {"H215B": [2], "H215A": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H215B": [2]}, "code": 2},
+      {"when": {"H215B": [1], "H215A": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H215B": [0, 1]}, "code": 1},
+      {"when": {"H215B": [5]}, "code": 5},
+      {"when": {"H213": [3]}, "code": 1}
+      ],
+      "ED4AC": [
+      {"when": {"ED4A": [4]}, "code": 4},
+      {"when": {"ED4A": [3], "ED4B": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"ED4A": [3]}, "code": 3},
+      {"when": {"ED4A": [2], "ED4B": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"ED4A": [2]}, "code": 2},
+      {"when": {"ED4A": [1], "ED4B": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"ED4A": [0, 1]}, "code": 1}
+      ],
+      "H212C": [
+      {"when": {"H212": [4]}, "code": 4},
+      {"when": {"H212": [3], "H213": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H212": [3]}, "code": 3},
+      {"when": {"H212": [2], "H213": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H212": [2]}, "code": 2},
+      {"when": {"H212": [1], "H213": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H212": [0, 1]}, "code": 1},
+      {"when": {"H210": [3]}, "code": 1}
+      ],
+      "H412C": [
+      {"when": {"H412": [4]}, "code": 4},
+      {"when": {"H412": [3], "H413": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H412": [3]}, "code": 3},
+      {"when": {"H412": [2], "H413": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H412": [2]}, "code": 2},
+      {"when": {"H412": [1], "H413": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H412": [0, 1]}, "code": 1},
+      {"when": {"H411": [3]}, "code": 1}
+      ],
+      "H304C": [
+      {"when": {"H304": [5, 6]}, "code": 4},
+      {"when": {"H304": [4], "H305": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H304": [4]}, "code": 3},
+      {"when": {"H304": [3], "H305": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H304": [3]}, "code": 2},
+      {"when": {"H304": [2], "H305": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H304": [1, 2]}, "code": 1}
+      ],
+      "H304C18": [
+      {"when": {"H304": [5, 6]}, "code": 4},
+      {"when": {"H304": [4], "H305": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H304": [4]}, "code": 3},
+      {"when": {"H304": [3], "H305": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H304": [3]}, "code": 2},
+      {"when": {"H304": [2], "H305": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H304": [1, 2]}, "code": 1},
+      {"when": {"H302": [3]}, "code": 1}
+      ],
+      "ED5AC": [
+      {"when": {"ED5A": [4], "ED5B": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"ED5A": [4]}, "code": 3},
+      {"when": {"ED5A": [2], "ED5B": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"ED5A": [2]}, "code": 2},
+      {"when": {"ED5A": [1], "ED5B": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"ED5A": [0, 1]}, "code": 1}
+      ],
+      "H504C": [
+      {"when": {"H504": [5, 6]}, "code": 4},
+      {"when": {"H504": [4], "H505": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"H504": [4]}, "code": 3},
+      {"when": {"H504": [3], "H505": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"H504": [3]}, "code": 2},
+      {"when": {"H504": [2], "H505": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"H504": [1, 2]}, "code": 1}
+      ],
+      "P303C": [
+      {"when": {"P303": [5, 6]}, "code": 4},
+      {"when": {"P303": [4], "P304": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 4},
+      {"when": {"P303": [4]}, "code": 3},
+      {"when": {"P303": [3], "P304": [4, 5, 6, 7, 8, 9, 10, 11, 12]}, "code": 3},
+      {"when": {"P303": [3]}, "code": 2},
+      {"when": {"P303": [2], "P304": [6, 7, 8, 9, 10, 11, 12]}, "code": 2},
+      {"when": {"P303": [1, 2]}, "code": 1},
+      {"when": {"P302": [3]}, "code": 1}
+      ]
+    },
     "notes": {
+      "keep_rows": "Only completed interviews (HRESUL / HRESULT = 1; HH46 = 1 in 2019).",
       "row_ids_without_key": "The 2006-2013 public files have no identifiers: rows get their own ID and persons are not linked to households.",
-      "map_columns": "ENHOGAR 2006 has provinces (ADMIN_DIVISION_2) but not regions.",
-      "relative_weight_years": "These years only have relative (normalized) weights, which average 1: shares are right but their sums are not population totals, so POPULATION / HOUSEHOLDS are left empty in the shares."
+      "map_columns": "The region comes from the province in 2006 (no region variable) and 2008 (its REGION has 4 codes that are not the 10 planning regions). 2008 covers only 7 provinces (Distrito Nacional, Santiago, Valverde, Duarte, Azua, Elías Piña, La Romana): it is not nationally representative and each region is only partly covered.",
+      "relative_weight_years": "These years only have relative (normalized) weights: shares are valid, POPULATION / HOUSEHOLDS are left empty.",
+      "derive_from_rules": "Completed education, one rule set per year (<level>C), first rule met: postgraduate, or university with 4+ years -> 4; university with fewer years, or media / secundaria with 4+ years -> 3; media with fewer years, or básica / primaria with 6+ grades -> 2; initial, none or fewer grades -> 1; never attended school (where asked) -> 1. 2006: a grade counts only when passed (P2018 = 1). 2018 uses H304C18 (2017 has the same names without the attendance question)."
     }
   }
 }

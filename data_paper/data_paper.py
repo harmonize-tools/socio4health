@@ -8,7 +8,8 @@ Usage::
     python data_paper.py shares                           # shares, codebook and DuckDB database only
 
 The surveys (files, keys, weights and rules) are defined in ``surveys.json`` and the harmonized variables in
-``harmonized_mapping.json``. The root folder is ``--output``, or ``S4H_SCRIPTS_OUTPUT``, or
+``mapping/harmonized_mapping.json``; the column and value mappings of each survey are in ``mapping/``. The root
+folder is ``--output``, or ``S4H_SCRIPTS_OUTPUT``, or
 ``<DATA_ROOT>/OUTPUT_scripts_full``.
 
 ``records`` writes, for each survey and year (``socio4health.s4h_build_records``):
@@ -43,19 +44,20 @@ from socio4health import (Schema, s4h_build_records, s4h_check_records, s4h_expo
                           schema)
 
 DATA_ROOT = Path(os.environ.get("S4H_DATA_ROOT", r"D:\EQUIPO\Documents HDD\Harmonize"))
-MAPPINGS_DIR = Path(__file__).resolve().parent
+MAPPINGS_DIR = Path(__file__).resolve().parent   # surveys.json; the mappings it lists are in mapping/
 DEFAULT_OUTPUT = Path(os.environ.get("S4H_SCRIPTS_OUTPUT", DATA_ROOT / "OUTPUT_scripts_full"))
 
-SCHEMA = Schema.from_json(MAPPINGS_DIR / "harmonized_mapping.json")
+SCHEMA = Schema.from_json(MAPPINGS_DIR / "mapping" / "harmonized_mapping.json")
 SURVEYS = s4h_load_surveys(MAPPINGS_DIR / "surveys.json", DATA_ROOT)
 # Codebook descriptions of the record columns, with the details of these surveys
 RECORD_COLUMNS = {
     **schema.RECORD_COLUMNS,
     "HOUSEHOLD_ID": ("households, persons", "Household identifier (survey keys joined with '-'); unique per survey and year. "
                                             "Empty for persons of ENHOGAR 2006-2013, whose public files have no identifiers"),
-    "ADMIN_DIVISION": ("households, persons", "First-level unit code (department, region, state; district UBIGEO in Peru)"),
-    "ADMIN_DIVISION_2": ("households, persons", "Second-level unit code where available (Brazil: state capital; "
-                                                "Dominican Republic: province)"),
+    "ADMIN_DIVISION": ("households, persons", "First-level unit code, the unit of the shares (Colombia and Peru: "
+                                              "department; Brazil: state; Dominican Republic: region)"),
+    "ADMIN_DIVISION_2": ("households, persons", "Second-level unit code where available (Peru: district UBIGEO; "
+                                                "Brazil: state capital; Dominican Republic: province)"),
 }
 IDS = {"households": "HOUSEHOLD_ID", "persons": "PERSON_ID"}
 KEY_COLS = ["COUNTRY", "SURVEY", "YEAR", "ADMIN_LEVEL", "ADMIN_DIVISION", "POPULATION", "HOUSEHOLDS"]

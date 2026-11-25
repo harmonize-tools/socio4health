@@ -755,6 +755,43 @@ def s4h_code_from_flags(df, flags, target, flag_value="1"):
     return df.assign(**{target: codes})
 
 
+def s4h_code_from_rules(df, rules, target):
+    """Create ``target`` with the code of the first rule whose conditions a record meets.
+
+    For variables that need several raw columns at once, e.g. completed education from the level reached, the
+    last grade approved in it and the title obtained (GEIH ``P3042``, ``P3042S1``, ``P3043``). Each rule is
+    ``{"when": {column: [codes]}, "code": code}``; a record meets it when every column has one of the listed
+    codes (as in ``keep_rows_any``). Rules are checked in order and the first one met gives the code; records
+    meeting none stay empty.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+    rules : list of dict
+        ``[{"when": {column: [codes]}, "code": code}, ...]`` in priority order.
+    target : str
+        Name of the new column.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A copy with ``target`` added, or the DataFrame unchanged if it lacks any column the rules use.
+    """
+    names = {_clean_column_name(c): c for c in df.columns}
+    used = {_clean_column_name(c) for rule in rules for c in rule["when"]}
+    if not used <= set(names):
+        return df
+    clean = {c: df[names[c]].astype('string').str.strip().str.replace(r'\.0+$', '', regex=True)
+                .str.replace(r'^0+(?=\d)', '', regex=True) for c in used}
+    codes = pd.Series(pd.NA, index=df.index, dtype='string')
+    for rule in rules:
+        match = pd.Series(True, index=df.index)
+        for col, values in rule["when"].items():
+            match &= clean[_clean_column_name(col)].isin([str(v) for v in values]).fillna(False)
+        codes = codes.mask(codes.isna() & match, str(rule["code"]))
+    return df.assign(**{target: codes})
+
+
 def harmonize_columns_by_year(dfs, year, year_mappings):
     """Rename raw columns to harmonized names using the mapping of the given year.
 
@@ -891,5 +928,6 @@ __all__ = [
     'mapping_source_columns',
     's4h_coalesce_columns',
     's4h_code_from_flags',
+    's4h_code_from_rules',
     'apply_value_mappings',
 ]

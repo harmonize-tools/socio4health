@@ -167,3 +167,32 @@ def test_code_from_flags_only_when_exactly_one_yes():
 def test_code_from_flags_without_flag_columns():
     df = pd.DataFrame({"X": ["1"]})
     assert list(s4h_code_from_flags(df, {"A1": 1}, "FUEL").columns) == ["X"]
+
+
+# ---------- codes from conditions on several columns (completed education) ----------
+
+from socio4health.utils.harmonizer_utils import s4h_code_from_rules
+
+EDUCATION_RULES = [   # GEIH: title first, then level and last grade approved
+    {"when": {"TITLE": [4, 5]}, "code": 4},
+    {"when": {"TITLE": [2]}, "code": 3},
+    {"when": {"LEVEL": [4, 5]}, "code": 2},
+    {"when": {"LEVEL": [3], "GRADE": [5]}, "code": 2},
+    {"when": {"LEVEL": [1, 2, 3]}, "code": 1},
+]
+
+
+def test_code_from_rules_first_rule_met_wins():
+    df = pd.DataFrame({"LEVEL": ["3", "03", "4", "5", "5", "1", "9"],
+                       "GRADE": ["2", "5.0", "7", "11", "11", "0", None],
+                       "TITLE": [None, None, None, "1", "2", None, None]})
+    out = s4h_code_from_rules(df, EDUCATION_RULES, "EDU")
+    # primary incomplete, primary complete ('03' / '5.0' are 3 / 5), secondary reached, media without title,
+    # bachiller, none, unknown
+    assert out["EDU"].tolist()[:6] == ["1", "2", "2", "2", "3", "1"]
+    assert pd.isna(out["EDU"].iloc[6])
+
+
+def test_code_from_rules_needs_every_column():
+    df = pd.DataFrame({"LEVEL": ["3"], "GRADE": ["5"]})   # no TITLE: table without the education module
+    assert list(s4h_code_from_rules(df, EDUCATION_RULES, "EDU").columns) == ["LEVEL", "GRADE"]

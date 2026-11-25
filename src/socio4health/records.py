@@ -29,7 +29,7 @@ from socio4health.utils import extractor_utils
 from socio4health.utils.log import logger, s4h_set_log_level as set_log_level
 from socio4health.utils.harmonizer_utils import (
     _clean_column_name, _normalize_columns, apply_value_mappings, harmonize_columns_by_year, merge_factor,
-    prune_columns, s4h_code_from_flags, use_person_factor,
+    prune_columns, s4h_code_from_flags, s4h_code_from_rules, use_person_factor,
 )
 
 LEVELS = {"households": "HOUSEHOLD_ID", "persons": "PERSON_ID"}
@@ -97,7 +97,8 @@ def _is_in(series, values):
 
 
 def _apply_rules(dfs, survey: Survey):
-    # Rules on raw records: rows to keep, values filled from another column, codes built from yes/no flags
+    # Rules on raw records: rows to keep, values filled from another column, codes built from yes/no flags or
+    # from conditions on several columns
     out = []
     for df in dfs:
         for col, values in survey.keep_rows.items():
@@ -122,6 +123,8 @@ def _apply_rules(dfs, survey: Survey):
                 df = df.assign(**{t: s4h_clean_codes(df[t]).fillna(source)})
         for target, flags in survey.derive_from_flags.items():
             df = s4h_code_from_flags(df, flags, target)
+        for target, rules in survey.derive_from_rules.items():
+            df = s4h_code_from_rules(df, rules, target)
         out.append(df)
     return out
 
